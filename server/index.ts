@@ -1,8 +1,34 @@
 import express, { type Request, type Response, type NextFunction } from "express";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+
+// Enable gzip compression for all responses
+app.use(compression({
+  // Set compression level (1-9, 6 is default, 9 is best compression)
+  level: 9,
+  // Set compression threshold (only compress if response is larger than this)
+  threshold: 1024,
+  // Compress these MIME types
+  filter: (req: Request, res: Response) => {
+    // Don't compress if the client doesn't support it
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    
+    const contentType = res.getHeader('content-type');
+    if (typeof contentType === 'string') {
+      // Compress text-based content (JS, CSS, HTML, JSON, SVG, etc.)
+      return /text|javascript|css|json|xml|html|svg|application\/javascript|application\/json/.test(contentType);
+    }
+    
+    // Use default compression filter as fallback
+    return compression.filter(req, res);
+  }
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

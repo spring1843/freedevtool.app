@@ -60,6 +60,11 @@ A basic user schema and session management foundation is prepared but not yet im
 - Lazy loading of tool components.
 - Minimal JavaScript bundle with tree shaking.
 - Browser caching (`Cache-Control: public, max-age=86400, must-revalidate`) for HTML routes.
+- Comprehensive gzip compression (level 9) for all text-based assets.
+- Pre-compressed static assets with automated .gz file generation.
+- CSS minification with cssnano and aggressive optimization settings.
+- JavaScript minification with esbuild for maximum compression.
+- Optimized chunk splitting and asset fingerprinting for better caching.
 
 **Testing Strategy:**
 - End-to-end tests with Playwright.

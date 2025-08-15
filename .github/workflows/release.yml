@@ -41,8 +41,8 @@ jobs:
         run: make test
         continue-on-error: true # Don't fail release if tests fail
       
-      - name: Build application
-        run: make build
+      - name: Build application with compression
+        run: make build-compressed
       
       - name: Create dist archive
         run: |
