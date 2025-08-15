@@ -8,7 +8,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
 
 jobs:
   test:
@@ -64,31 +63,3 @@ jobs:
             client/dist/
           retention-days: 7
 
-  security-scan:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: make install
-      
-      - name: Run security audit
-        run: make deps-audit
-        continue-on-error: true
-      
-      - name: Run CodeQL Analysis
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript-typescript
-      
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3

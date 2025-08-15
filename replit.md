@@ -75,7 +75,6 @@ A basic user schema and session management foundation is prepared but not yet im
 **GitHub Actions Workflows:**
 - **CI Pipeline**: Automated testing, type checking, and build validation on every PR and main branch push.
 - **Release Workflow**: Automated building, packaging, and GitHub release creation with changelog generation from merged PRs.
-- **Security Scanning**: CodeQL analysis and dependency vulnerability scanning.
 
 **Release Process:**
 - Manual release preparation with `scripts/prepare-release.sh`

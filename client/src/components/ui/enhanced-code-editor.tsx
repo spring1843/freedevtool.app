@@ -10,7 +10,7 @@ import { markdown } from '@codemirror/lang-markdown';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { CopyButton } from "./copy-button";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/hooks/use-theme";
+// import { useTheme } from "@/hooks/use-theme";
 
 interface EnhancedCodeEditorProps {
   value: string;
@@ -50,7 +50,8 @@ export function EnhancedCodeEditor({
   minHeight = 200,
   "data-testid": testId
 }: EnhancedCodeEditorProps) {
-  const { theme } = useTheme();
+  // Temporarily use light theme
+  const theme = "light" as "light" | "dark";
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1, character: 0 });
 
   // Get language extension safely with instance check

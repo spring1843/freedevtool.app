@@ -2,7 +2,7 @@ import { Search, Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useTheme } from "@/providers/theme-provider";
+// import { useTheme } from "@/providers/theme-provider";
 import { Link } from "wouter";
 import { useSearch } from "@/hooks/use-search";
 import { SearchResults } from "@/components/ui/search-results";
@@ -13,7 +13,8 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const { theme, setTheme } = useTheme();
+  // Temporarily disabled theme functionality
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const { 
     searchQuery, 
     setSearchQuery, 
