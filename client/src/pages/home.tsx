@@ -161,7 +161,7 @@ export default function Home() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
-            data-testid="search-input"
+            data-testid="homepage-search-input"
           />
         </div>
       </div>

@@ -8,8 +8,8 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show text diff tool when typing "text"', async ({ page }) => {
-    // Find and click on search input
-    const searchInput = page.locator('[data-testid="search-input"]');
+    // Find and click on homepage search input
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await expect(searchInput).toBeVisible();
     
     // Type "text" in search
@@ -30,7 +30,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should navigate to tool when search result is clicked', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('text diff');
     
     // Wait for search results
@@ -46,7 +46,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show JSON tools when typing "json"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('json');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -59,7 +59,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show time tools when typing "time"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('time');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -72,7 +72,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should clear search results when input is cleared', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     
     // Type search query
     await searchInput.fill('json');
@@ -86,7 +86,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show no results message for non-existent tools', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('nonexistenttool12345');
     
     // Wait a moment for search processing
@@ -102,7 +102,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should support keyboard navigation in search results', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('text');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -122,7 +122,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should close search results when clicking outside', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('json');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -135,7 +135,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show encoder tools when typing "encode"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('encode');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -146,7 +146,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should support case-insensitive search', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     
     // Test uppercase
     await searchInput.fill('TEXT');
@@ -161,7 +161,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show converter tools when typing "convert"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('convert');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -174,7 +174,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should handle search with special characters', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     
     // Test with special characters that shouldn't break search
     await searchInput.fill('json-yaml');
@@ -183,7 +183,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show generator tools when typing "generator"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="search-input"]');
+    const searchInput = page.locator('[data-testid="homepage-search-input"]');
     await searchInput.fill('generator');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
