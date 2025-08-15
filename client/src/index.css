@@ -1,0 +1,344 @@
+/* Using system fonts for complete offline functionality - no external dependencies */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(210 25% 7.8431%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(210 25% 7.8431%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(210 25% 7.8431%);
+  --primary: hsl(217 91% 60%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(210 40% 98%);
+  --secondary-foreground: hsl(210 25% 7.8431%);
+  --muted: hsl(210 40% 98%);
+  --muted-foreground: hsl(210 13% 40%);
+  --accent: hsl(210 40% 96%);
+  --accent-foreground: hsl(210 25% 7.8431%);
+  --destructive: hsl(0 84% 60%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(214 32% 91%);
+  --input: hsl(214 32% 91%);
+  --ring: hsl(217 91% 60%);
+  --radius: 0rem;
+  
+  /* Custom colors matching design */
+  --slate-50: hsl(210 40% 98%);
+  --slate-100: hsl(210 40% 96%);
+  --slate-200: hsl(214 32% 91%);
+  --slate-300: hsl(213 27% 84%);
+  --slate-400: hsl(215 20% 65%);
+  --slate-500: hsl(215 16% 47%);
+  --slate-600: hsl(215 19% 35%);
+  --slate-700: hsl(215 25% 27%);
+  --slate-800: hsl(217 33% 17%);
+  --slate-900: hsl(222 84% 5%);
+  
+  /* Font families - System fonts for offline security */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
+
+.dark {
+  --background: hsl(222 84% 5%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(217 33% 17%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(222 84% 5%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(217 91% 60%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(217 33% 17%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(215 25% 27%);
+  --muted-foreground: hsl(215 20% 65%);
+  --accent: hsl(215 25% 27%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62% 30%);
+  --destructive-foreground: hsl(0 85% 97%);
+  --border: hsl(215 25% 27%);
+  --input: hsl(215 25% 27%);
+  --ring: hsl(217 91% 60%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  
+  /* Additional transitions for theme-aware components */
+  .transition-theme {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Ensure buttons and interactive elements transition smoothly */
+  button, a, input, textarea, select {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(213 27% 84%);
+    border-radius: 0;
+  }
+  
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(215 19% 35%);
+  }
+  
+  /* Syntax highlighting */
+  .hljs {
+    background: transparent !important;
+  }
+  
+  .hljs-keyword { color: #c792ea; }
+  .hljs-string { color: #c3e88d; }
+  .hljs-number { color: #f78c6c; }
+  .hljs-attr { color: #82b1ff; }
+  .hljs-punctuation { color: #89ddff; }
+  
+  .dark .hljs-keyword { color: #bb9af7; }
+  .dark .hljs-string { color: #9ece6a; }
+  .dark .hljs-number { color: #ff9e64; }
+  .dark .hljs-attr { color: #7aa2f7; }
+  .dark .hljs-punctuation { color: #73daca; }
+  
+  /* Diff styles */
+  .diff-line-add {
+    background-color: hsl(142 76% 90%);
+    border-left: 3px solid hsl(142 76% 36%);
+  }
+  
+  .dark .diff-line-add {
+    background-color: hsl(142 76% 15%);
+  }
+  
+  .diff-line-remove {
+    background-color: hsl(0 84% 95%);
+    border-left: 3px solid hsl(0 84% 60%);
+  }
+  
+  .dark .diff-line-remove {
+    background-color: hsl(0 84% 15%);
+  }
+  
+  /* Word-level diff highlighting */
+  .diff-word-modified {
+    background-color: hsl(142 76% 70%);
+    font-weight: bold;
+    padding: 0 2px;
+  }
+  
+  .dark .diff-word-modified {
+    background-color: hsl(142 76% 30%);
+    color: white;
+  }
+
+  /* Flat Design - Remove all rounded corners */
+  .rounded-none { border-radius: 0 !important; }
+  .rounded { border-radius: 0 !important; }
+  .rounded-sm { border-radius: 0 !important; }
+  .rounded-md { border-radius: 0 !important; }
+  .rounded-lg { border-radius: 0 !important; }
+  .rounded-xl { border-radius: 0 !important; }
+  .rounded-2xl { border-radius: 0 !important; }
+  .rounded-3xl { border-radius: 0 !important; }
+  .rounded-full { border-radius: 0 !important; }
+  
+  /* Override component rounded corners */
+  .card, .button, .input, .textarea, .select, .badge { border-radius: 0 !important; }
+  
+  /* Mind map specific styles */
+  .mind-map-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    border-radius: 0 !important;
+  }
+  
+  .mind-map-center {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 3px solid;
+    border-radius: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.2;
+    z-index: 10;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .mind-map-center:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  
+  .mind-map-section {
+    position: absolute;
+    min-width: 100px;
+    height: 80px;
+    border: 2px solid;
+    border-radius: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-align: center;
+    font-size: 12px;
+    z-index: 5;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 8px;
+  }
+  
+  .mind-map-tool {
+    position: absolute;
+    min-width: 80px;
+    height: 60px;
+    border: 1px solid;
+    border-radius: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    text-align: center;
+    z-index: 4;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 6px;
+  }
+  
+  .mind-map-line {
+    position: absolute;
+    height: 2px;
+    background-color: currentColor;
+    transform-origin: left center;
+    z-index: 1;
+    opacity: 0.5;
+  }
+  
+  /* Advertisement spots */
+  .ad-slot {
+    border: 2px dashed #ccc;
+    background: #f9f9f9;
+    text-align: center;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 0 !important;
+  }
+  
+  .dark .ad-slot {
+    border-color: #555;
+    background: #2a2a2a;
+  }
+  
+  /* Word-level diff highlighting */
+  .diff-word-modified {
+    background-color: hsl(142 76% 70%);
+    font-weight: bold;
+    padding: 0 2px;
+  }
+  
+  .dark .diff-word-modified {
+    background-color: hsl(142 76% 30%);
+    color: white;
+  }
+
+  /* Mind map styles */
+  .mind-map-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+  }
+  
+  .mind-map-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .mind-map-section {
+    position: absolute;
+    width: 100px;
+    height: 80px;
+    border: 2px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .mind-map-tool {
+    position: absolute;
+    width: 80px;
+    height: 60px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .mind-map-line {
+    position: absolute;
+    background: currentColor;
+    height: 2px;
+    transform-origin: left center;
+  }
+  
+  /* Ad slots */
+  .ad-slot {
+    border: 2px dashed;
+    padding: 20px;
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.7;
+    margin: 20px 0;
+  }
+  
+  /* Flat design - remove all border radius */
+  * {
+    border-radius: 0 !important;
+  }
+}

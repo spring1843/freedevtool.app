@@ -1,0 +1,8 @@
+dist/
+node_modules/
+.replit
+package-lock.json
+*.md
+*.json
+*.yaml
+*.yml

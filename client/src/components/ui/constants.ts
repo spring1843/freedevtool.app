@@ -1,0 +1,8 @@
+// UI Constants to avoid magic numbers
+export const UI_CONSTANTS = {
+  DROPDOWN_SIDE_OFFSET: 4,
+  HOVER_CARD_SIDE_OFFSET: 4,
+  COPY_TIMEOUT_MS: 2000,
+  DEFAULT_DEBOUNCE_MS: 300,
+  ANIMATION_DURATION_MS: 200,
+} as const;

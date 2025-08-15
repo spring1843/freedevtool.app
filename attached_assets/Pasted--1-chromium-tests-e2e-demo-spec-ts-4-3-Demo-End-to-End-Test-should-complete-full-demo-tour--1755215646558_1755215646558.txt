@@ -1,0 +1,71 @@
+ 1) [chromium] › tests/e2e/demo.spec.ts:4:3 › Demo End-to-End Test › should complete full demo tour with very-fast speed 
+    TimeoutError: page.goto: Timeout 3000ms exceeded.
+    Call log:
+      - navigating to "http://localhost:5000/", waiting until "load"
+       7 |     
+       8 |     // Navigate to the home page with 3-second timeout
+    >  9 |     await page.goto('/', { timeout: 3000 });
+         |                ^
+      10 |     
+      11 |     // Wait for the page to load with 3-second timeout
+      12 |     await expect(page.locator('[data-testid="start-demo-button"]')).toBeVisible({ timeout: 3000 });
+        at /home/runner/work/freedevtool.app/freedevtool.app/tests/e2e/demo.spec.ts:9:16
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 2000ms waiting for expect(locator).toHaveCount(expected)
+    Locator: locator('header, nav, main')
+    Expected: 3
+    Received: 2
+    Call log:
+      - Expect "toHaveCount" with timeout 2000ms
+      - waiting for locator('header, nav, main')
+        6 × locator resolved to 2 elements
+          - unexpected value "2"
+      59 |         
+      60 |         // Verify essential UI elements are present with shorter timeout
+    > 61 |         await expect(page.locator('header, nav, main')).toHaveCount(3, { timeout: 2000 });
+         |                                                         ^
+      62 |       }
+      63 |       
+      64 |       // Check if demo completed
+        at /home/runner/work/freedevtool.app/freedevtool.app/tests/e2e/demo.spec.ts:61:57
+    Error Context: test-results/demo-Demo-End-to-End-Test--82007-o-tour-with-very-fast-speed-chromium-retry1/error-context.md
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/demo-Demo-End-to-End-Test--82007-o-tour-with-very-fast-speed-chromium-retry1/trace.zip
+    Usage:
+        npx playwright show-trace test-results/demo-Demo-End-to-End-Test--82007-o-tour-with-very-fast-speed-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 2000ms waiting for expect(locator).toHaveCount(expected)
+    Locator: locator('header, nav, main')
+    Expected: 3
+    Received: 2
+    Call log:
+      - Expect "toHaveCount" with timeout 2000ms
+      - waiting for locator('header, nav, main')
+        6 × locator resolved to 2 elements
+          - unexpected value "2"
+      59 |         
+      60 |         // Verify essential UI elements are present with shorter timeout
+    > 61 |         await expect(page.locator('header, nav, main')).toHaveCount(3, { timeout: 2000 });
+         |                                                         ^
+      62 |       }
+      63 |       
+      64 |       // Check if demo completed
+        at /home/runner/work/freedevtool.app/freedevtool.app/tests/e2e/demo.spec.ts:61:57
+    Error Context: test-results/demo-Demo-End-to-End-Test--82007-o-tour-with-very-fast-speed-chromium-retry2/error-context.md
+  2) [chromium] › tests/e2e/demo.spec.ts:96:3 › Demo End-to-End Test › should handle demo pause and resume correctly 
+    Test timeout of 30000ms exceeded.
+    Error: locator.textContent: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid]').locator('text=/\\d+%/').first()
+      109 |     
+      110 |     // Verify demo is paused (progress shouldn't change)
+    > 111 |     const progressBefore = await page.locator('[data-testid] >> text=/\\d+%/').first().textContent();
+          |                                                                                        ^
+      112 |     await page.waitForTimeout(1000); // Reduced wait time
+      113 |     const progressAfter = await page.locator('[data-testid] >> text=/\\d+%/').first().textContent();
+      114 |     expect(progressBefore).toBe(progressAfter);
+        at /home/runner/work/freedevtool.app/freedevtool.app/tests/e2e/demo.spec.ts:111:88
+    Error Context: test-results/demo-Demo-End-to-End-Test--0f7d0--pause-and-resume-correctly-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Test timeout of 30000ms exceeded.
