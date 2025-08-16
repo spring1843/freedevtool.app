@@ -13,7 +13,7 @@ export function SecurityBanner({ variant = "compact", className = "" }: Security
       <div className={`inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-3 py-2 ${className}`}>
         <Shield className="w-4 h-4 text-green-600 dark:text-green-400 mr-2" />
         <span className="text-sm font-medium text-green-700 dark:text-green-400">
-          <a href="https://github.com/spring1843/freedevtool.app?tab=readme-ov-file#tenets" target="_blank" rel="noopener noreferrer" className="hover:underline">Secure</a>, and <a href="https://github.com/spring1843/freedevtool.app" target="_blank" rel="noopener noreferrer" className="hover:underline">Open Source</a>
+          <a href="https://github.com/spring1843/FreeDevTool.App?tab=readme-ov-file#tenets" target="_blank" className="hover:underline">Secure</a>, and <a href="https://github.com/spring1843/FreeDevTool.App" target="_blank" className="hover:underline">Open Source</a>
         </span>
       </div>
     );
