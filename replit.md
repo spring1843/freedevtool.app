@@ -31,15 +31,15 @@ The server-side is a minimal Node.js Express application with TypeScript, provid
 - **Error Handling**: Basic middleware for logging and structured responses.
 
 ### Data Storage Solutions
-Currently uses in-memory storage, but is architecturally prepared for PostgreSQL integration via Drizzle ORM for type-safe database operations.
+The application operates entirely client-side without persistent data storage, focusing on real-time tool computations and browser-based processing.
 
 **Storage Architecture:**
-- **Current**: In-memory storage with Map-based implementation.
-- **Future-Ready**: Drizzle ORM configured for PostgreSQL.
-- **Type Safety**: Full TypeScript integration with Zod schema validation.
+- **Client-Side Only**: All data processing occurs in the browser with no server persistence.
+- **Privacy-First**: No data transmitted to servers, ensuring complete privacy and security.
+- **Offline Capability**: Full functionality without network dependencies.
 
 ### Authentication and Authorization
-A basic user schema and session management foundation is prepared but not yet implemented. The application currently operates without authentication as all tools function offline.
+The application operates without authentication requirements as all tools function offline and require no user accounts or data persistence.
 
 ### Key Technical Implementations
 
@@ -108,10 +108,7 @@ A basic user schema and session management foundation is prepared but not yet im
 - **tsx**: TypeScript execution.
 - **esbuild**: JavaScript bundler.
 
-### Database and ORM (Prepared)
-- **Drizzle ORM**: Type-safe database operations.
-- **@neondatabase/serverless**: PostgreSQL adapter.
-- **Drizzle Kit**: Database migration and schema management.
+
 
 ### Utility Libraries
 - **wouter**: Lightweight client-side routing.

@@ -82,16 +82,7 @@ e2e-test-ui: ## Run end-to-end tests with UI
 e2e-install: ## Install Playwright browsers
 	npx playwright install
 
-## Database and Storage Commands
 
-db-generate: ## Generate database types with Drizzle
-	npx drizzle-kit generate
-
-db-migrate: ## Run database migrations
-	npx drizzle-kit migrate
-
-db-studio: ## Open Drizzle Studio for database management
-	npx drizzle-kit studio
 
 ## Dependency Management
 
