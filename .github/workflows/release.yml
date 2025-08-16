@@ -297,34 +297,9 @@ jobs:
           # Update package.json version
           npm version ${VERSION_NUMBER} --no-git-tag-version
           
-          # Commit and push changes to feature branch
+          # Commit and push changes
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          
-          # Create feature branch for version bump
-          BRANCH_NAME="release/v${VERSION_NUMBER}-auto-bump"
-          git checkout -b "$BRANCH_NAME"
-          
           git add package.json
           git commit -m "chore: bump version to ${VERSION_NUMBER}" || exit 0
-          git push origin "$BRANCH_NAME"
-          
-          # Create pull request if version was bumped
-          if git diff --quiet HEAD~1 package.json; then
-            echo "No version bump needed"
-          else
-            gh pr create \
-              --title "chore: bump version to ${VERSION_NUMBER}" \
-              --body "Automated version bump for release ${VERSION_NUMBER}
-
-            This PR was automatically created by the release workflow.
-            
-            Changes:
-            - Updated package.json version to ${VERSION_NUMBER}
-            - Prepared for release deployment
-            
-            **Note**: This PR can be merged immediately as it only updates the version number." \
-              --base main \
-              --head "$BRANCH_NAME" \
-              --label "release,automation" || echo "PR creation failed or already exists"
-          fi
+          git push origin main
