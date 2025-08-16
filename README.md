@@ -31,6 +31,7 @@ Preferred terminology: "Camera" instead of "Webcam" for video capture devices.
 Monetization: Application includes advertisements. Current features are free since computation happens in user browsers, but future premium features may be introduced.
 
 ## Recent Updates (August 16, 2025)
+- **CI-Dependent Releases**: Release workflow now requires CI to pass before allowing releases, with emergency bypass option
 - **Make Target Integration**: Updated all build scripts and release automation to use make targets instead of npm commands
 - **Release Automation**: Comprehensive GitHub Actions workflows with automated building, packaging, and changelog generation
 - **Search Testing**: Added end-to-end tests for search functionality including text tool discovery and keyboard navigation
@@ -91,6 +92,12 @@ make test          # Run unit tests
 make e2e-test      # Run end-to-end tests
 make test-coverage # Run tests with coverage
 ```
+
+### Release Process
+- **Automatic**: Push a git tag (e.g., `v1.0.0`) to trigger a release
+- **Manual**: Use GitHub Actions workflow dispatch with version input
+- **CI Requirement**: All releases require CI to pass first
+- **Emergency Bypass**: Manual releases can bypass CI if needed (creates prerelease with warning)
 
 ## External Dependencies
 
