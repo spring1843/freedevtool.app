@@ -98,6 +98,7 @@ make test-coverage # Run tests with coverage
 - **Manual**: Use GitHub Actions workflow dispatch with version input
 - **CI Requirement**: All releases require CI to pass first
 - **Emergency Bypass**: Manual releases can bypass CI if needed (creates prerelease with warning)
+- **GitHub Pages**: Each release deploys the same gzip package to GitHub Pages as a standalone web application
 
 ## External Dependencies
 
