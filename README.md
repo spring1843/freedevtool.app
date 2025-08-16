@@ -1,9 +1,11 @@
-# freedevtool.app
+# FreeDevTool.app
+
+[FreeDevTool.App](https://FreeDevTool.App)
 
 **A comprehensive collection of 49+ open source developer tools with offline functionality**
 
 ## Overview
-freedevtool.app is a comprehensive web-based collection of open source developer and productivity utilities. It provides a wide range of tools across sections like Conversions, Formatters, Encoders, Text, Time, Financial, Color, and Hardware tools. Built as a full-stack TypeScript application with a privacy-first design, it offers a modern, responsive UI with dark/light theme support, optimized for desktop, mobile, and TV displays. Key advantages include: Open Source & Community-Driven, Browser-Based Computation for Enhanced Security, Zero Data Transmission, and Offline Functionality. All current tools are free to use since computation happens entirely in your browser, providing both security and performance benefits.
+FreeDevTool.App is a comprehensive web-based collection of open source developer and productivity utilities. It provides a wide range of tools across sections like Conversions, Formatters, Encoders, Text, Time, Financial, Color, and Hardware tools. Built as a full-stack TypeScript application with a privacy-first design, it offers a modern, responsive UI with dark/light theme support, optimized for desktop, mobile, and TV displays. Key advantages include: Open Source & Community-Driven, Browser-Based Computation for Enhanced Security, Zero Data Transmission, and Offline Functionality. All current tools are free to use since computation happens entirely in your browser, providing both security and performance benefits.
 
 ## Tenets
 
@@ -98,7 +100,7 @@ Not implemented
 Licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for full details.
 
 ```
-Copyright 2025 freedevtool.app
+Copyright 2025 FreeDevTool.App
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -13,7 +13,7 @@ export default function Home() {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-          freedevtool.app
+          FreeDevTool.App
         </h1>
         <p className="text-lg text-slate-600 dark:text-slate-400 mb-2">
           🔒 100% Secure Offline Developer Tools
@@ -171,7 +171,7 @@ export default function Home() {
         {/* Standard Footer */}
         <div className="text-center text-sm text-slate-500 dark:text-slate-400">
           <p>
-            freedevtool.app - Professional-grade offline developer utilities
+            FreeDevTool.App - Professional-grade offline developer utilities
           </p>
           <p className="mt-1">
             All processing happens locally in your browser • Content Security Policy enforced • No external connections
