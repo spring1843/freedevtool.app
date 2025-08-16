@@ -30,7 +30,10 @@ Preferred UI behavior: All menu sections collapsed by default, with minimize but
 Preferred terminology: "Camera" instead of "Webcam" for video capture devices.
 Monetization: Application includes advertisements. Current features are free since computation happens in user browsers, but future premium features may be introduced.
 
-## Recent Updates (August 14, 2025)
+## Recent Updates (August 16, 2025)
+- **Make Target Integration**: Updated all build scripts and release automation to use make targets instead of npm commands
+- **Release Automation**: Comprehensive GitHub Actions workflows with automated building, packaging, and changelog generation
+- **Search Testing**: Added end-to-end tests for search functionality including text tool discovery and keyboard navigation
 - **Enhanced Mobile UX**: Improved hamburger menu with larger touch targets, better accessibility, and enhanced sidebar layout
 - **Centralized Architecture**: Created unified data source for all components (sidebar, homepage, search, demo) to eliminate inconsistencies
 - **Navigation Fixes**: Resolved double "/tools" path issues and demo system routing for seamless user experience
@@ -63,6 +66,31 @@ Not implemented
 - **URL Sharing**: Implemented across all major tools, including timing tools, for state persistence and sharing.
 - **Monetization**: Includes a 3-ad placement system for revenue generation.
 - **Security**: Implemented Content Security Policy and removed external dependencies enforcing a privacy-first, zero-network-dependency architecture suitable for air-gapped environments. Strict validation and sanitization are applied to all URL parameters.
+
+## Quick Start
+
+### Development Setup
+```bash
+make setup    # Install dependencies and setup development environment
+make start    # Start the development server
+```
+
+### Available Commands
+```bash
+make help     # Show all available commands
+make deps     # Install dependencies
+make build    # Build for production
+make test     # Run tests
+make lint     # Check code quality
+make format   # Format code
+```
+
+### Testing
+```bash
+make test          # Run unit tests
+make e2e-test      # Run end-to-end tests
+make test-coverage # Run tests with coverage
+```
 
 ## External Dependencies
 

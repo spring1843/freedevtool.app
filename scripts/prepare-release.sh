@@ -32,9 +32,10 @@ mkdir -p "$RELEASE_DIR"
 echo "📦 Building application..."
 
 # Install dependencies and build
-npm ci
-npm run check
-npm run build
+make deps
+make lint
+make type-check
+make build
 
 echo "📋 Copying files to release directory..."
 
@@ -85,11 +86,11 @@ cat > "$RELEASE_DIR/install.sh" << 'EOF'
 #!/bin/bash
 echo "🚀 Installing FreeDev Tool App..."
 echo "📦 Installing dependencies..."
-npm install --production
+make deps
 echo "✅ Installation complete!"
 echo ""
 echo "🎉 To start the application:"
-echo "   npm start"
+echo "   make start"
 echo ""
 echo "🌐 Then open http://localhost:5000 in your browser"
 EOF
@@ -101,11 +102,11 @@ cat > "$RELEASE_DIR/install.bat" << 'EOF'
 @echo off
 echo 🚀 Installing FreeDev Tool App...
 echo 📦 Installing dependencies...
-npm install --production
+make deps
 echo ✅ Installation complete!
 echo.
 echo 🎉 To start the application:
-echo    npm start
+echo    make start
 echo.
 echo 🌐 Then open http://localhost:5000 in your browser
 pause
@@ -122,17 +123,17 @@ Free, Secure, Open Source, and Offline Developer Tools
 ### Linux/macOS
 \`\`\`bash
 ./install.sh
-npm start
+make start
 \`\`\`
 
 ### Windows
 1. Double-click \`install.bat\`
-2. Run \`npm start\`
+2. Run \`make start\`
 
 ### Manual Installation
 \`\`\`bash
-npm install --production
-npm start
+make deps
+make start
 \`\`\`
 
 Then open http://localhost:5000 in your browser.
@@ -180,7 +181,7 @@ echo "   - freedevtool-app-v${CLEAN_VERSION}.tar.gz"
 echo "   - freedevtool-app-v${CLEAN_VERSION}.zip"
 echo ""
 echo "🚀 Next steps:"
-echo "1. Test the release: cd $RELEASE_DIR && npm install --production && npm start"
+echo "1. Test the release: cd $RELEASE_DIR && make deps && make start"
 echo "2. Create git tag: git tag -a v$CLEAN_VERSION -m 'Release v$CLEAN_VERSION'"
 echo "3. Push to GitHub: git push origin v$CLEAN_VERSION"
 echo "4. Upload archives to GitHub release"
