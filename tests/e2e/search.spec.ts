@@ -72,11 +72,27 @@ test.describe("Search Functionality", () => {
     const searchInput = page.locator('[data-testid="search-input"]');
     await searchInput.fill("nonexistenttool12345");
 
-    // Wait a moment for search processing
-    await page.waitForTimeout(300);
+    // Wait for search results to appear or disappear
+    const searchResults = page.locator('[data-testid="search-results"]');
+
+    // Wait for either results to appear or to confirm no results exist
+    await page.waitForFunction(
+      () => {
+        const resultsEl = document.querySelector(
+          '[data-testid="search-results"]'
+        );
+        if (!resultsEl) return true; // No results container = no results
+
+        const resultItems = resultsEl.querySelectorAll(
+          '[data-testid^="search-result-"]'
+        );
+        return resultItems.length === 0; // Empty results = search processed
+      },
+      undefined,
+      { timeout: 3000 }
+    );
 
     // Verify no results or empty results container
-    const searchResults = page.locator('[data-testid="search-results"]');
     if (await searchResults.isVisible()) {
       // If results container exists, it should be empty or show no results message
       const resultItems = searchResults.locator(
