@@ -19,7 +19,7 @@ The client-side application is built with React and TypeScript, leveraging a mod
 - **State Management**: React's built-in hooks (`useState`, `useEffect`).
 - **UI Components**: Radix UI primitives with shadcn/ui.
 - **Styling**: Tailwind CSS with custom CSS variables for theming, 0.3s transitions, and local storage persistence.
-- **Code Editor**: Custom CodeEditor component with syntax highlighting and copy functionality. Enhanced textarea components are standardized across all 42+ tools, providing line numbers, character count, cursor position display, and disabled word wrapping.
+- **Code Editor**: Simple CodeEditor component with copy functionality. Standardized textarea components across all tools provide character count and disabled word wrapping for consistent user experience.
 - **Navigation**: Hamburger menu in top right, no desktop sidebar, non-modal design. Blue FD logo toggles sidebar, text logo links to homepage.
 
 ### Backend Architecture
