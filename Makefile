@@ -21,6 +21,16 @@ setup: ## Complete project setup - install dependencies, browsers, and prepare f
 	make type-check
 	make lint
 
+## Combined Commands
+
+all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
+
+pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
+
+ci-without-e2e: pre-commit format-check build test ## CI commands without end-to-end tests, for environments that can't run e2e tests
+
+ci: pre-commit ci-without-e2e e2e-test ## Commands run in the CI. Good to run before pushing changes
+
 install: deps ## Install dependencies (alias for deps)
 
 deps: ## Install all dependencies
@@ -135,14 +145,6 @@ deploy-check: prepare-deploy ## Check if ready for deployment
 	@echo "$(GREEN)✓ Linting passed$(NC)"
 	@echo "$(GREEN)✓ Type checking passed$(NC)"
 	@echo "$(GREEN)✓ Build successful$(NC)"
-
-## Combined Commands
-
-all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
-
-pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
-
-ci: pre-commit build test e2e-test
 
 ## Documentation
 
