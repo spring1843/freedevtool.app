@@ -6,7 +6,7 @@ import { resolve } from 'path'
 
 describe('Text Tools', () => {
   // Check if text-tools.ts exists and what functions it exports
-  let textTools: any = {}
+  const textTools: any = {}
   
   try {
     // Dynamic import to handle the case where the module might not exist or export different functions

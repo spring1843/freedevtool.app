@@ -142,13 +142,11 @@ export function DemoProvider({ children }: DemoProviderProps) {
   };
 
   // Cleanup on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       if (demoTimeoutRef.current) {
         clearTimeout(demoTimeoutRef.current);
       }
-    };
-  }, []);
+    }, []);
 
   const value: DemoContextType = {
     isDemoRunning,

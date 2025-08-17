@@ -8,7 +8,7 @@ import { Calculator, RotateCcw, TrendingUp, BarChart3 } from "lucide-react";
 import { useState, useEffect } from "react";
 import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
 
 interface CompoundInterestResult {
   finalAmount: number;
@@ -116,12 +116,10 @@ export default function CompoundInterestCalculator() {
     calculateCompoundInterest();
   }, []);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+  const formatCurrency = (amount: number) => new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
     }).format(amount);
-  };
 
   const calculateNxTable = () => {
     if (!result) return [];
@@ -287,8 +285,7 @@ export default function CompoundInterestCalculator() {
           </CardContent>
         </Card>
 
-        {result && (
-          <Card>
+        {result ? <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <TrendingUp className="w-5 h-5 mr-2" />
@@ -326,12 +323,10 @@ export default function CompoundInterestCalculator() {
                 </Badge>
               </div>
             </CardContent>
-          </Card>
-        )}
+          </Card> : null}
       </div>
 
-      {result && result.yearlyBreakdown.length > 0 && (
-        <Card className="mt-6">
+      {result && result.yearlyBreakdown.length > 0 ? <Card className="mt-6">
           <CardHeader>
             <CardTitle className="flex items-center">
               <BarChart3 className="w-5 h-5 mr-2" />
@@ -384,20 +379,18 @@ export default function CompoundInterestCalculator() {
             </div>
             <div className="flex justify-center gap-6 mt-4 text-sm">
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
+                <div className="w-4 h-4 bg-blue-500 rounded mr-2" />
                 <span>Total Contributions</span>
               </div>
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
+                <div className="w-4 h-4 bg-green-500 rounded mr-2" />
                 <span>Interest Earned</span>
               </div>
             </div>
           </CardContent>
-        </Card>
-      )}
+        </Card> : null}
 
-      {result && (
-        <Card>
+      {result ? <Card>
           <CardHeader>
             <CardTitle>Year-by-Year Breakdown</CardTitle>
           </CardHeader>
@@ -427,11 +420,9 @@ export default function CompoundInterestCalculator() {
               </table>
             </div>
           </CardContent>
-        </Card>
-      )}
+        </Card> : null}
 
-      {result && (
-        <Card className="mt-6">
+      {result ? <Card className="mt-6">
           <CardHeader>
             <CardTitle className="flex items-center">
               <TrendingUp className="w-5 h-5 mr-2" />
@@ -502,8 +493,7 @@ export default function CompoundInterestCalculator() {
               <div>• <span className="text-red-500 font-medium">Beyond 100y</span>: Milestone would take more than 100 years to reach</div>
             </div>
           </CardContent>
-        </Card>
-      )}
+        </Card> : null}
 
       <AdSlot position="sidebar" id="CI-002" size="medium" className="mt-6" />
     </div>

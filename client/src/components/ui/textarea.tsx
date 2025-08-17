@@ -97,8 +97,7 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
     return (
       <div className="relative">
         {/* Controls Bar */}
-        {showControls && (
-          <div className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-b-0 border-input rounded-t-md">
+        {showControls ? <div className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-b-0 border-input rounded-t-md">
             <div className="flex items-center gap-2">
               <Button
                 type="button"
@@ -114,8 +113,7 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
             </div>
             
             <div className="flex items-center gap-2">
-              {value && (
-                <Button
+              {value ? <Button
                   type="button"
                   variant="ghost"
                   size="sm"
@@ -125,15 +123,12 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
                 >
                   <Copy className="w-3 h-3 mr-1" />
                   Copy
-                </Button>
-              )}
+                </Button> : null}
             </div>
-          </div>
-        )}
+          </div> : null}
 
         {/* Line Numbers */}
-        {showLineNumbers && !wordWrap && (
-          <div className="absolute left-0 top-0 bottom-0 w-12 bg-slate-50 dark:bg-slate-800 border-r border-input flex flex-col text-sm text-slate-500 dark:text-slate-400 font-mono select-none z-10"
+        {showLineNumbers && !wordWrap ? <div className="absolute left-0 top-0 bottom-0 w-12 bg-slate-50 dark:bg-slate-800 border-r border-input flex flex-col text-sm text-slate-500 dark:text-slate-400 font-mono select-none z-10"
                style={{ marginTop: showControls ? '41px' : '0' }}>
             <div className="py-2 px-2 flex-1 leading-6">
               {lineNumbers.map((num) => (
@@ -142,8 +137,7 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
                 </div>
               ))}
             </div>
-          </div>
-        )}
+          </div> : null}
 
         {/* Textarea */}
         <textarea
@@ -162,8 +156,7 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
         />
 
         {/* Stats Bar */}
-        {showStats && (
-          <div className="flex justify-between items-center px-3 py-1 bg-slate-50 dark:bg-slate-800 border border-t-0 border-input rounded-b-md text-xs text-slate-600 dark:text-slate-400">
+        {showStats ? <div className="flex justify-between items-center px-3 py-1 bg-slate-50 dark:bg-slate-800 border border-t-0 border-input rounded-b-md text-xs text-slate-600 dark:text-slate-400">
             <div className="flex gap-4">
               <span>Lines: {lineCount}</span>
               <span>Characters: {characterCount}</span>
@@ -171,8 +164,7 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
             <div>
               Line {currentLine}, Column {currentColumn}
             </div>
-          </div>
-        )}
+          </div> : null}
       </div>
     )
   }

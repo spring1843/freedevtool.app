@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Header } from "./Header";
 import { Sidebar } from "./Sidebar";
@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ChevronUp, Square, SkipForward, Timer, X, Play, Pause } from "lucide-react";
+import { ChevronUp, Square, SkipForward, Timer, Play, Pause } from "lucide-react";
 import { toolsData } from "@/data/tools";
 import { useDemo } from "@/providers/demo-provider";
 
@@ -89,8 +89,7 @@ export function Layout({ children }: LayoutProps) {
       </div>
       
       {/* Demo Status Bar */}
-      {isDemoRunning && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 px-4 py-2">
+      {isDemoRunning ? <div className="bg-blue-50 dark:bg-blue-900/20 border-b border-blue-200 dark:border-blue-800 px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Badge variant="default" className="bg-blue-600">
@@ -185,8 +184,7 @@ export function Layout({ children }: LayoutProps) {
               </Tooltip>
             </div>
           </div>
-        </div>
-      )}
+        </div> : null}
 
       {/* Header Collapse Toggle */}
       <div className={`flex justify-end pr-4 transition-all duration-300 ${headerCollapsed ? 'py-1' : 'py-0'}`}>

@@ -46,7 +46,7 @@ export default function HTMLFormatter() {
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
 
-  const formatCode = (minify: boolean = false) => {
+  const formatCode = (minify = false) => {
     const { formatted, error: formatError, warnings: formatWarnings } = formatHTML(input, minify);
     setOutput(formatted);
     setError(formatError || null);
@@ -90,13 +90,11 @@ export default function HTMLFormatter() {
         </div>
       </div>
 
-      {error && (
-        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert>
-      )}
+        </Alert> : null}
 
       {warnings.length > 0 && (
         <Alert className="mb-6 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20">
@@ -109,7 +107,7 @@ export default function HTMLFormatter() {
                   <span className={`font-medium ${warning.type === 'error' ? 'text-red-600' : 'text-yellow-600'}`}>
                     {warning.type === 'error' ? 'Error' : 'Warning'}
                   </span>
-                  {warning.line && <span className="text-gray-500"> (Line {warning.line})</span>}: {warning.message}
+                  {warning.line ? <span className="text-gray-500"> (Line {warning.line})</span> : null}: {warning.message}
                 </div>
               ))}
               {warnings.length > 5 && (

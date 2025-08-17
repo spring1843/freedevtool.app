@@ -124,14 +124,14 @@ export default function BcryptHash() {
           Password matches hash
         </div>
       );
-    } else {
+    } 
       return (
         <div className="flex items-center text-red-600">
           <XCircle className="w-4 h-4 mr-2" />
           Password does not match hash
         </div>
       );
-    }
+    
   };
 
   return (
@@ -152,13 +152,11 @@ export default function BcryptHash() {
         </div>
       </div>
 
-      {error && (
-        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert>
-      )}
+        </Alert> : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>

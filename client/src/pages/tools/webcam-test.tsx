@@ -188,13 +188,11 @@ export default function WebcamTest() {
         </div>
       </div>
 
-      {error && (
-        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert>
-      )}
+        </Alert> : null}
 
       <Card className="mb-6">
         <CardHeader>
@@ -301,8 +299,7 @@ export default function WebcamTest() {
           
           <canvas ref={canvasRef} className="hidden" />
           
-          {isActive && (
-            <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+          {isActive ? <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
               <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                 <div className="font-semibold text-green-700 dark:text-green-300">Status</div>
                 <div className="text-green-600 dark:text-green-400">Camera Active</div>
@@ -313,8 +310,7 @@ export default function WebcamTest() {
                   {videoRef.current?.videoWidth}x{videoRef.current?.videoHeight}
                 </div>
               </div>
-            </div>
-          )}
+            </div> : null}
         </CardContent>
       </Card>
 

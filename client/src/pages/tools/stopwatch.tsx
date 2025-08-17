@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, Pause, Square, Flag, RotateCcw } from "lucide-react";
+import { Play, Pause, Square, Flag } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -59,7 +59,7 @@ export default function Stopwatch() {
       const lapTime = laps.length > 0 ? time - laps[laps.length - 1].totalTime : time;
       const newLap: LapTime = {
         lapNumber: laps.length + 1,
-        lapTime: lapTime,
+        lapTime,
         totalTime: time
       };
       setLaps(prevLaps => [...prevLaps, newLap]);
@@ -87,7 +87,7 @@ export default function Stopwatch() {
               const lapTime = laps.length > 0 ? time - laps[laps.length - 1].totalTime : time;
               const newLap: LapTime = {
                 lapNumber: laps.length + 1,
-                lapTime: lapTime,
+                lapTime,
                 totalTime: time
               };
               setLaps(prevLaps => [...prevLaps, newLap]);
@@ -132,13 +132,11 @@ export default function Stopwatch() {
   }, [isRunning, time, laps]);
 
   // Cleanup on unmount
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-    };
-  }, []);
+    }, []);
 
   const fastestLap = laps.length > 0 ? Math.min(...laps.map(lap => lap.lapTime)) : 0;
   const slowestLap = laps.length > 0 ? Math.max(...laps.map(lap => lap.lapTime)) : 0;

@@ -41,7 +41,7 @@ export default function TextSorter() {
   const sortText = () => {
     const lines = input.split('\n').filter(line => line.trim() !== '');
     
-    let sorted = [...lines];
+    const sorted = [...lines];
     
     switch (sortType) {
       case 'alphabetical':

@@ -177,7 +177,7 @@ export function calculateMultipleDebts(
   }
   
   const extraPayment = totalPayment - totalMinimum;
-  let sortedDebts = [...debts];
+  const sortedDebts = [...debts];
   
   // Sort based on strategy
   if (strategy === 'avalanche') {
@@ -192,7 +192,7 @@ export function calculateMultipleDebts(
   const debtPayoffOrder = [];
   const monthlySummary = [];
   let month = 0;
-  let currentDebts = sortedDebts.map(debt => ({ ...debt, isPaidOff: false }));
+  const currentDebts = sortedDebts.map(debt => ({ ...debt, isPaidOff: false }));
   let remainingExtraPayment = extraPayment;
   
   while (currentDebts.some(debt => !debt.isPaidOff)) {

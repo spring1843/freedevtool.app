@@ -15,7 +15,7 @@ import {
   generateRandomColor, 
   getContrastColor
 } from "@/lib/color-tools";
-import { Palette, Copy, Download, RefreshCw, Shuffle, RotateCcw, Share, Link } from "lucide-react";
+import { Palette, Copy, Download, RefreshCw, Shuffle, RotateCcw, Share } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdSlot from "@/components/ui/ad-slot";
 import { useLocation } from "wouter";

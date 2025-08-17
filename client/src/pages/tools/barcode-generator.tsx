@@ -41,10 +41,10 @@ export default function BarcodeGenerator() {
       setError(null);
       
       const options = {
-        format: format,
-        width: width,
-        height: height,
-        displayValue: displayValue,
+        format,
+        width,
+        height,
+        displayValue,
         fontSize: 16,
         textAlign: "center" as const,
         textPosition: "bottom" as const,
@@ -87,9 +87,7 @@ export default function BarcodeGenerator() {
     setError(null);
   };
 
-  const getFormatInfo = (formatValue: string) => {
-    return barcodeFormats.find(f => f.value === formatValue);
-  };
+  const getFormatInfo = (formatValue: string) => barcodeFormats.find(f => f.value === formatValue);
 
   const validateInput = (inputText: string, barcodeFormat: string) => {
     switch (barcodeFormat) {
@@ -137,13 +135,11 @@ export default function BarcodeGenerator() {
         </div>
       </div>
 
-      {(error || inputError) && (
-        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {(error || inputError) ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error || inputError}
           </AlertDescription>
-        </Alert>
-      )}
+        </Alert> : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
@@ -161,9 +157,7 @@ export default function BarcodeGenerator() {
                 data-testid="barcode-text"
                 className={inputError ? 'border-red-500' : ''}
               />
-              {inputError && (
-                <div className="text-sm text-red-600 mt-1">{inputError}</div>
-              )}
+              {inputError ? <div className="text-sm text-red-600 mt-1">{inputError}</div> : null}
             </div>
 
             <div>

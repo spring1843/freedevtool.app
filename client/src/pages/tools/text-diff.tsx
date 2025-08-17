@@ -45,7 +45,7 @@ export default function TextDiff() {
     const lines2 = text2.split('\n');
     const result: DiffLine[] = [];
     
-    let stats = {
+    const stats = {
       linesAdded: 0,
       linesRemoved: 0,
       linesModified: 0,
@@ -64,7 +64,7 @@ export default function TextDiff() {
         // Line added in text2
         result.push({
           type: 'added',
-          line2: line2,
+          line2,
           lineNumber2: i + 1
         });
         stats.linesAdded++;
@@ -73,7 +73,7 @@ export default function TextDiff() {
         // Line removed from text1
         result.push({
           type: 'removed',
-          line1: line1,
+          line1,
           lineNumber1: i + 1
         });
         stats.linesRemoved++;
@@ -82,8 +82,8 @@ export default function TextDiff() {
         // Lines are identical
         result.push({
           type: 'unchanged',
-          line1: line1,
-          line2: line2,
+          line1,
+          line2,
           lineNumber1: i + 1,
           lineNumber2: i + 1
         });
@@ -91,8 +91,8 @@ export default function TextDiff() {
         // Lines are different
         result.push({
           type: 'modified',
-          line1: line1,
-          line2: line2,
+          line1,
+          line2,
           lineNumber1: i + 1,
           lineNumber2: i + 1
         });
@@ -134,15 +134,11 @@ export default function TextDiff() {
       <div key={index} className={`p-2 ${getLineClass(diff.type)}`}>
         <div className="grid grid-cols-2 gap-4 text-sm font-mono">
           <div>
-            {diff.lineNumber1 && (
-              <span className="text-gray-500 mr-2">{diff.lineNumber1}:</span>
-            )}
+            {diff.lineNumber1 ? <span className="text-gray-500 mr-2">{diff.lineNumber1}:</span> : null}
             {diff.line1 || ''}
           </div>
           <div>
-            {diff.lineNumber2 && (
-              <span className="text-gray-500 mr-2">{diff.lineNumber2}:</span>
-            )}
+            {diff.lineNumber2 ? <span className="text-gray-500 mr-2">{diff.lineNumber2}:</span> : null}
             {diff.line2 || ''}
           </div>
         </div>
@@ -168,8 +164,7 @@ export default function TextDiff() {
         </div>
       </div>
 
-      {diffStats && (
-        <Card className="mb-6">
+      {diffStats ? <Card className="mb-6">
           <CardHeader>
             <CardTitle>Diff Statistics</CardTitle>
           </CardHeader>
@@ -189,8 +184,7 @@ export default function TextDiff() {
               </Badge>
             </div>
           </CardContent>
-        </Card>
-      )}
+        </Card> : null}
 
       <div className="mb-6 flex gap-3">
         <Button

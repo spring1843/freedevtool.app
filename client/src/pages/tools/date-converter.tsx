@@ -2,7 +2,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, RotateCcw, Clock, Copy } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -106,7 +105,7 @@ export default function DateConverter() {
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
       case 'objectid':
         const timestamp = Math.floor(date.getTime() / 1000).toString(16);
-        return timestamp.padStart(8, '0') + 'f1a2b3c4d5e6f789';
+        return `${timestamp.padStart(8, '0')  }f1a2b3c4d5e6f789`;
       case 'full':
         return date.toLocaleDateString('en-US', { 
           weekday: 'long', 

@@ -107,7 +107,7 @@ function validateHTML(input: string): ValidationIssue[] {
   return issues;
 }
 
-export function formatHTML(input: string, minify: boolean = false): { formatted: string; error?: string; warnings?: ValidationIssue[] } {
+export function formatHTML(input: string, minify = false): { formatted: string; error?: string; warnings?: ValidationIssue[] } {
   try {
     if (minify) {
       // Minify HTML
@@ -292,7 +292,7 @@ export function formatHTML(input: string, minify: boolean = false): { formatted:
   }
 }
 
-export function formatCSS(input: string, minify: boolean = false): { formatted: string; error?: string } {
+export function formatCSS(input: string, minify = false): { formatted: string; error?: string } {
   try {
     if (minify) {
       // Minify CSS
@@ -312,7 +312,7 @@ export function formatCSS(input: string, minify: boolean = false): { formatted: 
         .trim();
       
       return { formatted: minified };
-    } else {
+    } 
       // Beautify CSS
       let formatted = input
         // Remove comments first but preserve them for now
@@ -365,7 +365,7 @@ export function formatCSS(input: string, minify: boolean = false): { formatted: 
         .join('\n');
       
       return { formatted: finalFormatted };
-    }
+    
   } catch (error) {
     return { formatted: input, error: `CSS formatting error: ${error instanceof Error ? error.message : 'Unknown error'}` };
   }
@@ -416,7 +416,7 @@ export function formatMarkdown(input: string): { formatted: string; error?: stri
   }
 }
 
-export function formatLESS(input: string, minify: boolean = false): { formatted: string; error?: string } {
+export function formatLESS(input: string, minify = false): { formatted: string; error?: string } {
   // LESS has similar syntax to CSS, so we can use the CSS formatter as a base
   return formatCSS(input, minify);
 }

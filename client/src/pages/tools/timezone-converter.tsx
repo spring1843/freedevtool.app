@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Globe, Clock, ArrowRight, Copy, Check, RefreshCw, Share } from "lucide-react";
 import AdSlot from "@/components/ui/ad-slot";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
-import { getTimeForTimezone, getDateForTimezone, getTimezoneOffset, getUserTimezone } from "@/lib/time-tools";
+import { getUserTimezone } from "@/lib/time-tools";
 import { updateURL, copyShareableURL, getValidatedParam } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 

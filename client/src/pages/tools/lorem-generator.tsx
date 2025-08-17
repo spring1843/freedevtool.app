@@ -34,7 +34,7 @@ export default function LoremGenerator() {
     return loremWords[randomIndex];
   };
 
-  const generateSentence = (wordCount: number = 10): string => {
+  const generateSentence = (wordCount = 10): string => {
     const words: string[] = [];
     
     for (let i = 0; i < wordCount; i++) {
@@ -46,10 +46,10 @@ export default function LoremGenerator() {
       words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
     }
     
-    return words.join(" ") + ".";
+    return `${words.join(" ")  }.`;
   };
 
-  const generateParagraph = (sentenceCount: number = 5): string => {
+  const generateParagraph = (sentenceCount = 5): string => {
     const sentences: string[] = [];
     
     for (let i = 0; i < sentenceCount; i++) {
@@ -91,7 +91,7 @@ export default function LoremGenerator() {
           
           // Start first sentence with "Lorem ipsum" if requested
           if (i === 0 && startWithLorem) {
-            sentence = "Lorem ipsum " + sentence.toLowerCase();
+            sentence = `Lorem ipsum ${  sentence.toLowerCase()}`;
             sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
           }
           
@@ -111,7 +111,7 @@ export default function LoremGenerator() {
           
           // Start first paragraph with "Lorem ipsum" if requested
           if (i === 0 && startWithLorem) {
-            paragraph = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " + paragraph;
+            paragraph = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. ${  paragraph}`;
           }
           
           paragraphs.push(paragraph);
@@ -228,8 +228,7 @@ export default function LoremGenerator() {
         </CardContent>
       </Card>
 
-      {generated && (
-        <Card>
+      {generated ? <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Generated Lorem Ipsum
@@ -259,8 +258,7 @@ export default function LoremGenerator() {
               {generated.split(' ').length} words, {generated.split(/[.!?]+/).length - 1} sentences
             </div>
           </CardContent>
-        </Card>
-      )}
+        </Card> : null}
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
         <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">About Lorem Ipsum:</h3>

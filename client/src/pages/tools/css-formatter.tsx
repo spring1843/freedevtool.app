@@ -15,7 +15,7 @@ export default function CSSFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const formatCode = (minify: boolean = false) => {
+  const formatCode = (minify = false) => {
     const { formatted, error: formatError } = formatCSS(input, minify);
     setOutput(formatted);
     setError(formatError || null);
@@ -56,13 +56,11 @@ export default function CSSFormatter() {
         </div>
       </div>
 
-      {error && (
-        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert>
-      )}
+        </Alert> : null}
 
       <div className="mb-6 flex gap-4">
         <Button

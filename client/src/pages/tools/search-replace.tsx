@@ -164,11 +164,9 @@ export default function SearchReplace() {
             </div>
           </div>
 
-          {error && (
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          {error ? <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
               <div className="text-sm text-red-800 dark:text-red-200">{error}</div>
-            </div>
-          )}
+            </div> : null}
 
           <div className="flex items-center justify-between">
             <div className="flex gap-3">

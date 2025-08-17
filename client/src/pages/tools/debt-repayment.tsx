@@ -82,12 +82,10 @@ export default function DebtRepaymentCalculator() {
     calculateDebtRepayment();
   }, []);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+  const formatCurrency = (amount: number) => new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
     }).format(amount);
-  };
 
   const formatTime = (months: number) => {
     const years = Math.floor(months / 12);
@@ -176,8 +174,7 @@ export default function DebtRepaymentCalculator() {
           </CardContent>
         </Card>
 
-        {result && (
-          <Card>
+        {result ? <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <CreditCard className="w-5 h-5 mr-2" />
@@ -223,12 +220,10 @@ export default function DebtRepaymentCalculator() {
                 </div>
               )}
             </CardContent>
-          </Card>
-        )}
+          </Card> : null}
       </div>
 
-      {result && result.schedule.length > 0 && (
-        <>
+      {result && result.schedule.length > 0 ? <>
           <Card>
             <CardHeader>
               <CardTitle>Payment Schedule (First 5 Years)</CardTitle>
@@ -344,22 +339,21 @@ export default function DebtRepaymentCalculator() {
               </div>
               <div className="flex justify-center gap-6 mt-4 text-sm">
                 <div className="flex items-center">
-                  <div className="w-4 h-4 bg-red-600 rounded mr-2"></div>
+                  <div className="w-4 h-4 bg-red-600 rounded mr-2" />
                   <span>Remaining Balance</span>
                 </div>
                 <div className="flex items-center">
-                  <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
+                  <div className="w-4 h-4 bg-green-500 rounded mr-2" />
                   <span>Principal Payment</span>
                 </div>
                 <div className="flex items-center">
-                  <div className="w-4 h-4 bg-amber-500 rounded mr-2"></div>
+                  <div className="w-4 h-4 bg-amber-500 rounded mr-2" />
                   <span>Interest Payment</span>
                 </div>
               </div>
             </CardContent>
           </Card>
-        </>
-      )}
+        </> : null}
 
       <AdSlot position="sidebar" id="DR-002" size="medium" className="mt-6" />
     </div>

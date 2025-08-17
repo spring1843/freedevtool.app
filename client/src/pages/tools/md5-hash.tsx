@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 import AdSlot from "@/components/ui/ad-slot";
@@ -170,8 +169,7 @@ export default function MD5Hash() {
               {isLoading ? 'Generating...' : 'Generate MD5 Hash'}
             </Button>
 
-            {hashResult && (
-              <div className="mt-4">
+            {hashResult ? <div className="mt-4">
                 <Label className="text-sm font-medium">Generated Hash:</Label>
                 <div className="flex items-center mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
                   <div className="font-mono text-sm flex-1 break-all">
@@ -186,8 +184,7 @@ export default function MD5Hash() {
                     <Copy className="w-4 h-4" />
                   </Button>
                 </div>
-              </div>
-            )}
+              </div> : null}
           </CardContent>
         </Card>
 

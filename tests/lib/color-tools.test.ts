@@ -22,9 +22,9 @@ describe('Color Tools Utilities', () => {
       const rgbToHex = (r: number, g: number, b: number): string => {
         const componentToHex = (c: number): string => {
           const hex = c.toString(16)
-          return hex.length === 1 ? '0' + hex : hex
+          return hex.length === 1 ? `0${  hex}` : hex
         }
-        return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b)
+        return `#${  componentToHex(r)  }${componentToHex(g)  }${componentToHex(b)}`
       }
 
       expect(rgbToHex(255, 0, 0)).toBe('#ff0000')
@@ -75,9 +75,7 @@ describe('Color Tools Utilities', () => {
 
   describe('Color Validation', () => {
     it('should validate hex colors', () => {
-      const isValidHex = (hex: string): boolean => {
-        return /^#?([a-f\d]{3}|[a-f\d]{6})$/i.test(hex)
-      }
+      const isValidHex = (hex: string): boolean => /^#?([a-f\d]{3}|[a-f\d]{6})$/i.test(hex)
 
       expect(isValidHex('#FF0000')).toBe(true)
       expect(isValidHex('#F00')).toBe(true)
@@ -89,9 +87,7 @@ describe('Color Tools Utilities', () => {
     })
 
     it('should validate RGB values', () => {
-      const isValidRgb = (r: number, g: number, b: number): boolean => {
-        return r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255
-      }
+      const isValidRgb = (r: number, g: number, b: number): boolean => r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255
 
       expect(isValidRgb(255, 0, 0)).toBe(true)
       expect(isValidRgb(0, 255, 0)).toBe(true)
@@ -190,9 +186,7 @@ describe('Color Tools Utilities', () => {
     })
 
     it('should determine if colors meet WCAG contrast requirements', () => {
-      const meetsWCAG = (contrastRatio: number, level: 'AA' | 'AAA' = 'AA'): boolean => {
-        return level === 'AA' ? contrastRatio >= 4.5 : contrastRatio >= 7
-      }
+      const meetsWCAG = (contrastRatio: number, level: 'AA' | 'AAA' = 'AA'): boolean => level === 'AA' ? contrastRatio >= 4.5 : contrastRatio >= 7
 
       expect(meetsWCAG(21)).toBe(true) // White vs Black
       expect(meetsWCAG(4.5)).toBe(true) // Minimum AA
@@ -204,9 +198,7 @@ describe('Color Tools Utilities', () => {
 
   describe('Color Palette Generation', () => {
     it('should generate complementary colors', () => {
-      const getComplementary = (h: number): number => {
-        return (h + 180) % 360
-      }
+      const getComplementary = (h: number): number => (h + 180) % 360
 
       expect(getComplementary(0)).toBe(180) // Red -> Cyan
       expect(getComplementary(120)).toBe(300) // Green -> Magenta
@@ -215,9 +207,7 @@ describe('Color Tools Utilities', () => {
     })
 
     it('should generate triadic colors', () => {
-      const getTriadic = (h: number): [number, number] => {
-        return [(h + 120) % 360, (h + 240) % 360]
-      }
+      const getTriadic = (h: number): [number, number] => [(h + 120) % 360, (h + 240) % 360]
 
       expect(getTriadic(0)).toEqual([120, 240]) // Red -> Green, Blue
       expect(getTriadic(60)).toEqual([180, 300]) // Yellow -> Cyan, Magenta
@@ -225,9 +215,7 @@ describe('Color Tools Utilities', () => {
     })
 
     it('should generate analogous colors', () => {
-      const getAnalogous = (h: number, step: number = 30): [number, number] => {
-        return [(h - step + 360) % 360, (h + step) % 360]
-      }
+      const getAnalogous = (h: number, step = 30): [number, number] => [(h - step + 360) % 360, (h + step) % 360]
 
       expect(getAnalogous(180)).toEqual([150, 210]) // Cyan +/- 30°
       expect(getAnalogous(30)).toEqual([0, 60]) // Orange +/- 30°

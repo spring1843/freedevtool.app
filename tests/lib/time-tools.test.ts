@@ -237,9 +237,7 @@ describe('Time and Date Utilities', () => {
     })
 
     it('should check if date is in the past', () => {
-      const isInPast = (date: Date): boolean => {
-        return date.getTime() < Date.now()
-      }
+      const isInPast = (date: Date): boolean => date.getTime() < Date.now()
       
       const pastDate = new Date('2020-01-01')
       const futureDate = new Date('2030-01-01')

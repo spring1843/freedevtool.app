@@ -146,24 +146,20 @@ export default function TLSDecoder() {
         </div>
       </div>
 
-      {error && (
-        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert>
-      )}
+        </Alert> : null}
 
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Certificate Input
-            {validityStatus && (
-              <div className={`flex items-center ${validityStatus.color} text-sm`}>
+            {validityStatus ? <div className={`flex items-center ${validityStatus.color} text-sm`}>
                 {validityStatus.icon}
                 <span className="ml-1">{validityStatus.text}</span>
-              </div>
-            )}
+              </div> : null}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -193,8 +189,7 @@ export default function TLSDecoder() {
         </CardContent>
       </Card>
 
-      {certificateInfo && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {certificateInfo ? <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-blue-600 dark:text-blue-400">Basic Information</CardTitle>
@@ -288,8 +283,7 @@ export default function TLSDecoder() {
               </div>
             </CardContent>
           </Card>
-        </div>
-      )}
+        </div> : null}
 
       <AdSlot position="sidebar" id="TLS-002" size="medium" className="mt-6" />
     </div>

@@ -128,7 +128,7 @@ export function formatDateWithPattern(date: Date, pattern: string): string {
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const fullDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   
-  const pad = (n: number, width: number = 2): string => n.toString().padStart(width, '0');
+  const pad = (n: number, width = 2): string => n.toString().padStart(width, '0');
   const padSpace = (n: number): string => n.toString().padStart(2, ' ');
   
   // Get timezone offset
@@ -157,10 +157,10 @@ export function formatDateWithPattern(date: Date, pattern: string): string {
   result = result.replace(/'06/g, year.toString().slice(2));
   result = result.replace(/January/g, new Date(2000, date.getMonth()).toLocaleString('en', { month: 'long' }));
   result = result.replace(/Monday/g, fullDays[date.getDay()]);
-  result = result.replace(/999999999/g, pad(milliseconds, 3) + '000000');
-  result = result.replace(/000000000/g, pad(milliseconds, 3) + '000000');
-  result = result.replace(/999999/g, pad(milliseconds, 3) + '000');
-  result = result.replace(/000000/g, pad(milliseconds, 3) + '000');
+  result = result.replace(/999999999/g, `${pad(milliseconds, 3)  }000000`);
+  result = result.replace(/000000000/g, `${pad(milliseconds, 3)  }000000`);
+  result = result.replace(/999999/g, `${pad(milliseconds, 3)  }000`);
+  result = result.replace(/000000/g, `${pad(milliseconds, 3)  }000`);
   result = result.replace(/Z07:00/g, offset === 0 ? 'Z' : timezoneOffsetColon);
   result = result.replace(/Z0700/g, offset === 0 ? 'Z' : timezoneOffset);
   result = result.replace(/-0700/g, timezoneOffset);
@@ -251,7 +251,7 @@ export function parseDate(input: string): Date | null {
 }
 
 // Convert all supported formats for a given date
-export function convertToAllFormats(date: Date): { name: string; value: string; description: string }[] {
+export function convertToAllFormats(date: Date): Array<{ name: string; value: string; description: string }> {
   const formats = [
     // Standard JavaScript formats
     {

@@ -169,9 +169,7 @@ export default function RegexTester() {
               data-testid="regex-pattern"
               className={`font-mono ${!isValidRegex ? 'border-red-500' : ''}`}
             />
-            {error && (
-              <div className="text-sm text-red-600 mt-1">{error}</div>
-            )}
+            {error ? <div className="text-sm text-red-600 mt-1">{error}</div> : null}
           </div>
 
           <div className="flex flex-wrap gap-4">

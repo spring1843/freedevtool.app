@@ -162,7 +162,7 @@ export default function Countdown() {
   ];
 
   const applyPreset = (preset: typeof presets[0]) => {
-    const date = preset.date;
+    const {date} = preset;
     const dateStr = date.toISOString().split('T')[0];
     const timeStr = preset.time || date.toTimeString().slice(0, 5);
     
@@ -352,16 +352,14 @@ export default function Countdown() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {isComplete && (
-            <div className="text-center mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          {isComplete ? <div className="text-center mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
               <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">
                 🎉 Countdown Complete! 🎉
               </div>
               <div className="text-red-700 dark:text-red-300">
                 Target time has been reached
               </div>
-            </div>
-          )}
+            </div> : null}
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -390,12 +388,11 @@ export default function Countdown() {
             </div>
           </div>
 
-          {targetDate && targetTime && (
-            <div className="mt-6 text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+          {targetDate && targetTime ? <div className="mt-6 text-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
               <div className="text-sm text-gray-600 dark:text-gray-400">Target:</div>
               <div className="font-mono text-lg">
                 {new Date(`${targetDate}T${targetTime}`).toLocaleString(undefined, {
-                  timeZone: timeZone,
+                  timeZone,
                   weekday: 'long',
                   year: 'numeric',
                   month: 'long',
@@ -406,8 +403,7 @@ export default function Countdown() {
                 })}
               </div>
               <div className="text-xs text-gray-500 mt-1">({timeZone})</div>
-            </div>
-          )}
+            </div> : null}
         </CardContent>
       </Card>
 

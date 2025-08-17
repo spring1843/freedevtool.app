@@ -63,8 +63,7 @@ export default function Home() {
         </div>
         
         {/* Demo Mode */}
-        {isDemoRunning && (
-          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        {isDemoRunning ? <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
                 <Badge variant="default" className="bg-blue-600">
@@ -113,8 +112,7 @@ export default function Home() {
             <div className="text-xs text-blue-600 dark:text-blue-400 mt-1 text-center">
               {Math.round(demoProgress)}% complete • {isDemoPaused ? 'Paused' : `${demoSpeed.replace('-', ' ')} speed`}
             </div>
-          </div>
-        )}
+          </div> : null}
 
         {/* Demo Button */}
         {!isDemoRunning && (
@@ -219,8 +217,7 @@ export default function Home() {
             </div>
 
             {/* Expandable section with all shortcuts */}
-            {showAllShortcuts && (
-              <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+            {showAllShortcuts ? <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
                     <h4 className="font-semibold text-sm mb-2">Converters:</h4>
@@ -259,8 +256,7 @@ export default function Home() {
                     </ul>
                   </div>
                 </div>
-              </div>
-            )}
+              </div> : null}
             
             <div className="text-center mt-4">
               <Button

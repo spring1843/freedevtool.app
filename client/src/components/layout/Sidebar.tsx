@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link, useLocation } from "wouter";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toolsData } from "@/data/tools";
 import {
   Calendar,
@@ -25,7 +25,6 @@ import {
   Globe,
   Calculator,
   CreditCard,
-  Home,
   Square,
   BarChart3,
   Type,
@@ -319,7 +318,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                   tabIndex={-1}
                 >
                   <span className={cn("flex items-center gap-2.5", isCategoryActive && "font-bold")}>
-                    {isCategoryActive && <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />}
+                    {isCategoryActive ? <div className="w-2 h-2 bg-primary rounded-full animate-pulse" /> : null}
                     {categoryName}
                   </span>
                   {isExpanded ? (
@@ -367,9 +366,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                                 data-testid={`tool-${tool.path.slice(1) || 'date-converter'}`}
                                 tabIndex={-1}
                               >
-                                {isActive && (
-                                  <div className="absolute left-1 top-2 bottom-2 w-1 bg-primary-foreground rounded-r-full" />
-                                )}
+                                {isActive ? <div className="absolute left-1 top-2 bottom-2 w-1 bg-primary-foreground rounded-r-full" /> : null}
                                 <div className={cn(
                                   "w-5 h-5 mr-3 flex-shrink-0 transition-all duration-300 group-hover:scale-110",
                                   isActive && "scale-110 text-primary-foreground"
@@ -381,7 +378,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                                   isActive && "font-medium"
                                 )}>{tool.name}</span>
                                 <div className="flex items-center gap-2 ml-auto flex-shrink-0">
-                                  {tool.experimental && <Badge 
+                                  {tool.experimental ? <Badge 
                                       variant="secondary" 
                                       className={cn(
                                         "text-xs px-1.5 py-0.5 h-5 rounded-full transition-all duration-300",
@@ -391,13 +388,9 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                                       )}
                                     >
                                       β
-                                    </Badge>}
-                                  {isActive && (
-                                    <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
-                                  )}
-                                  {!isActive && isVisited && (
-                                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full opacity-70" />
-                                  )}
+                                    </Badge> : null}
+                                  {isActive ? <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse" /> : null}
+                                  {!isActive && isVisited ? <div className="w-1.5 h-1.5 bg-purple-500 rounded-full opacity-70" /> : null}
                                 </div>
                               </Button>
                             </Link>

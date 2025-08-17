@@ -11,9 +11,7 @@ const sessionState = new Map<string, any>();
  */
 export function usePersistentState<T>(key: string, initialValue: T): [T, (value: T | ((prev: T) => T)) => void] {
   // Get stored value from session state or use initial value
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    return sessionState.has(key) ? sessionState.get(key) : initialValue;
-  });
+  const [storedValue, setStoredValue] = useState<T>(() => sessionState.has(key) ? sessionState.get(key) : initialValue);
 
   // Save to session state whenever value changes
   const setValue = (value: T | ((prev: T) => T)) => {
