@@ -1,7 +1,7 @@
 # Development Makefile for DevTools Suite
 # Comprehensive development workflow management
 
-.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy all
+.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all
 
 # Default target
 .DEFAULT_GOAL := help
@@ -16,7 +16,7 @@ NC=\033[0m # No Color
 ## Setup Commands
 
 setup: ## Complete project setup - install dependencies, browsers, and prepare for development
-    make install
+	make deps
 	make e2e-install
 	make type-check
 	make lint
@@ -140,9 +140,9 @@ deploy-check: prepare-deploy ## Check if ready for deployment
 
 all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
 
-pre-commit: lint-fix format type-check ## Pre-commit hook (fix, format, check)
+pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
 
-ci: pre-commit build test e2e-test lint
+ci: pre-commit build test e2e-test
 
 ## Documentation
 
