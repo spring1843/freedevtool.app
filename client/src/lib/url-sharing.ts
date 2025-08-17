@@ -79,31 +79,37 @@ function validateParam(
     switch (rule.type) {
       case "string":
         if (typeof value !== "string") return defaultValue;
-        const sanitized = sanitizeString(value, rule.maxLength);
-        if (rule.pattern && !rule.pattern.test(sanitized)) return defaultValue;
-        if (rule.allowedValues && !rule.allowedValues.includes(sanitized))
-          return defaultValue;
-        return sanitized;
+        {
+          const sanitized = sanitizeString(value, rule.maxLength);
+          if (rule.pattern && !rule.pattern.test(sanitized))
+            return defaultValue;
+          if (rule.allowedValues && !rule.allowedValues.includes(sanitized))
+            return defaultValue;
+          return sanitized;
+        }
 
-      case "number":
+      case "number": {
         const num = Number(value);
         if (isNaN(num)) return defaultValue;
         if (rule.min !== undefined && num < rule.min) return defaultValue;
         if (rule.max !== undefined && num > rule.max) return defaultValue;
         return num;
+      }
 
-      case "boolean":
+      case "boolean": {
         if (typeof value === "boolean") return value;
         if (typeof value === "string") return value === "true";
         return defaultValue;
+      }
 
-      case "enum":
+      case "enum": {
         if (rule.allowedValues && rule.allowedValues.includes(String(value))) {
           return String(value);
         }
         return defaultValue;
+      }
 
-      case "array":
+      case "array": {
         if (typeof value !== "string") return defaultValue;
         const items = value
           .split(",")
@@ -130,6 +136,7 @@ function validateParam(
         }
 
         return items;
+      }
 
       default:
         return defaultValue;
