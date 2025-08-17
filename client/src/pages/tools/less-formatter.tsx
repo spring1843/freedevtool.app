@@ -23,7 +23,7 @@ export default function LESSFormatter() {
   const handleInputChange = (value: string) => {
     setInput(value);
     if (output) {
-      setOutput('');
+      setOutput("");
     }
   };
 
@@ -40,7 +40,7 @@ export default function LESSFormatter() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="LF-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
           LESS Formatter
@@ -50,11 +50,13 @@ export default function LESSFormatter() {
         </p>
       </div>
 
-      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert> : null}
+        </Alert>
+      ) : null}
 
       <div className="mb-6 flex gap-4">
         <Button
@@ -78,7 +80,7 @@ export default function LESSFormatter() {
           <CardContent>
             <Textarea
               value={input}
-              onChange={(e) => handleInputChange(e.target.value)}
+              onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your LESS code here..."
               data-testid="less-input"
               className="min-h-[400px] font-mono text-sm"

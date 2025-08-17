@@ -1,4 +1,4 @@
-import type { CompoundInterestResult, DebtPaymentResult } from '@/types/tools';
+import type { CompoundInterestResult, DebtPaymentResult } from "@/types/tools";
 
 // Calculate compound interest with enhanced features
 export function calculateCompoundInterest(
@@ -7,8 +7,8 @@ export function calculateCompoundInterest(
   years: number,
   compoundingFrequency = 12, // Monthly by default
   monthlyContribution = 0,
-  contributionFrequency: 'monthly' | 'yearly' = 'monthly',
-  interestFrequency: 'monthly' | 'yearly' = 'monthly'
+  contributionFrequency: "monthly" | "yearly" = "monthly",
+  interestFrequency: "monthly" | "yearly" = "monthly"
 ): CompoundInterestResult {
   const monthlyRate = annualRate / 100 / 12;
   const yearlyRate = annualRate / 100;
@@ -18,14 +18,18 @@ export function calculateCompoundInterest(
   let balance = principal;
   let totalInterest = 0;
   let totalContributions = 0;
-  const milestones: Array<{ month: number; balance: number; multiple: number }> = [];
+  const milestones: Array<{
+    month: number;
+    balance: number;
+    multiple: number;
+  }> = [];
 
   for (let month = 1; month <= totalMonths; month++) {
     // Calculate interest based on frequency
     let interestThisMonth = 0;
-    if (interestFrequency === 'monthly') {
+    if (interestFrequency === "monthly") {
       interestThisMonth = balance * monthlyRate;
-    } else if (interestFrequency === 'yearly' && month % 12 === 0) {
+    } else if (interestFrequency === "yearly" && month % 12 === 0) {
       interestThisMonth = balance * yearlyRate;
     }
 
@@ -34,9 +38,9 @@ export function calculateCompoundInterest(
 
     // Add contributions based on frequency
     let contributionThisMonth = 0;
-    if (contributionFrequency === 'monthly') {
+    if (contributionFrequency === "monthly") {
       contributionThisMonth = monthlyContribution;
-    } else if (contributionFrequency === 'yearly' && month % 12 === 0) {
+    } else if (contributionFrequency === "yearly" && month % 12 === 0) {
       contributionThisMonth = monthlyContribution * 12; // Assuming yearly contribution is 12x monthly
     }
 
@@ -74,7 +78,7 @@ export function calculateDebtPayment(
   monthlyPayment: number
 ): DebtPaymentResult {
   if (monthlyPayment <= 0) {
-    throw new Error('Monthly payment must be greater than 0');
+    throw new Error("Monthly payment must be greater than 0");
   }
 
   const monthlyRate = annualRate / 100 / 12;
@@ -86,17 +90,23 @@ export function calculateDebtPayment(
   // Check if payment covers interest
   const minimumPayment = balance * monthlyRate;
   if (monthlyPayment <= minimumPayment && monthlyRate > 0) {
-    throw new Error('Monthly payment must be higher than the monthly interest to pay off the debt');
+    throw new Error(
+      "Monthly payment must be higher than the monthly interest to pay off the debt"
+    );
   }
 
-  while (balance > 0.01 && month < 1000) { // Safety limit
+  while (balance > 0.01 && month < 1000) {
+    // Safety limit
     month++;
-    
+
     const interestPayment = balance * monthlyRate;
-    const principalPayment = Math.min(monthlyPayment - interestPayment, balance);
-    
+    const principalPayment = Math.min(
+      monthlyPayment - interestPayment,
+      balance
+    );
+
     if (principalPayment <= 0) {
-      throw new Error('Payment too low to reduce principal');
+      throw new Error("Payment too low to reduce principal");
     }
 
     balance -= principalPayment;
@@ -104,7 +114,10 @@ export function calculateDebtPayment(
 
     monthlyBreakdown.push({
       month,
-      payment: Math.min(monthlyPayment, interestPayment + balance + principalPayment),
+      payment: Math.min(
+        monthlyPayment,
+        interestPayment + balance + principalPayment
+      ),
       principal: principalPayment,
       interest: interestPayment,
       balance,
@@ -132,8 +145,8 @@ export function calculateMinimumPayment(
     return principal / totalMonths;
   }
 
-  const monthlyPayment = principal * 
-    (monthlyRate * Math.pow(1 + monthlyRate, totalMonths)) / 
+  const monthlyPayment =
+    (principal * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths))) /
     (Math.pow(1 + monthlyRate, totalMonths) - 1);
 
   return monthlyPayment;
@@ -141,9 +154,9 @@ export function calculateMinimumPayment(
 
 // Format currency
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);

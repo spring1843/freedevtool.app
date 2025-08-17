@@ -2,8 +2,22 @@ import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Play, Square, Music, Plus, Trash2, Volume2, Share } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Play,
+  Square,
+  Music,
+  Plus,
+  Trash2,
+  Volume2,
+  Share,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -24,35 +38,35 @@ interface ToneSchedule {
 
 // Musical note frequencies (4th octave)
 const NOTES = {
-  'C4': 261.63,
-  'C#4/Db4': 277.18,
-  'D4': 293.66,
-  'D#4/Eb4': 311.13,
-  'E4': 329.63,
-  'F4': 349.23,
-  'F#4/Gb4': 369.99,
-  'G4': 392.00,
-  'G#4/Ab4': 415.30,
-  'A4': 440.00,
-  'A#4/Bb4': 466.16,
-  'B4': 493.88,
-  'C5': 523.25,
-  'D5': 587.33,
-  'E5': 659.25,
-  'F5': 698.46,
-  'G5': 783.99,
-  'A5': 880.00
+  C4: 261.63,
+  "C#4/Db4": 277.18,
+  D4: 293.66,
+  "D#4/Eb4": 311.13,
+  E4: 329.63,
+  F4: 349.23,
+  "F#4/Gb4": 369.99,
+  G4: 392.0,
+  "G#4/Ab4": 415.3,
+  A4: 440.0,
+  "A#4/Bb4": 466.16,
+  B4: 493.88,
+  C5: 523.25,
+  D5: 587.33,
+  E5: 659.25,
+  F5: 698.46,
+  G5: 783.99,
+  A5: 880.0,
 };
 
 export default function Metronome() {
   const [toneSchedules, setToneSchedules] = useState<ToneSchedule[]>([
     {
-      id: '1',
-      note: 'A4',
-      frequency: 440.00,
+      id: "1",
+      note: "A4",
+      frequency: 440.0,
       intervalSeconds: 0.5, // Default: 120 BPM
-      enabled: true
-    }
+      enabled: true,
+    },
   ]);
   const [isRunning, setIsRunning] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -67,18 +81,21 @@ export default function Metronome() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Prevent shortcuts when typing in inputs
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement
+      ) {
         return;
       }
 
       switch (event.key) {
-        case 'Enter':
+        case "Enter":
           event.preventDefault();
           if (!isRunning) {
             startMetronome();
           }
           break;
-        case ' ':
+        case " ":
           event.preventDefault();
           if (isRunning) {
             stopMetronome();
@@ -86,20 +103,20 @@ export default function Metronome() {
             startMetronome();
           }
           break;
-        case 'Escape':
+        case "Escape":
           event.preventDefault();
           stopMetronome();
           break;
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isRunning]);
 
   useEffect(() => {
     // Load parameters from URL
-    const urlTones = getParam('tones', '');
+    const urlTones = getParam("tones", "");
     if (urlTones) {
       try {
         const tonesData = JSON.parse(decodeURIComponent(urlTones));
@@ -107,7 +124,7 @@ export default function Metronome() {
           setToneSchedules(tonesData);
         }
       } catch {
-        console.warn('Failed to parse tones from URL');
+        console.warn("Failed to parse tones from URL");
       }
     }
   }, []);
@@ -132,7 +149,8 @@ export default function Metronome() {
   useEffect(() => {
     // Initialize audio context
     if (!audioContextRef.current) {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      audioContextRef.current = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
     }
 
     return () => {
@@ -152,7 +170,7 @@ export default function Metronome() {
 
     // Add visual effect
     setPlayingTones(prev => new Set(prev).add(scheduleId));
-    
+
     // Remove visual effect after duration
     setTimeout(() => {
       setPlayingTones(prev => {
@@ -168,12 +186,21 @@ export default function Metronome() {
     oscillator.connect(gainNode);
     gainNode.connect(audioContextRef.current.destination);
 
-    oscillator.frequency.setValueAtTime(frequency, audioContextRef.current.currentTime);
-    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(
+      frequency,
+      audioContextRef.current.currentTime
+    );
+    oscillator.type = "sine";
 
     gainNode.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-    gainNode.gain.linearRampToValueAtTime(0.3, audioContextRef.current.currentTime + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContextRef.current.currentTime + duration / 1000);
+    gainNode.gain.linearRampToValueAtTime(
+      0.3,
+      audioContextRef.current.currentTime + 0.01
+    );
+    gainNode.gain.exponentialRampToValueAtTime(
+      0.01,
+      audioContextRef.current.currentTime + duration / 1000
+    );
 
     oscillator.start(audioContextRef.current.currentTime);
     oscillator.stop(audioContextRef.current.currentTime + duration / 1000);
@@ -182,7 +209,7 @@ export default function Metronome() {
   const scheduleNextTone = (schedule: ToneSchedule, startTime: number) => {
     if (!schedule.enabled || !isRunningRef.current) return;
 
-    const nextPlayTime = startTime + (schedule.intervalSeconds * 1000);
+    const nextPlayTime = startTime + schedule.intervalSeconds * 1000;
     const delay = nextPlayTime - Date.now();
 
     if (delay > 0) {
@@ -201,7 +228,7 @@ export default function Metronome() {
     if (!audioContextRef.current) return;
 
     // Resume audio context if suspended
-    if (audioContextRef.current.state === 'suspended') {
+    if (audioContextRef.current.state === "suspended") {
       audioContextRef.current.resume();
     }
 
@@ -245,10 +272,10 @@ export default function Metronome() {
     const newId = Date.now().toString();
     const newSchedule: ToneSchedule = {
       id: newId,
-      note: 'G4',
-      frequency: 392.00,
+      note: "G4",
+      frequency: 392.0,
       intervalSeconds: 2,
-      enabled: true
+      enabled: true,
     };
     setToneSchedules([...toneSchedules, newSchedule]);
   };
@@ -266,18 +293,20 @@ export default function Metronome() {
   };
 
   const updateToneSchedule = (id: string, updates: Partial<ToneSchedule>) => {
-    setToneSchedules(toneSchedules.map(schedule => 
-      schedule.id === id ? { ...schedule, ...updates } : schedule
-    ));
+    setToneSchedules(
+      toneSchedules.map(schedule =>
+        schedule.id === id ? { ...schedule, ...updates } : schedule
+      )
+    );
   };
 
   const testTone = (frequency: number, scheduleId: string) => {
     if (!audioContextRef.current) return;
-    
-    if (audioContextRef.current.state === 'suspended') {
+
+    if (audioContextRef.current.state === "suspended") {
       audioContextRef.current.resume();
     }
-    
+
     playTone(frequency, scheduleId, 300);
   };
 
@@ -285,7 +314,7 @@ export default function Metronome() {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -301,7 +330,8 @@ export default function Metronome() {
               Multi-Tone Metronome
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Create custom rhythm patterns with multiple musical notes at different intervals
+              Create custom rhythm patterns with multiple musical notes at
+              different intervals
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
               Keyboard: Enter (start) • Space/Esc (stop)
@@ -329,7 +359,8 @@ export default function Metronome() {
             </div>
           </CardTitle>
           <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
-            Configure multiple tones with different intervals to create complex rhythm patterns
+            Configure multiple tones with different intervals to create complex
+            rhythm patterns
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -358,7 +389,7 @@ export default function Metronome() {
                 <span>Stop (Space/Esc)</span>
               </Button>
             )}
-            
+
             <Button
               onClick={shareMetronome}
               variant="outline"
@@ -373,7 +404,8 @@ export default function Metronome() {
           {toneSchedules.filter(s => s.enabled).length === 0 && (
             <Alert>
               <AlertDescription>
-                Please enable at least one tone below to start the metronome. Each tone will play at its configured interval.
+                Please enable at least one tone below to start the metronome.
+                Each tone will play at its configured interval.
               </AlertDescription>
             </Alert>
           )}
@@ -384,7 +416,8 @@ export default function Metronome() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                Tone Configuration ({toneSchedules.filter(s => s.enabled).length} active)
+                Tone Configuration (
+                {toneSchedules.filter(s => s.enabled).length} active)
               </h3>
               <Button
                 onClick={addToneSchedule}
@@ -403,10 +436,10 @@ export default function Metronome() {
                   key={schedule.id}
                   className={`p-5 border rounded-lg transition-all duration-300 ${
                     playingTones.has(schedule.id)
-                      ? 'border-green-400 dark:border-green-500 bg-green-100/70 dark:bg-green-900/30 shadow-lg scale-105 ring-2 ring-green-300 dark:ring-green-600'
-                      : schedule.enabled 
-                        ? 'border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10' 
-                        : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900'
+                      ? "border-green-400 dark:border-green-500 bg-green-100/70 dark:bg-green-900/30 shadow-lg scale-105 ring-2 ring-green-300 dark:ring-green-600"
+                      : schedule.enabled
+                        ? "border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10"
+                        : "border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900"
                   }`}
                   data-testid={`tone-schedule-${index}`}
                 >
@@ -415,22 +448,28 @@ export default function Metronome() {
                     <div className="flex items-center space-x-3">
                       <Switch
                         checked={schedule.enabled}
-                        onCheckedChange={(checked) => {
+                        onCheckedChange={checked => {
                           updateToneSchedule(schedule.id, { enabled: checked });
                         }}
                         data-testid={`enabled-switch-${index}`}
                       />
                       <div>
-                        <h4 className={`font-medium transition-colors duration-300 ${
-                          playingTones.has(schedule.id) 
-                            ? 'text-green-800 dark:text-green-200 font-bold' 
-                            : 'text-slate-900 dark:text-slate-100'
-                        }`}>
-                          Tone #{index + 1} {playingTones.has(schedule.id) && '🎵'}
+                        <h4
+                          className={`font-medium transition-colors duration-300 ${
+                            playingTones.has(schedule.id)
+                              ? "text-green-800 dark:text-green-200 font-bold"
+                              : "text-slate-900 dark:text-slate-100"
+                          }`}
+                        >
+                          Tone #{index + 1}{" "}
+                          {playingTones.has(schedule.id) && "🎵"}
                         </h4>
                         <p className="text-sm text-slate-500 dark:text-slate-400">
                           {schedule.enabled ? (
-                            <>Playing {schedule.note} every {schedule.intervalSeconds}s</>
+                            <>
+                              Playing {schedule.note} every{" "}
+                              {schedule.intervalSeconds}s
+                            </>
                           ) : (
                             <>Disabled</>
                           )}
@@ -441,7 +480,9 @@ export default function Metronome() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => testTone(schedule.frequency, schedule.id)}
+                        onClick={() =>
+                          testTone(schedule.frequency, schedule.id)
+                        }
                         className="flex items-center space-x-1"
                         data-testid={`test-tone-${index}`}
                       >
@@ -465,15 +506,18 @@ export default function Metronome() {
                   {/* Configuration Controls */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                      <Label htmlFor={`note-${schedule.id}`} className="text-sm font-medium mb-2 block">
+                      <Label
+                        htmlFor={`note-${schedule.id}`}
+                        className="text-sm font-medium mb-2 block"
+                      >
                         Musical Note & Frequency
                       </Label>
                       <Select
                         value={schedule.note}
-                        onValueChange={(value) => {
+                        onValueChange={value => {
                           updateToneSchedule(schedule.id, {
                             note: value,
-                            frequency: NOTES[value as keyof typeof NOTES]
+                            frequency: NOTES[value as keyof typeof NOTES],
                           });
                         }}
                       >
@@ -491,14 +535,19 @@ export default function Metronome() {
                     </div>
 
                     <div>
-                      <Label htmlFor={`interval-${schedule.id}`} className="text-sm font-medium mb-2 block">
+                      <Label
+                        htmlFor={`interval-${schedule.id}`}
+                        className="text-sm font-medium mb-2 block"
+                      >
                         Interval: {schedule.intervalSeconds}s
                       </Label>
                       <div className="space-y-2">
                         <Slider
                           value={[schedule.intervalSeconds]}
-                          onValueChange={(value) => {
-                            updateToneSchedule(schedule.id, { intervalSeconds: value[0] });
+                          onValueChange={value => {
+                            updateToneSchedule(schedule.id, {
+                              intervalSeconds: value[0],
+                            });
                           }}
                           min={0.1}
                           max={10}
@@ -516,14 +565,24 @@ export default function Metronome() {
 
                   {/* Quick Presets */}
                   <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
-                    <Label className="text-sm font-medium mb-2 block">Quick Interval Presets:</Label>
+                    <Label className="text-sm font-medium mb-2 block">
+                      Quick Interval Presets:
+                    </Label>
                     <div className="flex flex-wrap gap-2">
                       {[0.5, 1, 1.5, 2, 3, 4].map(interval => (
                         <Button
                           key={interval}
                           size="sm"
-                          variant={schedule.intervalSeconds === interval ? "default" : "outline"}
-                          onClick={() => updateToneSchedule(schedule.id, { intervalSeconds: interval })}
+                          variant={
+                            schedule.intervalSeconds === interval
+                              ? "default"
+                              : "outline"
+                          }
+                          onClick={() =>
+                            updateToneSchedule(schedule.id, {
+                              intervalSeconds: interval,
+                            })
+                          }
                           className="text-xs px-3 py-1"
                         >
                           {interval}s
@@ -555,15 +614,29 @@ export default function Metronome() {
           <div className="grid md:grid-cols-2 gap-6">
             {/* Example Patterns */}
             <div>
-              <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">Example Patterns</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">
+                Example Patterns
+              </h4>
               <div className="space-y-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     setToneSchedules([
-                      { id: '1', note: 'C5', frequency: NOTES['C5'], intervalSeconds: 1, enabled: true },
-                      { id: '2', note: 'G4', frequency: NOTES['G4'], intervalSeconds: 2, enabled: true }
+                      {
+                        id: "1",
+                        note: "C5",
+                        frequency: NOTES["C5"],
+                        intervalSeconds: 1,
+                        enabled: true,
+                      },
+                      {
+                        id: "2",
+                        note: "G4",
+                        frequency: NOTES["G4"],
+                        intervalSeconds: 2,
+                        enabled: true,
+                      },
                     ]);
                   }}
                   className="w-full justify-start"
@@ -571,15 +644,33 @@ export default function Metronome() {
                   <Music className="w-4 h-4 mr-2" />
                   Basic Beat (C5 + G4)
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     setToneSchedules([
-                      { id: '1', note: 'A4', frequency: NOTES['A4'], intervalSeconds: 0.5, enabled: true },
-                      { id: '2', note: 'E4', frequency: NOTES['E4'], intervalSeconds: 2, enabled: true },
-                      { id: '3', note: 'A5', frequency: NOTES['A5'], intervalSeconds: 4, enabled: true }
+                      {
+                        id: "1",
+                        note: "A4",
+                        frequency: NOTES["A4"],
+                        intervalSeconds: 0.5,
+                        enabled: true,
+                      },
+                      {
+                        id: "2",
+                        note: "E4",
+                        frequency: NOTES["E4"],
+                        intervalSeconds: 2,
+                        enabled: true,
+                      },
+                      {
+                        id: "3",
+                        note: "A5",
+                        frequency: NOTES["A5"],
+                        intervalSeconds: 4,
+                        enabled: true,
+                      },
                     ]);
                   }}
                   className="w-full justify-start"
@@ -587,56 +678,94 @@ export default function Metronome() {
                   <Music className="w-4 h-4 mr-2" />
                   Complex Rhythm (3 Tones)
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
                     setToneSchedules([
-                      { id: '1', note: 'C4', frequency: NOTES['C4'], intervalSeconds: 1, enabled: true },
-                      { id: '2', note: 'E4', frequency: NOTES['E4'], intervalSeconds: 1.5, enabled: true },
-                      { id: '3', note: 'G4', frequency: NOTES['G4'], intervalSeconds: 2, enabled: true },
-                      { id: '4', note: 'C5', frequency: NOTES['C5'], intervalSeconds: 3, enabled: true }
+                      {
+                        id: "1",
+                        note: "C4",
+                        frequency: NOTES["C4"],
+                        intervalSeconds: 1,
+                        enabled: true,
+                      },
+                      {
+                        id: "2",
+                        note: "E4",
+                        frequency: NOTES["E4"],
+                        intervalSeconds: 1.5,
+                        enabled: true,
+                      },
+                      {
+                        id: "3",
+                        note: "G4",
+                        frequency: NOTES["G4"],
+                        intervalSeconds: 2,
+                        enabled: true,
+                      },
+                      {
+                        id: "4",
+                        note: "C5",
+                        frequency: NOTES["C5"],
+                        intervalSeconds: 3,
+                        enabled: true,
+                      },
                     ]);
                   }}
                   className="w-full justify-start"
                 >
-                  <Music className="w-4 h-4 mr-2" />
-                  C Major Chord Progression
+                  <Music className="w-4 h-4 mr-2" />C Major Chord Progression
                 </Button>
               </div>
             </div>
 
             {/* Instructions */}
             <div>
-              <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">How to Use</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-slate-100 mb-3">
+                How to Use
+              </h4>
               <div className="text-sm text-slate-600 dark:text-slate-400 space-y-2">
                 <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">1</span>
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
+                    1
+                  </span>
                   <p>Click "Test" to preview each tone before starting</p>
                 </div>
                 <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">2</span>
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
+                    2
+                  </span>
                   <p>Configure notes and intervals using the controls below</p>
                 </div>
                 <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">3</span>
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
+                    3
+                  </span>
                   <p>Toggle tones on/off using the switches</p>
                 </div>
                 <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">4</span>
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
+                    4
+                  </span>
                   <p>Click "Start Metronome" - first tones play immediately</p>
                 </div>
                 <div className="flex items-start space-x-2">
-                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">5</span>
+                  <span className="w-5 h-5 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 flex-shrink-0">
+                    5
+                  </span>
                   <p>Add multiple tones for complex rhythm patterns</p>
                 </div>
               </div>
-              
+
               <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded">
-                <p className="text-sm text-green-700 dark:text-green-300 font-medium mb-1">💡 Pro Tip:</p>
+                <p className="text-sm text-green-700 dark:text-green-300 font-medium mb-1">
+                  💡 Pro Tip:
+                </p>
                 <p className="text-sm text-green-600 dark:text-green-400">
-                  Use different interval combinations like 0.5s, 1.5s, and 3s to create polyrhythmic patterns that repeat every 6 seconds.
+                  Use different interval combinations like 0.5s, 1.5s, and 3s to
+                  create polyrhythmic patterns that repeat every 6 seconds.
                 </p>
               </div>
             </div>

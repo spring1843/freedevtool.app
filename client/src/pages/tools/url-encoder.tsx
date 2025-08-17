@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
-const defaultPlainText = "Hello World! This is a test URL parameter with special characters: @#$%^&*()+={}[]|\\:;\"'<>?,./`~";
+const defaultPlainText =
+  "Hello World! This is a test URL parameter with special characters: @#$%^&*()+={}[]|\\:;\"'<>?,./`~";
 
 export default function URLEncoder() {
   const [plainText, setPlainText] = useState(defaultPlainText);
@@ -33,14 +34,14 @@ export default function URLEncoder() {
   const handlePlainTextChange = (value: string) => {
     setPlainText(value);
     if (encodedText) {
-      setEncodedText('');
+      setEncodedText("");
     }
   };
 
   const handleEncodedTextChange = (value: string) => {
     setEncodedText(value);
     if (plainText !== defaultPlainText) {
-      setPlainText('');
+      setPlainText("");
     }
   };
 
@@ -56,7 +57,7 @@ export default function URLEncoder() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="UE-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -95,12 +96,14 @@ export default function URLEncoder() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-blue-600 dark:text-blue-400">Plain Text</CardTitle>
+            <CardTitle className="text-blue-600 dark:text-blue-400">
+              Plain Text
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
               value={plainText}
-              onChange={(e) => handlePlainTextChange(e.target.value)}
+              onChange={e => handlePlainTextChange(e.target.value)}
               placeholder="Enter text to URL encode..."
               data-testid="plain-text-input"
               className="min-h-[400px] font-mono text-sm"
@@ -113,12 +116,14 @@ export default function URLEncoder() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-green-600 dark:text-green-400">URL Encoded</CardTitle>
+            <CardTitle className="text-green-600 dark:text-green-400">
+              URL Encoded
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
               value={encodedText}
-              onChange={(e) => handleEncodedTextChange(e.target.value)}
+              onChange={e => handleEncodedTextChange(e.target.value)}
               placeholder="URL encoded text will appear here..."
               data-testid="encoded-text-output"
               className="min-h-[400px] font-mono text-sm"
@@ -131,12 +136,46 @@ export default function URLEncoder() {
       </div>
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">URL Encoding Examples:</h3>
+        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          URL Encoding Examples:
+        </h3>
         <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">Space</span> → <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">%20</span></div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">@</span> → <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">%40</span></div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">&</span> → <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">%26</span></div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">=</span> → <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">%3D</span></div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              Space
+            </span>{" "}
+            →{" "}
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              %20
+            </span>
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              @
+            </span>{" "}
+            →{" "}
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              %40
+            </span>
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              &
+            </span>{" "}
+            →{" "}
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              %26
+            </span>
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              =
+            </span>{" "}
+            →{" "}
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              %3D
+            </span>
+          </div>
         </div>
       </div>
 

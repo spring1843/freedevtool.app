@@ -28,7 +28,7 @@ export function DualEditor({
   leftLanguage = "text",
   rightLanguage = "text",
   rightReadOnly = true,
-  className = "grid grid-cols-1 lg:grid-cols-2 gap-6"
+  className = "grid grid-cols-1 lg:grid-cols-2 gap-6",
 }: DualEditorProps) {
   return (
     <div className={className}>

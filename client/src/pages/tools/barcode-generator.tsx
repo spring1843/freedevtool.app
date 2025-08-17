@@ -2,7 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, Download, RotateCcw } from "lucide-react";
@@ -21,14 +27,46 @@ export default function BarcodeGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const barcodeFormats = [
-    { value: "CODE128", label: "CODE 128", description: "Most versatile, supports all ASCII" },
-    { value: "CODE39", label: "CODE 39", description: "Alphanumeric, widely used" },
-    { value: "EAN13", label: "EAN-13", description: "European Article Number, 13 digits" },
-    { value: "EAN8", label: "EAN-8", description: "European Article Number, 8 digits" },
-    { value: "UPC", label: "UPC-A", description: "Universal Product Code, 12 digits" },
-    { value: "ITF14", label: "ITF-14", description: "Interleaved 2 of 5, 14 digits" },
-    { value: "MSI", label: "MSI", description: "Modified Plessey, numeric only" },
-    { value: "pharmacode", label: "Pharmacode", description: "Pharmaceutical, 3-131070" }
+    {
+      value: "CODE128",
+      label: "CODE 128",
+      description: "Most versatile, supports all ASCII",
+    },
+    {
+      value: "CODE39",
+      label: "CODE 39",
+      description: "Alphanumeric, widely used",
+    },
+    {
+      value: "EAN13",
+      label: "EAN-13",
+      description: "European Article Number, 13 digits",
+    },
+    {
+      value: "EAN8",
+      label: "EAN-8",
+      description: "European Article Number, 8 digits",
+    },
+    {
+      value: "UPC",
+      label: "UPC-A",
+      description: "Universal Product Code, 12 digits",
+    },
+    {
+      value: "ITF14",
+      label: "ITF-14",
+      description: "Interleaved 2 of 5, 14 digits",
+    },
+    {
+      value: "MSI",
+      label: "MSI",
+      description: "Modified Plessey, numeric only",
+    },
+    {
+      value: "pharmacode",
+      label: "Pharmacode",
+      description: "Pharmaceutical, 3-131070",
+    },
   ];
 
   const generateBarcode = () => {
@@ -39,36 +77,37 @@ export default function BarcodeGenerator() {
 
     try {
       setError(null);
-      
+
       const options = {
-        format: format,
-        width: width,
-        height: height,
-        displayValue: displayValue,
+        format,
+        width,
+        height,
+        displayValue,
         fontSize: 16,
         textAlign: "center" as const,
         textPosition: "bottom" as const,
         textMargin: 2,
         background: "#ffffff",
         lineColor: "#000000",
-        margin: 10
+        margin: 10,
       };
 
       JsBarcode(canvasRef.current, text, options);
-      
     } catch (err) {
-      setError(`Barcode generation failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(
+        `Barcode generation failed: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
     }
   };
 
   const downloadBarcode = () => {
     if (!canvasRef.current) return;
-    
-    canvasRef.current.toBlob((blob) => {
+
+    canvasRef.current.toBlob(blob => {
       if (!blob) return;
-      
+
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `barcode-${format}-${Date.now()}.png`;
       document.body.appendChild(a);
@@ -87,27 +126,40 @@ export default function BarcodeGenerator() {
     setError(null);
   };
 
-  const getFormatInfo = (formatValue: string) => {
-    return barcodeFormats.find(f => f.value === formatValue);
-  };
+  const getFormatInfo = (formatValue: string) =>
+    barcodeFormats.find(f => f.value === formatValue);
 
   const validateInput = (inputText: string, barcodeFormat: string) => {
     switch (barcodeFormat) {
-      case 'EAN13':
-        return /^\d{13}$/.test(inputText) ? null : "EAN-13 requires exactly 13 digits";
-      case 'EAN8':
-        return /^\d{8}$/.test(inputText) ? null : "EAN-8 requires exactly 8 digits";
-      case 'UPC':
-        return /^\d{12}$/.test(inputText) ? null : "UPC-A requires exactly 12 digits";
-      case 'ITF14':
-        return /^\d{14}$/.test(inputText) ? null : "ITF-14 requires exactly 14 digits";
-      case 'CODE39':
-        return /^[A-Z0-9 .\-$\/+%]+$/.test(inputText) ? null : "CODE 39 supports A-Z, 0-9, and symbols . - $ / + %";
-      case 'MSI':
-        return /^\d+$/.test(inputText) ? null : "MSI supports numeric characters only";
-      case 'pharmacode':
+      case "EAN13":
+        return /^\d{13}$/.test(inputText)
+          ? null
+          : "EAN-13 requires exactly 13 digits";
+      case "EAN8":
+        return /^\d{8}$/.test(inputText)
+          ? null
+          : "EAN-8 requires exactly 8 digits";
+      case "UPC":
+        return /^\d{12}$/.test(inputText)
+          ? null
+          : "UPC-A requires exactly 12 digits";
+      case "ITF14":
+        return /^\d{14}$/.test(inputText)
+          ? null
+          : "ITF-14 requires exactly 14 digits";
+      case "CODE39":
+        return /^[A-Z0-9 .\-$\/+%]+$/.test(inputText)
+          ? null
+          : "CODE 39 supports A-Z, 0-9, and symbols . - $ / + %";
+      case "MSI":
+        return /^\d+$/.test(inputText)
+          ? null
+          : "MSI supports numeric characters only";
+      case "pharmacode":
         const num = parseInt(inputText);
-        return (num >= 3 && num <= 131070) ? null : "Pharmacode requires number between 3 and 131070";
+        return num >= 3 && num <= 131070
+          ? null
+          : "Pharmacode requires number between 3 and 131070";
       default:
         return null; // CODE128 supports all ASCII
     }
@@ -122,7 +174,7 @@ export default function BarcodeGenerator() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="BG-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -137,13 +189,13 @@ export default function BarcodeGenerator() {
         </div>
       </div>
 
-      {(error || inputError) && (
+      {error || inputError ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error || inputError}
           </AlertDescription>
         </Alert>
-      )}
+      ) : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
@@ -156,14 +208,14 @@ export default function BarcodeGenerator() {
               <Input
                 id="barcode-text"
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={e => setText(e.target.value)}
                 placeholder="Enter text or numbers..."
                 data-testid="barcode-text"
-                className={inputError ? 'border-red-500' : ''}
+                className={inputError ? "border-red-500" : ""}
               />
-              {inputError && (
+              {inputError ? (
                 <div className="text-sm text-red-600 mt-1">{inputError}</div>
-              )}
+              ) : null}
             </div>
 
             <div>
@@ -173,7 +225,7 @@ export default function BarcodeGenerator() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {barcodeFormats.map((fmt) => (
+                  {barcodeFormats.map(fmt => (
                     <SelectItem key={fmt.value} value={fmt.value}>
                       {fmt.label}
                     </SelectItem>
@@ -188,7 +240,10 @@ export default function BarcodeGenerator() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="width">Bar Width</Label>
-                <Select value={width.toString()} onValueChange={(value) => setWidth(parseInt(value))}>
+                <Select
+                  value={width.toString()}
+                  onValueChange={value => setWidth(parseInt(value))}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -202,7 +257,10 @@ export default function BarcodeGenerator() {
               </div>
               <div>
                 <Label htmlFor="height">Height</Label>
-                <Select value={height.toString()} onValueChange={(value) => setHeight(parseInt(value))}>
+                <Select
+                  value={height.toString()}
+                  onValueChange={value => setHeight(parseInt(value))}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -221,7 +279,7 @@ export default function BarcodeGenerator() {
                 type="checkbox"
                 id="display-value"
                 checked={displayValue}
-                onChange={(e) => setDisplayValue(e.target.checked)}
+                onChange={e => setDisplayValue(e.target.checked)}
                 className="rounded"
               />
               <Label htmlFor="display-value">Display text below barcode</Label>
@@ -248,9 +306,7 @@ export default function BarcodeGenerator() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Generated Barcode
-              <Badge variant="outline">
-                {format}
-              </Badge>
+              <Badge variant="outline">{format}</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -259,7 +315,7 @@ export default function BarcodeGenerator() {
                 ref={canvasRef}
                 className="max-w-full h-auto border border-gray-200 dark:border-gray-700 rounded-lg bg-white mx-auto"
               />
-              
+
               <div className="mt-4">
                 <Button
                   onClick={downloadBarcode}
@@ -277,17 +333,29 @@ export default function BarcodeGenerator() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Common Use Cases:</h3>
+          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+            Common Use Cases:
+          </h3>
           <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <li>• <strong>EAN-13/UPC:</strong> Retail products</li>
-            <li>• <strong>CODE 128:</strong> Shipping and logistics</li>
-            <li>• <strong>CODE 39:</strong> Industrial applications</li>
-            <li>• <strong>ITF-14:</strong> Packaging and cases</li>
+            <li>
+              • <strong>EAN-13/UPC:</strong> Retail products
+            </li>
+            <li>
+              • <strong>CODE 128:</strong> Shipping and logistics
+            </li>
+            <li>
+              • <strong>CODE 39:</strong> Industrial applications
+            </li>
+            <li>
+              • <strong>ITF-14:</strong> Packaging and cases
+            </li>
           </ul>
         </div>
 
         <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">Tips:</h3>
+          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
+            Tips:
+          </h3>
           <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
             <li>• Use CODE 128 for maximum compatibility</li>
             <li>• EAN/UPC codes need specific lengths</li>

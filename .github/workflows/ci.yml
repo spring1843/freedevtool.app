@@ -44,6 +44,13 @@ jobs:
         run: make e2e-test
         continue-on-error: false
       
+      - name: Run formatters
+        run: make format
+
+        # Running the above should not cause a git diff.
+      - name: Check for changes
+        run: git diff --exit-code
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -62,4 +69,3 @@ jobs:
             dist/
             client/dist/
           retention-days: 7
-

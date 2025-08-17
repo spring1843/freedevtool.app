@@ -2,13 +2,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, RotateCcw, TrendingUp, BarChart3 } from "lucide-react";
 import { useState, useEffect } from "react";
 import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
+import {
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from "recharts";
 
 interface CompoundInterestResult {
   finalAmount: number;
@@ -28,16 +42,20 @@ export default function CompoundInterestCalculator() {
   const [annualRate, setAnnualRate] = useState(12);
   const [years, setYears] = useState(20);
   const [monthlyContribution, setMonthlyContribution] = useState(500);
-  const [contributionFrequency, setContributionFrequency] = useState<'monthly' | 'yearly'>('monthly');
-  const [interestFrequency, setInterestFrequency] = useState<'monthly' | 'yearly'>('yearly');
+  const [contributionFrequency, setContributionFrequency] = useState<
+    "monthly" | "yearly"
+  >("monthly");
+  const [interestFrequency, setInterestFrequency] = useState<
+    "monthly" | "yearly"
+  >("yearly");
   const [result, setResult] = useState<CompoundInterestResult | null>(null);
 
   const calculateCompoundInterest = () => {
     const monthlyRate = annualRate / 100 / 12;
     const yearlyRate = annualRate / 100;
-    
+
     let currentAmount = principal;
-    const yearlyBreakdown: CompoundInterestResult['yearlyBreakdown'] = [];
+    const yearlyBreakdown: CompoundInterestResult["yearlyBreakdown"] = [];
     let totalContributions = principal;
 
     for (let year = 1; year <= years; year++) {
@@ -45,31 +63,31 @@ export default function CompoundInterestCalculator() {
       let yearContributions = 0;
       let yearInterest = 0;
 
-      if (interestFrequency === 'monthly') {
+      if (interestFrequency === "monthly") {
         // Monthly compounding
         for (let month = 0; month < 12; month++) {
           // Add monthly contribution
-          if (contributionFrequency === 'monthly') {
+          if (contributionFrequency === "monthly") {
             currentAmount += monthlyContribution;
             yearContributions += monthlyContribution;
             totalContributions += monthlyContribution;
           }
-          
+
           // Calculate monthly interest
           const monthlyInterest = currentAmount * monthlyRate;
           currentAmount += monthlyInterest;
           yearInterest += monthlyInterest;
         }
-        
+
         // Add yearly contribution if frequency is yearly
-        if (contributionFrequency === 'yearly') {
+        if (contributionFrequency === "yearly") {
           currentAmount += monthlyContribution * 12; // Use as yearly amount
           yearContributions += monthlyContribution * 12;
           totalContributions += monthlyContribution * 12;
         }
       } else {
         // Yearly compounding
-        if (contributionFrequency === 'yearly') {
+        if (contributionFrequency === "yearly") {
           currentAmount += monthlyContribution * 12; // Use as yearly amount
           yearContributions += monthlyContribution * 12;
           totalContributions += monthlyContribution * 12;
@@ -78,7 +96,7 @@ export default function CompoundInterestCalculator() {
           yearContributions += monthlyContribution * 12;
           totalContributions += monthlyContribution * 12;
         }
-        
+
         yearInterest = currentAmount * yearlyRate;
         currentAmount += yearInterest;
       }
@@ -88,7 +106,7 @@ export default function CompoundInterestCalculator() {
         startingAmount,
         contributions: yearContributions,
         interest: yearInterest,
-        endingAmount: currentAmount
+        endingAmount: currentAmount,
       });
     }
 
@@ -96,7 +114,7 @@ export default function CompoundInterestCalculator() {
       finalAmount: currentAmount,
       totalContributions: totalContributions - principal, // Exclude initial principal
       totalInterest: currentAmount - totalContributions,
-      yearlyBreakdown
+      yearlyBreakdown,
     };
 
     setResult(finalResult);
@@ -107,8 +125,8 @@ export default function CompoundInterestCalculator() {
     setAnnualRate(7);
     setYears(10);
     setMonthlyContribution(500);
-    setContributionFrequency('monthly');
-    setInterestFrequency('monthly');
+    setContributionFrequency("monthly");
+    setInterestFrequency("monthly");
     setResult(null);
   };
 
@@ -116,70 +134,74 @@ export default function CompoundInterestCalculator() {
     calculateCompoundInterest();
   }, []);
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
+  const formatCurrency = (amount: number) =>
+    new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
     }).format(amount);
-  };
 
   const calculateNxTable = () => {
     if (!result) return [];
-    
+
     const targetMultiples = [2, 3, 4, 5, 6, 7, 8, 9, 10];
     const nxResults = [];
-    
+
     for (const multiple of targetMultiples) {
       const targetAmount = principal * multiple;
-      const reachedYear = result.yearlyBreakdown.find(year => year.endingAmount >= targetAmount);
-      
+      const reachedYear = result.yearlyBreakdown.find(
+        year => year.endingAmount >= targetAmount
+      );
+
       if (reachedYear) {
         nxResults.push({
           multiple: `${multiple}x`,
           targetAmount: formatCurrency(targetAmount),
           yearReached: reachedYear.year,
-          actualAmount: formatCurrency(reachedYear.endingAmount)
+          actualAmount: formatCurrency(reachedYear.endingAmount),
         });
       } else {
         // Calculate when it would be reached beyond the current period
         let projectedYear = years;
         let projectedAmount = result.finalAmount;
         const yearlyRate = annualRate / 100;
-        const yearlyContribution = contributionFrequency === 'yearly' ? monthlyContribution * 12 : monthlyContribution * 12;
-        
+        const yearlyContribution =
+          contributionFrequency === "yearly"
+            ? monthlyContribution * 12
+            : monthlyContribution * 12;
+
         while (projectedAmount < targetAmount && projectedYear < 100) {
           projectedYear++;
           projectedAmount += yearlyContribution;
-          projectedAmount *= (1 + yearlyRate);
+          projectedAmount *= 1 + yearlyRate;
         }
-        
+
         if (projectedYear < 100) {
           nxResults.push({
             multiple: `${multiple}x`,
             targetAmount: formatCurrency(targetAmount),
             yearReached: projectedYear,
             actualAmount: formatCurrency(projectedAmount),
-            projected: true
+            projected: true,
           });
         } else {
           nxResults.push({
             multiple: `${multiple}x`,
             targetAmount: formatCurrency(targetAmount),
             yearReached: null,
-            actualAmount: 'Not reached',
-            projected: true
+            actualAmount: "Not reached",
+            projected: true,
           });
         }
       }
     }
-    
+
     return nxResults;
   };
 
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="CI-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -206,7 +228,7 @@ export default function CompoundInterestCalculator() {
                 id="principal"
                 type="number"
                 value={principal}
-                onChange={(e) => setPrincipal(Number(e.target.value))}
+                onChange={e => setPrincipal(Number(e.target.value))}
                 placeholder="Initial amount"
               />
             </div>
@@ -218,7 +240,7 @@ export default function CompoundInterestCalculator() {
                 type="number"
                 step="0.1"
                 value={annualRate}
-                onChange={(e) => setAnnualRate(Number(e.target.value))}
+                onChange={e => setAnnualRate(Number(e.target.value))}
                 placeholder="Annual rate"
               />
             </div>
@@ -229,7 +251,7 @@ export default function CompoundInterestCalculator() {
                 id="years"
                 type="number"
                 value={years}
-                onChange={(e) => setYears(Number(e.target.value))}
+                onChange={e => setYears(Number(e.target.value))}
                 placeholder="Number of years"
               />
             </div>
@@ -240,14 +262,19 @@ export default function CompoundInterestCalculator() {
                 id="contribution"
                 type="number"
                 value={monthlyContribution}
-                onChange={(e) => setMonthlyContribution(Number(e.target.value))}
+                onChange={e => setMonthlyContribution(Number(e.target.value))}
                 placeholder="Monthly amount"
               />
             </div>
 
             <div>
               <Label htmlFor="contribution-freq">Contribution Frequency</Label>
-              <Select value={contributionFrequency} onValueChange={(value: 'monthly' | 'yearly') => setContributionFrequency(value)}>
+              <Select
+                value={contributionFrequency}
+                onValueChange={(value: "monthly" | "yearly") =>
+                  setContributionFrequency(value)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -260,7 +287,12 @@ export default function CompoundInterestCalculator() {
 
             <div>
               <Label htmlFor="interest-freq">Compounding Frequency</Label>
-              <Select value={interestFrequency} onValueChange={(value: 'monthly' | 'yearly') => setInterestFrequency(value)}>
+              <Select
+                value={interestFrequency}
+                onValueChange={(value: "monthly" | "yearly") =>
+                  setInterestFrequency(value)
+                }
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -287,7 +319,7 @@ export default function CompoundInterestCalculator() {
           </CardContent>
         </Card>
 
-        {result && (
+        {result ? (
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
@@ -301,36 +333,46 @@ export default function CompoundInterestCalculator() {
                   <div className="text-2xl font-bold text-green-600 dark:text-green-400">
                     {formatCurrency(result.finalAmount)}
                   </div>
-                  <div className="text-sm text-green-700 dark:text-green-300">Final Amount</div>
+                  <div className="text-sm text-green-700 dark:text-green-300">
+                    Final Amount
+                  </div>
                 </div>
                 <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                     {formatCurrency(result.totalInterest)}
                   </div>
-                  <div className="text-sm text-blue-700 dark:text-blue-300">Total Interest</div>
+                  <div className="text-sm text-blue-700 dark:text-blue-300">
+                    Total Interest
+                  </div>
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Badge variant="outline" className="w-full justify-between p-2">
                   <span>Initial Investment:</span>
-                  <span className="font-semibold">{formatCurrency(principal)}</span>
+                  <span className="font-semibold">
+                    {formatCurrency(principal)}
+                  </span>
                 </Badge>
                 <Badge variant="outline" className="w-full justify-between p-2">
                   <span>Total Contributions:</span>
-                  <span className="font-semibold">{formatCurrency(result.totalContributions)}</span>
+                  <span className="font-semibold">
+                    {formatCurrency(result.totalContributions)}
+                  </span>
                 </Badge>
                 <Badge variant="outline" className="w-full justify-between p-2">
                   <span>Interest Earned:</span>
-                  <span className="font-semibold">{formatCurrency(result.totalInterest)}</span>
+                  <span className="font-semibold">
+                    {formatCurrency(result.totalInterest)}
+                  </span>
                 </Badge>
               </div>
             </CardContent>
           </Card>
-        )}
+        ) : null}
       </div>
 
-      {result && result.yearlyBreakdown.length > 0 && (
+      {result && result.yearlyBreakdown.length > 0 ? (
         <Card className="mt-6">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -344,39 +386,50 @@ export default function CompoundInterestCalculator() {
                 <AreaChart
                   data={result.yearlyBreakdown.map(item => ({
                     year: `Year ${item.year}`,
-                    'Total Value': Math.round(item.endingAmount),
-                    'Contributions': Math.round(result.yearlyBreakdown.slice(0, item.year).reduce((sum, y) => sum + y.contributions, 0) + principal),
-                    'Interest Earned': Math.round(item.endingAmount - result.yearlyBreakdown.slice(0, item.year).reduce((sum, y) => sum + y.contributions, 0) - principal)
+                    "Total Value": Math.round(item.endingAmount),
+                    Contributions: Math.round(
+                      result.yearlyBreakdown
+                        .slice(0, item.year)
+                        .reduce((sum, y) => sum + y.contributions, 0) +
+                        principal
+                    ),
+                    "Interest Earned": Math.round(
+                      item.endingAmount -
+                        result.yearlyBreakdown
+                          .slice(0, item.year)
+                          .reduce((sum, y) => sum + y.contributions, 0) -
+                        principal
+                    ),
                   }))}
                   margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="year" 
+                  <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+                  <YAxis
                     tick={{ fontSize: 12 }}
+                    tickFormatter={value => `$${(value / 1000).toFixed(0)}k`}
                   />
-                  <YAxis 
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  <Tooltip
+                    formatter={(value: number) => [
+                      `$${value.toLocaleString()}`,
+                      "",
+                    ]}
+                    labelStyle={{ color: "#000" }}
                   />
-                  <Tooltip 
-                    formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
-                    labelStyle={{ color: '#000' }}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="Contributions" 
+                  <Area
+                    type="monotone"
+                    dataKey="Contributions"
                     stackId="1"
-                    stroke="#3b82f6" 
-                    fill="#3b82f6" 
+                    stroke="#3b82f6"
+                    fill="#3b82f6"
                     fillOpacity={0.6}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="Interest Earned" 
+                  <Area
+                    type="monotone"
+                    dataKey="Interest Earned"
                     stackId="1"
-                    stroke="#10b981" 
-                    fill="#10b981" 
+                    stroke="#10b981"
+                    fill="#10b981"
                     fillOpacity={0.8}
                   />
                 </AreaChart>
@@ -384,19 +437,19 @@ export default function CompoundInterestCalculator() {
             </div>
             <div className="flex justify-center gap-6 mt-4 text-sm">
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-blue-500 rounded mr-2"></div>
+                <div className="w-4 h-4 bg-blue-500 rounded mr-2" />
                 <span>Total Contributions</span>
               </div>
               <div className="flex items-center">
-                <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
+                <div className="w-4 h-4 bg-green-500 rounded mr-2" />
                 <span>Interest Earned</span>
               </div>
             </div>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
-      {result && (
+      {result ? (
         <Card>
           <CardHeader>
             <CardTitle>Year-by-Year Breakdown</CardTitle>
@@ -414,13 +467,21 @@ export default function CompoundInterestCalculator() {
                   </tr>
                 </thead>
                 <tbody>
-                  {result.yearlyBreakdown.map((row) => (
+                  {result.yearlyBreakdown.map(row => (
                     <tr key={row.year} className="border-b">
                       <td className="p-2 font-medium">{row.year}</td>
-                      <td className="text-right p-2">{formatCurrency(row.startingAmount)}</td>
-                      <td className="text-right p-2 text-blue-600">{formatCurrency(row.contributions)}</td>
-                      <td className="text-right p-2 text-green-600">{formatCurrency(row.interest)}</td>
-                      <td className="text-right p-2 font-semibold">{formatCurrency(row.endingAmount)}</td>
+                      <td className="text-right p-2">
+                        {formatCurrency(row.startingAmount)}
+                      </td>
+                      <td className="text-right p-2 text-blue-600">
+                        {formatCurrency(row.contributions)}
+                      </td>
+                      <td className="text-right p-2 text-green-600">
+                        {formatCurrency(row.interest)}
+                      </td>
+                      <td className="text-right p-2 font-semibold">
+                        {formatCurrency(row.endingAmount)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -428,9 +489,9 @@ export default function CompoundInterestCalculator() {
             </div>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
-      {result && (
+      {result ? (
         <Card className="mt-6">
           <CardHeader>
             <CardTitle className="flex items-center">
@@ -438,7 +499,8 @@ export default function CompoundInterestCalculator() {
               NX Table - Money Multiplication Milestones
             </CardTitle>
             <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-              See when your initial investment of {formatCurrency(principal)} will reach different multiples
+              See when your initial investment of {formatCurrency(principal)}{" "}
+              will reach different multiples
             </p>
           </CardHeader>
           <CardContent>
@@ -454,8 +516,11 @@ export default function CompoundInterestCalculator() {
                   </tr>
                 </thead>
                 <tbody>
-                  {calculateNxTable().map((row) => (
-                    <tr key={row.multiple} className="border-b hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  {calculateNxTable().map(row => (
+                    <tr
+                      key={row.multiple}
+                      className="border-b hover:bg-slate-50 dark:hover:bg-slate-800/50"
+                    >
                       <td className="p-3 font-bold text-lg text-blue-600 dark:text-blue-400">
                         {row.multiple}
                       </td>
@@ -464,7 +529,13 @@ export default function CompoundInterestCalculator() {
                       </td>
                       <td className="text-right p-3">
                         {row.yearReached ? (
-                          <span className={row.projected ? "text-orange-600 dark:text-orange-400" : "text-green-600 dark:text-green-400"}>
+                          <span
+                            className={
+                              row.projected
+                                ? "text-orange-600 dark:text-orange-400"
+                                : "text-green-600 dark:text-green-400"
+                            }
+                          >
                             Year {row.yearReached}
                           </span>
                         ) : (
@@ -477,16 +548,25 @@ export default function CompoundInterestCalculator() {
                       <td className="text-center p-3">
                         {row.yearReached ? (
                           row.projected ? (
-                            <Badge variant="outline" className="text-orange-600 border-orange-300">
+                            <Badge
+                              variant="outline"
+                              className="text-orange-600 border-orange-300"
+                            >
                               Projected
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="text-green-600 border-green-300">
+                            <Badge
+                              variant="outline"
+                              className="text-green-600 border-green-300"
+                            >
                               Reached
                             </Badge>
                           )
                         ) : (
-                          <Badge variant="outline" className="text-red-500 border-red-300">
+                          <Badge
+                            variant="outline"
+                            className="text-red-500 border-red-300"
+                          >
                             Beyond 100y
                           </Badge>
                         )}
@@ -497,13 +577,28 @@ export default function CompoundInterestCalculator() {
               </table>
             </div>
             <div className="mt-4 text-xs text-slate-500 dark:text-slate-400 space-y-1">
-              <div>• <span className="text-green-600 dark:text-green-400 font-medium">Reached</span>: Milestone achieved within your {years}-year investment period</div>
-              <div>• <span className="text-orange-600 dark:text-orange-400 font-medium">Projected</span>: Estimated timeline beyond your current investment period</div>
-              <div>• <span className="text-red-500 font-medium">Beyond 100y</span>: Milestone would take more than 100 years to reach</div>
+              <div>
+                •{" "}
+                <span className="text-green-600 dark:text-green-400 font-medium">
+                  Reached
+                </span>
+                : Milestone achieved within your {years}-year investment period
+              </div>
+              <div>
+                •{" "}
+                <span className="text-orange-600 dark:text-orange-400 font-medium">
+                  Projected
+                </span>
+                : Estimated timeline beyond your current investment period
+              </div>
+              <div>
+                • <span className="text-red-500 font-medium">Beyond 100y</span>:
+                Milestone would take more than 100 years to reach
+              </div>
             </div>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       <AdSlot position="sidebar" id="CI-002" size="medium" className="mt-6" />
     </div>

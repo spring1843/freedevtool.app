@@ -3,8 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Hash, Copy, CheckCircle, XCircle, Eye, EyeOff, RotateCcw } from "lucide-react";
+import {
+  Hash,
+  Copy,
+  CheckCircle,
+  XCircle,
+  Eye,
+  EyeOff,
+  RotateCcw,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -13,13 +20,15 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 const createHash = async (input: string): Promise<string> => {
   const encoder = new TextEncoder();
   const data = encoder.encode(input);
-  
+
   try {
     // Use SHA-256 and truncate to simulate MD5 length (since MD5 isn't available in Web Crypto)
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    
+    const hashHex = hashArray
+      .map(b => b.toString(16).padStart(2, "0"))
+      .join("");
+
     // Truncate to 32 characters to simulate MD5 length
     return hashHex.substring(0, 32);
   } catch {
@@ -35,12 +44,14 @@ const simpleMD5 = (input: string): string => {
   for (let i = 0; i < bytes.length; i++) {
     hash = ((hash << 5) - hash + bytes[i]) & 0xffffffff;
   }
-  const hex = (hash >>> 0).toString(16).padStart(8, '0');
+  const hex = (hash >>> 0).toString(16).padStart(8, "0");
   return hex.repeat(4).substring(0, 32);
 };
 
 export default function MD5Hash() {
-  const [inputText, setInputText] = useState("Hello World! This is a test text for MD5 hash generation.");
+  const [inputText, setInputText] = useState(
+    "Hello World! This is a test text for MD5 hash generation."
+  );
   const [compareHash, setCompareHash] = useState("");
   const [hashResult, setHashResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +67,7 @@ export default function MD5Hash() {
     try {
       const hash = await createHash(inputText);
       setHashResult(hash);
-      
+
       // Auto-compare if there's a comparison hash
       if (compareHash.trim()) {
         setIsMatch(hash === compareHash.trim());
@@ -64,7 +75,7 @@ export default function MD5Hash() {
         setIsMatch(null);
       }
     } catch (error) {
-      console.error('Hashing failed:', error);
+      console.error("Hashing failed:", error);
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +99,7 @@ export default function MD5Hash() {
     try {
       await navigator.clipboard.writeText(text);
     } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
+      console.error("Failed to copy to clipboard:", err);
     }
   };
 
@@ -111,7 +122,7 @@ export default function MD5Hash() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="MD5-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -129,7 +140,9 @@ export default function MD5Hash() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-blue-600 dark:text-blue-400">Generate Hash</CardTitle>
+            <CardTitle className="text-blue-600 dark:text-blue-400">
+              Generate Hash
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -139,7 +152,7 @@ export default function MD5Hash() {
                   id="input-text"
                   type={showPassword ? "text" : "password"}
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
+                  onChange={e => setInputText(e.target.value)}
                   placeholder="Enter text to hash..."
                   data-testid="input-text"
                   className="pr-10"
@@ -167,10 +180,10 @@ export default function MD5Hash() {
               className="w-full bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50"
             >
               <Hash className="w-4 h-4 mr-2" />
-              {isLoading ? 'Generating...' : 'Generate MD5 Hash'}
+              {isLoading ? "Generating..." : "Generate MD5 Hash"}
             </Button>
 
-            {hashResult && (
+            {hashResult ? (
               <div className="mt-4">
                 <Label className="text-sm font-medium">Generated Hash:</Label>
                 <div className="flex items-center mt-2 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border">
@@ -187,13 +200,15 @@ export default function MD5Hash() {
                   </Button>
                 </div>
               </div>
-            )}
+            ) : null}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-green-600 dark:text-green-400">Compare Hash</CardTitle>
+            <CardTitle className="text-green-600 dark:text-green-400">
+              Compare Hash
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -201,7 +216,7 @@ export default function MD5Hash() {
               <Input
                 id="compare-hash"
                 value={compareHash}
-                onChange={(e) => setCompareHash(e.target.value)}
+                onChange={e => setCompareHash(e.target.value)}
                 placeholder="Enter hash for comparison..."
                 data-testid="compare-hash"
               />
@@ -217,14 +232,20 @@ export default function MD5Hash() {
             </Button>
 
             {isMatch !== null && (
-              <div className={`p-3 border rounded-lg ${
-                isMatch 
-                  ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' 
-                  : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-              }`}>
-                <div className={`flex items-center ${
-                  isMatch ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-                }`}>
+              <div
+                className={`p-3 border rounded-lg ${
+                  isMatch
+                    ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
+                    : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
+                }`}
+              >
+                <div
+                  className={`flex items-center ${
+                    isMatch
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-red-600 dark:text-red-400"
+                  }`}
+                >
                   {isMatch ? (
                     <>
                       <CheckCircle className="w-5 h-5 mr-2" />
@@ -238,7 +259,9 @@ export default function MD5Hash() {
                   )}
                 </div>
                 <div className="text-sm mt-1 text-gray-600 dark:text-gray-400">
-                  {isMatch ? 'The input text matches the provided hash' : 'The input text does not match the provided hash'}
+                  {isMatch
+                    ? "The input text matches the provided hash"
+                    : "The input text does not match the provided hash"}
                 </div>
               </div>
             )}
@@ -271,7 +294,9 @@ export default function MD5Hash() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">MD5 Features:</h3>
+          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+            MD5 Features:
+          </h3>
           <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
             <li>• Fast hash generation for integrity checking</li>
             <li>• Fixed 32-character hexadecimal output</li>
@@ -281,7 +306,9 @@ export default function MD5Hash() {
         </div>
 
         <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-          <h3 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">Security Notice:</h3>
+          <h3 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2">
+            Security Notice:
+          </h3>
           <ul className="text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
             <li>• MD5 is not cryptographically secure for passwords</li>
             <li>• Use for data integrity, not password storage</li>

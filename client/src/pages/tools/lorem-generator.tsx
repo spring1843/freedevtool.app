@@ -2,7 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
@@ -11,20 +17,91 @@ import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const loremWords = [
-  "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
-  "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
-  "magna", "aliqua", "enim", "ad", "minim", "veniam", "quis", "nostrud",
-  "exercitation", "ullamco", "laboris", "nisi", "aliquip", "ex", "ea", "commodo",
-  "consequat", "duis", "aute", "irure", "in", "reprehenderit", "voluptate",
-  "velit", "esse", "cillum", "fugiat", "nulla", "pariatur", "excepteur", "sint",
-  "occaecat", "cupidatat", "non", "proident", "sunt", "culpa", "qui", "officia",
-  "deserunt", "mollit", "anim", "id", "est", "laborum", "at", "vero", "eos",
-  "accusamus", "accusantium", "doloremque", "laudantium", "totam", "rem",
-  "aperiam", "eaque", "ipsa", "quae", "ab", "illo", "inventore", "veritatis"
+  "lorem",
+  "ipsum",
+  "dolor",
+  "sit",
+  "amet",
+  "consectetur",
+  "adipiscing",
+  "elit",
+  "sed",
+  "do",
+  "eiusmod",
+  "tempor",
+  "incididunt",
+  "ut",
+  "labore",
+  "et",
+  "dolore",
+  "magna",
+  "aliqua",
+  "enim",
+  "ad",
+  "minim",
+  "veniam",
+  "quis",
+  "nostrud",
+  "exercitation",
+  "ullamco",
+  "laboris",
+  "nisi",
+  "aliquip",
+  "ex",
+  "ea",
+  "commodo",
+  "consequat",
+  "duis",
+  "aute",
+  "irure",
+  "in",
+  "reprehenderit",
+  "voluptate",
+  "velit",
+  "esse",
+  "cillum",
+  "fugiat",
+  "nulla",
+  "pariatur",
+  "excepteur",
+  "sint",
+  "occaecat",
+  "cupidatat",
+  "non",
+  "proident",
+  "sunt",
+  "culpa",
+  "qui",
+  "officia",
+  "deserunt",
+  "mollit",
+  "anim",
+  "id",
+  "est",
+  "laborum",
+  "at",
+  "vero",
+  "eos",
+  "accusamus",
+  "accusantium",
+  "doloremque",
+  "laudantium",
+  "totam",
+  "rem",
+  "aperiam",
+  "eaque",
+  "ipsa",
+  "quae",
+  "ab",
+  "illo",
+  "inventore",
+  "veritatis",
 ];
 
 export default function LoremGenerator() {
-  const [type, setType] = useState<"words" | "sentences" | "paragraphs">("paragraphs");
+  const [type, setType] = useState<"words" | "sentences" | "paragraphs">(
+    "paragraphs"
+  );
   const [count, setCount] = useState(3);
   const [startWithLorem, setStartWithLorem] = useState(true);
   const [generated, setGenerated] = useState("");
@@ -34,39 +111,39 @@ export default function LoremGenerator() {
     return loremWords[randomIndex];
   };
 
-  const generateSentence = (wordCount: number = 10): string => {
+  const generateSentence = (wordCount = 10): string => {
     const words: string[] = [];
-    
+
     for (let i = 0; i < wordCount; i++) {
       words.push(generateRandom());
     }
-    
+
     // Capitalize first word
     if (words.length > 0) {
       words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
     }
-    
-    return words.join(" ") + ".";
+
+    return `${words.join(" ")}.`;
   };
 
-  const generateParagraph = (sentenceCount: number = 5): string => {
+  const generateParagraph = (sentenceCount = 5): string => {
     const sentences: string[] = [];
-    
+
     for (let i = 0; i < sentenceCount; i++) {
       const wordCount = Math.floor(Math.random() * 8) + 6; // 6-13 words per sentence
       sentences.push(generateSentence(wordCount));
     }
-    
+
     return sentences.join(" ");
   };
 
   const generateLorem = () => {
     let result = "";
-    
+
     switch (type) {
       case "words": {
         const words: string[] = [];
-        
+
         if (startWithLorem && count > 0) {
           words.push("Lorem");
           for (let i = 1; i < count; i++) {
@@ -77,51 +154,51 @@ export default function LoremGenerator() {
             words.push(generateRandom());
           }
         }
-        
+
         result = words.join(" ");
         break;
       }
-      
+
       case "sentences": {
         const sentences: string[] = [];
-        
+
         for (let i = 0; i < count; i++) {
           const wordCount = Math.floor(Math.random() * 8) + 6;
           let sentence = generateSentence(wordCount);
-          
+
           // Start first sentence with "Lorem ipsum" if requested
           if (i === 0 && startWithLorem) {
-            sentence = "Lorem ipsum " + sentence.toLowerCase();
+            sentence = `Lorem ipsum ${sentence.toLowerCase()}`;
             sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
           }
-          
+
           sentences.push(sentence);
         }
-        
+
         result = sentences.join(" ");
         break;
       }
-      
+
       case "paragraphs": {
         const paragraphs: string[] = [];
-        
+
         for (let i = 0; i < count; i++) {
           const sentenceCount = Math.floor(Math.random() * 4) + 3; // 3-6 sentences per paragraph
           let paragraph = generateParagraph(sentenceCount);
-          
+
           // Start first paragraph with "Lorem ipsum" if requested
           if (i === 0 && startWithLorem) {
-            paragraph = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " + paragraph;
+            paragraph = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. ${paragraph}`;
           }
-          
+
           paragraphs.push(paragraph);
         }
-        
+
         result = paragraphs.join("\n\n");
         break;
       }
     }
-    
+
     setGenerated(result);
   };
 
@@ -136,7 +213,7 @@ export default function LoremGenerator() {
     try {
       await navigator.clipboard.writeText(generated);
     } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
+      console.error("Failed to copy to clipboard:", err);
     }
   };
 
@@ -147,7 +224,7 @@ export default function LoremGenerator() {
   return (
     <div className="max-w-4xl mx-auto">
       <AdSlot position="top" id="LG-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -170,7 +247,10 @@ export default function LoremGenerator() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="type">Generate</Label>
-              <Select value={type} onValueChange={(value: typeof type) => setType(value)}>
+              <Select
+                value={type}
+                onValueChange={(value: typeof type) => setType(value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -190,7 +270,11 @@ export default function LoremGenerator() {
                 min="1"
                 max="100"
                 value={count}
-                onChange={(e) => setCount(Math.max(1, Math.min(100, parseInt(e.target.value) || 1)))}
+                onChange={e =>
+                  setCount(
+                    Math.max(1, Math.min(100, parseInt(e.target.value) || 1))
+                  )
+                }
                 data-testid="count-input"
               />
             </div>
@@ -200,7 +284,7 @@ export default function LoremGenerator() {
                 type="checkbox"
                 id="start-with-lorem"
                 checked={startWithLorem}
-                onChange={(e) => setStartWithLorem(e.target.checked)}
+                onChange={e => setStartWithLorem(e.target.checked)}
                 className="rounded"
               />
               <Label htmlFor="start-with-lorem">Start with "Lorem ipsum"</Label>
@@ -228,16 +312,12 @@ export default function LoremGenerator() {
         </CardContent>
       </Card>
 
-      {generated && (
+      {generated ? (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Generated Lorem Ipsum
-              <Button
-                onClick={copyToClipboard}
-                variant="outline"
-                size="sm"
-              >
+              <Button onClick={copyToClipboard} variant="outline" size="sm">
                 <Copy className="w-4 h-4 mr-1" />
                 Copy
               </Button>
@@ -254,21 +334,26 @@ export default function LoremGenerator() {
               showLineNumbers={true}
               showStats={true}
             />
-            
+
             <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-              {generated.split(' ').length} words, {generated.split(/[.!?]+/).length - 1} sentences
+              {generated.split(" ").length} words,{" "}
+              {generated.split(/[.!?]+/).length - 1} sentences
             </div>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">About Lorem Ipsum:</h3>
+        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          About Lorem Ipsum:
+        </h3>
         <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
           <div>• Industry standard placeholder text since the 1500s</div>
           <div>• Based on a work by Cicero from 45 BC</div>
           <div>• Scrambled Latin text that's readable but meaningless</div>
-          <div>• Perfect for focusing on design without content distraction</div>
+          <div>
+            • Perfect for focusing on design without content distraction
+          </div>
         </div>
       </div>
 

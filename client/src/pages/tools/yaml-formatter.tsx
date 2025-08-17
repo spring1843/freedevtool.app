@@ -51,7 +51,7 @@ export default function YAMLFormatter() {
   const handleInputChange = (value: string) => {
     setInput(value);
     if (output) {
-      setOutput('');
+      setOutput("");
     }
   };
 
@@ -68,7 +68,7 @@ export default function YAMLFormatter() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="YF-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -83,11 +83,13 @@ export default function YAMLFormatter() {
         </div>
       </div>
 
-      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert> : null}
+        </Alert>
+      ) : null}
 
       <div className="mb-6 flex gap-4">
         <Button
@@ -111,7 +113,7 @@ export default function YAMLFormatter() {
           <CardContent>
             <Textarea
               value={input}
-              onChange={(e) => handleInputChange(e.target.value)}
+              onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your YAML here..."
               data-testid="yaml-input"
               className="min-h-[400px] font-mono text-sm"
@@ -142,10 +144,14 @@ export default function YAMLFormatter() {
       </div>
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">YAML Features:</h3>
+        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          YAML Features:
+        </h3>
         <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
           <li>• Human-readable data serialization standard</li>
-          <li>• Supports complex data structures like lists and dictionaries</li>
+          <li>
+            • Supports complex data structures like lists and dictionaries
+          </li>
           <li>• Commonly used for configuration files and data exchange</li>
           <li>• Strict indentation rules using spaces (not tabs)</li>
         </ul>

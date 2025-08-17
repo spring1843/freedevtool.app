@@ -38,22 +38,23 @@ interface CertificateInfo {
 
 export default function TLSDecoder() {
   const [certificate, setCertificate] = useState(DEFAULT_CERT);
-  const [certificateInfo, setCertificateInfo] = useState<CertificateInfo | null>(null);
+  const [certificateInfo, setCertificateInfo] =
+    useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const decodeCertificate = () => {
     try {
       setError(null);
-      
+
       // This is a basic implementation for demonstration
       // In a real implementation, you would use a proper X.509 parsing library
       const cleanCert = certificate
-        .replace(/-----BEGIN CERTIFICATE-----/g, '')
-        .replace(/-----END CERTIFICATE-----/g, '')
-        .replace(/\s/g, '');
+        .replace(/-----BEGIN CERTIFICATE-----/g, "")
+        .replace(/-----END CERTIFICATE-----/g, "")
+        .replace(/\s/g, "");
 
       if (!cleanCert) {
-        throw new Error('No certificate data found');
+        throw new Error("No certificate data found");
       }
 
       // For demonstration purposes, we'll create mock certificate info
@@ -72,17 +73,19 @@ export default function TLSDecoder() {
           "Key Usage",
           "Extended Key Usage",
           "Basic Constraints",
-          "Certificate Policies"
+          "Certificate Policies",
         ],
-        fingerprint: "SHA1: AB:CD:EF:12:34:56:78:9A:BC:DE:F0:12:34:56:78:9A:BC:DE:F0:12",
+        fingerprint:
+          "SHA1: AB:CD:EF:12:34:56:78:9A:BC:DE:F0:12:34:56:78:9A:BC:DE:F0:12",
         isValid: true,
-        daysUntilExpiry: 365
+        daysUntilExpiry: 365,
       };
 
       setCertificateInfo(mockInfo);
-      
     } catch (err) {
-      setError(`Certificate parsing failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(
+        `Certificate parsing failed: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
       setCertificateInfo(null);
     }
   };
@@ -114,16 +117,28 @@ export default function TLSDecoder() {
 
   const getValidityStatus = () => {
     if (!certificateInfo) return null;
-    
+
     if (!certificateInfo.isValid) {
-      return { color: 'text-red-600', icon: <XCircle className="w-4 h-4" />, text: 'Invalid' };
+      return {
+        color: "text-red-600",
+        icon: <XCircle className="w-4 h-4" />,
+        text: "Invalid",
+      };
     }
-    
+
     if (certificateInfo.daysUntilExpiry < 30) {
-      return { color: 'text-yellow-600', icon: <XCircle className="w-4 h-4" />, text: 'Expires Soon' };
+      return {
+        color: "text-yellow-600",
+        icon: <XCircle className="w-4 h-4" />,
+        text: "Expires Soon",
+      };
     }
-    
-    return { color: 'text-green-600', icon: <CheckCircle className="w-4 h-4" />, text: 'Valid' };
+
+    return {
+      color: "text-green-600",
+      icon: <CheckCircle className="w-4 h-4" />,
+      text: "Valid",
+    };
   };
 
   const validityStatus = getValidityStatus();
@@ -131,7 +146,7 @@ export default function TLSDecoder() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="TLS-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -146,24 +161,26 @@ export default function TLSDecoder() {
         </div>
       </div>
 
-      {error && (
+      {error ? (
         <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
         </Alert>
-      )}
+      ) : null}
 
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             Certificate Input
-            {validityStatus && (
-              <div className={`flex items-center ${validityStatus.color} text-sm`}>
+            {validityStatus ? (
+              <div
+                className={`flex items-center ${validityStatus.color} text-sm`}
+              >
                 {validityStatus.icon}
                 <span className="ml-1">{validityStatus.text}</span>
               </div>
-            )}
+            ) : null}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -182,7 +199,7 @@ export default function TLSDecoder() {
           </div>
           <Textarea
             value={certificate}
-            onChange={(e) => handleCertificateChange(e.target.value)}
+            onChange={e => handleCertificateChange(e.target.value)}
             placeholder="Paste your X.509 certificate here (PEM format)..."
             data-testid="certificate-input"
             className="min-h-[200px] font-mono text-sm"
@@ -193,11 +210,13 @@ export default function TLSDecoder() {
         </CardContent>
       </Card>
 
-      {certificateInfo && (
+      {certificateInfo ? (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-blue-600 dark:text-blue-400">Basic Information</CardTitle>
+              <CardTitle className="text-blue-600 dark:text-blue-400">
+                Basic Information
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -229,7 +248,9 @@ export default function TLSDecoder() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-green-600 dark:text-green-400">Validity & Security</CardTitle>
+              <CardTitle className="text-green-600 dark:text-green-400">
+                Validity & Security
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -246,7 +267,13 @@ export default function TLSDecoder() {
               </div>
               <div>
                 <Label className="font-semibold">Days Until Expiry</Label>
-                <Badge variant={certificateInfo.daysUntilExpiry < 30 ? "destructive" : "outline"}>
+                <Badge
+                  variant={
+                    certificateInfo.daysUntilExpiry < 30
+                      ? "destructive"
+                      : "outline"
+                  }
+                >
                   {certificateInfo.daysUntilExpiry} days
                 </Badge>
               </div>
@@ -267,7 +294,9 @@ export default function TLSDecoder() {
 
           <Card className="lg:col-span-2">
             <CardHeader>
-              <CardTitle className="text-purple-600 dark:text-purple-400">Extensions & Fingerprint</CardTitle>
+              <CardTitle className="text-purple-600 dark:text-purple-400">
+                Extensions & Fingerprint
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -289,13 +318,25 @@ export default function TLSDecoder() {
             </CardContent>
           </Card>
         </div>
-      )}
+      ) : null}
 
       <AdSlot position="sidebar" id="TLS-002" size="medium" className="mt-6" />
     </div>
   );
 }
 
-function Label({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={`text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 ${className || ''}`}>{children}</div>;
+function Label({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 ${className || ""}`}
+    >
+      {children}
+    </div>
+  );
 }
