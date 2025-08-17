@@ -82,8 +82,6 @@ e2e-test-ui: ## Run end-to-end tests with UI
 e2e-install: ## Install Playwright browsers
 	npx playwright install
 
-
-
 ## Dependency Management
 
 install: deps ## Install dependencies (alias for deps)

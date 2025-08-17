@@ -95,7 +95,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         event.preventDefault();
         navigateResults("up");
         break;
-      case "Enter":
+      case "Enter": {
         event.preventDefault();
         const selected = selectResult();
         if (selected) {
@@ -104,12 +104,16 @@ export function Header({ onMenuClick }: HeaderProps) {
           handleResultClick();
         }
         break;
+      }
       case "Escape":
         event.preventDefault();
         setShowResults(false);
         resetSelection();
         (event.target as HTMLInputElement).blur();
         break;
+      default: {
+        // Handle default case
+      }
     }
   };
 

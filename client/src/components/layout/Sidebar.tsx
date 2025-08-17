@@ -222,25 +222,28 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
       if (!sidebarRef.current?.contains(document.activeElement)) return;
 
       switch (e.key) {
-        case "ArrowDown":
+        case "ArrowDown": {
           e.preventDefault();
           setFocusedIndex(prev =>
             Math.min(prev + 1, navigableItems.length - 1)
           );
           break;
-        case "ArrowUp":
+        }
+        case "ArrowUp": {
           e.preventDefault();
           setFocusedIndex(prev => Math.max(prev - 1, 0));
           break;
+        }
         case " ":
-        case "Space":
+        case "Space": {
           e.preventDefault();
           const currentItem = navigableItems[focusedIndex];
           if (currentItem && currentItem.type === "category") {
             toggleSection(currentItem.categoryName);
           }
           break;
-        case "Enter":
+        }
+        case "Enter": {
           e.preventDefault();
           const selectedItem = navigableItems[focusedIndex];
           if (
@@ -259,6 +262,10 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
             toggleSection(selectedItem.categoryName);
           }
           break;
+        }
+        default: {
+          // Handle default case
+        }
       }
     };
 

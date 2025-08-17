@@ -99,19 +99,6 @@ export default tseslint.config(
       "arrow-body-style": ["error", "as-needed"],
       "object-shorthand": ["error", "always"],
       "prefer-destructuring": ["error", { object: true, array: false }],
-      "no-magic-numbers": [
-        "warn",
-        {
-          ignore: [
-            -1, 0, 1, 2, 3, 4, 5, 8, 10, 11, 12, 16, 24, 60, 100, 200, 300, 500,
-            800, 1000, 2000, 3600, 60000, 86400,
-          ],
-          ignoreArrayIndexes: true,
-          enforceConst: true,
-          detectObjects: false,
-          ignoreDefaultValues: true,
-        },
-      ],
       "consistent-return": "off", // Too strict for React components
       "default-case": "error",
       eqeqeq: ["error", "always"],
@@ -125,7 +112,6 @@ export default tseslint.config(
       "no-throw-literal": "error",
       "no-useless-concat": "error",
       "no-useless-return": "error",
-      radix: "warn",
       "no-duplicate-case": "error",
       "no-fallthrough": "error",
       "no-unreachable": "error",

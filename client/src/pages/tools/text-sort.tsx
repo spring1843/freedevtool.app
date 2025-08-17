@@ -73,6 +73,9 @@ export default function TextSorter() {
       case "reverse":
         sorted.reverse();
         break;
+      default: {
+        // Handle default case
+      }
     }
 
     if (sortOrder === "desc" && sortType !== "reverse") {

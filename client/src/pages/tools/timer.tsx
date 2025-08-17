@@ -63,6 +63,9 @@ export default function Timer() {
           event.preventDefault();
           stopTimer();
           break;
+        default: {
+          // Handle default case
+        }
       }
     };
 
