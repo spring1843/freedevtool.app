@@ -179,7 +179,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4 z-10" />
                 <Input
                   type="text"
-                  placeholder="Search tools... (Ctrl+S)"
+                  placeholder="Search in 45 tools... (Ctrl+S)"
                   value={searchQuery}
                   onChange={e => handleSearchChange(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
@@ -287,7 +287,7 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4 z-10" />
                 <Input
                   type="text"
-                  placeholder="Search tools... (Ctrl+S)"
+                  placeholder="Search in 45 tools... (Ctrl+S)"
                   value={searchQuery}
                   onChange={e => handleSearchChange(e.target.value)}
                   onKeyDown={handleSearchKeyDown}
