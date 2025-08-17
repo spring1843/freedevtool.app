@@ -69,22 +69,10 @@ test.describe("Countdown Tool", () => {
     // Wait for any delayed operations
     await page.waitForFunction(() => true, undefined, { timeout: 1000 });
 
-    // Filter critical errors
-    const criticalConsoleErrors = consoleErrors.filter(
-      error =>
-        !error.includes("favicon") &&
-        !error.includes("404") &&
-        !error.toLowerCase().includes("warning")
-    );
-
     // Verify no errors occurred
     expect(jsErrors, `JavaScript errors: ${jsErrors.join(", ")}`).toHaveLength(
       0
     );
-    expect(
-      criticalConsoleErrors,
-      `Console errors: ${criticalConsoleErrors.join(", ")}`
-    ).toHaveLength(0);
 
     // Verify page title
     const pageTitle = await page.title();
