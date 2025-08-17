@@ -113,7 +113,7 @@ export default function RegexTester() {
     let highlighted = text;
     let offset = 0;
 
-    matches.forEach((match) => {
+    matches.forEach(match => {
       const start = match.index + offset;
       const end = start + match.match.length;
       const highlightedMatch = `<mark class="bg-yellow-200 dark:bg-yellow-800">${match.match}</mark>`;
