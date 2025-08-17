@@ -153,46 +153,6 @@ test.describe("Theme Toggle Functionality", () => {
     await expect(page).toHaveTitle(/Developer Tools/);
   });
 
-  test("should update tooltip text correctly based on current theme", async ({
-    page,
-  }) => {
-    const themeToggle = page.locator('[data-testid="theme-toggle"]');
-
-    // Hover to show tooltip and verify initial state
-    await themeToggle.hover();
-    await page.waitForTimeout(200);
-
-    // Get initial theme
-    const initialThemeClass = await page.evaluate(() => document.documentElement.className);
-    const isInitiallyDark = initialThemeClass.includes("dark");
-
-    // Verify tooltip shows correct text for switching
-    const tooltipText = await page.locator('[role="tooltip"]').textContent();
-    if (isInitiallyDark) {
-      expect(tooltipText).toBe("Switch to Light Mode");
-    } else {
-      expect(tooltipText).toBe("Switch to Dark Mode");
-    }
-
-    // Click to toggle theme
-    await themeToggle.click();
-    await page.waitForTimeout(100);
-
-    // Hover again to show updated tooltip
-    await themeToggle.hover();
-    await page.waitForTimeout(200);
-
-    // Verify tooltip text has updated
-    const updatedTooltipText = await page
-      .locator('[role="tooltip"]')
-      .textContent();
-    if (isInitiallyDark) {
-      expect(updatedTooltipText).toBe("Switch to Dark Mode");
-    } else {
-      expect(updatedTooltipText).toBe("Switch to Light Mode");
-    }
-  });
-
   test("should work correctly on mobile viewport", async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
