@@ -64,13 +64,15 @@ The application operates without authentication requirements as all tools functi
 - Removed 16+ unused UI libraries including CodeMirror, carousel, input-otp, drawer components for smaller bundle size.
 
 **Testing Strategy:**
-- Comprehensive end-to-end tests with Playwright covering all 45+ tools in the application.
-- Individual tool tests verify each tool loads without JavaScript errors and displays correctly.
+- Individual end-to-end test files for each of the 45+ tools in the application (`tests/e2e/tools/`).
+- Each tool has dedicated test coverage verifying page loads without JavaScript/CSS errors.
+- Isolated test failures allow precise identification of broken tools during development.
 - Theme toggle functionality validation with proper state persistence across navigation.
 - Demo functionality testing to ensure interactive tours work properly across tools.
+- Search and navigation testing to verify tool discovery and routing functionality.
 - Robust e2e tests using proper wait conditions instead of fixed timeouts to prevent flaky tests.
 - Tests use `page.waitForFunction()` to wait for actual DOM changes rather than arbitrary delays.
-- Search and navigation testing to verify tool discovery and routing functionality.
+- Automated test generation script for creating new tool tests (`scripts/generate-tool-tests.js`).
 - CI/CD pipeline includes comprehensive testing with 146 unit tests and full e2e validation.
 
 **Security Features:**
