@@ -36,7 +36,7 @@ export default function MicrophoneTest() {
   const [audioLevel, setAudioLevel] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [_, setPermissionRequested] = useState(false);
+  const [, setPermissionRequested] = useState(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);

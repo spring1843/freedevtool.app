@@ -23,7 +23,7 @@ export default function WebcamTest() {
   );
   const [error, setError] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [_, setPermissionRequested] = useState(false);
+  const [, setPermissionRequested] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
