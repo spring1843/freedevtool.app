@@ -10,33 +10,14 @@ on:
         description: 'Version tag (e.g., v1.0.0)'
         required: true
         type: string
-      bypass_ci:
-        description: 'Bypass CI requirement (only use if CI is broken)'
-        required: false
-        type: boolean
-        default: false
-
-permissions:
-  contents: write
-  pull-requests: read
-  pages: write
-  id-token: write
 
 jobs:
-  check-ci:
-    name: Check CI Status
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && !inputs.bypass_ci)
-    outputs:
-      ci-passed: ${{ steps.ci-status.outputs.ci-passed }}
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-  
   build-and-release:
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
     name: Build and Release
     runs-on: ubuntu-latest
     steps:
@@ -57,55 +38,18 @@ jobs:
       - name: Build application
         run: make build
       
-      - name: Create dist archive and GitHub Pages artifacts
+      - name: Create dist archive
         run: |
           # Create a clean build directory for release
           mkdir -p release-build
           
-          # Copy built application files (server build)
+          # Copy deployable public files
           if [ -d "dist" ]; then
-            cp -r dist/* release-build/
+            cp -r dist/public/* release-build/
           fi
-          
-          # Copy client build for GitHub Pages deployment
-          if [ -d "client/dist" ]; then
-            mkdir -p release-build/client
-            cp -r client/dist release-build/client/
-            # Also copy to public for server serving
-            mkdir -p release-build/public
-            cp -r client/dist/* release-build/public/ 2>/dev/null || true
-          fi
-          
-          # Copy source files for reference
-          cp -r client/src release-build/client/ 2>/dev/null || true
-          cp -r client/public release-build/client/ 2>/dev/null || true
-          
-          # Copy necessary files
-          cp package.json release-build/
-          cp README.md release-build/
-          cp LICENSE release-build/
-          cp Makefile release-build/
-          
-          
-          # Create GitHub Pages deployment directory with the same files
-          mkdir -p gh-pages-deploy
-          if [ -d "client/dist" ]; then
-            cp -r client/dist/* gh-pages-deploy/
-            echo "Copied client build to GitHub Pages deployment directory"
-          else
-            echo "No client/dist found for GitHub Pages deployment"
-          fi
-          
-          # Verify the build structure
-          echo "Release build structure:"
-          find release-build -type f | head -20
-          echo "Client dist files:"
-          find release-build/client/dist -type f 2>/dev/null | head -10 || echo "No client dist files found"
-          echo "GitHub Pages deployment files:"
-          find gh-pages-deploy -type f | head -20
-          
+           
           # Create archive
-          cd release-build
+          cd dist
           tar -czf ../freedevtool-app.tar.gz .
           cd ..
           
@@ -122,7 +66,6 @@ jobs:
           else
             echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
-      
       
       - name: Generate changelog
         id: changelog
@@ -173,7 +116,22 @@ jobs:
           generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
+      - name: Prepare GitHub Pages
+        run: |
+          mkdir -p gh-pages-deploy
+          cp dist/public/
+
+          # Copy client build for GitHub Pages deployment
+          if [ -d "client/dist" ]; then
+            mkdir -p release-build/client
+            cp -r client/dist release-build/client/
+            # Also copy to public for server serving
+            mkdir -p release-build/public
+            cp -r client/dist/* release-build/public/ 2>/dev/null || true
+          fi
+          
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
