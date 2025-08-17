@@ -311,23 +311,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Update package.json version
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          # Remove 'v' prefix if present
-          VERSION_NUMBER=${VERSION#v}
-          
-          # Update package.json version
-          npm version ${VERSION_NUMBER} --no-git-tag-version
-          
-          # Commit and push changes
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add package.json
-          git commit -m "chore: bump version to ${VERSION_NUMBER}" || exit 0
-          git push origin main
-
   deploy-to-pages:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
