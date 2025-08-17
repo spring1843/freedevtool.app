@@ -35,8 +35,6 @@ export function Header({ onMenuClick }: HeaderProps) {
   const toggleTheme = () => {
     if (theme === "dark") {
       setTheme("light");
-    } else if (theme === "light") {
-      setTheme("system");
     } else {
       setTheme("dark");
     }
@@ -247,26 +245,17 @@ export function Header({ onMenuClick }: HeaderProps) {
                     onClick={toggleTheme}
                     className="h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
                     data-testid="theme-toggle"
-                    aria-label={`Switch theme (current: ${theme})`}
+                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
                   >
                     {theme === "dark" ? (
                       <Sun className="h-5 w-5" />
-                    ) : theme === "light" ? (
-                      <Moon className="h-5 w-5" />
                     ) : (
-                      <Sun className="h-5 w-5" />
+                      <Moon className="h-5 w-5" />
                     )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>
-                    Toggle Theme:{" "}
-                    {theme === "dark"
-                      ? "→ Light"
-                      : theme === "light"
-                        ? "→ System"
-                        : "→ Dark"}
-                  </p>
+                  <p>Switch to {theme === "dark" ? "Light" : "Dark"} Mode</p>
                 </TooltipContent>
               </Tooltip>
 

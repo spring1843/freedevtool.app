@@ -145,7 +145,7 @@ function Router() {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system">
+    <ThemeProvider defaultTheme="light">
       <QueryClientProvider client={queryClient}>
         <DemoProvider>
           <TooltipProvider>
