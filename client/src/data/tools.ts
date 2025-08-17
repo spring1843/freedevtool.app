@@ -354,6 +354,17 @@ export function getAllTools(): Tool[] {
   return Object.values(toolsData).flatMap(category => category.tools);
 }
 
+// Cached tool count - calculated once and reused
+const TOOLS_COUNT = Object.values(toolsData).reduce(
+  (count, category) => count + category.tools.length,
+  0
+);
+
+// Utility function to get the total number of tools (efficient cached version)
+export function getToolsCount(): number {
+  return TOOLS_COUNT;
+}
+
 // Utility function to get tools for demo (same as getAllTools but explicit)
 export function getDemoTools(): Array<{
   name: string;
