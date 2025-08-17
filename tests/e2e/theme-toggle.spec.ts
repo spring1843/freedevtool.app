@@ -166,7 +166,7 @@ test.describe("Theme Toggle Functionality", () => {
       // Wait for theme change instead of fixed timeout
       await page.waitForFunction(
         () => {
-          const {className} = document.documentElement;
+          const { className } = document.documentElement;
           return className.includes("dark") || className.includes("light");
         },
         undefined,
@@ -217,7 +217,7 @@ test.describe("Theme Toggle Functionality", () => {
     // Wait for theme change using proper wait condition
     await page.waitForFunction(
       () => {
-        const {className} = document.documentElement;
+        const { className } = document.documentElement;
         return className.includes("dark") || className.includes("light");
       },
       undefined,
