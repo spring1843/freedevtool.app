@@ -160,7 +160,10 @@ export function formatDateWithPattern(date: Date, pattern: string): string {
   result = result.replace(/999999999/g, `${pad(milliseconds, 3)  }000000`);
   result = result.replace(/000000000/g, `${pad(milliseconds, 3)  }000000`);
   result = result.replace(/999999/g, `${pad(milliseconds, 3)  }000`);
-  result = result.replace(/000000/g, `${pad(milliseconds, 3)  }000`);
+  result = result.replace(/999999999/g, `${pad(milliseconds, 3)}000000`);
+  result = result.replace(/000000000/g, `${pad(milliseconds, 3)}000000`);
+  result = result.replace(/999999/g, `${pad(milliseconds, 3)}000`);
+  result = result.replace(/000000/g, `${pad(milliseconds, 3)}000`);
   result = result.replace(/Z07:00/g, offset === 0 ? 'Z' : timezoneOffsetColon);
   result = result.replace(/Z0700/g, offset === 0 ? 'Z' : timezoneOffset);
   result = result.replace(/-0700/g, timezoneOffset);
