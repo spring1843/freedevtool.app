@@ -31,8 +31,6 @@ ci-without-e2e: pre-commit format-check build test ## CI commands without end-to
 
 ci: pre-commit ci-without-e2e e2e-test ## Commands run in the CI. Good to run before pushing changes
 
-install: deps ## Install dependencies (alias for deps)
-
 deps: ## Install all dependencies
 	npm install
 

@@ -27,7 +27,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - run: make install
+      - run: make deps
 
       - run: make type-check
       - run: make test
