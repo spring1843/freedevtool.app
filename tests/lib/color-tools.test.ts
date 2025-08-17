@@ -24,7 +24,7 @@ describe('Color Tools Utilities', () => {
           const hex = c.toString(16)
           return hex.length === 1 ? `0${hex}` : hex
         }
-        return `#${  componentToHex(r)  }${componentToHex(g)  }${componentToHex(b)}`
+        return `#${componentToHex(r)}${componentToHex(g)}${componentToHex(b)}`
       }
 
       expect(rgbToHex(255, 0, 0)).toBe('#ff0000')
