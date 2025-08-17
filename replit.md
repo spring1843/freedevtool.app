@@ -7,7 +7,7 @@
 Preferred communication style: Simple, everyday language.
 Theme preferences: Smooth theme transitions with local storage persistence, respecting browser/OS theme selection by default, falling back to light mode when system preference unavailable.
 Timezone behavior: All time-related tools should default to the user's local timezone instead of UTC for better user experience.
-Build system preferences: Use make targets instead of npm commands for all development, testing, and release operations (e.g., `make deps` instead of `npm install`, `make start` instead of `npm run dev`).
+Build system preferences: Use make targets instead of npm commands for all development, testing, and release operations (e.g., `make deps` instead of `npm install`, `make start` instead of `npm run dev`). Default build creates standalone HTML with all assets inlined for optimal deployment.
 
 ## System Architecture
 
@@ -84,7 +84,7 @@ The application operates without authentication requirements as all tools functi
 - **Automatic**: Push git tags (e.g., `v1.0.0`) trigger releases after CI validation
 - **Manual**: GitHub Actions workflow dispatch with CI status verification
 - **Emergency Bypass**: Manual releases can bypass CI requirement if needed (creates prerelease with warning)
-- **Unified Build & Deploy**: Single workflow builds application and deploys identical files to both GitHub Releases and GitHub Pages
+- **Unified Build & Deploy**: Single workflow builds standalone HTML application and deploys identical self-contained files to both GitHub Releases and GitHub Pages
 - Manual release preparation with `scripts/prepare-release.sh`
 - Automated changelog generation from PR merge commits
 - Cross-platform distribution packages (tar.gz, zip)

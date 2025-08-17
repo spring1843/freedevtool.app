@@ -39,10 +39,10 @@ restart: stop start ## Restart the development server
 dev: ## Start development server with verbose logging
         NODE_ENV=development DEBUG=* npm run dev
 
-build: ## Build the application for production
+build-dev: ## Build the application for development (separate files)
         npm run build
 
-build-standalone: ## Build self-contained HTML file with all assets inlined
+build: ## Build self-contained HTML file with all assets inlined for production
         npm run build
         node scripts/inline-build.js
 
@@ -186,6 +186,4 @@ version: ## Show version information
         @echo "$(GREEN)NPM:$(NC) $$(npm --version)"
         @echo "$(GREEN)TypeScript:$(NC) $$(npx tsc --version | cut -d' ' -f2)"
 
-info: version status ## Show comprehensive project informationbuild-standalone:	## Build self-contained HTML file with all assets inlined
-	npm run build
-	node scripts/inline-build.js
+info: version status ## Show comprehensive project information
