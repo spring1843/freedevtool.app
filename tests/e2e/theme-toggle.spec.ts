@@ -15,7 +15,9 @@ test.describe("Theme Toggle Functionality", () => {
     await expect(themeToggle).toBeVisible();
 
     // Get initial theme state from document element class
-    const initialThemeClass = await page.evaluate(() => document.documentElement.className);
+    const initialThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
 
     // Determine initial theme (default should be light)
     const initialTheme = initialThemeClass.includes("dark") ? "dark" : "light";
@@ -29,7 +31,9 @@ test.describe("Theme Toggle Functionality", () => {
       await page.waitForTimeout(100);
 
       // Verify theme has changed
-      const currentThemeClass = await page.evaluate(() => document.documentElement.className);
+      const currentThemeClass = await page.evaluate(
+        () => document.documentElement.className
+      );
 
       // Determine expected theme after clicking
       const expectedTheme =
@@ -46,7 +50,9 @@ test.describe("Theme Toggle Functionality", () => {
         );
 
         // Verify dark theme styles are applied
-        const backgroundColor = await page.evaluate(() => window.getComputedStyle(document.body).backgroundColor);
+        const backgroundColor = await page.evaluate(
+          () => window.getComputedStyle(document.body).backgroundColor
+        );
         // Dark theme should have darker background
         expect(backgroundColor).not.toBe("rgb(255, 255, 255)"); // Not white
       } else {
@@ -80,7 +86,9 @@ test.describe("Theme Toggle Functionality", () => {
     await page.waitForTimeout(100);
 
     // Verify dark theme is active
-    const darkThemeClass = await page.evaluate(() => document.documentElement.className);
+    const darkThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
     expect(darkThemeClass).toContain("dark");
 
     // Navigate to a tool page
@@ -88,7 +96,9 @@ test.describe("Theme Toggle Functionality", () => {
     await page.waitForLoadState("networkidle");
 
     // Verify theme persists after navigation
-    const persistedThemeClass = await page.evaluate(() => document.documentElement.className);
+    const persistedThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
     expect(persistedThemeClass).toContain("dark");
 
     // Verify theme toggle button still works on the new page
@@ -100,7 +110,9 @@ test.describe("Theme Toggle Functionality", () => {
     await page.waitForTimeout(100);
 
     // Verify light theme is now active
-    const lightThemeClass = await page.evaluate(() => document.documentElement.className);
+    const lightThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
     expect(lightThemeClass).toContain("light");
     expect(lightThemeClass).not.toContain("dark");
   });
@@ -169,7 +181,9 @@ test.describe("Theme Toggle Functionality", () => {
     await page.waitForTimeout(100);
 
     // Verify theme changed
-    const themeClass = await page.evaluate(() => document.documentElement.className);
+    const themeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
     expect(themeClass).toMatch(/(light|dark)/);
 
     // Verify button remains accessible and functional
