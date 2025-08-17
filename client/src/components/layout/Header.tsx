@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-// import { useTheme } from "@/providers/theme-provider";
+import { useTheme } from "@/providers/theme-provider";
 import { Link } from "wouter";
 import { useSearch } from "@/hooks/use-search";
 import { SearchResults } from "@/components/ui/search-results";
@@ -18,8 +18,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  // Temporarily disabled theme functionality
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme, setTheme } = useTheme();
   const {
     searchQuery,
     setSearchQuery,
@@ -34,7 +33,13 @@ export function Header({ onMenuClick }: HeaderProps) {
   const searchRef = useRef<HTMLDivElement>(null);
 
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    if (theme === "dark") {
+      setTheme("light");
+    } else if (theme === "light") {
+      setTheme("system");
+    } else {
+      setTheme("dark");
+    }
   };
 
   const handleSearchChange = (value: string) => {
@@ -242,17 +247,19 @@ export function Header({ onMenuClick }: HeaderProps) {
                     onClick={toggleTheme}
                     className="h-10 w-10 p-0 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors touch-manipulation"
                     data-testid="theme-toggle"
-                    aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+                    aria-label={`Switch theme (current: ${theme})`}
                   >
                     {theme === "dark" ? (
                       <Sun className="h-5 w-5" />
-                    ) : (
+                    ) : theme === "light" ? (
                       <Moon className="h-5 w-5" />
+                    ) : (
+                      <Sun className="h-5 w-5" />
                     )}
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Toggle Theme (Ctrl+D)</p>
+                  <p>Toggle Theme: {theme === "dark" ? "→ Light" : theme === "light" ? "→ System" : "→ Dark"}</p>
                 </TooltipContent>
               </Tooltip>
 
