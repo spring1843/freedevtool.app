@@ -29,7 +29,7 @@ pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
 
 ci-without-e2e: pre-commit format-check build test ## CI commands without end-to-end tests, for environments that can't run e2e tests
 
-ci: pre-commit ci-without-e2e e2e-test ## Commands run in the CI. Good to run before pushing changes
+ci: ci-without-e2e e2e-test ## Commands run in the CI. Good to run before pushing changes
 
 install: deps ## Install dependencies (alias for deps)
 
