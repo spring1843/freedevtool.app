@@ -82,7 +82,7 @@ export default function PasswordGenerator() {
     if (includeSymbols) {
       let symbolSet = symbols;
       if (excludeAmbiguous) {
-        symbolSet = symbols.replace(/[{}[\]()\/\\'"`,;.<>]/g, "");
+        symbolSet = symbols.replace(/[{}[\]()/\\'"`,;.<>]/g, "");
       }
       charset += symbolSet;
     }
