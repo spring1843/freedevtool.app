@@ -3,10 +3,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CopyButton } from "@/components/ui/copy-button";
-import { FileSpreadsheet, Code2, Upload, Share, Download, RefreshCw } from "lucide-react";
-import { updateURL, copyShareableURL, getValidatedParam } from "@/lib/url-sharing";
+import {
+  FileSpreadsheet,
+  Code2,
+  Upload,
+  Share,
+  Download,
+  RefreshCw,
+} from "lucide-react";
+import {
+  updateURL,
+  copyShareableURL,
+  getValidatedParam,
+} from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import AdSlot from "@/components/ui/ad-slot";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
@@ -25,55 +42,58 @@ const delimiters = [
 ];
 
 export default function CSVToJSON() {
-  const { fields, updateField, resetFields } = usePersistentForm('csv-to-json', {
-    csvInput: `name,email,age,city
+  const { fields, updateField, resetFields } = usePersistentForm(
+    "csv-to-json",
+    {
+      csvInput: `name,email,age,city
 John Doe,john@example.com,30,New York
 Jane Smith,jane@example.com,25,Los Angeles
 Bob Johnson,bob@example.com,35,Chicago`,
-    selectedDelimiter: ",",
-    jsonOutput: "",
-    parsedData: [] as CSVRow[],
-    headers: [] as string[],
-    error: "",
-    rowCount: 0
-  });
+      selectedDelimiter: ",",
+      jsonOutput: "",
+      parsedData: [] as CSVRow[],
+      headers: [] as string[],
+      error: "",
+      rowCount: 0,
+    }
+  );
   const { toast } = useToast();
 
   useEffect(() => {
     // Load parameters from URL with validation
-    const urlCsv = getValidatedParam('csv', '', {
-      type: 'string',
-      maxLength: 10000 // Limit CSV size in URL
+    const urlCsv = getValidatedParam("csv", "", {
+      type: "string",
+      maxLength: 10000, // Limit CSV size in URL
     });
-    const urlDelimiter = getValidatedParam('delimiter', ',', {
-      type: 'enum',
-      allowedValues: [',', ';', '\t', '|', ' ', ':']
+    const urlDelimiter = getValidatedParam("delimiter", ",", {
+      type: "enum",
+      allowedValues: [",", ";", "\t", "|", " ", ":"],
     });
-    
+
     if (urlCsv) {
-      updateField('csvInput', urlCsv);
+      updateField("csvInput", urlCsv);
     }
-    updateField('selectedDelimiter', urlDelimiter);
+    updateField("selectedDelimiter", urlDelimiter);
   }, []);
 
   useEffect(() => {
     convertCSV();
     // Update URL when input changes
-    updateURL({ 
+    updateURL({
       csv: encodeURIComponent(fields.csvInput.slice(0, 500)), // Limit URL length
-      delimiter: fields.selectedDelimiter 
+      delimiter: fields.selectedDelimiter,
     });
   }, [fields.csvInput, fields.selectedDelimiter]);
 
   const parseCSVLine = (line: string, delimiter: string): string[] => {
     const result: string[] = [];
-    let current = '';
+    let current = "";
     let inQuotes = false;
     let i = 0;
 
     while (i < line.length) {
       const char = line[i];
-      
+
       if (char === '"') {
         if (inQuotes && line[i + 1] === '"') {
           // Escaped quote
@@ -87,14 +107,14 @@ Bob Johnson,bob@example.com,35,Chicago`,
       } else if (char === delimiter && !inQuotes) {
         // End of field
         result.push(current.trim());
-        current = '';
+        current = "";
         i++;
       } else {
         current += char;
         i++;
       }
     }
-    
+
     // Add the last field
     result.push(current.trim());
     return result;
@@ -102,18 +122,21 @@ Bob Johnson,bob@example.com,35,Chicago`,
 
   const convertCSV = () => {
     try {
-      updateField('error', "");
-      
+      updateField("error", "");
+
       if (!fields.csvInput.trim()) {
-        updateField('parsedData', []);
-        updateField('jsonOutput', "");
-        updateField('headers', []);
-        updateField('rowCount', 0);
+        updateField("parsedData", []);
+        updateField("jsonOutput", "");
+        updateField("headers", []);
+        updateField("rowCount", 0);
         return;
       }
 
-      const lines = fields.csvInput.trim().split('\n').filter((line: string) => line.trim());
-      
+      const lines = fields.csvInput
+        .trim()
+        .split("\n")
+        .filter((line: string) => line.trim());
+
       if (lines.length === 0) {
         throw new Error("No data found");
       }
@@ -121,18 +144,18 @@ Bob Johnson,bob@example.com,35,Chicago`,
       // Parse headers from first line
       const headerLine = lines[0];
       const parsedHeaders = parseCSVLine(headerLine, fields.selectedDelimiter)
-        .map(header => header.replace(/^["']|["']$/g, '').trim())
+        .map(header => header.replace(/^["']|["']$/g, "").trim())
         .filter(header => header.length > 0);
 
       if (parsedHeaders.length === 0) {
         throw new Error("No headers found in the first line");
       }
 
-      updateField('headers', parsedHeaders);
+      updateField("headers", parsedHeaders);
 
       // Parse data rows
       const dataRows: CSVRow[] = [];
-      
+
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
@@ -142,31 +165,30 @@ Bob Johnson,bob@example.com,35,Chicago`,
 
         // Map values to headers
         parsedHeaders.forEach((header, index) => {
-          const value = values[index] || '';
-          row[header] = value.replace(/^["']|["']$/g, '').trim();
+          const value = values[index] || "";
+          row[header] = value.replace(/^["']|["']$/g, "").trim();
         });
 
         dataRows.push(row);
       }
 
-      updateField('parsedData', dataRows);
-      updateField('rowCount', dataRows.length);
-      updateField('jsonOutput', JSON.stringify(dataRows, null, 2));
-
+      updateField("parsedData", dataRows);
+      updateField("rowCount", dataRows.length);
+      updateField("jsonOutput", JSON.stringify(dataRows, null, 2));
     } catch {
       const errorMessage = "Failed to parse CSV";
-      updateField('error', errorMessage);
-      updateField('parsedData', []);
-      updateField('jsonOutput', "");
-      updateField('headers', []);
-      updateField('rowCount', 0);
+      updateField("error", errorMessage);
+      updateField("parsedData", []);
+      updateField("jsonOutput", "");
+      updateField("headers", []);
+      updateField("rowCount", 0);
     }
   };
 
   const shareConverter = async () => {
-    const success = await copyShareableURL({ 
+    const success = await copyShareableURL({
       csv: encodeURIComponent(fields.csvInput.slice(0, 500)),
-      delimiter: fields.selectedDelimiter 
+      delimiter: fields.selectedDelimiter,
     });
     if (success) {
       toast({
@@ -182,7 +204,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
     }
   };
 
-  const loadSampleData = (type: 'simple' | 'complex' | 'semicolon' | 'tab') => {
+  const loadSampleData = (type: "simple" | "complex" | "semicolon" | "tab") => {
     const samples = {
       simple: `name,email,age
 John Doe,john@example.com,30
@@ -198,37 +220,35 @@ Jane Smith;jane@example.com;25;Los Angeles`,
 John Doe        john@example.com        30      Engineering
 Jane Smith      jane@example.com        25      Marketing`,
     };
-    
-    updateField('csvInput', samples[type]);
-    
-    if (type === 'semicolon') {
-      updateField('selectedDelimiter', ';');
-    } else if (type === 'tab') {
-      updateField('selectedDelimiter', '\t');
+
+    updateField("csvInput", samples[type]);
+
+    if (type === "semicolon") {
+      updateField("selectedDelimiter", ";");
+    } else if (type === "tab") {
+      updateField("selectedDelimiter", "\t");
     } else {
-      updateField('selectedDelimiter', ',');
+      updateField("selectedDelimiter", ",");
     }
   };
 
-
-
   const clearAll = () => {
-    updateField('csvInput', "");
-    updateField('parsedData', []);
-    updateField('jsonOutput', "");
-    updateField('headers', []);
-    updateField('rowCount', 0);
-    updateField('error', "");
+    updateField("csvInput", "");
+    updateField("parsedData", []);
+    updateField("jsonOutput", "");
+    updateField("headers", []);
+    updateField("rowCount", 0);
+    updateField("error", "");
   };
 
   const downloadJSON = () => {
     if (!fields.jsonOutput) return;
-    
-    const blob = new Blob([fields.jsonOutput], { type: 'application/json' });
+
+    const blob = new Blob([fields.jsonOutput], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'converted_data.json';
+    link.download = "converted_data.json";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -240,9 +260,9 @@ Jane Smith      jane@example.com        25      Marketing`,
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       const content = e.target?.result as string;
-      updateField('csvInput', content);
+      updateField("csvInput", content);
     };
     reader.readAsText(file);
   };
@@ -258,7 +278,8 @@ Jane Smith      jane@example.com        25      Marketing`,
           CSV to JSON Converter
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
-          Convert CSV data to JSON format with automatic header detection and customizable delimiters
+          Convert CSV data to JSON format with automatic header detection and
+          customizable delimiters
         </p>
       </div>
 
@@ -276,7 +297,12 @@ Jane Smith      jane@example.com        25      Marketing`,
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="delimiter-select">Delimiter</Label>
-                <Select value={fields.selectedDelimiter} onValueChange={(value) => updateField('selectedDelimiter', value)}>
+                <Select
+                  value={fields.selectedDelimiter}
+                  onValueChange={value =>
+                    updateField("selectedDelimiter", value)
+                  }
+                >
                   <SelectTrigger data-testid="delimiter-select">
                     <SelectValue />
                   </SelectTrigger>
@@ -304,7 +330,9 @@ Jane Smith      jane@example.com        25      Marketing`,
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => document.getElementById('file-upload')?.click()}
+                      onClick={() =>
+                        document.getElementById("file-upload")?.click()
+                      }
                       data-testid="upload-file-button"
                     >
                       <Upload className="w-4 h-4 mr-1" />
@@ -314,7 +342,7 @@ Jane Smith      jane@example.com        25      Marketing`,
                 </div>
                 <Textarea
                   value={fields.csvInput}
-                  onChange={(e) => updateField('csvInput', e.target.value)}
+                  onChange={e => updateField("csvInput", e.target.value)}
                   placeholder="name,email,age
 John Doe,john@example.com,30
 Jane Smith,jane@example.com,25"
@@ -326,20 +354,24 @@ Jane Smith,jane@example.com,25"
                 />
               </div>
 
-              {fields.error ? <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-sm text-red-700 dark:text-red-400">{fields.error}</p>
-                </div> : null}
+              {fields.error ? (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-sm text-red-700 dark:text-red-400">
+                    {fields.error}
+                  </p>
+                </div>
+              ) : null}
 
               <div className="flex gap-2">
-                <Button 
-                  onClick={convertCSV} 
-                  className="flex-1" 
+                <Button
+                  onClick={convertCSV}
+                  className="flex-1"
                   data-testid="convert-button"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Convert
                 </Button>
-                
+
                 <Button
                   onClick={shareConverter}
                   variant="outline"
@@ -352,7 +384,7 @@ Jane Smith,jane@example.com,25"
 
               <div className="grid grid-cols-2 gap-2">
                 <Button
-                  onClick={() => loadSampleData('simple')}
+                  onClick={() => loadSampleData("simple")}
                   variant="outline"
                   size="sm"
                   data-testid="load-simple-button"
@@ -360,7 +392,7 @@ Jane Smith,jane@example.com,25"
                   Simple CSV
                 </Button>
                 <Button
-                  onClick={() => loadSampleData('complex')}
+                  onClick={() => loadSampleData("complex")}
                   variant="outline"
                   size="sm"
                   data-testid="load-complex-button"
@@ -368,7 +400,7 @@ Jane Smith,jane@example.com,25"
                   Complex CSV
                 </Button>
                 <Button
-                  onClick={() => loadSampleData('semicolon')}
+                  onClick={() => loadSampleData("semicolon")}
                   variant="outline"
                   size="sm"
                   data-testid="load-semicolon-button"
@@ -376,7 +408,7 @@ Jane Smith,jane@example.com,25"
                   Semicolon (;)
                 </Button>
                 <Button
-                  onClick={() => loadSampleData('tab')}
+                  onClick={() => loadSampleData("tab")}
                   variant="outline"
                   size="sm"
                   data-testid="load-tab-button"
@@ -412,10 +444,11 @@ Jane Smith,jane@example.com,25"
                     </span>
                   )}
                 </CardTitle>
-                {fields.jsonOutput ? <div className="flex gap-2">
-                    <CopyButton 
-                      text={fields.jsonOutput} 
-                      variant="outline" 
+                {fields.jsonOutput ? (
+                  <div className="flex gap-2">
+                    <CopyButton
+                      text={fields.jsonOutput}
+                      variant="outline"
                       size="sm"
                     />
                     <Button
@@ -427,7 +460,8 @@ Jane Smith,jane@example.com,25"
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
-                  </div> : null}
+                  </div>
+                ) : null}
               </div>
             </CardHeader>
             <CardContent>
@@ -471,23 +505,38 @@ Jane Smith,jane@example.com,25"
                         <table className="w-full text-sm">
                           <thead className="bg-slate-50 dark:bg-slate-700">
                             <tr>
-                              {fields.headers.map((header: string, index: number) => (
-                                <th key={index} className="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400 border-r border-slate-200 dark:border-slate-600 last:border-r-0">
-                                  {header}
-                                </th>
-                              ))}
+                              {fields.headers.map(
+                                (header: string, index: number) => (
+                                  <th
+                                    key={index}
+                                    className="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400 border-r border-slate-200 dark:border-slate-600 last:border-r-0"
+                                  >
+                                    {header}
+                                  </th>
+                                )
+                              )}
                             </tr>
                           </thead>
                           <tbody>
-                            {fields.parsedData.slice(0, 5).map((row: CSVRow, rowIndex: number) => (
-                              <tr key={rowIndex} className="border-t border-slate-200 dark:border-slate-600">
-                                {fields.headers.map((header: string, colIndex: number) => (
-                                  <td key={colIndex} className="px-3 py-2 text-slate-800 dark:text-slate-200 border-r border-slate-200 dark:border-slate-600 last:border-r-0">
-                                    {row[header] || ''}
-                                  </td>
-                                ))}
-                              </tr>
-                            ))}
+                            {fields.parsedData
+                              .slice(0, 5)
+                              .map((row: CSVRow, rowIndex: number) => (
+                                <tr
+                                  key={rowIndex}
+                                  className="border-t border-slate-200 dark:border-slate-600"
+                                >
+                                  {fields.headers.map(
+                                    (header: string, colIndex: number) => (
+                                      <td
+                                        key={colIndex}
+                                        className="px-3 py-2 text-slate-800 dark:text-slate-200 border-r border-slate-200 dark:border-slate-600 last:border-r-0"
+                                      >
+                                        {row[header] || ""}
+                                      </td>
+                                    )
+                                  )}
+                                </tr>
+                              ))}
                           </tbody>
                         </table>
                       </div>
@@ -526,7 +575,9 @@ Jane Smith,jane@example.com,25"
               <h4 className="font-semibold mb-2">Features:</h4>
               <ul className="space-y-1 text-slate-600 dark:text-slate-400">
                 <li>• Automatic header detection from first row</li>
-                <li>• Multiple delimiter support (comma, semicolon, tab, etc.)</li>
+                <li>
+                  • Multiple delimiter support (comma, semicolon, tab, etc.)
+                </li>
                 <li>• Proper handling of quoted fields and escaped quotes</li>
                 <li>• Data preview table for verification</li>
                 <li>• File upload support for CSV files</li>
@@ -547,13 +598,17 @@ Jane Smith,jane@example.com,25"
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
             <h4 className="font-semibold mb-2">Tips for Best Results:</h4>
             <ul className="space-y-1 text-sm text-slate-600 dark:text-slate-400">
               <li>• Ensure the first row contains column headers</li>
-              <li>• Use quotes around fields containing delimiters or line breaks</li>
-              <li>• Escape quotes within quoted fields by doubling them ("")</li>
+              <li>
+                • Use quotes around fields containing delimiters or line breaks
+              </li>
+              <li>
+                • Escape quotes within quoted fields by doubling them ("")
+              </li>
               <li>• Choose the correct delimiter for your data format</li>
               <li>• Remove empty rows for cleaner JSON output</li>
             </ul>

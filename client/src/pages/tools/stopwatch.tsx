@@ -23,8 +23,8 @@ export default function Stopwatch() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const ms = milliseconds % 1000;
-    
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`;
+
+    return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${ms.toString().padStart(3, "0")}`;
   };
 
   const startStopwatch = () => {
@@ -56,11 +56,12 @@ export default function Stopwatch() {
 
   const recordLap = () => {
     if (isRunning) {
-      const lapTime = laps.length > 0 ? time - laps[laps.length - 1].totalTime : time;
+      const lapTime =
+        laps.length > 0 ? time - laps[laps.length - 1].totalTime : time;
       const newLap: LapTime = {
         lapNumber: laps.length + 1,
         lapTime,
-        totalTime: time
+        totalTime: time,
       };
       setLaps(prevLaps => [...prevLaps, newLap]);
     }
@@ -74,21 +75,25 @@ export default function Stopwatch() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Prevent shortcuts when typing in inputs
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement
+      ) {
         return;
       }
 
       switch (event.key) {
-        case 'Enter':
+        case "Enter":
           event.preventDefault();
           if (isRunning) {
             // Record lap when running
             if (isRunning) {
-              const lapTime = laps.length > 0 ? time - laps[laps.length - 1].totalTime : time;
+              const lapTime =
+                laps.length > 0 ? time - laps[laps.length - 1].totalTime : time;
               const newLap: LapTime = {
                 lapNumber: laps.length + 1,
                 lapTime,
-                totalTime: time
+                totalTime: time,
               };
               setLaps(prevLaps => [...prevLaps, newLap]);
             }
@@ -100,7 +105,7 @@ export default function Stopwatch() {
             }, 1);
           }
           break;
-        case ' ':
+        case " ":
           event.preventDefault();
           if (isRunning) {
             // Pause when running
@@ -111,7 +116,7 @@ export default function Stopwatch() {
             }
           }
           break;
-        case 'Escape':
+        case "Escape":
           event.preventDefault();
           // Stop and reset
           setIsRunning(false);
@@ -125,26 +130,31 @@ export default function Stopwatch() {
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [isRunning, time, laps]);
 
   // Cleanup on unmount
-  useEffect(() => () => {
+  useEffect(
+    () => () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-    }, []);
+    },
+    []
+  );
 
-  const fastestLap = laps.length > 0 ? Math.min(...laps.map(lap => lap.lapTime)) : 0;
-  const slowestLap = laps.length > 0 ? Math.max(...laps.map(lap => lap.lapTime)) : 0;
+  const fastestLap =
+    laps.length > 0 ? Math.min(...laps.map(lap => lap.lapTime)) : 0;
+  const slowestLap =
+    laps.length > 0 ? Math.max(...laps.map(lap => lap.lapTime)) : 0;
 
   return (
     <div className="max-w-4xl mx-auto">
       <AdSlot position="top" id="SW-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -172,7 +182,10 @@ export default function Stopwatch() {
               {formatTime(time)}
             </div>
             <div className="flex justify-center items-center gap-2 mb-4">
-              <Badge variant={isRunning ? "default" : "outline"} className="text-sm">
+              <Badge
+                variant={isRunning ? "default" : "outline"}
+                className="text-sm"
+              >
                 {isRunning ? "Running" : "Stopped"}
               </Badge>
               {laps.length > 0 && (
@@ -205,7 +218,7 @@ export default function Stopwatch() {
                   <Pause className="w-5 h-5 mr-2" />
                   Pause <span className="text-xs opacity-75 ml-2">(Space)</span>
                 </Button>
-                
+
                 <Button
                   onClick={recordLap}
                   className="bg-blue-600 hover:bg-blue-700 text-white"
@@ -217,7 +230,7 @@ export default function Stopwatch() {
                 </Button>
               </>
             )}
-            
+
             <Button
               onClick={handleReset}
               variant="outline"
@@ -244,20 +257,29 @@ export default function Stopwatch() {
                     <div className="text-lg font-bold text-green-600 dark:text-green-400">
                       {formatTime(fastestLap)}
                     </div>
-                    <div className="text-sm text-green-700 dark:text-green-300">Fastest Lap</div>
+                    <div className="text-sm text-green-700 dark:text-green-300">
+                      Fastest Lap
+                    </div>
                   </div>
                   <div className="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
                     <div className="text-lg font-bold text-red-600 dark:text-red-400">
                       {formatTime(slowestLap)}
                     </div>
-                    <div className="text-sm text-red-700 dark:text-red-300">Slowest Lap</div>
+                    <div className="text-sm text-red-700 dark:text-red-300">
+                      Slowest Lap
+                    </div>
                   </div>
                 </div>
                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                    {formatTime(laps.reduce((sum, lap) => sum + lap.lapTime, 0) / laps.length)}
+                    {formatTime(
+                      laps.reduce((sum, lap) => sum + lap.lapTime, 0) /
+                        laps.length
+                    )}
                   </div>
-                  <div className="text-sm text-blue-700 dark:text-blue-300">Average Lap</div>
+                  <div className="text-sm text-blue-700 dark:text-blue-300">
+                    Average Lap
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -278,12 +300,15 @@ export default function Stopwatch() {
                     </tr>
                   </thead>
                   <tbody>
-                    {laps.map((lap) => (
-                      <tr 
-                        key={lap.lapNumber} 
+                    {laps.map(lap => (
+                      <tr
+                        key={lap.lapNumber}
                         className={`border-b ${
-                          lap.lapTime === fastestLap ? 'bg-green-50 dark:bg-green-900/20' :
-                          lap.lapTime === slowestLap ? 'bg-red-50 dark:bg-red-900/20' : ''
+                          lap.lapTime === fastestLap
+                            ? "bg-green-50 dark:bg-green-900/20"
+                            : lap.lapTime === slowestLap
+                              ? "bg-red-50 dark:bg-red-900/20"
+                              : ""
                         }`}
                       >
                         <td className="p-2 font-medium">#{lap.lapNumber}</td>

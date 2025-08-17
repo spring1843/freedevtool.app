@@ -34,7 +34,7 @@ const DEFAULT_HTML = `<!DOCTYPE html>
 </html>`;
 
 interface ValidationIssue {
-  type: 'error' | 'warning';
+  type: "error" | "warning";
   message: string;
   line?: number;
   column?: number;
@@ -47,7 +47,11 @@ export default function HTMLFormatter() {
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
 
   const formatCode = (minify = false) => {
-    const { formatted, error: formatError, warnings: formatWarnings } = formatHTML(input, minify);
+    const {
+      formatted,
+      error: formatError,
+      warnings: formatWarnings,
+    } = formatHTML(input, minify);
     setOutput(formatted);
     setError(formatError || null);
     setWarnings(formatWarnings || []);
@@ -56,7 +60,7 @@ export default function HTMLFormatter() {
   const handleInputChange = (value: string) => {
     setInput(value);
     if (output) {
-      setOutput('');
+      setOutput("");
       setWarnings([]);
     }
   };
@@ -75,7 +79,7 @@ export default function HTMLFormatter() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="HF-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -90,11 +94,13 @@ export default function HTMLFormatter() {
         </div>
       </div>
 
-      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert> : null}
+        </Alert>
+      ) : null}
 
       {warnings.length > 0 && (
         <Alert className="mb-6 border-yellow-200 bg-yellow-50 dark:bg-yellow-900/20">
@@ -104,14 +110,24 @@ export default function HTMLFormatter() {
             <div className="space-y-1 text-sm">
               {warnings.slice(0, 5).map((warning, index) => (
                 <div key={index}>
-                  <span className={`font-medium ${warning.type === 'error' ? 'text-red-600' : 'text-yellow-600'}`}>
-                    {warning.type === 'error' ? 'Error' : 'Warning'}
+                  <span
+                    className={`font-medium ${warning.type === "error" ? "text-red-600" : "text-yellow-600"}`}
+                  >
+                    {warning.type === "error" ? "Error" : "Warning"}
                   </span>
-                  {warning.line ? <span className="text-gray-500"> (Line {warning.line})</span> : null}: {warning.message}
+                  {warning.line ? (
+                    <span className="text-gray-500">
+                      {" "}
+                      (Line {warning.line})
+                    </span>
+                  ) : null}
+                  : {warning.message}
                 </div>
               ))}
               {warnings.length > 5 && (
-                <div className="text-gray-600">... and {warnings.length - 5} more issues</div>
+                <div className="text-gray-600">
+                  ... and {warnings.length - 5} more issues
+                </div>
               )}
             </div>
           </AlertDescription>
@@ -147,7 +163,7 @@ export default function HTMLFormatter() {
           <CardContent>
             <Textarea
               value={input}
-              onChange={(e) => handleInputChange(e.target.value)}
+              onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your HTML here..."
               data-testid="html-input"
               className="min-h-[400px] font-mono text-sm"
@@ -187,16 +203,29 @@ export default function HTMLFormatter() {
 
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">HTML Formatting Options:</h3>
+          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+            HTML Formatting Options:
+          </h3>
           <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-            <div>• <strong>Beautify:</strong> Adds proper indentation and line breaks for readability</div>
-            <div>• <strong>Minify:</strong> Removes whitespace and comments to reduce file size</div>
-            <div>• <strong>Validation:</strong> Checks for common HTML issues and best practices</div>
+            <div>
+              • <strong>Beautify:</strong> Adds proper indentation and line
+              breaks for readability
+            </div>
+            <div>
+              • <strong>Minify:</strong> Removes whitespace and comments to
+              reduce file size
+            </div>
+            <div>
+              • <strong>Validation:</strong> Checks for common HTML issues and
+              best practices
+            </div>
           </div>
         </div>
 
         <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">Validation Features:</h3>
+          <h3 className="font-semibold text-green-800 dark:text-green-200 mb-2">
+            Validation Features:
+          </h3>
           <div className="text-sm text-green-700 dark:text-green-300 space-y-1">
             <div>• Checks for unclosed or mismatched tags</div>
             <div>• Validates required attributes (alt, src, etc.)</div>

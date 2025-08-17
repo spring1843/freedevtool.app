@@ -1,10 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 /**
  * Hook to execute a function once when the component mounts with default values
  * This ensures that tools with default data show processed results immediately
  */
-export function useToolDefault(executeFunction: () => void, dependencies: unknown[] = []) {
+export function useToolDefault(
+  executeFunction: () => void,
+  dependencies: unknown[] = []
+) {
   const hasExecuted = useRef(false);
 
   useEffect(() => {

@@ -1,10 +1,35 @@
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Copy, RefreshCw, Share, Download, Upload, Play, Pause, Square, RotateCcw } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Copy,
+  RefreshCw,
+  Share,
+  Download,
+  Upload,
+  Play,
+  Pause,
+  Square,
+  RotateCcw,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ToolButtonProps {
-  variant?: 'copy' | 'reset' | 'share' | 'download' | 'upload' | 'play' | 'pause' | 'stop' | 'clear' | 'custom';
+  variant?:
+    | "copy"
+    | "reset"
+    | "share"
+    | "download"
+    | "upload"
+    | "play"
+    | "pause"
+    | "stop"
+    | "clear"
+    | "custom";
   onClick: () => void;
   disabled?: boolean;
   className?: string;
@@ -18,61 +43,61 @@ const variantConfig = {
   copy: {
     icon: Copy,
     text: "Copy",
-    tooltip: "Copy to clipboard"
+    tooltip: "Copy to clipboard",
   },
   reset: {
     icon: RefreshCw,
     text: "Reset",
-    tooltip: "Reset to default values"
+    tooltip: "Reset to default values",
   },
   share: {
     icon: Share,
     text: "Share",
-    tooltip: "Copy shareable URL to clipboard"
+    tooltip: "Copy shareable URL to clipboard",
   },
   download: {
     icon: Download,
     text: "Download",
-    tooltip: "Download file"
+    tooltip: "Download file",
   },
   upload: {
     icon: Upload,
     text: "Upload",
-    tooltip: "Upload file"
+    tooltip: "Upload file",
   },
   play: {
     icon: Play,
     text: "Start",
-    tooltip: "Start"
+    tooltip: "Start",
   },
   pause: {
     icon: Pause,
     text: "Pause",
-    tooltip: "Pause"
+    tooltip: "Pause",
   },
   stop: {
     icon: Square,
     text: "Stop",
-    tooltip: "Stop"
+    tooltip: "Stop",
   },
   clear: {
     icon: RotateCcw,
     text: "Clear",
-    tooltip: "Clear all data"
-  }
+    tooltip: "Clear all data",
+  },
 };
 
-export function ToolButton({ 
-  variant = 'custom', 
-  onClick, 
-  disabled = false, 
-  className, 
-  children, 
-  icon, 
-  tooltip, 
-  size = "default" 
+export function ToolButton({
+  variant = "custom",
+  onClick,
+  disabled = false,
+  className,
+  children,
+  icon,
+  tooltip,
+  size = "default",
 }: ToolButtonProps) {
-  const config = variant !== 'custom' ? variantConfig[variant] : null;
+  const config = variant !== "custom" ? variantConfig[variant] : null;
   const IconComponent = config?.icon;
   const buttonText = config?.text;
   const defaultTooltip = config?.tooltip;
@@ -88,7 +113,8 @@ export function ToolButton({
             className={cn(className)}
             data-testid={`button-${variant}`}
           >
-            {icon || (IconComponent && <IconComponent className="w-4 h-4 mr-2" />)}
+            {icon ||
+              (IconComponent && <IconComponent className="w-4 h-4 mr-2" />)}
             {children || buttonText}
           </Button>
         </TooltipTrigger>
@@ -101,7 +127,12 @@ export function ToolButton({
 }
 
 // Specialized button variants for common use cases
-export function CopyButton({ onClick, disabled, text = "Copy", tooltip = "Copy to clipboard" }: {
+export function CopyButton({
+  onClick,
+  disabled,
+  text = "Copy",
+  tooltip = "Copy to clipboard",
+}: {
   onClick: () => void;
   disabled?: boolean;
   text?: string;
@@ -119,7 +150,11 @@ export function CopyButton({ onClick, disabled, text = "Copy", tooltip = "Copy t
   );
 }
 
-export function ResetButton({ onClick, disabled, tooltip = "Reset to default values" }: {
+export function ResetButton({
+  onClick,
+  disabled,
+  tooltip = "Reset to default values",
+}: {
   onClick: () => void;
   disabled?: boolean;
   tooltip?: string;
@@ -134,7 +169,11 @@ export function ResetButton({ onClick, disabled, tooltip = "Reset to default val
   );
 }
 
-export function ShareButton({ onClick, disabled, tooltip = "Copy shareable URL to clipboard" }: {
+export function ShareButton({
+  onClick,
+  disabled,
+  tooltip = "Copy shareable URL to clipboard",
+}: {
   onClick: () => void;
   disabled?: boolean;
   tooltip?: string;

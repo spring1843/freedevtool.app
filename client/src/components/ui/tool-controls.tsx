@@ -5,7 +5,13 @@ export interface ControlButton {
   label: string;
   onClick: () => void;
   icon: LucideIcon;
-  variant?: "default" | "outline" | "destructive" | "secondary" | "ghost" | "link";
+  variant?:
+    | "default"
+    | "outline"
+    | "destructive"
+    | "secondary"
+    | "ghost"
+    | "link";
   disabled?: boolean;
   testId?: string;
 }
@@ -15,7 +21,10 @@ interface ToolControlsProps {
   className?: string;
 }
 
-export function ToolControls({ buttons, className = "mb-6 flex flex-wrap gap-3" }: ToolControlsProps) {
+export function ToolControls({
+  buttons,
+  className = "mb-6 flex flex-wrap gap-3",
+}: ToolControlsProps) {
   return (
     <div className={className}>
       {buttons.map((button, index) => (

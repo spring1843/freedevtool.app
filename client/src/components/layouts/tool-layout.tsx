@@ -28,12 +28,19 @@ export function ToolLayout({
   showTopAd = false,
   showBottomAd = false,
   adId = "TL",
-  maxWidth = "max-w-6xl"
+  maxWidth = "max-w-6xl",
 }: ToolLayoutProps) {
   return (
     <div className={`${maxWidth} mx-auto`}>
-      {showTopAd ? <AdSlot position="top" id={`${adId}-001`} size="large" className="mb-6" /> : null}
-      
+      {showTopAd ? (
+        <AdSlot
+          position="top"
+          id={`${adId}-001`}
+          size="large"
+          className="mb-6"
+        />
+      ) : null}
+
       <ToolHeader
         title={title}
         description={description}
@@ -45,9 +52,11 @@ export function ToolLayout({
 
       {children}
 
-      {showBottomAd ? <div className="flex justify-center mt-8">
+      {showBottomAd ? (
+        <div className="flex justify-center mt-8">
           <AdSlot position="bottom" id={`${adId}-003`} size="large" />
-        </div> : null}
+        </div>
+      ) : null}
     </div>
   );
 }

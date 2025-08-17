@@ -3,8 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Play, Pause, Square, Timer as TimerIcon, VolumeX, Share } from "lucide-react";
-import { formatTimerTime, createTimerSound, playTimerBeep } from "@/lib/time-tools";
+import {
+  Play,
+  Pause,
+  Square,
+  Timer as TimerIcon,
+  VolumeX,
+  Share,
+} from "lucide-react";
+import {
+  formatTimerTime,
+  createTimerSound,
+  playTimerBeep,
+} from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import AdSlot from "@/components/ui/ad-slot";
@@ -26,18 +37,21 @@ export default function Timer() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       // Prevent shortcuts when typing in inputs
-      if (event.target instanceof HTMLInputElement || event.target instanceof HTMLTextAreaElement) {
+      if (
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement
+      ) {
         return;
       }
 
       switch (event.key) {
-        case 'Enter':
+        case "Enter":
           event.preventDefault();
           if (!isRunning && !isFinished) {
             startTimer();
           }
           break;
-        case ' ':
+        case " ":
           event.preventDefault();
           if (isRunning) {
             pauseTimer();
@@ -45,31 +59,31 @@ export default function Timer() {
             startTimer();
           }
           break;
-        case 'Escape':
+        case "Escape":
           event.preventDefault();
           stopTimer();
           break;
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isRunning, isFinished]);
 
   useEffect(() => {
     audioContextRef.current = createTimerSound();
-    
+
     // Load parameters from URL
-    const urlDays = getParam('d', 0);
-    const urlHours = getParam('h', 0);
-    const urlMinutes = getParam('m', 5);
-    const urlSeconds = getParam('s', 0);
-    
+    const urlDays = getParam("d", 0);
+    const urlHours = getParam("h", 0);
+    const urlMinutes = getParam("m", 5);
+    const urlSeconds = getParam("s", 0);
+
     setDays(urlDays);
     setHours(urlHours);
     setMinutes(urlMinutes);
     setSeconds(urlSeconds);
-    
+
     return () => {
       if (audioContextRef.current) {
         audioContextRef.current.close();
@@ -80,7 +94,7 @@ export default function Timer() {
   useEffect(() => {
     if (isRunning && timeLeft > 0) {
       intervalRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
+        setTimeLeft(prev => {
           if (prev <= 1) {
             setIsRunning(false);
             setIsFinished(true);
@@ -132,7 +146,8 @@ export default function Timer() {
 
     if (!isRunning && timeLeft === 0) {
       // Starting fresh timer
-      const totalSeconds = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60) + seconds;
+      const totalSeconds =
+        days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60 + seconds;
       if (totalSeconds > 0) {
         setTimeLeft(totalSeconds);
         setIsRunning(true);
@@ -171,7 +186,7 @@ export default function Timer() {
     setHours(h);
     setMinutes(mins);
     setSeconds(secs);
-    const totalSeconds = (d * 24 * 60 * 60) + (h * 60 * 60) + (mins * 60) + secs;
+    const totalSeconds = d * 24 * 60 * 60 + h * 60 * 60 + mins * 60 + secs;
     setTimeLeft(totalSeconds);
     setIsRunning(true);
     setIsFinished(false);
@@ -191,25 +206,38 @@ export default function Timer() {
   const handleInputChange = (field: string, value: number) => {
     if (!isRunning) {
       switch (field) {
-        case 'days': setDays(value); break;
-        case 'hours': setHours(value); break;
-        case 'minutes': setMinutes(value); break;
-        case 'seconds': setSeconds(value); break;
+        case "days":
+          setDays(value);
+          break;
+        case "hours":
+          setHours(value);
+          break;
+        case "minutes":
+          setMinutes(value);
+          break;
+        case "seconds":
+          setSeconds(value);
+          break;
         default:
           console.warn(`Unknown timer field: ${field}`);
           break;
       }
-      updateURL({ 
-        d: field === 'days' ? value : days,
-        h: field === 'hours' ? value : hours,
-        m: field === 'minutes' ? value : minutes,
-        s: field === 'seconds' ? value : seconds
+      updateURL({
+        d: field === "days" ? value : days,
+        h: field === "hours" ? value : hours,
+        m: field === "minutes" ? value : minutes,
+        s: field === "seconds" ? value : seconds,
       });
     }
   };
 
   const shareTimer = async () => {
-    const success = await copyShareableURL({ d: days, h: hours, m: minutes, s: seconds });
+    const success = await copyShareableURL({
+      d: days,
+      h: hours,
+      m: minutes,
+      s: seconds,
+    });
     if (success) {
       toast({
         title: "Timer shared!",
@@ -224,20 +252,24 @@ export default function Timer() {
     }
   };
 
-  const displayTime = timeLeft > 0 ? timeLeft : ((days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60) + seconds);
+  const displayTime =
+    timeLeft > 0
+      ? timeLeft
+      : days * 24 * 60 * 60 + hours * 60 * 60 + minutes * 60 + seconds;
 
   return (
     <div className="max-w-4xl mx-auto">
       {/* Top Ad */}
       <AdSlot position="top" id="TM-001" size="large" className="mb-6" />
-      
+
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
           Timer
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
-          Countdown timer with audio alert - supports days, hours, minutes, and seconds
+          Countdown timer with audio alert - supports days, hours, minutes, and
+          seconds
         </p>
         <p className="text-xs text-slate-500 dark:text-slate-500 mt-1">
           Keyboard: Enter (start) • Space (pause/resume) • Esc (stop)
@@ -245,16 +277,23 @@ export default function Timer() {
       </div>
 
       {/* Timer Display */}
-      <Card className={`mb-6 transition-colors ${isFinished ? 'border-red-500 bg-red-50 dark:bg-red-900/20' : ''}`}>
+      <Card
+        className={`mb-6 transition-colors ${isFinished ? "border-red-500 bg-red-50 dark:bg-red-900/20" : ""}`}
+      >
         <CardContent className="p-8">
           <div className="text-center">
-            <div className={`text-6xl font-mono font-bold mb-8 ${
-              isFinished ? 'text-red-600 dark:text-red-400 animate-pulse' : 'text-slate-900 dark:text-slate-100'
-            }`}>
+            <div
+              className={`text-6xl font-mono font-bold mb-8 ${
+                isFinished
+                  ? "text-red-600 dark:text-red-400 animate-pulse"
+                  : "text-slate-900 dark:text-slate-100"
+              }`}
+            >
               {formatTimerTime(displayTime)}
             </div>
 
-            {isFinished ? <div className="mb-4">
+            {isFinished ? (
+              <div className="mb-4">
                 <div className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2">
                   Timer Finished!
                 </div>
@@ -271,7 +310,8 @@ export default function Timer() {
                   <VolumeX className="w-5 h-5 mr-2" />
                   Stop Alarm
                 </Button>
-              </div> : null}
+              </div>
+            ) : null}
 
             {!isFinished && (
               <div className="flex justify-center gap-4">
@@ -279,8 +319,17 @@ export default function Timer() {
                   onClick={startPause}
                   size="lg"
                   variant={isRunning ? "secondary" : "default"}
-                  disabled={!isRunning && timeLeft === 0 && days === 0 && hours === 0 && minutes === 0 && seconds === 0}
-                  data-testid={isRunning ? "pause-timer-button" : "start-timer-button"}
+                  disabled={
+                    !isRunning &&
+                    timeLeft === 0 &&
+                    days === 0 &&
+                    hours === 0 &&
+                    minutes === 0 &&
+                    seconds === 0
+                  }
+                  data-testid={
+                    isRunning ? "pause-timer-button" : "start-timer-button"
+                  }
                 >
                   {isRunning ? (
                     <>
@@ -330,7 +379,12 @@ export default function Timer() {
                     min="0"
                     max="99"
                     value={days}
-                    onChange={(e) => handleInputChange('days', Math.max(0, parseInt(e.target.value, 10) || 0))}
+                    onChange={e =>
+                      handleInputChange(
+                        "days",
+                        Math.max(0, parseInt(e.target.value, 10) || 0)
+                      )
+                    }
                     data-testid="days-input"
                   />
                 </div>
@@ -342,7 +396,12 @@ export default function Timer() {
                     min="0"
                     max="23"
                     value={hours}
-                    onChange={(e) => handleInputChange('hours', Math.max(0, parseInt(e.target.value, 10) || 0))}
+                    onChange={e =>
+                      handleInputChange(
+                        "hours",
+                        Math.max(0, parseInt(e.target.value, 10) || 0)
+                      )
+                    }
                     data-testid="hours-input"
                   />
                 </div>
@@ -354,7 +413,12 @@ export default function Timer() {
                     min="0"
                     max="59"
                     value={minutes}
-                    onChange={(e) => handleInputChange('minutes', Math.max(0, parseInt(e.target.value, 10) || 0))}
+                    onChange={e =>
+                      handleInputChange(
+                        "minutes",
+                        Math.max(0, parseInt(e.target.value, 10) || 0)
+                      )
+                    }
                     data-testid="minutes-input"
                   />
                 </div>
@@ -366,12 +430,20 @@ export default function Timer() {
                     min="0"
                     max="59"
                     value={seconds}
-                    onChange={(e) => handleInputChange('seconds', Math.max(0, Math.min(59, parseInt(e.target.value, 10) || 0)))}
+                    onChange={e =>
+                      handleInputChange(
+                        "seconds",
+                        Math.max(
+                          0,
+                          Math.min(59, parseInt(e.target.value, 10) || 0)
+                        )
+                      )
+                    }
                     data-testid="seconds-input"
                   />
                 </div>
               </div>
-              
+
               <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
                 <Button
                   onClick={shareTimer}
@@ -398,10 +470,12 @@ export default function Timer() {
                     onClick={() => presetTimer(0, 0, preset.mins)}
                     variant="outline"
                     className="text-left flex flex-col items-start p-3 h-auto"
-                    data-testid={`preset-${preset.label.toLowerCase().replace(' ', '-')}`}
+                    data-testid={`preset-${preset.label.toLowerCase().replace(" ", "-")}`}
                   >
                     <span className="font-medium">{preset.label}</span>
-                    <span className="text-xs text-slate-500">{preset.desc}</span>
+                    <span className="text-xs text-slate-500">
+                      {preset.desc}
+                    </span>
                   </Button>
                 ))}
               </div>

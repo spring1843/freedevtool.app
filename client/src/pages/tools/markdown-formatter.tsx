@@ -75,7 +75,7 @@ export default function MarkdownFormatter() {
   const handleInputChange = (value: string) => {
     setInput(value);
     if (output) {
-      setOutput('');
+      setOutput("");
     }
   };
 
@@ -92,7 +92,7 @@ export default function MarkdownFormatter() {
   return (
     <div className="max-w-6xl mx-auto">
       <AdSlot position="top" id="MF-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -107,11 +107,13 @@ export default function MarkdownFormatter() {
         </div>
       </div>
 
-      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert> : null}
+        </Alert>
+      ) : null}
 
       <div className="mb-6 flex gap-4">
         <Button
@@ -135,7 +137,7 @@ export default function MarkdownFormatter() {
           <CardContent>
             <Textarea
               value={input}
-              onChange={(e) => handleInputChange(e.target.value)}
+              onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your Markdown here..."
               data-testid="markdown-input"
               className="min-h-[500px] font-mono text-sm"
@@ -166,19 +168,53 @@ export default function MarkdownFormatter() {
       </div>
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Markdown Syntax:</h3>
+        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          Markdown Syntax:
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700 dark:text-blue-300">
           <div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded"># Header 1</span></div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">## Header 2</span></div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">**bold**</span></div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">*italic*</span></div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                # Header 1
+              </span>
+            </div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                ## Header 2
+              </span>
+            </div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                **bold**
+              </span>
+            </div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                *italic*
+              </span>
+            </div>
           </div>
           <div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">- List item</span></div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">1. Numbered</span></div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">[Link](url)</span></div>
-            <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">`code`</span></div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                - List item
+              </span>
+            </div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                1. Numbered
+              </span>
+            </div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                [Link](url)
+              </span>
+            </div>
+            <div>
+              <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+                `code`
+              </span>
+            </div>
           </div>
         </div>
       </div>

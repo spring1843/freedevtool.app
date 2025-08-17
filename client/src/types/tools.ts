@@ -10,7 +10,7 @@ export interface TimezoneInfo {
 }
 
 export interface DiffLine {
-  type: 'add' | 'remove' | 'normal';
+  type: "add" | "remove" | "normal";
   content: string;
   highlightedContent?: string;
   lineNumber?: number;
@@ -42,8 +42,8 @@ export interface CertificateInfo {
   error?: string;
 }
 
-export type SortOrder = 'asc' | 'desc';
-export type SortType = 'alphabetical' | 'numerical' | 'length';
+export type SortOrder = "asc" | "desc";
+export type SortType = "alphabetical" | "numerical" | "length";
 
 export interface LapTime {
   id: number;

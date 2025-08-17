@@ -2,7 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Copy, RotateCcw } from "lucide-react";
@@ -14,41 +20,43 @@ export default function UUIDGenerator() {
   const [uuids, setUuids] = useState<string[]>([]);
   const [version, setVersion] = useState<1 | 4>(4);
   const [count, setCount] = useState(1);
-  const [format, setFormat] = useState<'standard' | 'uppercase' | 'lowercase' | 'nodashes' | 'brackets'>('standard');
+  const [format, setFormat] = useState<
+    "standard" | "uppercase" | "lowercase" | "nodashes" | "brackets"
+  >("standard");
 
   const generateUUID = () => {
     const newUuids: string[] = [];
-    
+
     for (let i = 0; i < count; i++) {
       let uuid: string;
-      
+
       if (version === 4) {
         // Generate UUID v4 (random)
-        uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-          const r = Math.random() * 16 | 0;
-          const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, c => {
+          const r = (Math.random() * 16) | 0;
+          const v = c === "x" ? r : (r & 0x3) | 0x8;
           return v.toString(16);
         });
       } else {
         // Generate UUID v1 (timestamp-based) - simplified version
         const timestamp = Date.now();
-        const timestampHex = timestamp.toString(16).padStart(12, '0');
+        const timestampHex = timestamp.toString(16).padStart(12, "0");
         const randomPart = Math.random().toString(16).substring(2, 15);
         uuid = `${timestampHex.substring(0, 8)}-${timestampHex.substring(8)}-1${randomPart.substring(0, 3)}-a${randomPart.substring(3, 6)}-${randomPart.substring(6, 18)}`;
       }
 
       // Apply formatting
       switch (format) {
-        case 'uppercase':
+        case "uppercase":
           uuid = uuid.toUpperCase();
           break;
-        case 'lowercase':
+        case "lowercase":
           uuid = uuid.toLowerCase();
           break;
-        case 'nodashes':
-          uuid = uuid.replace(/-/g, '');
+        case "nodashes":
+          uuid = uuid.replace(/-/g, "");
           break;
-        case 'brackets':
+        case "brackets":
           uuid = `{${uuid}}`;
           break;
         default:
@@ -58,7 +66,7 @@ export default function UUIDGenerator() {
 
       newUuids.push(uuid);
     }
-    
+
     setUuids(newUuids);
   };
 
@@ -66,19 +74,19 @@ export default function UUIDGenerator() {
     setUuids([]);
     setVersion(4);
     setCount(1);
-    setFormat('standard');
+    setFormat("standard");
   };
 
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
     } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
+      console.error("Failed to copy to clipboard:", err);
     }
   };
 
   const copyAllToClipboard = async () => {
-    const allUuids = uuids.join('\n');
+    const allUuids = uuids.join("\n");
     await copyToClipboard(allUuids);
   };
 
@@ -88,19 +96,25 @@ export default function UUIDGenerator() {
 
   const getFormatDescription = (fmt: string) => {
     switch (fmt) {
-      case 'standard': return 'Standard format with hyphens';
-      case 'uppercase': return 'Uppercase letters';
-      case 'lowercase': return 'Lowercase letters';
-      case 'nodashes': return 'No hyphens/dashes';
-      case 'brackets': return 'Wrapped in curly brackets';
-      default: return '';
+      case "standard":
+        return "Standard format with hyphens";
+      case "uppercase":
+        return "Uppercase letters";
+      case "lowercase":
+        return "Lowercase letters";
+      case "nodashes":
+        return "No hyphens/dashes";
+      case "brackets":
+        return "Wrapped in curly brackets";
+      default:
+        return "";
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto">
       <AdSlot position="top" id="UG-001" size="large" className="mb-6" />
-      
+
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -123,7 +137,10 @@ export default function UUIDGenerator() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label htmlFor="version">UUID Version</Label>
-              <Select value={version.toString()} onValueChange={(value) => setVersion(parseInt(value) as 1 | 4)}>
+              <Select
+                value={version.toString()}
+                onValueChange={value => setVersion(parseInt(value) as 1 | 4)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -142,14 +159,21 @@ export default function UUIDGenerator() {
                 min="1"
                 max="100"
                 value={count}
-                onChange={(e) => setCount(Math.max(1, Math.min(100, parseInt(e.target.value) || 1)))}
+                onChange={e =>
+                  setCount(
+                    Math.max(1, Math.min(100, parseInt(e.target.value) || 1))
+                  )
+                }
                 data-testid="count-input"
               />
             </div>
 
             <div>
               <Label htmlFor="format">Format</Label>
-              <Select value={format} onValueChange={(value: typeof format) => setFormat(value)}>
+              <Select
+                value={format}
+                onValueChange={(value: typeof format) => setFormat(value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -179,12 +203,8 @@ export default function UUIDGenerator() {
               </Button>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline">
-                Version {version}
-              </Badge>
-              <Badge variant="outline">
-                {getFormatDescription(format)}
-              </Badge>
+              <Badge variant="outline">Version {version}</Badge>
+              <Badge variant="outline">{getFormatDescription(format)}</Badge>
             </div>
           </div>
         </CardContent>
@@ -197,7 +217,7 @@ export default function UUIDGenerator() {
               Generated UUIDs
               <div className="flex gap-2">
                 <Badge variant="outline">
-                  {uuids.length} UUID{uuids.length > 1 ? 's' : ''}
+                  {uuids.length} UUID{uuids.length > 1 ? "s" : ""}
                 </Badge>
                 <Button
                   onClick={copyAllToClipboard}
@@ -234,9 +254,11 @@ export default function UUIDGenerator() {
 
             {uuids.length > 1 && (
               <div className="mt-4">
-                <Label className="text-sm font-medium">All UUIDs (for copying):</Label>
+                <Label className="text-sm font-medium">
+                  All UUIDs (for copying):
+                </Label>
                 <Textarea
-                  value={uuids.join('\n')}
+                  value={uuids.join("\n")}
                   readOnly={true}
                   className="mt-2 min-h-[100px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
                   data-testid="all-uuids-output"
@@ -251,12 +273,24 @@ export default function UUIDGenerator() {
       )}
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">UUID Information:</h3>
+        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          UUID Information:
+        </h3>
         <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div><strong>Version 1:</strong> Timestamp-based, includes MAC address (or random node)</div>
-          <div><strong>Version 4:</strong> Randomly generated, most commonly used</div>
-          <div><strong>Format:</strong> 8-4-4-4-12 hexadecimal digits (32 total)</div>
-          <div><strong>Use cases:</strong> Database keys, session IDs, file names, API tokens</div>
+          <div>
+            <strong>Version 1:</strong> Timestamp-based, includes MAC address
+            (or random node)
+          </div>
+          <div>
+            <strong>Version 4:</strong> Randomly generated, most commonly used
+          </div>
+          <div>
+            <strong>Format:</strong> 8-4-4-4-12 hexadecimal digits (32 total)
+          </div>
+          <div>
+            <strong>Use cases:</strong> Database keys, session IDs, file names,
+            API tokens
+          </div>
         </div>
       </div>
 

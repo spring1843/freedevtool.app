@@ -34,12 +34,12 @@ export function ToolTextArea({
   showCursorPosition = true,
   maxLength,
   language,
-  error
+  error,
 }: ToolTextAreaProps) {
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const lines = value.split('\n');
+  const lines = value.split("\n");
   const lineCount = lines.length;
   const characterCount = value.length;
   const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
@@ -49,7 +49,7 @@ export function ToolTextArea({
       const textarea = textareaRef.current;
       const start = textarea.selectionStart;
       const textBeforeCursor = value.substring(0, start);
-      const lines = textBeforeCursor.split('\n');
+      const lines = textBeforeCursor.split("\n");
       const line = lines.length;
       const column = lines[lines.length - 1].length + 1;
       setCursorPosition({ line, column });
@@ -81,32 +81,49 @@ export function ToolTextArea({
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg">{title}</CardTitle>
           <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400">
-            {language ? <Badge variant="outline" className="text-xs">
+            {language ? (
+              <Badge variant="outline" className="text-xs">
                 {language.toUpperCase()}
-              </Badge> : null}
-            {showCharacterCount ? <span>
+              </Badge>
+            ) : null}
+            {showCharacterCount ? (
+              <span>
                 {characterCount.toLocaleString()} chars
                 {maxLength ? ` / ${maxLength.toLocaleString()}` : null}
-              </span> : null}
-            {showWordCount ? <span>{wordCount.toLocaleString()} words</span> : null}
+              </span>
+            ) : null}
+            {showWordCount ? (
+              <span>{wordCount.toLocaleString()} words</span>
+            ) : null}
             <span>{lineCount.toLocaleString()} lines</span>
-            {showCursorPosition && !readOnly ? <span>Ln {cursorPosition.line}, Col {cursorPosition.column}</span> : null}
+            {showCursorPosition && !readOnly ? (
+              <span>
+                Ln {cursorPosition.line}, Col {cursorPosition.column}
+              </span>
+            ) : null}
           </div>
         </div>
-        {error ? <div className="text-sm text-red-600 dark:text-red-400 mt-1">
+        {error ? (
+          <div className="text-sm text-red-600 dark:text-red-400 mt-1">
             {error}
-          </div> : null}
+          </div>
+        ) : null}
       </CardHeader>
       <CardContent className="p-0">
         <div className="relative">
           <div className="flex">
-            {showLineNumbers ? <div className="flex-shrink-0 bg-slate-50 dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 px-3 py-3 font-mono text-xs text-slate-500 dark:text-slate-400 select-none">
+            {showLineNumbers ? (
+              <div className="flex-shrink-0 bg-slate-50 dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 px-3 py-3 font-mono text-xs text-slate-500 dark:text-slate-400 select-none">
                 {lines.map((_, index) => (
-                  <div key={index + 1} className="leading-6 text-right min-w-[2rem]">
+                  <div
+                    key={index + 1}
+                    className="leading-6 text-right min-w-[2rem]"
+                  >
                     {index + 1}
                   </div>
                 ))}
-              </div> : null}
+              </div>
+            ) : null}
             <textarea
               ref={textareaRef}
               value={value}
@@ -124,7 +141,7 @@ export function ToolTextArea({
                 readOnly && "cursor-default"
               )}
               style={{ minHeight: `${minHeight}px` }}
-              data-testid={`textarea-${title.toLowerCase().replace(/\s+/g, '-')}`}
+              data-testid={`textarea-${title.toLowerCase().replace(/\s+/g, "-")}`}
             />
           </div>
         </div>
