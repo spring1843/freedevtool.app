@@ -32,7 +32,9 @@ describe("Base64 Encoding/Decoding", () => {
 
   it("should throw error for Failed to decode Base64", () => {
     const invalidBase64 = "Invalid@Base64!";
-    expect(() => decodeBase64(invalidBase64)).toThrow("Failed to decode Base64");
+    expect(() => decodeBase64(invalidBase64)).toThrow(
+      "Failed to decode Base64"
+    );
   });
 
   it("should handle empty string encoding/decoding", () => {

@@ -258,7 +258,7 @@ export default function KeyboardTest() {
                 <div className="divide-y divide-slate-200 dark:divide-slate-700">
                   {keyHistory.map((keyPress, index) => {
                     const category = getKeyCategory(keyPress.code);
-                    const displayName = getKeyDisplayName(                      keyPress.key                    );
+                    const displayName = getKeyDisplayName(keyPress.key);
                     const timeAgo = (
                       (Date.now() - keyPress.timestamp) /
                       1000
