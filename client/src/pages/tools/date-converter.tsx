@@ -284,7 +284,7 @@ export default function DateConverter() {
     } catch (error: any) {
       toast({
         title: "Copy failed",
-        description: `Could not copy to clipboard: ${error.message}`,
+        description: `Could not copy to clipboard: ${error?.message || "Unknown error"}`,
         variant: "destructive",
       });
     }
