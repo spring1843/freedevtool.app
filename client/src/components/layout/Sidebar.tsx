@@ -259,6 +259,9 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
             toggleSection(selectedItem.categoryName);
           }
           break;
+        default: {
+          // Handle default case
+        }
       }
     };
 

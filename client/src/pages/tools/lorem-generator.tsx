@@ -197,6 +197,9 @@ export default function LoremGenerator() {
         result = paragraphs.join("\n\n");
         break;
       }
+      default: {
+        // Handle default case
+      }
     }
 
     setGenerated(result);

@@ -127,6 +127,9 @@ export default function Stopwatch() {
             intervalRef.current = null;
           }
           break;
+        default: {
+          // Handle default case
+        }
       }
     };
 

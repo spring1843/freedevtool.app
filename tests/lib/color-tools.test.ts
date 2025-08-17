@@ -69,6 +69,9 @@ describe("Color Tools Utilities", () => {
             case b:
               h = (r - g) / d + 4;
               break;
+            default: {
+              // Handle default case
+            }
           }
           h /= 6;
         }

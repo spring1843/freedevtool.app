@@ -70,6 +70,9 @@ export default function Countdown() {
           event.preventDefault();
           stopCountdown();
           break;
+        default: {
+          // Handle default case
+        }
       }
     };
 

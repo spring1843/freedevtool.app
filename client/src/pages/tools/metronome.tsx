@@ -107,6 +107,9 @@ export default function Metronome() {
           event.preventDefault();
           stopMetronome();
           break;
+        default: {
+          // Handle default case
+        }
       }
     };
 

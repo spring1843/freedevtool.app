@@ -110,6 +110,9 @@ export function Header({ onMenuClick }: HeaderProps) {
         resetSelection();
         (event.target as HTMLInputElement).blur();
         break;
+      default: {
+        // Handle default case
+      }
     }
   };
 

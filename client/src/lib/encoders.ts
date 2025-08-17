@@ -4,7 +4,9 @@ export function encodeBase64(input: string): string {
   try {
     return btoa(unescape(encodeURIComponent(input)));
   } catch (error: any) {
-    throw new Error(`Failed to encode Base64: ${error.message}`);
+    throw new Error(
+      `Failed to encode Base64: ${error?.message || "Unknown error"}`
+    );
   }
 }
 
@@ -12,7 +14,9 @@ export function decodeBase64(input: string): string {
   try {
     return decodeURIComponent(escape(atob(input)));
   } catch (error: any) {
-    throw new Error(`Failed to decode Base64: ${error.message}`);
+    throw new Error(
+      `Failed to decode Base64: ${error?.message || "Unknown error"}`
+    );
   }
 }
 
@@ -24,7 +28,9 @@ export function decodeURL(input: string): string {
   try {
     return decodeURIComponent(input);
   } catch (error: any) {
-    throw new Error(`Failed to decode URL: ${error.message}`);
+    throw new Error(
+      `Failed to decode URL: ${error?.message || "Unknown error"}`
+    );
   }
 }
 
