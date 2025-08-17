@@ -15,14 +15,6 @@
 - [ ] 🧪 Test addition or modification
 - [ ] 🔧 Build/CI configuration change
 
-## 🧪 Testing
-<!-- Describe the tests you ran and how to reproduce them -->
-
-- [ ] Unit tests pass
-- [ ] E2E tests pass
-- [ ] Manual testing completed
-- [ ] Cross-browser testing (if applicable)
-
 ## 📱 Screenshots/Videos
 <!-- If applicable, add screenshots or videos to help explain your changes -->
 

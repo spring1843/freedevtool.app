@@ -223,7 +223,7 @@ export function calculateMultipleDebts(
     let monthlyPayments = 0;
 
     // Calculate interest and make minimum payments
-    currentDebts.forEach(debt => {
+    for (const debt of currentDebts) {
       if (!debt.isPaidOff) {
         const monthlyInterestDebt = debt.balance * (debt.rate / 100 / 12);
         debt.balance += monthlyInterestDebt;
@@ -239,7 +239,7 @@ export function calculateMultipleDebts(
           debtPayoffOrder.push({ ...debt, monthPaidOff: month });
         }
       }
-    });
+    }
 
     // Apply extra payment to target debt
     const targetDebt = currentDebts.find(debt => !debt.isPaidOff);
