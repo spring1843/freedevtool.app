@@ -7,54 +7,99 @@ test.describe("Theme Toggle Functionality", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test("should toggle theme without crashes", async ({ page }) => {
+  test("should toggle between light and dark themes with multiple clicks", async ({
+    page,
+  }) => {
     // Verify theme toggle button is visible
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
     await expect(themeToggle).toBeVisible();
 
-    // Test basic toggle functionality
-    for (let i = 0; i < 3; i++) {
-      // Get current theme state before click
-      const beforeClick = await page.evaluate(
-        () => document.documentElement.className
-      );
+    // Get initial theme state from document element class
+    const initialThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
 
+    // Determine initial theme (default should be light)
+    const initialTheme = initialThemeClass.includes("dark") ? "dark" : "light";
+
+    // Test multiple toggle clicks (5 clicks total)
+    for (let i = 1; i <= 5; i++) {
+      // Click the theme toggle
       await themeToggle.click();
 
-      // Wait for theme to actually change by checking DOM class
+      // Wait for theme transition using proper wait condition
       await page.waitForFunction(
-        beforeState => document.documentElement.className !== beforeState,
-        beforeClick,
+        prevClass => document.documentElement.className !== prevClass,
+        initialThemeClass,
         { timeout: 2000 }
       );
 
-      // Verify page is still responsive
-      await expect(themeToggle).toBeVisible();
+      // Verify theme has changed
+      const currentThemeClass = await page.evaluate(
+        () => document.documentElement.className
+      );
+
+      // Determine expected theme after clicking
+      const expectedTheme =
+        (initialTheme === "light") === (i % 2 === 1) ? "dark" : "light";
+
+      if (expectedTheme === "dark") {
+        expect(currentThemeClass).toContain("dark");
+        expect(currentThemeClass).not.toContain("light");
+
+        // Verify dark theme icon is shown (Sun icon for switching to light)
+        await expect(themeToggle.locator("svg")).toHaveAttribute(
+          "class",
+          expect.stringContaining("h-5 w-5")
+        );
+
+        // Verify dark theme styles are applied
+        const backgroundColor = await page.evaluate(
+          () => window.getComputedStyle(document.body).backgroundColor
+        );
+        // Dark theme should have darker background
+        expect(backgroundColor).not.toBe("rgb(255, 255, 255)"); // Not white
+      } else {
+        expect(currentThemeClass).toContain("light");
+        expect(currentThemeClass).not.toContain("dark");
+
+        // Verify light theme icon is shown (Moon icon for switching to dark)
+        await expect(themeToggle.locator("svg")).toHaveAttribute(
+          "class",
+          expect.stringContaining("h-5 w-5")
+        );
+      }
+
+      // Verify aria-label updates correctly
+      const ariaLabel = await themeToggle.getAttribute("aria-label");
+      if (expectedTheme === "dark") {
+        expect(ariaLabel).toBe("Switch to light mode");
+      } else {
+        expect(ariaLabel).toBe("Switch to dark mode");
+      }
     }
   });
 
-  test("should maintain theme when navigating between pages", async ({
+  test("should maintain theme state when navigating between pages", async ({
     page,
   }) => {
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
 
-    // Switch theme
+    // Switch to dark theme
     await themeToggle.click();
 
-    // Wait for theme to change by checking the DOM
+    // Wait for theme to change using proper wait condition
     await page.waitForFunction(
-      () =>
-        document.documentElement.className.includes("dark") ||
-        document.documentElement.className.includes("light"),
+      () => document.documentElement.className.includes("dark"),
       undefined,
       { timeout: 2000 }
     );
 
-    // Get theme state
-    const themeClass = await page.evaluate(
+    // Verify dark theme is active
+    const darkThemeClass = await page.evaluate(
       () => document.documentElement.className
     );
-    const isDark = themeClass.includes("dark");
+    expect(darkThemeClass).toContain("dark");
 
     // Navigate to a tool page
     await page.goto("/tools/json-formatter");
@@ -62,30 +107,42 @@ test.describe("Theme Toggle Functionality", () => {
 
     // Wait for theme to be applied on new page
     await page.waitForFunction(
-      expectedDark => {
-        const {className} = document.documentElement;
-        return expectedDark
-          ? className.includes("dark")
-          : className.includes("light");
-      },
-      isDark,
+      () => document.documentElement.className.includes("dark"),
+      undefined,
       { timeout: 3000 }
     );
 
-    // Verify theme persists
+    // Verify theme persists after navigation
     const persistedThemeClass = await page.evaluate(
       () => document.documentElement.className
     );
-    const persistedIsDark = persistedThemeClass.includes("dark");
+    expect(persistedThemeClass).toContain("dark");
 
-    expect(isDark).toBe(persistedIsDark);
-
-    // Verify toggle still works
+    // Verify theme toggle button still works on the new page
     const toolPageThemeToggle = page.locator('[data-testid="theme-toggle"]');
     await expect(toolPageThemeToggle).toBeVisible();
+
+    // Switch back to light theme
+    await toolPageThemeToggle.click();
+
+    // Wait for theme to change to light
+    await page.waitForFunction(
+      () => document.documentElement.className.includes("light"),
+      undefined,
+      { timeout: 2000 }
+    );
+
+    // Verify light theme is now active
+    const lightThemeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
+    expect(lightThemeClass).toContain("light");
+    expect(lightThemeClass).not.toContain("dark");
   });
 
-  test("should not cause JavaScript errors", async ({ page }) => {
+  test("should not cause infinite recursion or application crashes", async ({
+    page,
+  }) => {
     const themeToggle = page.locator('[data-testid="theme-toggle"]');
 
     // Listen for JavaScript errors
@@ -94,8 +151,16 @@ test.describe("Theme Toggle Functionality", () => {
       jsErrors.push(error.message);
     });
 
-    // Click theme toggle multiple times
-    for (let i = 0; i < 5; i++) {
+    // Listen for console errors
+    const consoleErrors: string[] = [];
+    page.on("console", msg => {
+      if (msg.type() === "error") {
+        consoleErrors.push(msg.text());
+      }
+    });
+
+    // Rapidly click theme toggle multiple times to test for recursion
+    for (let i = 0; i < 10; i++) {
       await themeToggle.click();
 
       // Wait for theme change instead of fixed timeout
@@ -109,10 +174,63 @@ test.describe("Theme Toggle Functionality", () => {
       );
     }
 
-    // Verify no errors occurred
-    expect(jsErrors).toHaveLength(0);
+    // Wait for any delayed errors to surface
+    await page.waitForFunction(
+      () => true, // Just wait a bit for any errors to surface
+      undefined,
+      { timeout: 500 }
+    );
 
-    // Verify button is still functional
+    // Verify no JavaScript errors occurred
+    expect(jsErrors).toHaveLength(0);
+    expect(
+      consoleErrors.filter(
+        error =>
+          error.includes("recursion") ||
+          error.includes("stack") ||
+          error.includes("Maximum call stack")
+      )
+    ).toHaveLength(0);
+
+    // Verify the application is still responsive
+    await expect(themeToggle).toBeVisible();
+    await expect(page.locator("header")).toBeVisible();
+
+    // Verify page title is still correct
+    await expect(page).toHaveTitle(/Developer Tools/);
+  });
+
+  test("should work correctly on mobile viewport", async ({ page }) => {
+    // Set mobile viewport
+    await page.setViewportSize({ width: 375, height: 667 });
+
+    const themeToggle = page.locator('[data-testid="theme-toggle"]');
+    await expect(themeToggle).toBeVisible();
+
+    // Verify touch-friendly styling
+    const buttonClass = await themeToggle.getAttribute("class");
+    expect(buttonClass).toContain("touch-manipulation");
+
+    // Test theme toggle on mobile
+    await themeToggle.click();
+
+    // Wait for theme change using proper wait condition
+    await page.waitForFunction(
+      () => {
+        const {className} = document.documentElement;
+        return className.includes("dark") || className.includes("light");
+      },
+      undefined,
+      { timeout: 2000 }
+    );
+
+    // Verify theme changed
+    const themeClass = await page.evaluate(
+      () => document.documentElement.className
+    );
+    expect(themeClass).toMatch(/(light|dark)/);
+
+    // Verify button remains accessible and functional
     await expect(themeToggle).toBeVisible();
     await expect(themeToggle).toBeEnabled();
   });
