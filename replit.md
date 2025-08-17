@@ -7,7 +7,7 @@
 Preferred communication style: Simple, everyday language.
 Theme preferences: Smooth theme transitions with local storage persistence, respecting browser/OS theme selection by default, falling back to light mode when system preference unavailable.
 Timezone behavior: All time-related tools should default to the user's local timezone instead of UTC for better user experience.
-Build system preferences: Use make targets instead of npm commands for all development, testing, and release operations (e.g., `make deps` instead of `npm install`, `make start` instead of `npm run dev`). Support custom port configuration to avoid port conflicts (e.g., `make start-port PORT=3001`).
+Build system preferences: Use make targets instead of npm commands for all development, testing, and release operations (e.g., `make deps` instead of `npm install`, `make start` instead of `npm run dev`).
 
 ## System Architecture
 
@@ -79,11 +79,6 @@ The application operates without authentication requirements as all tools functi
 - **Release Workflow**: Automated building, packaging, and GitHub release creation with changelog generation from merged PRs.
 - **CI Dependency**: Release workflow requires CI to pass before allowing releases, ensuring quality control.
 - **GitHub Pages Deployment**: Each release deploys the same gzip package to GitHub Pages as a standalone web application.
-
-**Replit Deployment:**
-- **Cloud Run Target**: Configured for automatic deployment with build and run commands.
-- **Make Integration**: Added `make run` and `make build` targets for deployment compatibility.
-- **System Dependencies**: GNU Make installed for deployment environment compatibility.
 
 **Release Process:**
 - **Automatic**: Push git tags (e.g., `v1.0.0`) trigger releases after CI validation

@@ -30,13 +30,6 @@ help: ## Display this help message
 start: ## Start the development server
 	npm run dev
 
-start-port: ## Start the development server on a custom port (usage: make start-port PORT=3000)
-	@if [ -z "$(PORT)" ]; then \
-	        echo "$(RED)Error: PORT is required. Usage: make start-port PORT=3000$(NC)"; \
-	        exit 1; \
-	fi
-	NODE_ENV=development tsx server/index.ts --port=$(PORT)
-
 stop: ## Stop the development server (if running in background)
 	@pkill -f "tsx server/index.ts" || true
 	@pkill -f "vite" || true
@@ -46,18 +39,8 @@ restart: stop start ## Restart the development server
 dev: ## Start development server with verbose logging
 	NODE_ENV=development DEBUG=* npm run dev
 
-dev-port: ## Start development server with verbose logging on custom port (usage: make dev-port PORT=3000)
-	@if [ -z "$(PORT)" ]; then \
-	        echo "$(RED)Error: PORT is required. Usage: make dev-port PORT=3000$(NC)"; \
-	        exit 1; \
-	fi
-	NODE_ENV=development DEBUG=* tsx server/index.ts --port=$(PORT)
-
 build: ## Build the application for production
 	npm run build
-
-run: ## Run the application in production (used by deployment)
-	npm start
 
 ## Code Quality Commands
 
@@ -184,9 +167,6 @@ dev-https: ## Start development server with HTTPS (if configured)
 
 dev-debug: ## Start development server with debugging enabled
 	NODE_ENV=development DEBUG=express:* npm run dev
-
-quick-start: ## Quick start server with custom port (usage: make quick-start PORT=3001)
-	@./scripts/start-server.sh $(PORT)
 
 benchmark: ## Run performance benchmarks (placeholder)
 	@echo "$(YELLOW)Benchmarking not yet implemented$(NC)"
