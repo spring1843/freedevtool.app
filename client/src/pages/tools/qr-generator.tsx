@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -145,7 +145,7 @@ export default function QRGenerator() {
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
 
   // Generate QR code
-  const generateQR = () => {
+  const generateQR = useCallback(() => {
     if (!inputText.trim()) {
       setError("Please enter some text to generate a QR code");
       setQrUrl("");
@@ -166,7 +166,7 @@ export default function QRGenerator() {
       setError("Failed to generate QR code. Please check your input.");
       setQrUrl("");
     }
-  };
+  }, [inputText, currentPreset, qrSize, toast]);
 
   // Auto-generate on input change
   useEffect(() => {
@@ -176,7 +176,7 @@ export default function QRGenerator() {
     }
     setQrUrl("");
     setError("");
-  }, [inputText, qrType, qrSize]);
+  }, [inputText, qrType, qrSize, generateQR]);
 
   // Download QR code
   const downloadQR = async () => {
@@ -230,7 +230,7 @@ export default function QRGenerator() {
   };
 
   // Quick preset buttons
-  const usePreset = (preset: string) => {
+  const applyPreset = (preset: string) => {
     setInputText(preset);
   };
 
@@ -397,7 +397,7 @@ export default function QRGenerator() {
                     key={index}
                     variant="outline"
                     size="sm"
-                    onClick={() => usePreset(preset)}
+                    onClick={() => applyPreset(preset)}
                     className="justify-start text-left h-auto p-2"
                     data-testid={`preset-${index}`}
                   >
