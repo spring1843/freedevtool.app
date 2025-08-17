@@ -15,7 +15,7 @@ export function SearchResults({ results, onResultClick, className = "", selected
   if (results.length === 0) return null;
 
   return (
-    <div className={`absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-[9999] max-h-96 overflow-y-auto ${className}`} style={{ zIndex: 9999 }}>
+    <div className={`absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-[9999] max-h-96 overflow-y-auto ${className}`} style={{ zIndex: 9999 }} data-testid={`search-results`}>
       {results.map((result, index) => {
         const isSelected = index === selectedIndex;
         return (
