@@ -259,7 +259,14 @@ export function Header({ onMenuClick }: HeaderProps) {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Toggle Theme: {theme === "dark" ? "→ Light" : theme === "light" ? "→ System" : "→ Dark"}</p>
+                  <p>
+                    Toggle Theme:{" "}
+                    {theme === "dark"
+                      ? "→ Light"
+                      : theme === "light"
+                        ? "→ System"
+                        : "→ Dark"}
+                  </p>
                 </TooltipContent>
               </Tooltip>
 
