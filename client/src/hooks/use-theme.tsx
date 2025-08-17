@@ -32,7 +32,9 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = window.document.documentElement;
-
+    
+    console.log("Theme changing to:", theme);
+    
     root.classList.remove("light", "dark");
 
     if (theme === "system") {
@@ -40,12 +42,15 @@ export function ThemeProvider({
         .matches
         ? "dark"
         : "light";
-
+      
+      console.log("System theme detected:", systemTheme);
       root.classList.add(systemTheme);
       return;
     }
 
+    console.log("Adding theme class:", theme);
     root.classList.add(theme);
+    console.log("Root classes after change:", root.className);
   }, [theme]);
 
   const value = {
