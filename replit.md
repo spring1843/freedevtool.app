@@ -59,8 +59,9 @@ The application operates without authentication requirements as all tools functi
 **Performance Optimizations:**
 - Debounced input handling.
 - Lazy loading of tool components.
-- Minimal JavaScript bundle with tree shaking.
+- Optimized JavaScript bundle (1.3MB, 352KB gzipped) with tree shaking and unused dependency removal.
 - Browser caching (`Cache-Control: public, max-age=86400, must-revalidate`) for HTML routes.
+- Removed 16+ unused UI libraries including CodeMirror, carousel, input-otp, drawer components for smaller bundle size.
 
 **Testing Strategy:**
 - End-to-end tests with Playwright.
