@@ -36,7 +36,12 @@ export const AdSlot: React.FC<AdSlotProps> = ({
       data-testid={`ad-slot-${id}`}
     >
       <div className="font-semibold text-sm mb-1">Github</div>
-      <div className="text-xs opacity-75"> <a target="_blank" href="https://github.com/spring1843/FreeDevTool.App">FreeDevTool.App</a></div>
+      <div className="text-xs opacity-75">
+        {" "}
+        <a target="_blank" href="https://github.com/spring1843/FreeDevTool.App" rel="noreferrer">
+          FreeDevTool.App
+        </a>
+      </div>
     </div>
   );
 };
