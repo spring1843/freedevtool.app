@@ -181,7 +181,7 @@ export default function Home() {
         <div className="relative max-w-md mx-auto">
           <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
           <Input
-            placeholder={`Search in ${getToolsCount()} tools... (Ctrl+S)`}
+            placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className="pl-10"
