@@ -30,8 +30,12 @@ export default defineConfig({
       name: 'chromium',
       use: { 
         ...devices['Desktop Chrome'],
-        // Use headless mode in CI
+        // Use headless mode in CI and development
         headless: true,
+        // Use system chromium if available
+        launchOptions: {
+          executablePath: process.env.CHROMIUM_PATH || '/nix/store/zi4f80l169xlmivz8vja8wlphq74qqk0-chromium-125.0.6422.141/bin/chromium',
+        }
       },
     },
 
