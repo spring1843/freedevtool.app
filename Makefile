@@ -146,7 +146,7 @@ all: clean setup lint type-check test build ## Run full development setup with a
 
 pre-commit: lint-fix format type-check ## Pre-commit hook (fix, format, check)
 
-ci: pre-commit type-check build test e2e-test lint
+ci: pre-commit build test e2e-test lint
 
 ## Documentation
 
