@@ -57,7 +57,7 @@ jobs:
           cd release-build
           zip -r ../freedevtool-app.zip .
           cd ..
-      
+
       - name: Get version from tag or input
         id: version
         run: |
@@ -94,6 +94,7 @@ jobs:
           echo "" >> ${CHANGELOG_FILE}
           echo "## 🔗 Links" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
+          echo "- [Live FreeDevTool.App](https://freedevtool.app)" >> ${CHANGELOG_FILE}
           echo "- [GitHub Repository](https://github.com/spring1843/freedevtool.app)" >> ${CHANGELOG_FILE}
           echo "- [Documentation](https://github.com/spring1843/freedevtool.app#readme)" >> ${CHANGELOG_FILE}
           echo "- [Report Issues](https://github.com/spring1843/freedevtool.app/issues)" >> ${CHANGELOG_FILE}
@@ -117,25 +118,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prepare GitHub Pages
+      - name: Setup GitHub Pages
         run: |
-          mkdir -p gh-pages-deploy
-          cp dist/public/
-
-          # Copy client build for GitHub Pages deployment
-          if [ -d "client/dist" ]; then
-            mkdir -p release-build/client
-            cp -r client/dist release-build/client/
-            # Also copy to public for server serving
-            mkdir -p release-build/public
-            cp -r client/dist/* release-build/public/ 2>/dev/null || true
-          fi
+            # Create a clean build directory for release
+            mkdir -p gh-pages-deploy
           
+            # Copy deployable public files
+            if [ -d "dist" ]; then
+              cp -r dist/public/* gh-pages-deploy/
+            fi
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./gh-pages-deploy
+          path: gh-pages-deploy
 
       - name: Deploy to GitHub Pages
         id: deployment
