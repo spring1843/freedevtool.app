@@ -144,9 +144,9 @@ deploy-check: prepare-deploy ## Check if ready for deployment
 
 all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
 
-quick-check: lint-fix format type-check ## Quick code quality check with fixes
-
 pre-commit: lint-fix format type-check ## Pre-commit hook (fix, format, check)
+
+ci: pre-commit build test e2e-test lint
 
 ## Documentation
 

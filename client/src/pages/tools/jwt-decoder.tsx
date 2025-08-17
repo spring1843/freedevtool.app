@@ -48,7 +48,11 @@ export default function JWTDecoder() {
       setIsValid(true);
       setError(null);
     } catch (err) {
-      setError("Invalid JWT: Unable to decode token");
+      setError(
+        `Invalid JWT: Unable to decode token${
+          err instanceof Error ? ` - ${err.message}` : ""
+        }`
+      );
       setIsValid(false);
       setHeader("");
       setPayload("");

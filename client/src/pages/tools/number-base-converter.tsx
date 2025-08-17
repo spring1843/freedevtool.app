@@ -511,7 +511,7 @@ export default function NumberBaseConverter() {
                   </div>
 
                   {/* Conversion Results */}
-                  {results.map((result, index) => (
+                  {results.map(result => (
                     <div
                       key={result.base}
                       className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50"

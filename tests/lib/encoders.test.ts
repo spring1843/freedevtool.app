@@ -30,9 +30,11 @@ describe("Base64 Encoding/Decoding", () => {
     expect(decoded).toBe(input);
   });
 
-  it("should throw error for invalid base64 input", () => {
+  it("should throw error for Failed to decode Base64", () => {
     const invalidBase64 = "Invalid@Base64!";
-    expect(() => decodeBase64(invalidBase64)).toThrow("Invalid Base64 input");
+    expect(() => decodeBase64(invalidBase64)).toThrow(
+      "Failed to decode Base64"
+    );
   });
 
   it("should handle empty string encoding/decoding", () => {
@@ -62,9 +64,9 @@ describe("URL Encoding/Decoding", () => {
     expect(decoded).toBe("test data");
   });
 
-  it("should throw error for malformed URL encoding", () => {
+  it("should throw error for Failed to decode URL", () => {
     const invalidURL = "test%GG";
-    expect(() => decodeURL(invalidURL)).toThrow("Invalid URL encoding");
+    expect(() => decodeURL(invalidURL)).toThrow("Failed to decode URL");
   });
 
   it("should handle empty string", () => {

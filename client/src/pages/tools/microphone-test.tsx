@@ -36,7 +36,7 @@ export default function MicrophoneTest() {
   const [audioLevel, setAudioLevel] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [permissionRequested, setPermissionRequested] = useState(false);
+  const [, setPermissionRequested] = useState(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
@@ -117,8 +117,10 @@ export default function MicrophoneTest() {
         if (audioDevices.length > 0) {
           setDevices(audioDevices);
         }
-      } catch (err) {
-        // Silently fail - user will need to request permission
+      } catch (err: any) {
+        setError(
+          `Failed to enumerate devices: ${err?.message || "Please check microphone permissions"}`
+        );
       }
     };
 

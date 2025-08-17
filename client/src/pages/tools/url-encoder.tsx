@@ -17,7 +17,8 @@ export default function URLEncoder() {
     try {
       const encoded = encodeURIComponent(plainText);
       setEncodedText(encoded);
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Encoding error:", error);
       setEncodedText("Error: Invalid input for URL encoding");
     }
   };
@@ -26,8 +27,10 @@ export default function URLEncoder() {
     try {
       const decoded = decodeURIComponent(encodedText);
       setPlainText(decoded);
-    } catch (error) {
-      setPlainText("Error: Invalid input for URL decoding");
+    } catch (error: any) {
+      setPlainText(
+        `Error: Invalid input for URL decoding: ${error?.message || "Unknown error"}`
+      );
     }
   };
 

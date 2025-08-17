@@ -23,7 +23,7 @@ export default function WebcamTest() {
   );
   const [error, setError] = useState<string | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [permissionRequested, setPermissionRequested] = useState(false);
+  const [, setPermissionRequested] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -168,8 +168,10 @@ export default function WebcamTest() {
         if (videoDevices.length > 0) {
           setDevices(videoDevices);
         }
-      } catch (err) {
-        // Silently fail - user will need to request permission
+      } catch (err: any) {
+        setError(
+          `Failed to get basic devices: ${err?.message || "Unknown error"}`
+        );
       }
     };
 

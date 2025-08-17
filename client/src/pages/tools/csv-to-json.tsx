@@ -42,21 +42,18 @@ const delimiters = [
 ];
 
 export default function CSVToJSON() {
-  const { fields, updateField, resetFields } = usePersistentForm(
-    "csv-to-json",
-    {
-      csvInput: `name,email,age,city
+  const { fields, updateField } = usePersistentForm("csv-to-json", {
+    csvInput: `name,email,age,city
 John Doe,john@example.com,30,New York
 Jane Smith,jane@example.com,25,Los Angeles
 Bob Johnson,bob@example.com,35,Chicago`,
-      selectedDelimiter: ",",
-      jsonOutput: "",
-      parsedData: [] as CSVRow[],
-      headers: [] as string[],
-      error: "",
-      rowCount: 0,
-    }
-  );
+    selectedDelimiter: ",",
+    jsonOutput: "",
+    parsedData: [] as CSVRow[],
+    headers: [] as string[],
+    error: "",
+    rowCount: 0,
+  });
   const { toast } = useToast();
 
   useEffect(() => {

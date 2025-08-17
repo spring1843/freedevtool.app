@@ -31,7 +31,7 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
   ) => {
     // Remove readOnly from restProps to prevent conflicts
     const { readOnly: _, ...cleanRestProps } = restProps as any;
-    const [cursorPosition, setCursorPosition] = React.useState(0);
+    const [, setCursorPosition] = React.useState(0);
     const [currentLine, setCurrentLine] = React.useState(1);
     const [currentColumn, setCurrentColumn] = React.useState(1);
     const [wordWrap, setWordWrap] = React.useState(enableWordWrap);

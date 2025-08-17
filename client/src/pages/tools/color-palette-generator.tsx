@@ -28,7 +28,6 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdSlot from "@/components/ui/ad-slot";
-import { useLocation } from "wouter";
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
 
 export default function ColorPaletteGenerator() {
@@ -39,7 +38,6 @@ export default function ColorPaletteGenerator() {
   );
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
-  const [location, setLocation] = useLocation();
 
   const paletteTypes = getAllPaletteTypes();
 

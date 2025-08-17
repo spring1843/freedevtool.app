@@ -176,7 +176,6 @@ export default function DateConverter() {
 
   const formatDate = (date: Date, format: string): string => {
     const pad = (n: number) => String(n).padStart(2, "0");
-    const pad3 = (n: number) => String(n).padStart(3, "0");
 
     switch (format) {
       case "unix":
@@ -282,10 +281,10 @@ export default function DateConverter() {
         title: "Copied!",
         description: "Date format copied to clipboard",
       });
-    } catch (err) {
+    } catch (error: any) {
       toast({
         title: "Copy failed",
-        description: "Could not copy to clipboard",
+        description: `Could not copy to clipboard: ${error?.message || "Unknown error"}`,
         variant: "destructive",
       });
     }
