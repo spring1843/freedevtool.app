@@ -15,7 +15,6 @@ const adSizes = {
 };
 
 export const AdSlot: React.FC<AdSlotProps> = ({
-  position,
   id,
   size = "medium",
   className = "",
@@ -38,7 +37,11 @@ export const AdSlot: React.FC<AdSlotProps> = ({
       <div className="font-semibold text-sm mb-1">Github</div>
       <div className="text-xs opacity-75">
         {" "}
-        <a target="_blank" href="https://github.com/spring1843/FreeDevTool.App" rel="noreferrer">
+        <a
+          target="_blank"
+          href="https://github.com/spring1843/FreeDevTool.App"
+          rel="noreferrer"
+        >
           FreeDevTool.App
         </a>
       </div>
