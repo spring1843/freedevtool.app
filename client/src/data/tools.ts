@@ -354,6 +354,11 @@ export function getAllTools(): Tool[] {
   return Object.values(toolsData).flatMap(category => category.tools);
 }
 
+// Utility function to get the total number of tools
+export function getToolsCount(): number {
+  return getAllTools().length;
+}
+
 // Utility function to get tools for demo (same as getAllTools but explicit)
 export function getDemoTools(): Array<{
   name: string;

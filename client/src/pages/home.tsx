@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSearch } from "@/hooks/use-search";
 import { useDemo } from "@/providers/demo-provider";
+import { getToolsCount } from "@/data/tools";
 
 export default function Home() {
   const { searchQuery, setSearchQuery, filteredToolsData } = useSearch();
@@ -180,7 +181,7 @@ export default function Home() {
         <div className="relative max-w-md mx-auto">
           <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
           <Input
-            placeholder="Search in 45 tools... (Ctrl+S)"
+            placeholder={`Search in ${getToolsCount()} tools... (Ctrl+S)`}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className="pl-10"
