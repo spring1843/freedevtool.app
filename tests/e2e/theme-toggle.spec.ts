@@ -27,12 +27,8 @@ test.describe("Theme Toggle Functionality", () => {
       // Click the theme toggle
       await themeToggle.click();
 
-      // Wait for theme transition using proper wait condition
-      await page.waitForFunction(
-        prevClass => document.documentElement.className !== prevClass,
-        initialThemeClass,
-        { timeout: 2000 }
-      );
+      // Wait for theme transition
+      await page.waitForTimeout(100);
 
       // Verify theme has changed
       const currentThemeClass = await page.evaluate(
