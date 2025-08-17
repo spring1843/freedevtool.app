@@ -1,7 +1,12 @@
 import { Search, Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 // import { useTheme } from "@/providers/theme-provider";
 import { Link } from "wouter";
 import { useSearch } from "@/hooks/use-search";
