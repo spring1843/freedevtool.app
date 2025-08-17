@@ -83,7 +83,7 @@ The application operates without authentication requirements as all tools functi
 - **Automatic**: Push git tags (e.g., `v1.0.0`) trigger releases after CI validation
 - **Manual**: GitHub Actions workflow dispatch with CI status verification
 - **Emergency Bypass**: Manual releases can bypass CI requirement if needed (creates prerelease with warning)
-- **Standalone Deployment**: GitHub Pages deploys the exact same gzip package as a web-only application
+- **Unified Build & Deploy**: Single workflow builds application and deploys identical files to both GitHub Releases and GitHub Pages
 - Manual release preparation with `scripts/prepare-release.sh`
 - Automated changelog generation from PR merge commits
 - Cross-platform distribution packages (tar.gz, zip)
