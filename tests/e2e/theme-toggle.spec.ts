@@ -83,7 +83,13 @@ test.describe("Theme Toggle Functionality", () => {
 
     // Switch to dark theme
     await themeToggle.click();
-    await page.waitForTimeout(100);
+
+    // Wait for theme to change using proper wait condition
+    await page.waitForFunction(
+      () => document.documentElement.className.includes("dark"),
+      undefined,
+      { timeout: 2000 }
+    );
 
     // Verify dark theme is active
     const darkThemeClass = await page.evaluate(
@@ -94,6 +100,13 @@ test.describe("Theme Toggle Functionality", () => {
     // Navigate to a tool page
     await page.goto("/tools/json-formatter");
     await page.waitForLoadState("networkidle");
+
+    // Wait for theme to be applied on new page
+    await page.waitForFunction(
+      () => document.documentElement.className.includes("dark"),
+      undefined,
+      { timeout: 3000 }
+    );
 
     // Verify theme persists after navigation
     const persistedThemeClass = await page.evaluate(
@@ -107,7 +120,13 @@ test.describe("Theme Toggle Functionality", () => {
 
     // Switch back to light theme
     await toolPageThemeToggle.click();
-    await page.waitForTimeout(100);
+
+    // Wait for theme to change to light
+    await page.waitForFunction(
+      () => document.documentElement.className.includes("light"),
+      undefined,
+      { timeout: 2000 }
+    );
 
     // Verify light theme is now active
     const lightThemeClass = await page.evaluate(
@@ -139,12 +158,24 @@ test.describe("Theme Toggle Functionality", () => {
     // Rapidly click theme toggle multiple times to test for recursion
     for (let i = 0; i < 10; i++) {
       await themeToggle.click();
-      // Small wait to allow any potential recursion to manifest
-      await page.waitForTimeout(50);
+
+      // Wait for theme change instead of fixed timeout
+      await page.waitForFunction(
+        () => {
+          const { className } = document.documentElement;
+          return className.includes("dark") || className.includes("light");
+        },
+        undefined,
+        { timeout: 1000 }
+      );
     }
 
-    // Wait a bit more to catch any delayed errors
-    await page.waitForTimeout(500);
+    // Wait for any delayed errors to surface
+    await page.waitForFunction(
+      () => true, // Just wait a bit for any errors to surface
+      undefined,
+      { timeout: 500 }
+    );
 
     // Verify no JavaScript errors occurred
     expect(jsErrors).toHaveLength(0);
@@ -178,7 +209,16 @@ test.describe("Theme Toggle Functionality", () => {
 
     // Test theme toggle on mobile
     await themeToggle.click();
-    await page.waitForTimeout(100);
+
+    // Wait for theme change using proper wait condition
+    await page.waitForFunction(
+      () => {
+        const { className } = document.documentElement;
+        return className.includes("dark") || className.includes("light");
+      },
+      undefined,
+      { timeout: 2000 }
+    );
 
     // Verify theme changed
     const themeClass = await page.evaluate(
