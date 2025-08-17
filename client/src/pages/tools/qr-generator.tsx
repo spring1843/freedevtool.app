@@ -166,7 +166,7 @@ export default function QRGenerator() {
       setError("Failed to generate QR code. Please check your input.");
       setQrUrl("");
     }
-  }, [inputText, currentPreset, qrSize, toast]);
+  }, [inputText, currentPreset, qrType, qrSize, toast]);
 
   // Auto-generate on input change
   useEffect(() => {
