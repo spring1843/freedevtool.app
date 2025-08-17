@@ -47,7 +47,7 @@ const formatDate = (date: Date, format: string): string => {
       return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     case 'objectid':
       const timestamp = Math.floor(date.getTime() / 1000).toString(16);
-      return `${timestamp.padStart(8, '0')  }f1a2b3c4d5e6f789`;
+      return `${timestamp.padStart(8, '0')}f1a2b3c4d5e6f789`;
     case 'full':
       return date.toLocaleDateString('en-US', { 
         weekday: 'long', 
