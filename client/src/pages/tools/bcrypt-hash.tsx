@@ -130,7 +130,12 @@ export default function BcryptHash() {
           <XCircle className="w-4 h-4 mr-2" />
           Password does not match hash
         </div>
-      );
+    return (
+      <div className="flex items-center text-red-600">
+        <XCircle className="w-4 h-4 mr-2" />
+        Password does not match hash
+      </div>
+    );
     
   };
 
