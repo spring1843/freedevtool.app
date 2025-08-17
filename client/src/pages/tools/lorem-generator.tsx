@@ -91,7 +91,7 @@ export default function LoremGenerator() {
           
           // Start first sentence with "Lorem ipsum" if requested
           if (i === 0 && startWithLorem) {
-            sentence = `Lorem ipsum ${  sentence.toLowerCase()}`;
+            sentence = `Lorem ipsum ${sentence.toLowerCase()}`;
             sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
           }
           
