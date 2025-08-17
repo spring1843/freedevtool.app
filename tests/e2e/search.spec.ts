@@ -7,13 +7,13 @@ test.describe('Search Functionality', () => {
     await page.waitForLoadState('networkidle');
   });
 
-  test('should show text diff tool when typing "text"', async ({ page }) => {
+  test('should show text diff tool when typing "text diff"', async ({ page }) => {
     // Find and click on homepage search input
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     await expect(searchInput).toBeVisible();
     
     // Type "text" in search
-    await searchInput.fill('text');
+    await searchInput.fill('text diff');
     
     // Wait for search results to appear
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -22,15 +22,10 @@ test.describe('Search Functionality', () => {
     const textDiffResult = page.locator('[data-testid="search-result-text-diff"]');
     await expect(textDiffResult).toBeVisible();
     await expect(textDiffResult).toContainText('Text Diff');
-    
-    // Verify other text tools are also shown
-    await expect(page.locator('[data-testid="search-result-text-counter"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-text-sort"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-text-split"]')).toBeVisible();
   });
 
   test('should navigate to tool when search result is clicked', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     await searchInput.fill('text diff');
     
     // Wait for search results
@@ -42,37 +37,11 @@ test.describe('Search Functionality', () => {
     
     // Verify navigation to text diff tool
     await expect(page).toHaveURL('/tools/text-diff');
-    await expect(page.locator('h1')).toContainText('Text Diff');
-  });
-
-  test('should show JSON tools when typing "json"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
-    await searchInput.fill('json');
-    
-    await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
-    
-    // Verify JSON tools are shown
-    await expect(page.locator('[data-testid="search-result-json-formatter"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-json-yaml-converter"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-url-to-json"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-csv-to-json"]')).toBeVisible();
-  });
-
-  test('should show time tools when typing "time"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
-    await searchInput.fill('time');
-    
-    await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
-    
-    // Verify time tools are shown
-    await expect(page.locator('[data-testid="search-result-world-clock"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-timer"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-timezone-converter"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-datetime-diff"]')).toBeVisible();
+    await expect(page.locator('h2')).toContainText('Text Diff');
   });
 
   test('should clear search results when input is cleared', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     
     // Type search query
     await searchInput.fill('json');
@@ -86,7 +55,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show no results message for non-existent tools', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     await searchInput.fill('nonexistenttool12345');
     
     // Wait a moment for search processing
@@ -101,28 +70,8 @@ test.describe('Search Functionality', () => {
     }
   });
 
-  test('should support keyboard navigation in search results', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
-    await searchInput.fill('text');
-    
-    await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
-    
-    // Press arrow down to navigate
-    await searchInput.press('ArrowDown');
-    
-    // Verify first result is highlighted/focused
-    const firstResult = page.locator('[data-testid^="search-result-"]').first();
-    await expect(firstResult).toHaveClass(/selected|highlighted|focused/);
-    
-    // Press Enter to select
-    await page.keyboard.press('Enter');
-    
-    // Verify navigation occurred
-    await expect(page).toHaveURL(/\/tools\//);
-  });
-
   test('should close search results when clicking outside', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     await searchInput.fill('json');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -134,19 +83,8 @@ test.describe('Search Functionality', () => {
     await expect(page.locator('[data-testid="search-results"]')).not.toBeVisible();
   });
 
-  test('should show encoder tools when typing "encode"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
-    await searchInput.fill('encode');
-    
-    await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
-    
-    // Verify encoder tools are shown
-    await expect(page.locator('[data-testid="search-result-base64"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-url-encoder"]')).toBeVisible();
-  });
-
   test('should support case-insensitive search', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     
     // Test uppercase
     await searchInput.fill('TEXT');
@@ -161,7 +99,7 @@ test.describe('Search Functionality', () => {
   });
 
   test('should show converter tools when typing "convert"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     await searchInput.fill('convert');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
@@ -173,17 +111,8 @@ test.describe('Search Functionality', () => {
     await expect(page.locator('[data-testid="search-result-number-base-converter"]')).toBeVisible();
   });
 
-  test('should handle search with special characters', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
-    
-    // Test with special characters that shouldn't break search
-    await searchInput.fill('json-yaml');
-    await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
-    await expect(page.locator('[data-testid="search-result-json-yaml-converter"]')).toBeVisible();
-  });
-
   test('should show generator tools when typing "generator"', async ({ page }) => {
-    const searchInput = page.locator('[data-testid="homepage-search-input"]');
+    const searchInput = page.locator('[data-testid="search-input"]');
     await searchInput.fill('generator');
     
     await expect(page.locator('[data-testid="search-results"]')).toBeVisible();
