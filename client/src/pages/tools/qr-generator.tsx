@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AdSlot from "@/components/ui/ad-slot";
-// @ts-ignore
 import QRCodeLib from "qrcode-generator";
 
 // Standalone QR Code generation using qrcode-generator library

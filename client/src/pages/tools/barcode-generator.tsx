@@ -148,7 +148,7 @@ export default function BarcodeGenerator() {
           ? null
           : "ITF-14 requires exactly 14 digits";
       case "CODE39":
-        return /^[A-Z0-9 .\-$\/+%]+$/.test(inputText)
+        return /^[A-Z0-9 .\-$/+%]+$/.test(inputText)
           ? null
           : "CODE 39 supports A-Z, 0-9, and symbols . - $ / + %";
       case "MSI":
