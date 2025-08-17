@@ -121,7 +121,6 @@ export default function MicrophoneTest() {
         setError(
           `Failed to enumerate devices: ${err?.message || "Please check microphone permissions"}`
         );
-        // Silently fail - user will need to request permission
       }
     };
 
