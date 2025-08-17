@@ -68,10 +68,6 @@ export default function PasswordGenerator() {
     const numbers = "0123456789";
     const symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?";
 
-    // Characters to exclude if similar/ambiguous options are selected
-    const similarChars = "il1Lo0O";
-    const ambiguousChars = "{}[]()\/\\'\"`~,;.<>";
-
     let charset = "";
 
     if (includeUppercase) {

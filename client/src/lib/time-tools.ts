@@ -242,25 +242,6 @@ export function formatDateWithPattern(date: Date, pattern: string): string {
 
 // Parse various date formats
 export function parseDate(input: string): Date | null {
-  // Try common date formats
-  const formats = [
-    // Unix timestamp (seconds)
-    /^\d{10}$/,
-    // Unix timestamp (milliseconds)
-    /^\d{13}$/,
-    // ISO formats
-    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/,
-    /^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2}/,
-    /^\d{4}-\d{2}-\d{2}/,
-    // RFC formats
-    /^[A-Za-z]{3},?\s+\d{1,2}\s+[A-Za-z]{3}\s+\d{4}/,
-    // US formats
-    /^\d{1,2}\/\d{1,2}\/\d{4}/,
-    /^\d{1,2}-\d{1,2}-\d{4}/,
-    // European formats
-    /^\d{1,2}\.\d{1,2}\.\d{4}/,
-  ];
-
   try {
     // Try Unix timestamp
     if (/^\d{10}$/.test(input)) {

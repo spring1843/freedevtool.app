@@ -3,16 +3,16 @@ import * as yaml from "js-yaml";
 export function encodeBase64(input: string): string {
   try {
     return btoa(unescape(encodeURIComponent(input)));
-  } catch (error) {
-    throw new Error("Failed to encode Base64");
+  } catch (error: any) {
+    throw new Error(`Failed to encode Base64: ${error.message}`);
   }
 }
 
 export function decodeBase64(input: string): string {
   try {
     return decodeURIComponent(escape(atob(input)));
-  } catch (error) {
-    throw new Error("Invalid Base64 input");
+  } catch (error: any) {
+    throw new Error(`Failed to decode Base64: ${error.message}`);
   }
 }
 
@@ -23,8 +23,8 @@ export function encodeURL(input: string): string {
 export function decodeURL(input: string): string {
   try {
     return decodeURIComponent(input);
-  } catch (error) {
-    throw new Error("Invalid URL encoding");
+  } catch (error: any) {
+    throw new Error(`Failed to decode URL: ${error.message}`);
   }
 }
 

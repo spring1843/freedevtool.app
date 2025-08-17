@@ -75,7 +75,7 @@ export default function KeyboardTest() {
   };
 
   // Get key display name
-  const getKeyDisplayName = (key: string, code: string) => {
+  const getKeyDisplayName = (key: string) => {
     const specialKeys: { [key: string]: string } = {
       " ": "Space",
       ArrowUp: "↑",

@@ -311,194 +311,191 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
             </Button>
           </div>
 
-          {Object.entries(toolsData).map(
-            ([categoryName, categoryData], categoryIndex) => {
-              const isExpanded = expandedSections[categoryName] ?? false;
-              const isCategoryActive = activeCategory === categoryName;
-              const categoryItemIndex = navigableItems.findIndex(
-                item =>
-                  item.type === "category" && item.categoryName === categoryName
-              );
-              const isCategoryFocused = focusedIndex === categoryItemIndex;
+          {Object.entries(toolsData).map(([categoryName, categoryData]) => {
+            const isExpanded = expandedSections[categoryName] ?? false;
+            const isCategoryActive = activeCategory === categoryName;
+            const categoryItemIndex = navigableItems.findIndex(
+              item =>
+                item.type === "category" && item.categoryName === categoryName
+            );
+            const isCategoryFocused = focusedIndex === categoryItemIndex;
 
-              return (
-                <div
-                  key={categoryName}
+            return (
+              <div
+                key={categoryName}
+                className={cn(
+                  "mb-4 rounded-xl overflow-hidden transition-all duration-300",
+                  isCategoryActive &&
+                    "bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 shadow-sm"
+                )}
+              >
+                {/* Category Header - Clickable */}
+                <Button
+                  variant="ghost"
                   className={cn(
-                    "mb-4 rounded-xl overflow-hidden transition-all duration-300",
-                    isCategoryActive &&
-                      "bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/20 shadow-sm"
+                    "w-full justify-between text-xs font-semibold uppercase tracking-wider mb-0 h-10 px-4 rounded-xl transition-all duration-300 hover:scale-[1.02]",
+                    isCategoryActive
+                      ? "text-primary bg-primary/10 hover:bg-primary/15 shadow-sm"
+                      : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800",
+                    isCategoryFocused &&
+                      (isCategoryActive
+                        ? "bg-primary/25 hover:bg-primary/30 shadow-lg scale-105 ring-2 ring-primary/60 text-primary font-bold border-2 border-primary/40"
+                        : "bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-150 dark:hover:bg-blue-900/60 shadow-lg scale-105 ring-2 ring-blue-400/50 text-blue-800 dark:text-blue-200 font-semibold border-2 border-blue-300/50 dark:border-blue-600/50")
+                  )}
+                  onClick={() => toggleSection(categoryName)}
+                  data-testid={`category-${categoryName.toLowerCase().replace(/\s+/g, "-")}`}
+                  tabIndex={-1}
+                >
+                  <span
+                    className={cn(
+                      "flex items-center gap-2.5",
+                      isCategoryActive && "font-bold"
+                    )}
+                  >
+                    {isCategoryActive ? (
+                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                    ) : null}
+                    {categoryName}
+                  </span>
+                  {isExpanded ? (
+                    <ChevronDown
+                      className={cn(
+                        "w-4 h-4 transition-transform duration-300",
+                        isCategoryActive && "text-primary"
+                      )}
+                    />
+                  ) : (
+                    <ChevronRight
+                      className={cn(
+                        "w-4 h-4 transition-transform duration-300",
+                        isCategoryActive && "text-primary"
+                      )}
+                    />
+                  )}
+                </Button>
+
+                {/* Category Items - Collapsible */}
+                <div
+                  className={cn(
+                    "overflow-hidden transition-all duration-500 ease-out",
+                    isExpanded
+                      ? "max-h-[600px] opacity-100 translate-y-0"
+                      : "max-h-0 opacity-0 -translate-y-2",
+                    isCategoryActive && "px-2"
                   )}
                 >
-                  {/* Category Header - Clickable */}
-                  <Button
-                    variant="ghost"
-                    className={cn(
-                      "w-full justify-between text-xs font-semibold uppercase tracking-wider mb-0 h-10 px-4 rounded-xl transition-all duration-300 hover:scale-[1.02]",
-                      isCategoryActive
-                        ? "text-primary bg-primary/10 hover:bg-primary/15 shadow-sm"
-                        : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800",
-                      isCategoryFocused &&
-                        (isCategoryActive
-                          ? "bg-primary/25 hover:bg-primary/30 shadow-lg scale-105 ring-2 ring-primary/60 text-primary font-bold border-2 border-primary/40"
-                          : "bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-150 dark:hover:bg-blue-900/60 shadow-lg scale-105 ring-2 ring-blue-400/50 text-blue-800 dark:text-blue-200 font-semibold border-2 border-blue-300/50 dark:border-blue-600/50")
-                    )}
-                    onClick={() => toggleSection(categoryName)}
-                    data-testid={`category-${categoryName.toLowerCase().replace(/\s+/g, "-")}`}
-                    tabIndex={-1}
-                  >
-                    <span
-                      className={cn(
-                        "flex items-center gap-2.5",
-                        isCategoryActive && "font-bold"
-                      )}
-                    >
-                      {isCategoryActive ? (
-                        <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                      ) : null}
-                      {categoryName}
-                    </span>
-                    {isExpanded ? (
-                      <ChevronDown
-                        className={cn(
-                          "w-4 h-4 transition-transform duration-300",
-                          isCategoryActive && "text-primary"
-                        )}
-                      />
-                    ) : (
-                      <ChevronRight
-                        className={cn(
-                          "w-4 h-4 transition-transform duration-300",
-                          isCategoryActive && "text-primary"
-                        )}
-                      />
-                    )}
-                  </Button>
+                  <div className="space-y-1.5 pb-3 pt-1">
+                    {categoryData.tools.map(tool => {
+                      const toolPath = tool.path; // tool.path already includes /tools prefix
+                      const isActive = location === toolPath;
+                      const isVisited = visitedPaths.has(toolPath);
+                      const toolItemIndex = navigableItems.findIndex(
+                        item => item.type === "tool" && item.path === tool.path
+                      );
+                      const isToolFocused = focusedIndex === toolItemIndex;
 
-                  {/* Category Items - Collapsible */}
-                  <div
-                    className={cn(
-                      "overflow-hidden transition-all duration-500 ease-out",
-                      isExpanded
-                        ? "max-h-[600px] opacity-100 translate-y-0"
-                        : "max-h-0 opacity-0 -translate-y-2",
-                      isCategoryActive && "px-2"
-                    )}
-                  >
-                    <div className="space-y-1.5 pb-3 pt-1">
-                      {categoryData.tools.map(tool => {
-                        const toolPath = tool.path; // tool.path already includes /tools prefix
-                        const isActive = location === toolPath;
-                        const isVisited = visitedPaths.has(toolPath);
-                        const toolItemIndex = navigableItems.findIndex(
-                          item =>
-                            item.type === "tool" && item.path === tool.path
-                        );
-                        const isToolFocused = focusedIndex === toolItemIndex;
-
-                        return (
-                          <Tooltip key={tool.path} delayDuration={300}>
-                            <TooltipTrigger asChild>
-                              <Link href={toolPath}>
-                                <Button
-                                  variant="ghost"
-                                  className={cn(
-                                    "w-full justify-start text-sm transition-all duration-300 relative rounded-xl h-11 group hover:scale-[1.02] hover:shadow-sm",
-                                    isActive
-                                      ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg font-medium transform scale-[1.02]"
+                      return (
+                        <Tooltip key={tool.path} delayDuration={300}>
+                          <TooltipTrigger asChild>
+                            <Link href={toolPath}>
+                              <Button
+                                variant="ghost"
+                                className={cn(
+                                  "w-full justify-start text-sm transition-all duration-300 relative rounded-xl h-11 group hover:scale-[1.02] hover:shadow-sm",
+                                  isActive
+                                    ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg font-medium transform scale-[1.02]"
+                                    : isVisited
+                                      ? "text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800",
+                                  isToolFocused &&
+                                    (isActive
+                                      ? "ring-2 ring-primary-foreground/50 shadow-lg scale-105"
                                       : isVisited
-                                        ? "text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800",
-                                    isToolFocused &&
-                                      (isActive
-                                        ? "ring-2 ring-primary-foreground/50 shadow-lg scale-105"
-                                        : isVisited
-                                          ? "bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 scale-[1.02] shadow-sm ring-2 ring-purple-400/30"
-                                          : "bg-slate-100 dark:bg-slate-700 hover:bg-slate-150 dark:hover:bg-slate-600 scale-[1.02] shadow-sm ring-2 ring-primary/30")
+                                        ? "bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 scale-[1.02] shadow-sm ring-2 ring-purple-400/30"
+                                        : "bg-slate-100 dark:bg-slate-700 hover:bg-slate-150 dark:hover:bg-slate-600 scale-[1.02] shadow-sm ring-2 ring-primary/30")
+                                )}
+                                data-testid={`tool-${tool.path.slice(1) || "date-converter"}`}
+                                tabIndex={-1}
+                              >
+                                {isActive ? (
+                                  <div className="absolute left-1 top-2 bottom-2 w-1 bg-primary-foreground rounded-r-full" />
+                                ) : null}
+                                <div
+                                  className={cn(
+                                    "w-5 h-5 mr-3 flex-shrink-0 transition-all duration-300 group-hover:scale-110",
+                                    isActive &&
+                                      "scale-110 text-primary-foreground"
                                   )}
-                                  data-testid={`tool-${tool.path.slice(1) || "date-converter"}`}
-                                  tabIndex={-1}
                                 >
-                                  {isActive ? (
-                                    <div className="absolute left-1 top-2 bottom-2 w-1 bg-primary-foreground rounded-r-full" />
-                                  ) : null}
-                                  <div
-                                    className={cn(
-                                      "w-5 h-5 mr-3 flex-shrink-0 transition-all duration-300 group-hover:scale-110",
-                                      isActive &&
-                                        "scale-110 text-primary-foreground"
-                                    )}
-                                  >
-                                    {getToolIcon(categoryName, tool.name)}
-                                  </div>
-                                  <span
-                                    className={cn(
-                                      "truncate flex-1 transition-all duration-300",
-                                      isActive && "font-medium"
-                                    )}
-                                  >
-                                    {tool.name}
-                                  </span>
-                                  <div className="flex items-center gap-2 ml-auto flex-shrink-0">
-                                    {tool.experimental ? (
-                                      <Badge
-                                        variant="secondary"
-                                        className={cn(
-                                          "text-xs px-1.5 py-0.5 h-5 rounded-full transition-all duration-300",
-                                          isActive
-                                            ? "bg-primary-foreground/20 text-primary-foreground"
-                                            : "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
-                                        )}
-                                      >
-                                        β
-                                      </Badge>
-                                    ) : null}
-                                    {isActive ? (
-                                      <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
-                                    ) : null}
-                                    {!isActive && isVisited ? (
-                                      <div className="w-1.5 h-1.5 bg-purple-500 rounded-full opacity-70" />
-                                    ) : null}
-                                  </div>
-                                </Button>
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent side="right" className="max-w-xs">
-                              <div className="space-y-1">
-                                <div className="flex items-center gap-2">
-                                  <p className="font-medium">{tool.name}</p>
+                                  {getToolIcon(categoryName, tool.name)}
+                                </div>
+                                <span
+                                  className={cn(
+                                    "truncate flex-1 transition-all duration-300",
+                                    isActive && "font-medium"
+                                  )}
+                                >
+                                  {tool.name}
+                                </span>
+                                <div className="flex items-center gap-2 ml-auto flex-shrink-0">
                                   {tool.experimental ? (
                                     <Badge
                                       variant="secondary"
-                                      className="text-xs px-1.5 py-0 h-5 bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
+                                      className={cn(
+                                        "text-xs px-1.5 py-0.5 h-5 rounded-full transition-all duration-300",
+                                        isActive
+                                          ? "bg-primary-foreground/20 text-primary-foreground"
+                                          : "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
+                                      )}
                                     >
-                                      β Experimental
+                                      β
                                     </Badge>
                                   ) : null}
+                                  {isActive ? (
+                                    <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
+                                  ) : null}
+                                  {!isActive && isVisited ? (
+                                    <div className="w-1.5 h-1.5 bg-purple-500 rounded-full opacity-70" />
+                                  ) : null}
                                 </div>
-                                <p className="text-sm text-slate-600 dark:text-slate-400">
-                                  {tool.description}
-                                </p>
+                              </Button>
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent side="right" className="max-w-xs">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <p className="font-medium">{tool.name}</p>
                                 {tool.experimental ? (
-                                  <p className="text-xs text-orange-600 dark:text-orange-400">
-                                    ⚠️ This tool is in development and may have
-                                    limitations
-                                  </p>
+                                  <Badge
+                                    variant="secondary"
+                                    className="text-xs px-1.5 py-0 h-5 bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400"
+                                  >
+                                    β Experimental
+                                  </Badge>
                                 ) : null}
-                                <p className="text-xs text-slate-500 dark:text-slate-500">
-                                  Shortcut: {tool.shortcut}
-                                </p>
                               </div>
-                            </TooltipContent>
-                          </Tooltip>
-                        );
-                      })}
-                    </div>
+                              <p className="text-sm text-slate-600 dark:text-slate-400">
+                                {tool.description}
+                              </p>
+                              {tool.experimental ? (
+                                <p className="text-xs text-orange-600 dark:text-orange-400">
+                                  ⚠️ This tool is in development and may have
+                                  limitations
+                                </p>
+                              ) : null}
+                              <p className="text-xs text-slate-500 dark:text-slate-500">
+                                Shortcut: {tool.shortcut}
+                              </p>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      );
+                    })}
                   </div>
                 </div>
-              );
-            }
-          )}
+              </div>
+            );
+          })}
 
           {/* Keyboard navigation help */}
           <div className="mt-6 p-3 bg-slate-50 dark:bg-slate-800 rounded-lg text-xs text-slate-600 dark:text-slate-400">

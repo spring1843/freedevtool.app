@@ -5,7 +5,6 @@ export function calculateCompoundInterest(
   principal: number,
   annualRate: number,
   years: number,
-  compoundingFrequency = 12, // Monthly by default
   monthlyContribution = 0,
   contributionFrequency: "monthly" | "yearly" = "monthly",
   interestFrequency: "monthly" | "yearly" = "monthly"
