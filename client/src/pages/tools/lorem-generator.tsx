@@ -46,7 +46,7 @@ export default function LoremGenerator() {
       words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
     }
     
-    return `${words.join(" ")  }.`;
+    return `${words.join(" ")}.`;
   };
 
   const generateParagraph = (sentenceCount = 5): string => {
