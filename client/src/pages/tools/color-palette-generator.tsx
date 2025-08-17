@@ -11,12 +11,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { ColorPalette, ColorInfo } from "@/lib/color-tools";
-import {
+import type {
   getAllPaletteTypes,
   generateRandomColor,
   getContrastColor,
+  ColorPalette,
+  ColorInfo,
 } from "@/lib/color-tools";
+
 import {
   Palette,
   Copy,
