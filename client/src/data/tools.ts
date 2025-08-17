@@ -359,8 +359,3 @@ export function getDemoTools(): Array<{ name: string; path: string; description:
     description: tool.description
   }));
 }
-
-// Utility function to get total count of tools
-export function getTotalToolsCount(): number {
-  return getAllTools().length;
-}
