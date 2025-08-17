@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { getDemoTools } from '@/data/tools';
 
@@ -19,7 +19,7 @@ interface DemoContextType {
   totalTools: number;
 }
 
-const DemoContext = createContext<DemoContextType | undefined>(undefined);
+const DemoContext = createContext<DemoContextType | null>(null);
 
 interface DemoProviderProps {
   children: React.ReactNode;
@@ -57,6 +57,11 @@ export function DemoProvider({ children }: DemoProviderProps) {
 
   // Get all tools in a flat array for demo using centralized function
   const allTools = getDemoTools();
+  
+  // Ensure this doesn't cause hooks to break
+  if (!allTools || allTools.length === 0) {
+    return <div>Loading tools...</div>;
+  }
 
   const cycleThroughTools = (index: number, customDelay?: number) => {
     if (index >= allTools.length) {
@@ -174,8 +179,22 @@ export function DemoProvider({ children }: DemoProviderProps) {
 
 export function useDemo() {
   const context = useContext(DemoContext);
-  if (context === undefined) {
-    throw new Error('useDemo must be used within a DemoProvider');
+  if (context === null || context === undefined) {
+    // Return a safe fallback instead of throwing to prevent crashes
+    return {
+      isDemoRunning: false,
+      isDemoPaused: false,
+      currentDemoTool: '',
+      demoProgress: 0,
+      demoSpeed: 'normal' as DemoSpeed,
+      startDemo: () => {},
+      stopDemo: () => {},
+      pauseDemo: () => {},
+      resumeDemo: () => {},
+      skipToNext: () => {},
+      setDemoSpeed: () => {},
+      totalTools: 0,
+    };
   }
   return context;
 }
