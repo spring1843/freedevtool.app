@@ -240,7 +240,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
             toggleSection(currentItem.categoryName);
           }
           break;
-        case "Enter":
+        case "Enter": {
           e.preventDefault();
           const selectedItem = navigableItems[focusedIndex];
           if (
@@ -259,6 +259,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
             toggleSection(selectedItem.categoryName);
           }
           break;
+        }
         default: {
           // Handle default case
         }
