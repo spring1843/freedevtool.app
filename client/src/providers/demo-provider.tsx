@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useRef, useEffect } from 'react';
+import { createContext, useContext, useState, useRef, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { getDemoTools } from '@/data/tools';
 

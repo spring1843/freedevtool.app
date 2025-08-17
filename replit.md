@@ -61,6 +61,7 @@ The application operates without authentication requirements as all tools functi
 - **Code splitting** - Individual tools load on-demand (3-15kB each).
 - **Removed CodeMirror** - Replaced with lightweight RichTextarea (166 packages removed).
 - **Dependency cleanup** - Removed 90+ unused packages (testing, database, auth libraries).
+- **Component cleanup** - Removed 15+ unused UI components, 22% CSS reduction (92kB → 72kB).
 - Debounced input handling and tree shaking.
 - Browser caching (`Cache-Control: public, max-age=86400, must-revalidate`) for HTML routes.
 
