@@ -145,7 +145,7 @@ function Router() {
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="freedevtool-theme">
+    <ThemeProvider defaultTheme="system">
       <QueryClientProvider client={queryClient}>
         <DemoProvider>
           <TooltipProvider>

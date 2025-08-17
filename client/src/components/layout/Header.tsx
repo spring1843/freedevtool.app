@@ -18,9 +18,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  console.log("Header component rendering");
   const { theme, setTheme } = useTheme();
-  console.log("Theme context loaded:", { theme });
   const {
     searchQuery,
     setSearchQuery,
@@ -35,15 +33,11 @@ export function Header({ onMenuClick }: HeaderProps) {
   const searchRef = useRef<HTMLDivElement>(null);
 
   const toggleTheme = () => {
-    console.log("Toggle theme clicked, current theme:", theme);
     if (theme === "dark") {
-      console.log("Switching from dark to light");
       setTheme("light");
     } else if (theme === "light") {
-      console.log("Switching from light to system");
       setTheme("system");
     } else {
-      console.log("Switching from system to dark");
       setTheme("dark");
     }
   };
