@@ -80,6 +80,11 @@ The application operates without authentication requirements as all tools functi
 - **CI Dependency**: Release workflow requires CI to pass before allowing releases, ensuring quality control.
 - **GitHub Pages Deployment**: Each release deploys the same gzip package to GitHub Pages as a standalone web application.
 
+**Replit Deployment:**
+- **Cloud Run Target**: Configured for automatic deployment with build and run commands.
+- **Make Integration**: Added `make run` and `make build` targets for deployment compatibility.
+- **System Dependencies**: GNU Make installed for deployment environment compatibility.
+
 **Release Process:**
 - **Automatic**: Push git tags (e.g., `v1.0.0`) trigger releases after CI validation
 - **Manual**: GitHub Actions workflow dispatch with CI status verification

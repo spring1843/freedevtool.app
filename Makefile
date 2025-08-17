@@ -56,6 +56,9 @@ dev-port: ## Start development server with verbose logging on custom port (usage
 build: ## Build the application for production
 	npm run build
 
+run: ## Run the application in production (used by deployment)
+	npm start
+
 ## Code Quality Commands
 
 lint: ## Run ESLint to check for code issues
