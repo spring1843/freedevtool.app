@@ -238,9 +238,9 @@ export default function QRGenerator() {
     const presets = {
       text: ["Hello World!", "DevTools Suite", "Generated with QR Tool"],
       url: [
+        "https://freedevtool.app",
         "https://github.com",
         "https://google.com",
-        "https://stackoverflow.com",
       ],
       email: ["contact@example.com", "support@company.com", "hello@domain.com"],
       phone: ["+1-555-0123", "+44-20-7946-0958", "+81-3-1234-5678"],
@@ -502,13 +502,6 @@ export default function QRGenerator() {
               </ul>
             </div>
           </div>
-          <Alert>
-            <AlertDescription className="text-sm">
-              <strong>Note:</strong> QR codes are generated using Google Charts
-              API for simplicity. For production use, consider using a
-              client-side QR code library for better privacy and reliability.
-            </AlertDescription>
-          </Alert>
         </CardContent>
       </Card>
 
