@@ -152,7 +152,7 @@ export default function Home() {
                 <span className="text-xs text-slate-500 dark:text-slate-400">
                   Speed:
                 </span>
-                {(["slow", "normal", "fast", "very-fast"] as const).map(
+                {(["slow", "normal", "fast", "very-fast", "crazy-fast"] as const).map(
                   speed => (
                     <Button
                       key={speed}
@@ -163,6 +163,8 @@ export default function Home() {
                     >
                       {speed === "very-fast"
                         ? "Very Fast"
+                        : speed === "crazy-fast"
+                        ? "Crazy Fast"
                         : speed.charAt(0).toUpperCase() + speed.slice(1)}
                     </Button>
                   )

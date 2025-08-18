@@ -8,7 +8,7 @@ import React, {
 import { useLocation } from "wouter";
 import { getDemoTools } from "@/data/tools";
 
-type DemoSpeed = "slow" | "normal" | "fast" | "very-fast";
+type DemoSpeed = "slow" | "normal" | "fast" | "very-fast" | "crazy-fast";
 
 interface DemoContextType {
   isDemoRunning: boolean;
@@ -54,6 +54,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
     normal: 5000, // 5 seconds
     fast: 3000, // 3 seconds
     "very-fast": 1500, // 1.5 seconds
+    "crazy-fast": 100, // 100 milliseconds
   };
 
   // Wrapper function to save speed to localStorage and restart current cycle with new speed
