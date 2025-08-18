@@ -47,36 +47,27 @@ export function DemoProvider({ children }: DemoProviderProps) {
   const pauseStartTimeRef = useRef<number | null>(null);
   const remainingTimeRef = useRef<number>(0);
 
-  // Wrapper function to save speed to localStorage and adjust current timeout
-  const setDemoSpeed = (speed: DemoSpeed) => {
-    setDemoSpeedState(speed);
-    localStorage.setItem("freedevtool-demo-speed", speed);
-    
-    // If demo is running and not paused, adjust the current timeout
-    if (isDemoRunning && !isDemoPaused && demoTimeoutRef.current) {
-      // Calculate how much time has passed since the current cycle started
-      const elapsed = pauseStartTimeRef.current ? Date.now() - pauseStartTimeRef.current : 0;
-      const newDelay = speedConfig[speed];
-      
-      // Clear current timeout
-      clearTimeout(demoTimeoutRef.current);
-      
-      // Set new timeout with the new speed, but account for time already elapsed
-      const adjustedDelay = Math.max(100, newDelay - elapsed); // Minimum 100ms to avoid instant changes
-      remainingTimeRef.current = adjustedDelay;
-      
-      demoTimeoutRef.current = setTimeout(() => {
-        cycleThroughTools(currentIndexRef.current + 1);
-      }, adjustedDelay);
-    }
-  };
-
   // Speed configurations in milliseconds
   const speedConfig: Record<DemoSpeed, number> = {
     slow: 8000, // 8 seconds
     normal: 5000, // 5 seconds
     fast: 3000, // 3 seconds
     "very-fast": 1500, // 1.5 seconds
+  };
+
+  // Wrapper function to save speed to localStorage and restart current cycle with new speed
+  const setDemoSpeed = (speed: DemoSpeed) => {
+    setDemoSpeedState(speed);
+    localStorage.setItem("freedevtool-demo-speed", speed);
+    
+    // If demo is running and not paused, restart the current cycle with new speed
+    if (isDemoRunning && !isDemoPaused && demoTimeoutRef.current) {
+      // Clear current timeout
+      clearTimeout(demoTimeoutRef.current);
+      
+      // Restart current tool with new speed (skip to next immediately)
+      cycleThroughTools(currentIndexRef.current + 1);
+    }
   };
 
   // Get all tools in a flat array for demo using centralized function
