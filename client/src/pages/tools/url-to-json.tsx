@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { ToolTextArea } from "@/components/ui/tool-text-area";
 import { Label } from "@/components/ui/label";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
@@ -311,11 +312,17 @@ export default function URLToJSON() {
             <CardContent>
               {jsonOutput ? (
                 <div className="space-y-4">
-                  <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50">
-                    <pre className="text-sm font-mono text-slate-800 dark:text-slate-200 whitespace-pre-wrap break-all">
-                      {jsonOutput}
-                    </pre>
-                  </div>
+                  <ToolTextArea
+                    title=""
+                    value={jsonOutput}
+                    readOnly={true}
+                    language="json"
+                    showCharacterCount={true}
+                    showWordCount={false}
+                    showLineNumbers={true}
+                    minHeight={200}
+                    className="border-slate-200 dark:border-slate-700"
+                  />
 
                   {/* URL Components Summary */}
                   <div className="grid grid-cols-1 gap-3">
