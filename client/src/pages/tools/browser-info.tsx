@@ -225,9 +225,6 @@ export default function BrowserInfo() {
     setRefreshCount(1);
   }, []); // Only run once on mount
 
-  // Debug logging
-  console.log("Current browserInfo state:", browserInfo);
-
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -235,7 +232,8 @@ export default function BrowserInfo() {
         title: "Copied to clipboard",
         description: "Browser information copied successfully",
       });
-    } catch {
+    } catch (error) {
+      console.error("Clipboard copy failed:", error);
       toast({
         title: "Copy failed",
         description: "Could not copy to clipboard",
@@ -254,7 +252,9 @@ export default function BrowserInfo() {
       )
       .join("\n");
 
-    copyToClipboard(infoText);
+    copyToClipboard(infoText).catch(error => {
+      console.error("Failed to copy browser info:", error);
+    });
   };
 
   const formatBytes = (bytes: number) => {

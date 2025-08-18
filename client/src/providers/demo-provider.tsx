@@ -47,10 +47,28 @@ export function DemoProvider({ children }: DemoProviderProps) {
   const pauseStartTimeRef = useRef<number | null>(null);
   const remainingTimeRef = useRef<number>(0);
 
-  // Wrapper function to save speed to localStorage
+  // Wrapper function to save speed to localStorage and adjust current timeout
   const setDemoSpeed = (speed: DemoSpeed) => {
     setDemoSpeedState(speed);
     localStorage.setItem("freedevtool-demo-speed", speed);
+    
+    // If demo is running and not paused, adjust the current timeout
+    if (isDemoRunning && !isDemoPaused && demoTimeoutRef.current) {
+      // Calculate how much time has passed since the current cycle started
+      const elapsed = pauseStartTimeRef.current ? Date.now() - pauseStartTimeRef.current : 0;
+      const newDelay = speedConfig[speed];
+      
+      // Clear current timeout
+      clearTimeout(demoTimeoutRef.current);
+      
+      // Set new timeout with the new speed, but account for time already elapsed
+      const adjustedDelay = Math.max(100, newDelay - elapsed); // Minimum 100ms to avoid instant changes
+      remainingTimeRef.current = adjustedDelay;
+      
+      demoTimeoutRef.current = setTimeout(() => {
+        cycleThroughTools(currentIndexRef.current + 1);
+      }, adjustedDelay);
+    }
   };
 
   // Speed configurations in milliseconds
