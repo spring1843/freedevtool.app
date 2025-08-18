@@ -66,14 +66,28 @@ test.describe("Demo End-to-End Test", () => {
     await expect(resumeButton).toBeVisible();
     await resumeButton.click();
 
-    // Monitor demo progress and ensure it's making progress
+    // Track all visited tools during the demo
+    const visitedTools = new Set<string>();
     let currentProgress = 0;
     let progressChecks = 0;
-    const maxProgressChecks = 50; // Limit checks to prevent infinite loop
+    const maxProgressChecks = 200; // Increased for full demo
+    let lastUrl = "";
 
     while (currentProgress < 100 && progressChecks < maxProgressChecks) {
-      await page.waitForTimeout(500); // Wait 500ms between checks
+      await page.waitForTimeout(200); // Wait 200ms between checks
 
+      // Track tool visits
+      const currentUrl = page.url();
+      if (currentUrl !== lastUrl && currentUrl.includes("/tools/")) {
+        const toolPath = currentUrl.split("/tools/")[1];
+        if (toolPath && !visitedTools.has(toolPath)) {
+          visitedTools.add(toolPath);
+          console.log(`Visited tool #${visitedTools.size}: ${toolPath}`);
+        }
+        lastUrl = currentUrl;
+      }
+
+      // Check progress
       const progressText = await page
         .locator(".text-xs.text-blue-600")
         .first()
@@ -84,7 +98,6 @@ test.describe("Demo End-to-End Test", () => {
           const newProgress = parseInt(progressMatch[1], 10);
           if (newProgress > currentProgress) {
             currentProgress = newProgress;
-            console.log(`Demo progress: ${currentProgress}%`);
           }
         }
       }
@@ -110,8 +123,15 @@ test.describe("Demo End-to-End Test", () => {
         return !demoActive || !demoActive.isConnected;
       },
       undefined,
-      { timeout: 120000 } // 2 minutes max for crazy fast demo
+      { timeout: 300000 } // 5 minutes max for full demo tour
     );
+
+    // Verify we visited a substantial number of tools (should be all available tools)
+    console.log(`Demo completed! Visited ${visitedTools.size} tools total`);
+    console.log(`Tools visited: ${Array.from(visitedTools).sort().join(", ")}`);
+
+    // Expect to visit all 45 tools (or very close to it)
+    expect(visitedTools.size).toBeGreaterThanOrEqual(42);
 
     // Verify demo has completed and we're back to home state
     await expect(demoModeActive).not.toBeVisible();
@@ -186,16 +206,27 @@ test.describe("Demo End-to-End Test", () => {
     const visitedTools = new Set<string>();
     let lastUrl = "";
 
-    // Monitor URL changes for the first several tools
-    for (let i = 0; i < 10; i++) {
-      await page.waitForTimeout(200); // Short wait between checks
+    // Monitor URL changes for a longer period to visit more tools
+    let checksWithoutNewTool = 0;
+    const maxChecksWithoutNewTool = 25;
+
+    while (
+      checksWithoutNewTool < maxChecksWithoutNewTool &&
+      visitedTools.size < 15
+    ) {
+      await page.waitForTimeout(150); // Short wait between checks
 
       const currentUrl = page.url();
       if (currentUrl !== lastUrl && currentUrl.includes("/tools/")) {
         const toolPath = currentUrl.split("/tools/")[1];
-        visitedTools.add(toolPath);
-        lastUrl = currentUrl;
-        console.log(`Visited tool: ${toolPath}`);
+        if (toolPath && !visitedTools.has(toolPath)) {
+          visitedTools.add(toolPath);
+          lastUrl = currentUrl;
+          console.log(`Visited tool: ${toolPath} (${visitedTools.size} total)`);
+          checksWithoutNewTool = 0;
+        }
+      } else {
+        checksWithoutNewTool++;
       }
 
       // Check if demo is still running
@@ -207,9 +238,12 @@ test.describe("Demo End-to-End Test", () => {
       }
     }
 
-    // Verify we visited multiple tools
-    expect(visitedTools.size).toBeGreaterThan(0);
-    console.log(`Visited ${visitedTools.size} tools during demo sample`);
+    // Verify we visited a substantial number of tools
+    expect(visitedTools.size).toBeGreaterThan(5);
+    console.log(
+      `Visited ${visitedTools.size} tools during demo navigation test`
+    );
+    console.log(`Tools visited: ${Array.from(visitedTools).sort().join(", ")}`);
 
     // Stop demo for cleanup
     const stopButton = page.locator('button:has-text("Stop")');
