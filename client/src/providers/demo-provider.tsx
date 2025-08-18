@@ -62,12 +62,12 @@ export function DemoProvider({ children }: DemoProviderProps) {
     setDemoSpeedState(speed);
     demoSpeedRef.current = speed; // Update ref immediately
     localStorage.setItem("freedevtool-demo-speed", speed);
-    
+
     // If demo is running and not paused, restart the current cycle with new speed
     if (isDemoRunning && !isDemoPaused && demoTimeoutRef.current) {
       // Clear current timeout
       clearTimeout(demoTimeoutRef.current);
-      
+
       // Restart current tool with new speed (skip to next immediately)
       cycleThroughTools(currentIndexRef.current + 1);
     }
@@ -98,7 +98,9 @@ export function DemoProvider({ children }: DemoProviderProps) {
 
     // Set up next tool after configured delay - use ref to get current speed
     const delay =
-      customDelay !== undefined ? customDelay : speedConfig[demoSpeedRef.current];
+      customDelay !== undefined
+        ? customDelay
+        : speedConfig[demoSpeedRef.current];
     remainingTimeRef.current = delay;
     pauseStartTimeRef.current = Date.now();
 
