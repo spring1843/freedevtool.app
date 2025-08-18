@@ -68,7 +68,7 @@ The application operates without authentication requirements as all tools functi
 - Each tool has dedicated test coverage verifying page loads without JavaScript/CSS errors.
 - Isolated test failures allow precise identification of broken tools during development.
 - Theme toggle functionality validation with proper state persistence across navigation.
-- Demo functionality testing to ensure interactive tours work properly across tools.
+- Comprehensive demo functionality testing (`tests/e2e/demo.spec.ts`) including speed changes, pause/resume, and full tour completion in crazy fast mode.
 - Search and navigation testing to verify tool discovery and routing functionality.
 - Robust e2e tests using proper wait conditions instead of fixed timeouts to prevent flaky tests.
 - Tests use `page.waitForFunction()` to wait for actual DOM changes rather than arbitrary delays.
