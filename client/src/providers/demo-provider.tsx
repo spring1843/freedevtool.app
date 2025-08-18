@@ -8,7 +8,7 @@ import React, {
 import { useLocation } from "wouter";
 import { getDemoTools } from "@/data/tools";
 
-type DemoSpeed = "slow" | "normal" | "fast" | "very-fast";
+type DemoSpeed = "slow" | "normal" | "fast" | "very-fast" | "crazy-fast";
 
 interface DemoContextType {
   isDemoRunning: boolean;
@@ -46,12 +46,7 @@ export function DemoProvider({ children }: DemoProviderProps) {
   const currentIndexRef = useRef(0);
   const pauseStartTimeRef = useRef<number | null>(null);
   const remainingTimeRef = useRef<number>(0);
-
-  // Wrapper function to save speed to localStorage
-  const setDemoSpeed = (speed: DemoSpeed) => {
-    setDemoSpeedState(speed);
-    localStorage.setItem("freedevtool-demo-speed", speed);
-  };
+  const demoSpeedRef = useRef<DemoSpeed>(demoSpeed);
 
   // Speed configurations in milliseconds
   const speedConfig: Record<DemoSpeed, number> = {
@@ -59,7 +54,29 @@ export function DemoProvider({ children }: DemoProviderProps) {
     normal: 5000, // 5 seconds
     fast: 3000, // 3 seconds
     "very-fast": 1500, // 1.5 seconds
+    "crazy-fast": 100, // 100 milliseconds
   };
+
+  // Wrapper function to save speed to localStorage and restart current cycle with new speed
+  const setDemoSpeed = (speed: DemoSpeed) => {
+    setDemoSpeedState(speed);
+    demoSpeedRef.current = speed; // Update ref immediately
+    localStorage.setItem("freedevtool-demo-speed", speed);
+
+    // If demo is running and not paused, restart the current cycle with new speed
+    if (isDemoRunning && !isDemoPaused && demoTimeoutRef.current) {
+      // Clear current timeout
+      clearTimeout(demoTimeoutRef.current);
+
+      // Restart current tool with new speed (skip to next immediately)
+      cycleThroughTools(currentIndexRef.current + 1);
+    }
+  };
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    demoSpeedRef.current = demoSpeed;
+  }, [demoSpeed]);
 
   // Get all tools in a flat array for demo using centralized function
   const allTools = getDemoTools();
@@ -79,9 +96,11 @@ export function DemoProvider({ children }: DemoProviderProps) {
     // Navigate to the tool
     setLocation(tool.path);
 
-    // Set up next tool after configured delay
+    // Set up next tool after configured delay - use ref to get current speed
     const delay =
-      customDelay !== undefined ? customDelay : speedConfig[demoSpeed];
+      customDelay !== undefined
+        ? customDelay
+        : speedConfig[demoSpeedRef.current];
     remainingTimeRef.current = delay;
     pauseStartTimeRef.current = Date.now();
 

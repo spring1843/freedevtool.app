@@ -130,6 +130,30 @@ export default function Home() {
               {Math.round(demoProgress)}% complete •{" "}
               {isDemoPaused ? "Paused" : `${demoSpeed.replace("-", " ")} speed`}
             </div>
+
+            {/* Speed Selector during demo */}
+            <div className="flex items-center justify-center space-x-2 mt-3">
+              <span className="text-xs text-blue-600 dark:text-blue-400">
+                Speed:
+              </span>
+              {(
+                ["slow", "normal", "fast", "very-fast", "crazy-fast"] as const
+              ).map(speed => (
+                <Button
+                  key={speed}
+                  size="sm"
+                  variant={demoSpeed === speed ? "default" : "outline"}
+                  onClick={() => setDemoSpeed(speed)}
+                  className="h-5 px-2 text-xs"
+                >
+                  {speed === "very-fast"
+                    ? "Very Fast"
+                    : speed === "crazy-fast"
+                      ? "Crazy Fast"
+                      : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                </Button>
+              ))}
+            </div>
           </div>
         ) : null}
 
@@ -152,21 +176,23 @@ export default function Home() {
                 <span className="text-xs text-slate-500 dark:text-slate-400">
                   Speed:
                 </span>
-                {(["slow", "normal", "fast", "very-fast"] as const).map(
-                  speed => (
-                    <Button
-                      key={speed}
-                      size="sm"
-                      variant={demoSpeed === speed ? "default" : "outline"}
-                      onClick={() => setDemoSpeed(speed)}
-                      className="h-6 px-2 text-xs"
-                    >
-                      {speed === "very-fast"
-                        ? "Very Fast"
+                {(
+                  ["slow", "normal", "fast", "very-fast", "crazy-fast"] as const
+                ).map(speed => (
+                  <Button
+                    key={speed}
+                    size="sm"
+                    variant={demoSpeed === speed ? "default" : "outline"}
+                    onClick={() => setDemoSpeed(speed)}
+                    className="h-6 px-2 text-xs"
+                  >
+                    {speed === "very-fast"
+                      ? "Very Fast"
+                      : speed === "crazy-fast"
+                        ? "Crazy Fast"
                         : speed.charAt(0).toUpperCase() + speed.slice(1)}
-                    </Button>
-                  )
-                )}
+                  </Button>
+                ))}
               </div>
 
               <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
