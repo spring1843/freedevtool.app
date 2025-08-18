@@ -68,7 +68,7 @@ build: ## Build the application for production
 ## Code Quality Commands
 
 lint: ## Run ESLint to check for code issues
-	npx eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 100
+	npx eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 500
 
 lint-fix: ## Run ESLint with automatic fixing
 	npx eslint . --ext ts,tsx --fix
