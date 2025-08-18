@@ -72,7 +72,6 @@ The application operates without authentication requirements as all tools functi
 - Search and navigation testing to verify tool discovery and routing functionality.
 - Robust e2e tests using proper wait conditions instead of fixed timeouts to prevent flaky tests.
 - Tests use `page.waitForFunction()` to wait for actual DOM changes rather than arbitrary delays.
-- Automated test generation script for creating new tool tests (`scripts/generate-tool-tests.js`).
 - CI/CD pipeline includes comprehensive testing with 146 unit tests and full e2e validation.
 
 **Security Features:**
