@@ -10,6 +10,36 @@ test.describe("Demo End-to-End Test", () => {
   test("should complete full demo tour with speed change from normal to crazy fast", async ({
     page,
   }) => {
+    // Set up comprehensive error tracking for each tool
+    await page.addInitScript(() => {
+      (window as any).toolErrors = new Map();
+      (window as any).currentTool = "";
+
+      window.addEventListener("error", e => {
+        const tool = (window as any).currentTool || "unknown";
+        if (!(window as any).toolErrors.has(tool)) {
+          (window as any).toolErrors.set(tool, []);
+        }
+        (window as any).toolErrors.get(tool).push({
+          type: "javascript",
+          message: e.message,
+          filename: e.filename,
+          lineno: e.lineno,
+        });
+      });
+
+      window.addEventListener("unhandledrejection", e => {
+        const tool = (window as any).currentTool || "unknown";
+        if (!(window as any).toolErrors.has(tool)) {
+          (window as any).toolErrors.set(tool, []);
+        }
+        (window as any).toolErrors.get(tool).push({
+          type: "unhandled-promise",
+          message: `${e.reason}`,
+        });
+      });
+    });
+
     // Verify demo start button is visible
     const startDemoButton = page.locator('[data-testid="start-demo-button"]');
     await expect(startDemoButton).toBeVisible();
@@ -76,13 +106,42 @@ test.describe("Demo End-to-End Test", () => {
     while (currentProgress < 100 && progressChecks < maxProgressChecks) {
       await page.waitForTimeout(200); // Wait 200ms between checks
 
-      // Track tool visits
+      // Track tool visits and check for errors
       const currentUrl = page.url();
       if (currentUrl !== lastUrl && currentUrl.includes("/tools/")) {
         const toolPath = currentUrl.split("/tools/")[1];
         if (toolPath && !visitedTools.has(toolPath)) {
           visitedTools.add(toolPath);
-          console.log(`Visited tool #${visitedTools.size}: ${toolPath}`);
+
+          // Set current tool for error tracking
+          await page.evaluate(tool => {
+            (window as any).currentTool = tool;
+          }, toolPath);
+
+          // Wait a moment for the tool to load and any errors to surface
+          await page.waitForTimeout(300);
+
+          // Check for errors in this tool
+          const toolErrors = await page.evaluate(tool => {
+            const errors = (window as any).toolErrors.get(tool) || [];
+            return errors;
+          }, toolPath);
+
+          if (toolErrors.length > 0) {
+            console.error(
+              `Tool "${toolPath}" has ${toolErrors.length} error(s):`
+            );
+            toolErrors.forEach((error: any, index: number) => {
+              console.error(`  ${index + 1}. [${error.type}] ${error.message}`);
+              if (error.filename) {
+                console.error(`     File: ${error.filename}:${error.lineno}`);
+              }
+            });
+          } else {
+            console.log(
+              `✓ Tool #${visitedTools.size}: ${toolPath} - no errors`
+            );
+          }
         }
         lastUrl = currentUrl;
       }
@@ -137,13 +196,39 @@ test.describe("Demo End-to-End Test", () => {
     await expect(demoModeActive).not.toBeVisible();
     await expect(startDemoButton).toBeVisible();
 
-    // Verify no JavaScript errors occurred during demo
-    const errors = await page.evaluate(() => (window as any).jsErrors || []);
-    expect(errors.length).toBe(0);
+    // Generate final error report for all tools
+    const allToolErrors = await page.evaluate(() => {
+      const errorMap = (window as any).toolErrors;
+      const report: any = {};
+      if (errorMap) {
+        for (const [tool, errors] of errorMap.entries()) {
+          if (errors.length > 0) {
+            report[tool] = errors;
+          }
+        }
+      }
+      return report;
+    });
 
-    console.log(
-      `Demo completed successfully! Final progress: ${currentProgress}%`
-    );
+    const errorCount = Object.keys(allToolErrors).length;
+    if (errorCount > 0) {
+      console.error(`\n❌ Demo completed with errors in ${errorCount} tools:`);
+      Object.entries(allToolErrors).forEach(([tool, errors]: [string, any]) => {
+        console.error(`\n  Tool: ${tool}`);
+        errors.forEach((error: any, index: number) => {
+          console.error(`    ${index + 1}. [${error.type}] ${error.message}`);
+          if (error.filename) {
+            console.error(`       File: ${error.filename}:${error.lineno}`);
+          }
+        });
+      });
+    } else {
+      console.log(
+        `\n✅ Demo completed successfully with NO errors in any tools!`
+      );
+    }
+
+    console.log(`Demo completed! Final progress: ${currentProgress}%`);
   });
 
   test("should handle demo interruption and cleanup properly", async ({
