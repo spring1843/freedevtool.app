@@ -409,17 +409,25 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                                 variant="ghost"
                                 className={cn(
                                   "w-full justify-start text-sm transition-all duration-300 relative rounded-xl h-11 group hover:scale-[1.02] hover:shadow-sm",
-                                  isActive
-                                    ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg font-medium transform scale-[1.02]"
-                                    : isVisited
-                                      ? "text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800",
+                                  (() => {
+                                    if (isActive) {
+                                      return "bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg font-medium transform scale-[1.02]";
+                                    }
+                                    if (isVisited) {
+                                      return "text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20";
+                                    }
+                                    return "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800";
+                                  })(),
                                   isToolFocused &&
-                                    (isActive
-                                      ? "ring-2 ring-primary-foreground/50 shadow-lg scale-105"
-                                      : isVisited
-                                        ? "bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 scale-[1.02] shadow-sm ring-2 ring-purple-400/30"
-                                        : "bg-slate-100 dark:bg-slate-700 hover:bg-slate-150 dark:hover:bg-slate-600 scale-[1.02] shadow-sm ring-2 ring-primary/30")
+                                    (() => {
+                                      if (isActive) {
+                                        return "ring-2 ring-primary-foreground/50 shadow-lg scale-105";
+                                      }
+                                      if (isVisited) {
+                                        return "bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 scale-[1.02] shadow-sm ring-2 ring-purple-400/30";
+                                      }
+                                      return "bg-slate-100 dark:bg-slate-700 hover:bg-slate-150 dark:hover:bg-slate-600 scale-[1.02] shadow-sm ring-2 ring-primary/30";
+                                    })()
                                 )}
                                 data-testid={`tool-${tool.path.slice(1) || "date-converter"}`}
                                 tabIndex={-1}

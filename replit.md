@@ -51,7 +51,7 @@ The application operates without authentication requirements as all tools functi
 **Tool Architecture:**
 - Unified tool layout with consistent error handling and validation.
 - URL sharing for state persistence.
-- Demo system with automated tours, pause/resume, and 5 speed options (Slow, Normal, Fast, Very Fast, Crazy Fast).
+- Demo system with automated tours, pause/resume, and 5 speed options (Slow, Normal, Fast, Very Fast, Crazy Fast) available in both homepage controls and layout dropdown during demo playback.
 - Comprehensive time tools: Universal keyboard shortcuts (Enter, Space, Escape), auto-start with engaging defaults, contextual quick-access buttons, and maximum precision.
 - Date converter redesigned with 20 practical, internationally recognized formats categorized for enhanced UX, including auto-detection of input formats.
 - Enhanced RichTextarea component: Word wrap enabled by default with toggle, copy functionality, line numbers (no-wrap mode only), adjustable sizing, and integrated controls bar.
@@ -68,11 +68,10 @@ The application operates without authentication requirements as all tools functi
 - Each tool has dedicated test coverage verifying page loads without JavaScript/CSS errors.
 - Isolated test failures allow precise identification of broken tools during development.
 - Theme toggle functionality validation with proper state persistence across navigation.
-- Demo functionality testing to ensure interactive tours work properly across tools.
+- Comprehensive demo functionality testing (`tests/e2e/demo.spec.ts`) that validates visiting all 45 tools with speed changes from normal to crazy fast mode, tracks JavaScript/CSS errors for each tool load, and provides detailed error reporting for any problematic tools.
 - Search and navigation testing to verify tool discovery and routing functionality.
 - Robust e2e tests using proper wait conditions instead of fixed timeouts to prevent flaky tests.
 - Tests use `page.waitForFunction()` to wait for actual DOM changes rather than arbitrary delays.
-- Automated test generation script for creating new tool tests (`scripts/generate-tool-tests.js`).
 - CI/CD pipeline includes comprehensive testing with 146 unit tests and full e2e validation.
 
 **Security Features:**

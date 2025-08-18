@@ -174,6 +174,9 @@ export function Layout({ children }: LayoutProps) {
                       <SelectItem value="very-fast" className="text-xs">
                         Very Fast (1.5s)
                       </SelectItem>
+                      <SelectItem value="crazy-fast" className="text-xs">
+                        Crazy Fast (100ms)
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
