@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,8 +26,6 @@ import {
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 
-import { usePersistentForm } from "@/hooks/use-persistent-state";
-
 interface CSVRow {
   [key: string]: string;
 }
@@ -42,25 +40,24 @@ const delimiters = [
 ];
 
 export default function CSVToJSON() {
-  const { fields, updateField } = usePersistentForm("csv-to-json", {
-    csvInput: `name,email,age,city
+  const [csvInput, setCsvInput] = useState(`name,email,age,city
 John Doe,john@example.com,30,New York
 Jane Smith,jane@example.com,25,Los Angeles
-Bob Johnson,bob@example.com,35,Chicago`,
-    selectedDelimiter: ",",
-    jsonOutput: "",
-    parsedData: [] as CSVRow[],
-    headers: [] as string[],
-    error: "",
-    rowCount: 0,
-  });
+Bob Johnson,bob@example.com,35,Chicago`);
+  const [selectedDelimiter, setSelectedDelimiter] = useState(",");
+  const [jsonOutput, setJsonOutput] = useState("");
+  const [_parsedData, setParsedData] = useState<CSVRow[]>([]);
+  const [headers, setHeaders] = useState<string[]>([]);
+  const [error, setError] = useState("");
+  const [rowCount, setRowCount] = useState(0);
+
   const { toast } = useToast();
 
+  // Load URL parameters on mount
   useEffect(() => {
-    // Load parameters from URL with validation
     const urlCsv = getValidatedParam("csv", "", {
       type: "string",
-      maxLength: 10000, // Limit CSV size in URL
+      maxLength: 10000,
     });
     const urlDelimiter = getValidatedParam("delimiter", ",", {
       type: "enum",
@@ -68,19 +65,24 @@ Bob Johnson,bob@example.com,35,Chicago`,
     });
 
     if (urlCsv) {
-      updateField("csvInput", urlCsv);
+      setCsvInput(decodeURIComponent(urlCsv as string));
     }
-    updateField("selectedDelimiter", urlDelimiter);
+    setSelectedDelimiter(urlDelimiter as string);
   }, []);
 
+  // Update URL when input changes
+  useEffect(() => {
+    updateURL({
+      csv: encodeURIComponent(csvInput.slice(0, 500)),
+      delimiter: selectedDelimiter,
+    });
+  }, [csvInput, selectedDelimiter]);
+
+  // Parse CSV when input changes
   useEffect(() => {
     convertCSV();
-    // Update URL when input changes
-    updateURL({
-      csv: encodeURIComponent(fields.csvInput.slice(0, 500)), // Limit URL length
-      delimiter: fields.selectedDelimiter,
-    });
-  }, [fields.csvInput, fields.selectedDelimiter]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [csvInput, selectedDelimiter]);
 
   const parseCSVLine = (line: string, delimiter: string): string[] => {
     const result: string[] = [];
@@ -93,16 +95,13 @@ Bob Johnson,bob@example.com,35,Chicago`,
 
       if (char === '"') {
         if (inQuotes && line[i + 1] === '"') {
-          // Escaped quote
           current += '"';
           i += 2;
         } else {
-          // Toggle quotes
           inQuotes = !inQuotes;
           i++;
         }
       } else if (char === delimiter && !inQuotes) {
-        // End of field
         result.push(current.trim());
         current = "";
         i++;
@@ -112,24 +111,23 @@ Bob Johnson,bob@example.com,35,Chicago`,
       }
     }
 
-    // Add the last field
     result.push(current.trim());
     return result;
   };
 
   const convertCSV = () => {
     try {
-      updateField("error", "");
+      setError("");
 
-      if (!fields.csvInput.trim()) {
-        updateField("parsedData", []);
-        updateField("jsonOutput", "");
-        updateField("headers", []);
-        updateField("rowCount", 0);
+      if (!csvInput.trim()) {
+        setParsedData([]);
+        setJsonOutput("");
+        setHeaders([]);
+        setRowCount(0);
         return;
       }
 
-      const lines = fields.csvInput
+      const lines = csvInput
         .trim()
         .split("\n")
         .filter((line: string) => line.trim());
@@ -138,9 +136,9 @@ Bob Johnson,bob@example.com,35,Chicago`,
         throw new Error("No data found");
       }
 
-      // Parse headers from first line
+      // Parse headers
       const headerLine = lines[0];
-      const parsedHeaders = parseCSVLine(headerLine, fields.selectedDelimiter)
+      const parsedHeaders = parseCSVLine(headerLine, selectedDelimiter)
         .map(header => header.replace(/^["']|["']$/g, "").trim())
         .filter(header => header.length > 0);
 
@@ -148,7 +146,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
         throw new Error("No headers found in the first line");
       }
 
-      updateField("headers", parsedHeaders);
+      setHeaders(parsedHeaders);
 
       // Parse data rows
       const dataRows: CSVRow[] = [];
@@ -157,10 +155,9 @@ Bob Johnson,bob@example.com,35,Chicago`,
         const line = lines[i].trim();
         if (!line) continue;
 
-        const values = parseCSVLine(line, fields.selectedDelimiter);
+        const values = parseCSVLine(line, selectedDelimiter);
         const row: CSVRow = {};
 
-        // Map values to headers
         parsedHeaders.forEach((header, index) => {
           const value = values[index] || "";
           row[header] = value.replace(/^["']|["']$/g, "").trim();
@@ -169,23 +166,23 @@ Bob Johnson,bob@example.com,35,Chicago`,
         dataRows.push(row);
       }
 
-      updateField("parsedData", dataRows);
-      updateField("rowCount", dataRows.length);
-      updateField("jsonOutput", JSON.stringify(dataRows, null, 2));
+      setParsedData(dataRows);
+      setRowCount(dataRows.length);
+      setJsonOutput(JSON.stringify(dataRows, null, 2));
     } catch {
       const errorMessage = "Failed to parse CSV";
-      updateField("error", errorMessage);
-      updateField("parsedData", []);
-      updateField("jsonOutput", "");
-      updateField("headers", []);
-      updateField("rowCount", 0);
+      setError(errorMessage);
+      setParsedData([]);
+      setJsonOutput("");
+      setHeaders([]);
+      setRowCount(0);
     }
   };
 
   const shareConverter = async () => {
     const success = await copyShareableURL({
-      csv: encodeURIComponent(fields.csvInput.slice(0, 500)),
-      delimiter: fields.selectedDelimiter,
+      csv: encodeURIComponent(csvInput.slice(0, 500)),
+      delimiter: selectedDelimiter,
     });
     if (success) {
       toast({
@@ -218,37 +215,37 @@ John Doe        john@example.com        30      Engineering
 Jane Smith      jane@example.com        25      Marketing`,
     };
 
-    updateField("csvInput", samples[type]);
+    setCsvInput(samples[type]);
 
     if (type === "semicolon") {
-      updateField("selectedDelimiter", ";");
+      setSelectedDelimiter(";");
     } else if (type === "tab") {
-      updateField("selectedDelimiter", "\t");
+      setSelectedDelimiter("\t");
     } else {
-      updateField("selectedDelimiter", ",");
+      setSelectedDelimiter(",");
     }
   };
 
   const clearAll = () => {
-    updateField("csvInput", "");
-    updateField("parsedData", []);
-    updateField("jsonOutput", "");
-    updateField("headers", []);
-    updateField("rowCount", 0);
-    updateField("error", "");
+    setCsvInput("");
+    setParsedData([]);
+    setJsonOutput("");
+    setHeaders([]);
+    setRowCount(0);
+    setError("");
   };
 
   const downloadJSON = () => {
-    if (!fields.jsonOutput) return;
+    if (!jsonOutput) return;
 
-    const blob = new Blob([fields.jsonOutput], { type: "application/json" });
+    const blob = new Blob([jsonOutput], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "converted_data.json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "data.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
 
@@ -259,356 +256,208 @@ Jane Smith      jane@example.com        25      Marketing`,
     const reader = new FileReader();
     reader.onload = e => {
       const content = e.target?.result as string;
-      updateField("csvInput", content);
+      setCsvInput(content);
     };
     reader.readAsText(file);
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
-      {/* Header */}
+    <div className="container mx-auto p-6 max-w-7xl">
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
+          <FileSpreadsheet className="h-8 w-8 text-blue-600" />
           CSV to JSON Converter
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Convert CSV data to JSON format with automatic header detection and
-          customizable delimiters
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Convert CSV data to JSON format with customizable delimiters and
+          formatting options.
         </p>
       </div>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        {/* Input Section */}
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <FileSpreadsheet className="w-5 h-5 mr-2" />
-                CSV Input
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="delimiter-select">Delimiter</Label>
-                <Select
-                  value={fields.selectedDelimiter}
-                  onValueChange={value =>
-                    updateField("selectedDelimiter", value)
-                  }
-                >
-                  <SelectTrigger data-testid="delimiter-select">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {delimiters.map(delimiter => (
-                      <SelectItem key={delimiter.value} value={delimiter.value}>
-                        {delimiter.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileSpreadsheet className="h-5 w-5" />
+              CSV Input
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-wrap gap-2 items-center">
+              <Label htmlFor="delimiter-select">Delimiter:</Label>
+              <Select
+                value={selectedDelimiter}
+                onValueChange={setSelectedDelimiter}
+                data-testid="delimiter-select"
+              >
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {delimiters.map(delimiter => (
+                    <SelectItem key={delimiter.value} value={delimiter.value}>
+                      {delimiter.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <Label htmlFor="csv-input">CSV Data</Label>
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="file"
-                      accept=".csv,.txt"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="file-upload"
-                    />
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        document.getElementById("file-upload")?.click()
-                      }
-                      data-testid="upload-file-button"
-                    >
-                      <Upload className="w-4 h-4 mr-1" />
-                      Upload
-                    </Button>
-                  </div>
-                </div>
-                <Textarea
-                  value={fields.csvInput}
-                  onChange={e => updateField("csvInput", e.target.value)}
-                  placeholder="name,email,age
-John Doe,john@example.com,30
-Jane Smith,jane@example.com,25"
-                  className="min-h-[200px] font-mono text-sm"
-                  data-testid="csv-input"
-                  rows={10}
-                  showLineNumbers={true}
-                  showStats={true}
+              <div className="flex gap-2 ml-auto">
+                <Button
+                  onClick={clearAll}
+                  variant="outline"
+                  size="sm"
+                  data-testid="clear-button"
+                >
+                  Clear
+                </Button>
+                <Button
+                  onClick={() => document.getElementById("file-input")?.click()}
+                  variant="outline"
+                  size="sm"
+                  data-testid="upload-file-button"
+                >
+                  <Upload className="w-4 h-4 mr-1" />
+                  Upload
+                </Button>
+                <input
+                  id="file-input"
+                  type="file"
+                  accept=".csv"
+                  onChange={handleFileUpload}
+                  className="hidden"
                 />
               </div>
+            </div>
 
-              {fields.error ? (
-                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-sm text-red-700 dark:text-red-400">
-                    {fields.error}
-                  </p>
-                </div>
-              ) : null}
+            <Textarea
+              value={csvInput}
+              onChange={e => setCsvInput(e.target.value)}
+              placeholder="name,email,age
+John Doe,john@example.com,30
+Jane Smith,jane@example.com,25"
+              className="min-h-[200px] font-mono text-sm"
+              data-testid="csv-input"
+              rows={10}
+            />
 
-              <div className="flex gap-2">
-                <Button
-                  onClick={convertCSV}
-                  className="flex-1"
-                  data-testid="convert-button"
-                >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Convert
-                </Button>
-
-                <Button
-                  onClick={shareConverter}
-                  variant="outline"
-                  data-testid="share-converter-button"
-                >
-                  <Share className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
+            {error ? (
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <p className="text-sm text-red-700 dark:text-red-400">
+                  {error}
+                </p>
               </div>
+            ) : null}
 
-              <div className="grid grid-cols-2 gap-2">
-                <Button
-                  onClick={() => loadSampleData("simple")}
-                  variant="outline"
-                  size="sm"
-                  data-testid="load-simple-button"
-                >
-                  Simple CSV
-                </Button>
-                <Button
-                  onClick={() => loadSampleData("complex")}
-                  variant="outline"
-                  size="sm"
-                  data-testid="load-complex-button"
-                >
-                  Complex CSV
-                </Button>
-                <Button
-                  onClick={() => loadSampleData("semicolon")}
-                  variant="outline"
-                  size="sm"
-                  data-testid="load-semicolon-button"
-                >
-                  Semicolon (;)
-                </Button>
-                <Button
-                  onClick={() => loadSampleData("tab")}
-                  variant="outline"
-                  size="sm"
-                  data-testid="load-tab-button"
-                >
-                  Tab Delimited
-                </Button>
-              </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={convertCSV}
+                className="flex-1"
+                data-testid="convert-button"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Convert
+              </Button>
 
               <Button
-                onClick={clearAll}
+                onClick={shareConverter}
+                variant="outline"
+                data-testid="share-converter-button"
+              >
+                <Share className="w-4 h-4 mr-2" />
+                Share
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                onClick={() => loadSampleData("simple")}
                 variant="outline"
                 size="sm"
-                className="w-full"
-                data-testid="clear-button"
+                data-testid="load-simple-button"
               >
-                Clear Input
+                Simple CSV
               </Button>
-            </CardContent>
-          </Card>
-        </div>
+              <Button
+                onClick={() => loadSampleData("complex")}
+                variant="outline"
+                size="sm"
+                data-testid="load-complex-button"
+              >
+                Complex CSV
+              </Button>
+              <Button
+                onClick={() => loadSampleData("semicolon")}
+                variant="outline"
+                size="sm"
+                data-testid="load-semicolon-button"
+              >
+                Semicolon CSV
+              </Button>
+              <Button
+                onClick={() => loadSampleData("tab")}
+                variant="outline"
+                size="sm"
+                data-testid="load-tab-button"
+              >
+                Tab Delimited
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-        {/* Output Section */}
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center">
-                  <Code2 className="w-5 h-5 mr-2" />
-                  JSON Output
-                  {fields.rowCount > 0 && (
-                    <span className="ml-2 text-sm font-normal text-slate-500 dark:text-slate-400">
-                      ({fields.rowCount} rows)
-                    </span>
-                  )}
-                </CardTitle>
-                {fields.jsonOutput ? (
-                  <div className="flex gap-2">
-                    <CopyButton
-                      text={fields.jsonOutput}
-                      variant="outline"
-                      size="sm"
-                    />
-                    <Button
-                      onClick={downloadJSON}
-                      variant="outline"
-                      size="sm"
-                      data-testid="download-json-button"
-                    >
-                      <Download className="w-4 h-4 mr-1" />
-                      Download
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
-            </CardHeader>
-            <CardContent>
-              {fields.jsonOutput ? (
-                <div className="space-y-4">
-                  {/* Headers Preview */}
-                  {fields.headers.length > 0 && (
-                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                      <h4 className="text-sm font-medium text-blue-700 dark:text-blue-400 mb-2">
-                        Detected Headers ({fields.headers.length}):
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {fields.headers.map((header: string, index: number) => (
-                          <span
-                            key={index}
-                            className="px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 text-xs rounded"
-                          >
-                            {header}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* JSON Output */}
-                  <Textarea
-                    value={fields.jsonOutput}
-                    readOnly={true}
-                    className="font-mono text-sm min-h-[400px] resize-none"
-                    placeholder="JSON output will appear here..."
-                  />
-
-                  {/* Data Preview Table */}
-                  {fields.parsedData.length > 0 && (
-                    <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
-                      <div className="bg-slate-100 dark:bg-slate-800 px-4 py-2 border-b border-slate-200 dark:border-slate-700">
-                        <h4 className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                          Data Preview (First 5 rows)
-                        </h4>
-                      </div>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                          <thead className="bg-slate-50 dark:bg-slate-700">
-                            <tr>
-                              {fields.headers.map(
-                                (header: string, index: number) => (
-                                  <th
-                                    key={index}
-                                    className="px-3 py-2 text-left font-medium text-slate-600 dark:text-slate-400 border-r border-slate-200 dark:border-slate-600 last:border-r-0"
-                                  >
-                                    {header}
-                                  </th>
-                                )
-                              )}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {fields.parsedData
-                              .slice(0, 5)
-                              .map((row: CSVRow, rowIndex: number) => (
-                                <tr
-                                  key={rowIndex}
-                                  className="border-t border-slate-200 dark:border-slate-600"
-                                >
-                                  {fields.headers.map(
-                                    (header: string, colIndex: number) => (
-                                      <td
-                                        key={colIndex}
-                                        className="px-3 py-2 text-slate-800 dark:text-slate-200 border-r border-slate-200 dark:border-slate-600 last:border-r-0"
-                                      >
-                                        {row[header] || ""}
-                                      </td>
-                                    )
-                                  )}
-                                </tr>
-                              ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      {fields.parsedData.length > 5 && (
-                        <div className="bg-slate-50 dark:bg-slate-800 px-4 py-2 text-sm text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-700">
-                          ... and {fields.parsedData.length - 5} more rows
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-slate-500 dark:text-slate-400">
-                  <FileSpreadsheet className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p>Enter CSV data above to see the JSON conversion</p>
-                </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Code2 className="h-5 w-5" />
+              JSON Output
+              {rowCount > 0 && (
+                <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
+                  ({rowCount} rows)
+                </span>
               )}
-            </CardContent>
-          </Card>
-        </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-2">
+              <CopyButton
+                text={jsonOutput}
+                className="flex-1"
+                data-testid="copy-json-button"
+              />
+              <Button
+                onClick={downloadJSON}
+                variant="outline"
+                disabled={!jsonOutput}
+                data-testid="download-json-button"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download
+              </Button>
+            </div>
+
+            <Textarea
+              value={jsonOutput}
+              readOnly
+              placeholder="JSON output will appear here..."
+              className="min-h-[200px] font-mono text-sm"
+              data-testid="json-output"
+              rows={10}
+            />
+
+            {headers.length > 0 && (
+              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <p className="text-sm font-medium text-blue-700 dark:text-blue-400 mb-1">
+                  Detected Headers ({headers.length}):
+                </p>
+                <p className="text-sm text-blue-600 dark:text-blue-300">
+                  {headers.join(", ")}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
-
-      <div className="flex justify-center my-8" />
-
-      {/* Information */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle>About CSV to JSON Converter</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Features:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Automatic header detection from first row</li>
-                <li>
-                  • Multiple delimiter support (comma, semicolon, tab, etc.)
-                </li>
-                <li>• Proper handling of quoted fields and escaped quotes</li>
-                <li>• Data preview table for verification</li>
-                <li>• File upload support for CSV files</li>
-                <li>• JSON download functionality</li>
-                <li>• URL sharing with settings preservation</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-2">Supported Formats:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Standard CSV with comma delimiters</li>
-                <li>• Semicolon-separated values (European format)</li>
-                <li>• Tab-separated values (TSV)</li>
-                <li>• Pipe-delimited files</li>
-                <li>• Custom delimiter support</li>
-                <li>• Quoted fields with embedded delimiters</li>
-                <li>• Escaped quotes within quoted fields</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-            <h4 className="font-semibold mb-2">Tips for Best Results:</h4>
-            <ul className="space-y-1 text-sm text-slate-600 dark:text-slate-400">
-              <li>• Ensure the first row contains column headers</li>
-              <li>
-                • Use quotes around fields containing delimiters or line breaks
-              </li>
-              <li>
-                • Escape quotes within quoted fields by doubling them ("")
-              </li>
-              <li>• Choose the correct delimiter for your data format</li>
-              <li>• Remove empty rows for cleaner JSON output</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-center mt-8" />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -114,6 +114,7 @@ export default function Metronome() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRunning]);
 
   useEffect(() => {
@@ -156,12 +157,17 @@ export default function Metronome() {
           .webkitAudioContext)();
     }
 
+    // Capture ref values at effect time to avoid stale closures
+    const currentTimeouts = toneTimeoutsRef.current;
+
     return () => {
       if (audioContextRef.current) {
         audioContextRef.current.close();
       }
-      // Clear all timeouts
-      toneTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      // Clear all timeouts using captured value
+      currentTimeouts.forEach((timeout: NodeJS.Timeout) =>
+        clearTimeout(timeout)
+      );
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
@@ -209,25 +215,28 @@ export default function Metronome() {
     oscillator.stop(audioContextRef.current.currentTime + duration / 1000);
   };
 
-  const scheduleNextTone = (schedule: ToneSchedule, startTime: number) => {
-    if (!schedule.enabled || !isRunningRef.current) return;
+  const scheduleNextTone = useCallback(
+    (schedule: ToneSchedule, startTime: number) => {
+      if (!schedule.enabled || !isRunningRef.current) return;
 
-    const nextPlayTime = startTime + schedule.intervalSeconds * 1000;
-    const delay = nextPlayTime - Date.now();
+      const nextPlayTime = startTime + schedule.intervalSeconds * 1000;
+      const delay = nextPlayTime - Date.now();
 
-    if (delay > 0) {
-      const timeout = setTimeout(() => {
-        if (isRunningRef.current) {
-          playTone(schedule.frequency, schedule.id);
-          scheduleNextTone(schedule, nextPlayTime);
-        }
-      }, delay);
+      if (delay > 0) {
+        const timeout = setTimeout(() => {
+          if (isRunningRef.current) {
+            playTone(schedule.frequency, schedule.id);
+            scheduleNextTone(schedule, nextPlayTime);
+          }
+        }, delay);
 
-      toneTimeoutsRef.current.set(schedule.id, timeout);
-    }
-  };
+        toneTimeoutsRef.current.set(schedule.id, timeout);
+      }
+    },
+    []
+  );
 
-  const startMetronome = () => {
+  const startMetronome = useCallback(() => {
     if (!audioContextRef.current) return;
 
     // Resume audio context if suspended
@@ -253,9 +262,9 @@ export default function Metronome() {
         scheduleNextTone(schedule, startTime);
       }
     });
-  };
+  }, [toneSchedules, scheduleNextTone]);
 
-  const stopMetronome = () => {
+  const stopMetronome = useCallback(() => {
     setIsRunning(false);
     isRunningRef.current = false;
     setCurrentTime(0);
@@ -269,7 +278,7 @@ export default function Metronome() {
     // Clear all tone timeouts
     toneTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     toneTimeoutsRef.current.clear();
-  };
+  }, []);
 
   const addToneSchedule = () => {
     const newId = Date.now().toString();

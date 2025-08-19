@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -53,6 +53,7 @@ export default function URLToJSON() {
     parseURL();
     // Update URL when input changes
     updateURL({ url: inputUrl });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputUrl]);
 
   const extractTLD = (
@@ -112,7 +113,7 @@ export default function URLToJSON() {
     return { tld, domain, subdomain };
   };
 
-  const parseURL = () => {
+  const parseURL = useCallback(() => {
     try {
       setError("");
 
@@ -167,7 +168,7 @@ export default function URLToJSON() {
       setUrlComponents({});
       setJsonOutput("");
     }
-  };
+  }, [inputUrl]);
 
   const shareConverter = async () => {
     const success = await copyShareableURL({ url: inputUrl });

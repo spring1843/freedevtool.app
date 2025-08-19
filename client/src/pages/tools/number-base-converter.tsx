@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -91,6 +91,7 @@ export default function NumberBaseConverter() {
       from: inputBase.toString(),
       to: outputBases.join(","),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputNumber, inputBase, outputBases]);
 
   const getBaseCharacters = (base: number): string => {
@@ -121,7 +122,7 @@ export default function NumberBaseConverter() {
     return chars;
   };
 
-  const validateInput = (value: string, base: number): boolean => {
+  const validateInput = useCallback((value: string, base: number): boolean => {
     if (!value.trim()) return false;
 
     const validChars = getBaseCharacters(base).toLowerCase();
@@ -133,41 +134,47 @@ export default function NumberBaseConverter() {
       }
     }
     return true;
-  };
+  }, []);
 
-  const convertFromBaseToDecimal = (value: string, base: number): number => {
-    let decimal = 0;
-    const chars = getBaseCharacters(base);
-    const normalizedValue = value.toUpperCase().replace(/\s/g, "");
+  const convertFromBaseToDecimal = useCallback(
+    (value: string, base: number): number => {
+      let decimal = 0;
+      const chars = getBaseCharacters(base);
+      const normalizedValue = value.toUpperCase().replace(/\s/g, "");
 
-    for (let i = 0; i < normalizedValue.length; i++) {
-      const char = normalizedValue[i];
-      const digitValue = chars.indexOf(char);
-      if (digitValue === -1) {
-        throw new Error(`Invalid character '${char}' for base ${base}`);
+      for (let i = 0; i < normalizedValue.length; i++) {
+        const char = normalizedValue[i];
+        const digitValue = chars.indexOf(char);
+        if (digitValue === -1) {
+          throw new Error(`Invalid character '${char}' for base ${base}`);
+        }
+        decimal += digitValue * Math.pow(base, normalizedValue.length - 1 - i);
       }
-      decimal += digitValue * Math.pow(base, normalizedValue.length - 1 - i);
-    }
 
-    return decimal;
-  };
+      return decimal;
+    },
+    []
+  );
 
-  const convertDecimalToBase = (decimal: number, base: number): string => {
-    if (decimal === 0) return "0";
+  const convertDecimalToBase = useCallback(
+    (decimal: number, base: number): string => {
+      if (decimal === 0) return "0";
 
-    const chars = getBaseCharacters(base);
-    let result = "";
-    let num = Math.abs(decimal);
+      const chars = getBaseCharacters(base);
+      let result = "";
+      let num = Math.abs(decimal);
 
-    while (num > 0) {
-      result = chars[num % base] + result;
-      num = Math.floor(num / base);
-    }
+      while (num > 0) {
+        result = chars[num % base] + result;
+        num = Math.floor(num / base);
+      }
 
-    return decimal < 0 ? `-${result}` : result;
-  };
+      return decimal < 0 ? `-${result}` : result;
+    },
+    []
+  );
 
-  const convertNumber = () => {
+  const convertNumber = useCallback(() => {
     try {
       setError("");
 
@@ -203,7 +210,14 @@ export default function NumberBaseConverter() {
       setError(errorMessage);
       setResults([]);
     }
-  };
+  }, [
+    inputNumber,
+    inputBase,
+    outputBases,
+    convertDecimalToBase,
+    convertFromBaseToDecimal,
+    validateInput,
+  ]);
 
   const addCustomBase = () => {
     const base = parseInt(customBase, 10);

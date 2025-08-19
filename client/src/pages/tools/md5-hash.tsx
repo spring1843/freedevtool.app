@@ -12,7 +12,7 @@ import {
   EyeOff,
   RotateCcw,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -58,7 +58,7 @@ export default function MD5Hash() {
   const [isMatch, setIsMatch] = useState<boolean | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const generateHash = async () => {
+  const generateHash = useCallback(async () => {
     if (!inputText.trim()) {
       return;
     }
@@ -79,7 +79,7 @@ export default function MD5Hash() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [inputText, compareHash]);
 
   const compareHashes = async () => {
     if (!compareHash.trim()) {
@@ -117,7 +117,7 @@ export default function MD5Hash() {
 
   useEffect(() => {
     generateHash();
-  }, []);
+  }, [generateHash]);
 
   return (
     <div className="max-w-6xl mx-auto">

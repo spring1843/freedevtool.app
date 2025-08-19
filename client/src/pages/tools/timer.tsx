@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,6 +70,7 @@ export default function Timer() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRunning, isFinished]);
 
   useEffect(() => {
@@ -118,9 +119,10 @@ export default function Timer() {
         clearInterval(intervalRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRunning, timeLeft]);
 
-  const startBeeping = () => {
+  const startBeeping = useCallback(() => {
     if (audioContextRef.current) {
       playTimerBeep(audioContextRef.current);
       beepIntervalRef.current = setInterval(() => {
@@ -129,7 +131,7 @@ export default function Timer() {
         }
       }, 1000);
     }
-  };
+  }, []);
 
   const stopBeeping = () => {
     if (beepIntervalRef.current) {
@@ -138,7 +140,7 @@ export default function Timer() {
     }
   };
 
-  const startTimer = () => {
+  const startTimer = useCallback(() => {
     if (isFinished) {
       stopBeeping();
       setIsFinished(false);
@@ -158,15 +160,17 @@ export default function Timer() {
       // Resume
       setIsRunning(true);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, isFinished, days, hours, minutes, seconds, isRunning]);
 
   const pauseTimer = () => {
     setIsRunning(false);
   };
 
-  const stopTimer = () => {
+  const stopTimer = useCallback(() => {
     reset();
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const startPause = () => {
     if (isRunning) {

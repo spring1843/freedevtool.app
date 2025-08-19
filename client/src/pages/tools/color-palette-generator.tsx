@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,7 +63,7 @@ export default function ColorPaletteGenerator() {
     });
   };
 
-  const generatePalette = () => {
+  const generatePalette = useCallback(() => {
     setIsGenerating(true);
 
     try {
@@ -89,14 +89,14 @@ export default function ColorPaletteGenerator() {
     }
 
     setIsGenerating(false);
-  };
+  }, [baseColor, selectedType, paletteTypes, toast]);
 
   // Auto-generate palette on initial load
   useEffect(() => {
     if (generatedPalettes.length === 0) {
       generatePalette();
     }
-  }, [generatedPalettes.length]); // Remove generatePalette from dependencies
+  }, [generatePalette, generatedPalettes.length]);
 
   const generateAllPalettes = () => {
     setIsGenerating(true);

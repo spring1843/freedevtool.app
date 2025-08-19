@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -40,7 +40,7 @@ export default function TextDiff() {
     charactersModified: number;
   } | null>(null);
 
-  const calculateDiff = () => {
+  const calculateDiff = useCallback(() => {
     const lines1 = text1.split("\n");
     const lines2 = text2.split("\n");
     const result: DiffLine[] = [];
@@ -103,7 +103,7 @@ export default function TextDiff() {
 
     setDiffResult(result);
     setDiffStats(stats);
-  };
+  }, [text1, text2]);
 
   const handleReset = () => {
     setText1(defaultText1);
@@ -114,7 +114,7 @@ export default function TextDiff() {
 
   useEffect(() => {
     calculateDiff();
-  }, []);
+  }, [calculateDiff]);
 
   const renderDiffLine = (diff: DiffLine, index: number) => {
     const getLineClass = (type: string) => {

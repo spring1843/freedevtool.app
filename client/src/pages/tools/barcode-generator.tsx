@@ -12,7 +12,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { BarChart3, Download, RotateCcw } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import JsBarcode from "jsbarcode";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
@@ -69,7 +69,7 @@ export default function BarcodeGenerator() {
     },
   ];
 
-  const generateBarcode = () => {
+  const generateBarcode = useCallback(() => {
     if (!canvasRef.current || !text.trim()) {
       setError("Text cannot be empty");
       return;
@@ -98,7 +98,7 @@ export default function BarcodeGenerator() {
         `Barcode generation failed: ${err instanceof Error ? err.message : "Unknown error"}`
       );
     }
-  };
+  }, [text, format, width, height, displayValue]);
 
   const downloadBarcode = () => {
     if (!canvasRef.current) return;
@@ -167,7 +167,7 @@ export default function BarcodeGenerator() {
 
   useEffect(() => {
     generateBarcode();
-  }, []);
+  }, [generateBarcode]);
 
   const inputError = validateInput(text, format);
 

@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatLESS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const DEFAULT_LESS = `@primary-color: #007bff;@secondary-color: #6c757d;@border-radius: 4px;.btn{padding:10px 20px;border:none;border-radius:@border-radius;cursor:pointer;&.primary{background-color:@primary-color;color:white;&:hover{background-color:darken(@primary-color,10%);}}}&.card{background:white;border-radius:@border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);padding:20px;.header{border-bottom:1px solid @secondary-color;padding-bottom:10px;margin-bottom:20px;h1{margin:0;color:@primary-color;}}}`;
 
@@ -13,11 +13,11 @@ export default function LESSFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const formatCode = () => {
+  const formatCode = useCallback(() => {
     const { formatted, error: formatError } = formatLESS(input);
     setOutput(formatted);
     setError(formatError || null);
-  };
+  }, [input]);
 
   const handleInputChange = (value: string) => {
     setInput(value);
@@ -34,7 +34,7 @@ export default function LESSFormatter() {
 
   useEffect(() => {
     formatCode();
-  }, []);
+  }, [formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">

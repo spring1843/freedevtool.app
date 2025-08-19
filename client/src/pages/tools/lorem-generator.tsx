@@ -12,7 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const loremWords = [
@@ -110,7 +110,7 @@ export default function LoremGenerator() {
     return loremWords[randomIndex];
   };
 
-  const generateSentence = (wordCount = 10): string => {
+  const generateSentence = useCallback((wordCount = 10): string => {
     const words: string[] = [];
 
     for (let i = 0; i < wordCount; i++) {
@@ -123,20 +123,23 @@ export default function LoremGenerator() {
     }
 
     return `${words.join(" ")}.`;
-  };
+  }, []);
 
-  const generateParagraph = (sentenceCount = 5): string => {
-    const sentences: string[] = [];
+  const generateParagraph = useCallback(
+    (sentenceCount = 5): string => {
+      const sentences: string[] = [];
 
-    for (let i = 0; i < sentenceCount; i++) {
-      const wordCount = Math.floor(Math.random() * 8) + 6; // 6-13 words per sentence
-      sentences.push(generateSentence(wordCount));
-    }
+      for (let i = 0; i < sentenceCount; i++) {
+        const wordCount = Math.floor(Math.random() * 8) + 6; // 6-13 words per sentence
+        sentences.push(generateSentence(wordCount));
+      }
 
-    return sentences.join(" ");
-  };
+      return sentences.join(" ");
+    },
+    [generateSentence]
+  );
 
-  const generateLorem = () => {
+  const generateLorem = useCallback(() => {
     let result = "";
 
     switch (type) {
@@ -202,7 +205,7 @@ export default function LoremGenerator() {
     }
 
     setGenerated(result);
-  };
+  }, [type, count, startWithLorem, generateParagraph, generateSentence]);
 
   const handleReset = () => {
     setType("paragraphs");
@@ -221,7 +224,7 @@ export default function LoremGenerator() {
 
   useEffect(() => {
     generateLorem();
-  }, []);
+  }, [generateLorem]);
 
   return (
     <div className="max-w-4xl mx-auto">
