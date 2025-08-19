@@ -133,7 +133,8 @@ export default function BrowserInfo() {
         usedJSHeapSize?: number;
       };
     };
-    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
+    const connection =
+      nav.connection || nav.mozConnection || nav.webkitConnection;
 
     // Test WebGL support
     const canvas = document.createElement("canvas");
@@ -198,7 +199,9 @@ export default function BrowserInfo() {
       canvas: testFeature(document.createElement("canvas").getContext),
       webRTC: testFeature(window.RTCPeerConnection),
       webAudio: testFeature(
-        window.AudioContext || (window as typeof window & { webkitAudioContext?: unknown }).webkitAudioContext
+        window.AudioContext ||
+          (window as typeof window & { webkitAudioContext?: unknown })
+            .webkitAudioContext
       ),
       webWorkers: testFeature(window.Worker),
       serviceWorkers: testFeature(nav.serviceWorker),
@@ -212,14 +215,18 @@ export default function BrowserInfo() {
       mediaDevices: testFeature(nav.mediaDevices),
       mediaRecorder: testFeature(window.MediaRecorder),
       speechRecognition: testFeature(
-        (window as typeof window & { 
-          SpeechRecognition?: unknown;
-          webkitSpeechRecognition?: unknown;
-        }).SpeechRecognition ||
-          (window as typeof window & { 
+        (
+          window as typeof window & {
             SpeechRecognition?: unknown;
             webkitSpeechRecognition?: unknown;
-          }).webkitSpeechRecognition
+          }
+        ).SpeechRecognition ||
+          (
+            window as typeof window & {
+              SpeechRecognition?: unknown;
+              webkitSpeechRecognition?: unknown;
+            }
+          ).webkitSpeechRecognition
       ),
       speechSynthesis: testFeature(window.speechSynthesis),
 

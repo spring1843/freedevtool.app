@@ -104,9 +104,9 @@ export default function TimezoneConverter() {
     );
 
     if (urlDate && urlTime) {
-      setSourceDate(urlDate);
-      setSourceTime(urlTime);
-      setSourceTimezone(urlSourceTz);
+      setSourceDate(urlDate as string);
+      setSourceTime(urlTime as string);
+      setSourceTimezone(urlSourceTz as string);
 
       if (Array.isArray(urlTargetTzs) && urlTargetTzs.length > 0) {
         setTargetTimezones(urlTargetTzs);

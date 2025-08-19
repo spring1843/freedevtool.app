@@ -205,7 +205,10 @@ export default function MicrophoneTest() {
         errorMessage =
           "Microphone access is blocked due to security restrictions.";
       } else {
-        errorMessage = error instanceof Error ? error.message : "Failed to access microphone";
+        errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Failed to access microphone";
       }
 
       setError(`Microphone access failed: ${errorMessage}`);

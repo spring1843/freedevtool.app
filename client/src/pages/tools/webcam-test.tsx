@@ -49,7 +49,9 @@ export default function WebcamTest() {
       } else if (error.name === "NotFoundError") {
         setError("No camera found. Please connect a camera device.");
       } else {
-        setError(`Failed to access camera: ${error instanceof Error ? error.message : "Unknown error"}`);
+        setError(
+          `Failed to access camera: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
       }
     }
   };
@@ -101,7 +103,9 @@ export default function WebcamTest() {
       // Get updated device list with labels
       await getVideoDevices();
     } catch (err: unknown) {
-      setError(`Camera access failed: ${err instanceof Error ? err.message : "Unknown error"}`);
+      setError(
+        `Camera access failed: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
       setHasPermission(false);
       setIsActive(false);
     }
