@@ -11,7 +11,6 @@ interface ToolTextAreaProps {
   readOnly?: boolean;
   className?: string;
   minHeight?: number;
-  rows?: number;
   showLineNumbers?: boolean;
   showCharacterCount?: boolean;
   showWordCount?: boolean;
@@ -19,8 +18,6 @@ interface ToolTextAreaProps {
   maxLength?: number;
   language?: string;
   error?: string;
-  id?: string;
-  "data-testid"?: string;
 }
 
 export function ToolTextArea({
@@ -31,7 +28,6 @@ export function ToolTextArea({
   readOnly = false,
   className,
   minHeight = 300,
-  rows,
   showLineNumbers = true,
   showCharacterCount = true,
   showWordCount = false,
@@ -39,8 +35,6 @@ export function ToolTextArea({
   maxLength,
   language,
   error,
-  id,
-  "data-testid": dataTestId,
 }: ToolTextAreaProps) {
   const [cursorPosition, setCursorPosition] = useState({ line: 1, column: 1 });
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -132,7 +126,6 @@ export function ToolTextArea({
             ) : null}
             <textarea
               ref={textareaRef}
-              id={id}
               value={value}
               onChange={handleTextareaChange}
               onKeyUp={handleKeyUp}
@@ -140,7 +133,6 @@ export function ToolTextArea({
               placeholder={placeholder}
               readOnly={readOnly}
               maxLength={maxLength}
-              rows={rows}
               className={cn(
                 "flex-1 resize-none border-0 bg-transparent p-3 font-mono text-sm leading-6",
                 "placeholder:text-slate-400 dark:placeholder:text-slate-600",
@@ -149,7 +141,7 @@ export function ToolTextArea({
                 readOnly && "cursor-default"
               )}
               style={{ minHeight: `${minHeight}px` }}
-              data-testid={dataTestId || `textarea-${title.toLowerCase().replace(/\s+/g, "-")}`}
+              data-testid={`textarea-${title.toLowerCase().replace(/\s+/g, "-")}`}
             />
           </div>
         </div>

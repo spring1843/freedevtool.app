@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ToolTextArea } from "@/components/ui/tool-text-area";
+import { Textarea } from "@/components/ui/textarea";
 import { Link, Unlink, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
 

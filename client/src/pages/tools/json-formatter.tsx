@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ToolTextArea } from "@/components/ui/tool-text-area";
+import { Textarea } from "@/components/ui/textarea";
 import { formatJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Lightbulb } from "lucide-react";
@@ -125,17 +125,15 @@ export default function JsonFormatter() {
             <CardTitle>Input</CardTitle>
           </CardHeader>
           <CardContent>
-            <ToolTextArea
-              title=""
+            <Textarea
               value={input}
-              onChange={handleInputChange}
+              onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSON here..."
               data-testid="json-input"
-              className="min-h-[400px]"
+              className="min-h-[400px] font-mono text-sm"
               rows={20}
               showLineNumbers={true}
-              showCharacterCount={true}
-              showWordCount={false}
+              showStats={true}
             />
           </CardContent>
         </Card>
@@ -145,18 +143,15 @@ export default function JsonFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <ToolTextArea
-              title=""
+            <Textarea
               value={output}
               readOnly={true}
               placeholder="Formatted JSON will appear here..."
               data-testid="json-output"
-              className="min-h-[400px] bg-slate-50 dark:bg-slate-900"
+              className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={20}
               showLineNumbers={true}
-              showCharacterCount={true}
-              showWordCount={false}
-              language="json"
+              showStats={true}
             />
           </CardContent>
         </Card>

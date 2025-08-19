@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ToolTextArea } from "@/components/ui/tool-text-area";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
@@ -233,17 +233,15 @@ export default function RegexTester() {
             <CardTitle>Test Text</CardTitle>
           </CardHeader>
           <CardContent>
-            <ToolTextArea
-              title=""
+            <Textarea
               value={text}
-              onChange={setText}
+              onChange={e => setText(e.target.value)}
               placeholder="Enter text to test against..."
               data-testid="test-text"
-              className="min-h-[300px]"
+              className="min-h-[300px] font-mono text-sm"
               rows={15}
               showLineNumbers={true}
-              showCharacterCount={true}
-              showWordCount={true}
+              showStats={true}
             />
           </CardContent>
         </Card>

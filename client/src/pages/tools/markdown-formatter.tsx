@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ToolTextArea } from "@/components/ui/tool-text-area";
+import { Textarea } from "@/components/ui/textarea";
 import { formatMarkdown } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FileText, RotateCcw } from "lucide-react";
@@ -133,18 +133,15 @@ export default function MarkdownFormatter() {
             <CardTitle>Input</CardTitle>
           </CardHeader>
           <CardContent>
-            <ToolTextArea
-              title=""
+            <Textarea
               value={input}
-              onChange={handleInputChange}
+              onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your Markdown here..."
               data-testid="markdown-input"
-              className="min-h-[500px]"
+              className="min-h-[500px] font-mono text-sm"
               rows={25}
               showLineNumbers={true}
-              showCharacterCount={true}
-              showWordCount={true}
-              language="markdown"
+              showStats={true}
             />
           </CardContent>
         </Card>
@@ -154,18 +151,15 @@ export default function MarkdownFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <ToolTextArea
-              title=""
+            <Textarea
               value={output}
               readOnly={true}
               placeholder="Formatted Markdown will appear here..."
               data-testid="markdown-output"
-              className="min-h-[500px] bg-slate-50 dark:bg-slate-900"
+              className="min-h-[500px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={25}
               showLineNumbers={true}
-              showCharacterCount={true}
-              showWordCount={true}
-              language="markdown"
+              showStats={true}
             />
           </CardContent>
         </Card>
