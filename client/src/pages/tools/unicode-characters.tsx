@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -227,32 +227,35 @@ export default function UnicodeCharacters() {
   };
 
   // Get characters from custom range with pagination
-  const getCustomRangeCharacters = (start: string, end: string): string[] => {
-    const startCode = parseInt(start, 16);
-    const endCode = parseInt(end, 16);
+  const getCustomRangeCharacters = useCallback(
+    (start: string, end: string): string[] => {
+      const startCode = parseInt(start, 16);
+      const endCode = parseInt(end, 16);
 
-    if (isNaN(startCode) || isNaN(endCode) || startCode > endCode) {
-      return [];
-    }
-
-    // Calculate pagination range for custom unicode characters display
-    const pageStart = startCode + customRangePage * CUSTOM_CHARS_PER_PAGE;
-    const pageEnd = Math.min(pageStart + CUSTOM_CHARS_PER_PAGE - 1, endCode);
-
-    const chars: string[] = [];
-
-    for (let codePoint = pageStart; codePoint <= pageEnd; codePoint++) {
-      try {
-        const char = String.fromCodePoint(codePoint);
-        chars.push(char);
-      } catch {
-        // Skip invalid code points
-        chars.push(""); // Add empty placeholder
+      if (isNaN(startCode) || isNaN(endCode) || startCode > endCode) {
+        return [];
       }
-    }
 
-    return chars;
-  };
+      // Calculate pagination range for custom unicode characters display
+      const pageStart = startCode + customRangePage * CUSTOM_CHARS_PER_PAGE;
+      const pageEnd = Math.min(pageStart + CUSTOM_CHARS_PER_PAGE - 1, endCode);
+
+      const chars: string[] = [];
+
+      for (let codePoint = pageStart; codePoint <= pageEnd; codePoint++) {
+        try {
+          const char = String.fromCodePoint(codePoint);
+          chars.push(char);
+        } catch {
+          // Skip invalid code points
+          chars.push(""); // Add empty placeholder
+        }
+      }
+
+      return chars;
+    },
+    [customRangePage]
+  );
 
   // Get total pages for custom range
   const getCustomRangeTotalPages = (start: string, end: string): number => {
@@ -283,7 +286,7 @@ export default function UnicodeCharacters() {
   };
 
   // Filter characters by search
-  const searchCharacters = (query: string): string[] => {
+  const searchCharacters = useCallback((query: string): string[] => {
     if (!query.trim()) return [];
 
     const chars: string[] = [];
@@ -319,10 +322,10 @@ export default function UnicodeCharacters() {
     });
 
     return chars.slice(0, 100); // Limit search results
-  };
+  }, []);
 
   // Get characters for the "ALL" view with pagination
-  const getAllViewCharacters = (): string[] => {
+  const getAllViewCharacters = useCallback((): string[] => {
     const start = currentPage * CHARS_PER_PAGE;
     const end = Math.min(start + CHARS_PER_PAGE, MAX_UNICODE);
     const chars: string[] = [];
@@ -342,7 +345,7 @@ export default function UnicodeCharacters() {
     }
 
     return chars;
-  };
+  }, [currentPage]);
 
   const getTotalPages = (): number => Math.ceil(MAX_UNICODE / CHARS_PER_PAGE);
 

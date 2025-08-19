@@ -157,12 +157,17 @@ export default function Metronome() {
           .webkitAudioContext)();
     }
 
+    // Capture ref values at effect time to avoid stale closures
+    const currentTimeouts = toneTimeoutsRef.current;
+
     return () => {
       if (audioContextRef.current) {
         audioContextRef.current.close();
       }
-      // Clear all timeouts
-      toneTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      // Clear all timeouts using captured value
+      currentTimeouts.forEach((timeout: NodeJS.Timeout) =>
+        clearTimeout(timeout)
+      );
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }

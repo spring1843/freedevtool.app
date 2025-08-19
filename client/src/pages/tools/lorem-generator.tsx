@@ -125,16 +125,19 @@ export default function LoremGenerator() {
     return `${words.join(" ")}.`;
   }, []);
 
-  const generateParagraph = useCallback((sentenceCount = 5): string => {
-    const sentences: string[] = [];
+  const generateParagraph = useCallback(
+    (sentenceCount = 5): string => {
+      const sentences: string[] = [];
 
-    for (let i = 0; i < sentenceCount; i++) {
-      const wordCount = Math.floor(Math.random() * 8) + 6; // 6-13 words per sentence
-      sentences.push(generateSentence(wordCount));
-    }
+      for (let i = 0; i < sentenceCount; i++) {
+        const wordCount = Math.floor(Math.random() * 8) + 6; // 6-13 words per sentence
+        sentences.push(generateSentence(wordCount));
+      }
 
-    return sentences.join(" ");
-  }, [generateSentence]);
+      return sentences.join(" ");
+    },
+    [generateSentence]
+  );
 
   const generateLorem = useCallback(() => {
     let result = "";
