@@ -149,8 +149,8 @@ export default function Home() {
                   {speed === "very-fast"
                     ? "Very Fast"
                     : speed === "crazy-fast"
-                    ? "Crazy Fast"
-                    : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                      ? "Crazy Fast"
+                      : speed.charAt(0).toUpperCase() + speed.slice(1)}
                 </Button>
               ))}
             </div>
@@ -189,8 +189,8 @@ export default function Home() {
                     {speed === "very-fast"
                       ? "Very Fast"
                       : speed === "crazy-fast"
-                      ? "Crazy Fast"
-                      : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                        ? "Crazy Fast"
+                        : speed.charAt(0).toUpperCase() + speed.slice(1)}
                   </Button>
                 ))}
               </div>

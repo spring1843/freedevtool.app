@@ -169,7 +169,8 @@ export default function MicrophoneTest() {
 
       // Set up audio analysis
       const audioContext = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+        (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext)();
       const analyser = audioContext.createAnalyser();
       const source = audioContext.createMediaStreamSource(mediaStream);
 

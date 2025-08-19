@@ -152,7 +152,8 @@ export default function Metronome() {
     // Initialize audio context
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+        (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext)();
     }
 
     return () => {

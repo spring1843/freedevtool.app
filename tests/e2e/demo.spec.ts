@@ -47,7 +47,9 @@ test.describe("Demo End-to-End Test", () => {
     await page.addInitScript(() => {
       (window as typeof window & { jsErrors: string[] }).jsErrors = [];
       window.addEventListener("error", e => {
-        (window as typeof window & { jsErrors: string[] }).jsErrors.push(e.message);
+        (window as typeof window & { jsErrors: string[] }).jsErrors.push(
+          e.message
+        );
       });
       window.addEventListener("unhandledrejection", e => {
         (window as typeof window & { jsErrors: string[] }).jsErrors.push(
@@ -113,7 +115,9 @@ test.describe("Demo End-to-End Test", () => {
     }
 
     // Verify no critical JavaScript errors
-    const errors = await page.evaluate(() => (window as typeof window & { jsErrors?: string[] }).jsErrors || []);
+    const errors = await page.evaluate(
+      () => (window as typeof window & { jsErrors?: string[] }).jsErrors || []
+    );
     const criticalErrors = errors.filter(
       (error: string) =>
         !error.includes("unhandledrejection") ||
