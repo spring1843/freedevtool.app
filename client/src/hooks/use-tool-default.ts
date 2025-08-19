@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 
 /**
  * Hook to execute a function once when the component mounts with default values
@@ -10,6 +10,12 @@ export function useToolDefault(
 ) {
   const hasExecuted = useRef(false);
 
+  // Create a stable reference for dependencies to track changes
+  const dependencyString = useMemo(
+    () => JSON.stringify(dependencies),
+    [dependencies]
+  );
+
   useEffect(() => {
     if (!hasExecuted.current) {
       executeFunction();
@@ -17,11 +23,10 @@ export function useToolDefault(
     }
   }, [executeFunction]);
 
-  // Also execute when dependencies change (but not on first mount since we already did)
+  // Execute when dependencies change (but not on first mount since we already did)
   useEffect(() => {
     if (hasExecuted.current && dependencies.length > 0) {
       executeFunction();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [executeFunction, ...dependencies, dependencies.length]);
+  }, [executeFunction, dependencyString, dependencies.length]);
 }
