@@ -53,6 +53,7 @@ The application operates without authentication requirements as all tools functi
 - URL sharing for state persistence.
 - Demo system with automated tours, pause/resume, and 5 speed options (Slow, Normal, Fast, Very Fast, Crazy Fast) available in both homepage controls and layout dropdown during demo playback.
 - Comprehensive time tools: Universal keyboard shortcuts (Enter, Space, Escape), auto-start with engaging defaults, contextual quick-access buttons, and maximum precision.
+- Keyboard shortcuts: All tool shortcuts use only Ctrl key (never CMD/Meta) to avoid overriding browser behavior on Mac.
 - Date converter redesigned with 20 practical, internationally recognized formats categorized for enhanced UX, including auto-detection of input formats.
 - Enhanced RichTextarea component: Word wrap enabled by default with toggle, copy functionality, line numbers (no-wrap mode only), adjustable sizing, and integrated controls bar.
 
