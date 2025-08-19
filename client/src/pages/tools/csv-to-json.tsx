@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ToolTextArea } from "@/components/ui/tool-text-area";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -482,16 +481,11 @@ Jane Smith,jane@example.com,25"
                   )}
 
                   {/* JSON Output */}
-                  <ToolTextArea
-                    title=""
+                  <Textarea
                     value={fields.jsonOutput}
                     readOnly={true}
-                    language="json"
-                    showCharacterCount={true}
-                    showWordCount={false}
-                    showLineNumbers={true}
-                    minHeight={300}
-                    className="border-slate-200 dark:border-slate-700"
+                    className="font-mono text-sm min-h-[400px] resize-none"
+                    placeholder="JSON output will appear here..."
                   />
 
                   {/* Data Preview Table */}

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ToolTextArea } from "@/components/ui/tool-text-area";
 import { Label } from "@/components/ui/label";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
@@ -231,10 +230,8 @@ export default function URLToJSON() {
                   value={inputUrl}
                   onChange={e => setInputUrl(e.target.value)}
                   placeholder="https://example.com/path?param1=value1&param2=value2#section"
-                  className="font-mono min-h-[100px]"
+                  className="font-mono min-h-[100px] resize-none"
                   data-testid="url-input"
-                  showLineNumbers={true}
-                  showStats={true}
                 />
               </div>
 
@@ -308,16 +305,11 @@ export default function URLToJSON() {
             <CardContent>
               {jsonOutput ? (
                 <div className="space-y-4">
-                  <ToolTextArea
-                    title=""
+                  <Textarea
                     value={jsonOutput}
                     readOnly={true}
-                    language="json"
-                    showCharacterCount={true}
-                    showWordCount={false}
-                    showLineNumbers={true}
-                    minHeight={200}
-                    className="border-slate-200 dark:border-slate-700"
+                    className="font-mono text-sm min-h-[300px] resize-none"
+                    placeholder="JSON output will appear here..."
                   />
 
                   {/* URL Components Summary */}
