@@ -85,7 +85,7 @@ export default tseslint.config(
       "@typescript-eslint/no-inferrable-types": "error",
 
       // General code quality rules
-      "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-console": ["error", { allow: ["warn", "error"] }],
       "no-debugger": "error",
       "no-duplicate-imports": "error",
       "no-unused-expressions": "error",

@@ -258,8 +258,6 @@ export default function DateTimeDiff() {
     const date = now.toISOString().split("T")[0];
     const time = now.toTimeString().split(" ")[0].substring(0, 5);
 
-    console.log(`Setting ${field} to current date/time:`, { date, time });
-
     if (field === "start") {
       updateField("startDate", date);
       updateField("startTime", time);
