@@ -37,6 +37,13 @@ export default function Home() {
     totalTools,
   } = useDemo();
 
+  // Helper function to format speed display names
+  const formatSpeedName = (speed: string) => {
+    if (speed === "very-fast") return "Very Fast";
+    if (speed === "crazy-fast") return "Crazy Fast";
+    return speed.charAt(0).toUpperCase() + speed.slice(1);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
@@ -146,11 +153,7 @@ export default function Home() {
                   onClick={() => setDemoSpeed(speed)}
                   className="h-5 px-2 text-xs"
                 >
-                  {speed === "very-fast"
-                    ? "Very Fast"
-                    : speed === "crazy-fast"
-                      ? "Crazy Fast"
-                      : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                  {formatSpeedName(speed)}
                 </Button>
               ))}
             </div>
@@ -186,11 +189,7 @@ export default function Home() {
                     onClick={() => setDemoSpeed(speed)}
                     className="h-6 px-2 text-xs"
                   >
-                    {speed === "very-fast"
-                      ? "Very Fast"
-                      : speed === "crazy-fast"
-                        ? "Crazy Fast"
-                        : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                    {formatSpeedName(speed)}
                   </Button>
                 ))}
               </div>
