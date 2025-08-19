@@ -11,7 +11,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ArrowUpDown, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -44,7 +44,7 @@ export default function TextSorter() {
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
 
-  const sortText = () => {
+  const sortText = useCallback(() => {
     const lines = input.split("\n").filter(line => line.trim() !== "");
 
     const sorted = [...lines];
@@ -83,7 +83,7 @@ export default function TextSorter() {
     }
 
     setSortedOutput(sorted.join("\n"));
-  };
+  }, [input, sortType, sortOrder, caseSensitive]);
 
   const handleReset = () => {
     setInput(defaultInput);

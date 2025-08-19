@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, RotateCcw, CreditCard, BarChart3 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import {
   LineChart,
@@ -39,7 +39,7 @@ export default function DebtRepaymentCalculator() {
   const [monthlyPayment, setMonthlyPayment] = useState(800);
   const [result, setResult] = useState<DebtResult | null>(null);
 
-  const calculateDebtRepayment = () => {
+  const calculateDebtRepayment = useCallback(() => {
     const monthlyRate = annualRate / 100 / 12;
     let remainingBalance = principal;
     let month = 0;
@@ -85,7 +85,7 @@ export default function DebtRepaymentCalculator() {
     };
 
     setResult(debtResult);
-  };
+  }, [principal, annualRate, monthlyPayment]);
 
   const handleReset = () => {
     setPrincipal(25000);

@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatHTML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw, AlertTriangle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -46,16 +46,19 @@ export default function HTMLFormatter() {
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
 
-  const formatCode = (minify = false) => {
-    const {
-      formatted,
-      error: formatError,
-      warnings: formatWarnings,
-    } = formatHTML(input, minify);
-    setOutput(formatted);
-    setError(formatError || null);
-    setWarnings(formatWarnings || []);
-  };
+  const formatCode = useCallback(
+    (minify = false) => {
+      const {
+        formatted,
+        error: formatError,
+        warnings: formatWarnings,
+      } = formatHTML(input, minify);
+      setOutput(formatted);
+      setError(formatError || null);
+      setWarnings(formatWarnings || []);
+    },
+    [input]
+  );
 
   const handleInputChange = (value: string) => {
     setInput(value);

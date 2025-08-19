@@ -5,7 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Lightbulb } from "lucide-react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
 const DEFAULT_JSON = `{"name":"John Doe","age":30,"city":"New York","hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zipCode":"10001"}}`;
@@ -15,11 +15,11 @@ export default function JsonFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const formatCode = () => {
+  const formatCode = useCallback(() => {
     const { formatted, error: formatError } = formatJSON(input);
     setOutput(formatted);
     setError(formatError || null);
-  };
+  }, [input]);
 
   const minifyCode = () => {
     try {

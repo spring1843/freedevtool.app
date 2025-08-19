@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
 const DEFAULT_TOKEN =
@@ -17,7 +17,7 @@ export default function JWTDecoder() {
   const [isValid, setIsValid] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const decodeToken = () => {
+  const decodeToken = useCallback(() => {
     try {
       const parts = token.split(".");
       if (parts.length !== 3) {
@@ -58,7 +58,7 @@ export default function JWTDecoder() {
       setPayload("");
       setSignature("");
     }
-  };
+  }, [token]);
 
   const handleTokenChange = (value: string) => {
     setToken(value);

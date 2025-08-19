@@ -12,7 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const loremWords = [
@@ -136,7 +136,7 @@ export default function LoremGenerator() {
     return sentences.join(" ");
   };
 
-  const generateLorem = () => {
+  const generateLorem = useCallback(() => {
     let result = "";
 
     switch (type) {
@@ -202,7 +202,7 @@ export default function LoremGenerator() {
     }
 
     setGenerated(result);
-  };
+  }, [type, count, startWithLorem]);
 
   const handleReset = () => {
     setType("paragraphs");

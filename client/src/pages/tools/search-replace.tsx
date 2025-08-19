@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -29,7 +29,7 @@ export default function SearchReplace() {
   const [matchCount, setMatchCount] = useState(0);
   const [error, setError] = useState("");
 
-  const performSearchReplace = () => {
+  const performSearchReplace = useCallback(() => {
     try {
       setError("");
 
@@ -74,7 +74,7 @@ export default function SearchReplace() {
       setResult("");
       setMatchCount(0);
     }
-  };
+  }, [text, searchText, replaceText, isRegex, isCaseSensitive, isGlobal]);
 
   const handleReset = () => {
     setText(DEFAULT_TEXT);

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -38,15 +38,15 @@ export default function RegexTester() {
   const [isValidRegex, setIsValidRegex] = useState(true);
   const [error, setError] = useState("");
 
-  const updateFlags = () => {
+  const updateFlags = useCallback(() => {
     let newFlags = "";
     if (globalFlag) newFlags += "g";
     if (caseInsensitiveFlag) newFlags += "i";
     if (multilineFlag) newFlags += "m";
     setFlags(newFlags);
-  };
+  }, [globalFlag, caseInsensitiveFlag, multilineFlag]);
 
-  const testRegex = () => {
+  const testRegex = useCallback(() => {
     try {
       setError("");
       const regex = new RegExp(pattern, flags);
@@ -85,7 +85,7 @@ export default function RegexTester() {
       );
       setMatches([]);
     }
-  };
+  }, [pattern, flags, text, globalFlag]);
 
   const handleReset = () => {
     setPattern(DEFAULT_PATTERN);
