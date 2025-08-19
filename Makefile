@@ -74,7 +74,7 @@ lint-fix: ## Run ESLint with automatic fixing
 	npx eslint . --ext ts,tsx --fix
 
 format: ## Format code with Prettier
-	npx prettier --write "**/*.{ts,tsx,js,jsx,json,css,md}"
+	npx prettier --list-different --write "**/*.{ts,tsx,js,jsx,json,css,md}"
 
 format-check: ## Check if code is properly formatted
 	npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md}"
