@@ -18,7 +18,7 @@ import JsBarcode from "jsbarcode";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function BarcodeGenerator() {
-  const [text, setText] = useState("123456789012");
+  const [text, setText] = useState("FreeDevTool.App");
   const [format, setFormat] = useState("CODE128");
   const [width, setWidth] = useState(2);
   const [height, setHeight] = useState(100);
@@ -118,7 +118,7 @@ export default function BarcodeGenerator() {
   };
 
   const handleReset = () => {
-    setText("123456789012");
+    setText("FreeDevTool.App");
     setFormat("CODE128");
     setWidth(2);
     setHeight(100);

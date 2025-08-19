@@ -33,7 +33,7 @@ import {
   Pause,
 } from "lucide-react";
 import { toolsData } from "@/data/tools";
-import { useDemo } from "@/providers/demo-provider";
+import { useDemo } from "@/hooks/use-demo-hook";
 
 interface LayoutProps {
   children: React.ReactNode;

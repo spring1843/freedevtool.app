@@ -17,7 +17,7 @@ const DEFAULT_JSON = `{
     "city": "New York",
     "zipCode": "10001"
   },
-  "hobbies": ["reading", "swimming", "coding"],
+  "loves": ["free", "dev", "tool", "app"],
   "isActive": true
 }`;
 
@@ -28,10 +28,11 @@ address:
   street: 123 Main St
   city: New York
   zipCode: "10001"
-hobbies:
-  - reading
-  - swimming
-  - coding
+loves:
+  - free
+  - dev
+  - tool
+  - app
 isActive: true`;
 
 export default function JSONYAMLConverter() {

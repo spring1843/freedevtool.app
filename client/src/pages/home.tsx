@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSearch } from "@/hooks/use-search";
-import { useDemo } from "@/providers/demo-provider";
+import { useDemo } from "@/hooks/use-demo-hook";
 import { getToolsCount } from "@/data/tools";
 
 export default function Home() {
@@ -36,6 +36,13 @@ export default function Home() {
     setDemoSpeed,
     totalTools,
   } = useDemo();
+
+  // Helper function to format speed display names
+  const formatSpeedName = (speed: string) => {
+    if (speed === "very-fast") return "Very Fast";
+    if (speed === "crazy-fast") return "Crazy Fast";
+    return speed.charAt(0).toUpperCase() + speed.slice(1);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -146,11 +153,7 @@ export default function Home() {
                   onClick={() => setDemoSpeed(speed)}
                   className="h-5 px-2 text-xs"
                 >
-                  {speed === "very-fast"
-                    ? "Very Fast"
-                    : speed === "crazy-fast"
-                      ? "Crazy Fast"
-                      : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                  {formatSpeedName(speed)}
                 </Button>
               ))}
             </div>
@@ -186,11 +189,7 @@ export default function Home() {
                     onClick={() => setDemoSpeed(speed)}
                     className="h-6 px-2 text-xs"
                   >
-                    {speed === "very-fast"
-                      ? "Very Fast"
-                      : speed === "crazy-fast"
-                        ? "Crazy Fast"
-                        : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                    {formatSpeedName(speed)}
                   </Button>
                 ))}
               </div>
