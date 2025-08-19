@@ -103,13 +103,37 @@ export default function BrowserInfo() {
   const { toast } = useToast();
 
   const getBrowserInfo = (): BrowserInfo => {
-    const nav = navigator as any;
+    const nav = navigator as Navigator & {
+      connection?: {
+        type?: string;
+        effectiveType?: string;
+        downlink?: number;
+        rtt?: number;
+      };
+      mozConnection?: {
+        type?: string;
+        effectiveType?: string;
+        downlink?: number;
+        rtt?: number;
+      };
+      webkitConnection?: {
+        type?: string;
+        effectiveType?: string;
+        downlink?: number;
+        rtt?: number;
+      };
+      deviceMemory?: number;
+    };
     const { screen } = window;
     const { location } = window;
-    const { performance } = window as any;
-    const connection = (nav.connection ||
-      nav.mozConnection ||
-      nav.webkitConnection) as any;
+    const performance = window.performance as Performance & {
+      memory?: {
+        jsHeapSizeLimit?: number;
+        totalJSHeapSize?: number;
+        usedJSHeapSize?: number;
+      };
+    };
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
 
     // Test WebGL support
     const canvas = document.createElement("canvas");
@@ -117,14 +141,14 @@ export default function BrowserInfo() {
     const webGL2 = !!canvas.getContext("webgl2");
 
     // Test various browser features
-    const testFeature = (feature: any) => typeof feature !== "undefined";
+    const testFeature = (feature: unknown) => typeof feature !== "undefined";
 
     return {
       // Navigator properties
       userAgent: nav.userAgent || "Unknown",
       platform: nav.platform || "Unknown",
       language: nav.language || "Unknown",
-      languages: nav.languages || [],
+      languages: Array.from(nav.languages || []),
       cookieEnabled: nav.cookieEnabled || false,
       onLine: nav.onLine || false,
       hardwareConcurrency: nav.hardwareConcurrency || 0,
@@ -174,7 +198,7 @@ export default function BrowserInfo() {
       canvas: testFeature(document.createElement("canvas").getContext),
       webRTC: testFeature(window.RTCPeerConnection),
       webAudio: testFeature(
-        window.AudioContext || (window as any).webkitAudioContext
+        window.AudioContext || (window as typeof window & { webkitAudioContext?: unknown }).webkitAudioContext
       ),
       webWorkers: testFeature(window.Worker),
       serviceWorkers: testFeature(nav.serviceWorker),
@@ -188,8 +212,14 @@ export default function BrowserInfo() {
       mediaDevices: testFeature(nav.mediaDevices),
       mediaRecorder: testFeature(window.MediaRecorder),
       speechRecognition: testFeature(
-        (window as any).SpeechRecognition ||
-          (window as any).webkitSpeechRecognition
+        (window as typeof window & { 
+          SpeechRecognition?: unknown;
+          webkitSpeechRecognition?: unknown;
+        }).SpeechRecognition ||
+          (window as typeof window & { 
+            SpeechRecognition?: unknown;
+            webkitSpeechRecognition?: unknown;
+          }).webkitSpeechRecognition
       ),
       speechSynthesis: testFeature(window.speechSynthesis),
 

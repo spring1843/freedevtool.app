@@ -30,7 +30,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     ref
   ) => {
     // Remove readOnly from restProps to prevent conflicts
-    const { readOnly: _, ...cleanRestProps } = restProps as any;
+    const cleanRestProps = restProps;
     const [, setCursorPosition] = React.useState(0);
     const [currentLine, setCurrentLine] = React.useState(1);
     const [currentColumn, setCurrentColumn] = React.useState(1);
