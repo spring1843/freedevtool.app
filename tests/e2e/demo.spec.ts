@@ -85,7 +85,9 @@ test.describe("Demo End-to-End Test", () => {
         if (toolPath && !visitedTools.has(toolPath)) {
           visitedTools.add(toolPath);
           lastUrl = currentUrl;
-          console.warn(`Visited tool: ${toolPath} (${visitedTools.size} total)`);
+          console.warn(
+            `Visited tool: ${toolPath} (${visitedTools.size} total)`
+          );
           checksWithoutNewTool = 0;
         }
       } else {
@@ -106,7 +108,9 @@ test.describe("Demo End-to-End Test", () => {
     console.warn(
       `Visited ${visitedTools.size} tools during demo navigation test`
     );
-    console.warn(`Tools visited: ${Array.from(visitedTools).sort().join(", ")}`);
+    console.warn(
+      `Tools visited: ${Array.from(visitedTools).sort().join(", ")}`
+    );
 
     // Stop demo for cleanup
     const stopButton = page.locator('button:has-text("Stop")');
