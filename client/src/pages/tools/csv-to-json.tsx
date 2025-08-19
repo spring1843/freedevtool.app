@@ -26,7 +26,7 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 
 interface CSVRow {
@@ -268,7 +268,6 @@ Jane Smith      jane@example.com        25      Marketing`,
   return (
     <div className="max-w-6xl mx-auto">
       {/* Top Ad */}
-      <AdSlot position="top" id="CTJ-001" size="large" className="mb-6" />
 
       {/* Header */}
       <div className="mb-6">
@@ -564,9 +563,7 @@ Jane Smith,jane@example.com,25"
       </div>
 
       {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="CTJ-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card className="mt-6">
@@ -621,9 +618,7 @@ Jane Smith,jane@example.com,25"
       </Card>
 
       {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="CTJ-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

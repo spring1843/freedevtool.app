@@ -23,7 +23,6 @@ import {
   SkipForward,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface UnicodeBlock {
   name: string;
@@ -423,7 +422,6 @@ export default function UnicodeCharacters() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Top Ad */}
-      <AdSlot position="top" id="UC-001" size="large" className="mb-6" />
 
       {/* Header */}
       <div className="mb-6">
@@ -869,9 +867,7 @@ export default function UnicodeCharacters() {
       </div>
 
       {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="UC-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Character Info & Usage */}
       <Card>
@@ -925,9 +921,7 @@ export default function UnicodeCharacters() {
       </Card>
 
       {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="UC-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

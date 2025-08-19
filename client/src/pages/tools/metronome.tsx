@@ -26,7 +26,6 @@ import { Separator } from "@/components/ui/separator";
 import { getParam, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface ToneSchedule {
   id: string;
@@ -322,9 +321,6 @@ export default function Metronome() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
-      {/* Top Ad */}
-      <AdSlot position="top" id="MET-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
@@ -600,11 +596,6 @@ export default function Metronome() {
         </CardContent>
       </Card>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="MET-002" size="medium" />
-      </div>
-
       {/* Quick Start & Examples */}
       <Card className="mb-8">
         <CardHeader>
@@ -775,9 +766,6 @@ export default function Metronome() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Bottom Ad */}
-      <AdSlot position="bottom" id="MET-003" size="large" />
     </div>
   );
 }

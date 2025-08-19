@@ -5,7 +5,6 @@ import { formatLESS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
 
 const DEFAULT_LESS = `@primary-color: #007bff;@secondary-color: #6c757d;@border-radius: 4px;.btn{padding:10px 20px;border:none;border-radius:@border-radius;cursor:pointer;&.primary{background-color:@primary-color;color:white;&:hover{background-color:darken(@primary-color,10%);}}}&.card{background:white;border-radius:@border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);padding:20px;.header{border-bottom:1px solid @secondary-color;padding-bottom:10px;margin-bottom:20px;h1{margin:0;color:@primary-color;}}}`;
 
@@ -39,8 +38,6 @@ export default function LESSFormatter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="LF-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
           LESS Formatter
@@ -109,8 +106,6 @@ export default function LESSFormatter() {
           </CardContent>
         </Card>
       </div>
-
-      <AdSlot position="sidebar" id="LF-002" size="medium" className="mt-6" />
     </div>
   );
 }

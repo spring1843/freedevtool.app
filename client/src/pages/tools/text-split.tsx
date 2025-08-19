@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Split, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const defaultText = `apple,banana,cherry
@@ -76,8 +76,6 @@ export default function TextSplit() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="TS-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -266,8 +264,6 @@ export default function TextSplit() {
           </div>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="TS-002" size="medium" className="mt-6" />
     </div>
   );
 }

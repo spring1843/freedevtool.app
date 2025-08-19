@@ -12,7 +12,6 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getUserTimezone } from "@/lib/time-tools";
 
@@ -327,9 +326,6 @@ export default function DateTimeDiff() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="DTD-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -706,11 +702,6 @@ export default function DateTimeDiff() {
         </div>
       </div>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="DTD-002" size="medium" />
-      </div>
-
       {/* Quick Examples */}
       <Card>
         <CardHeader>
@@ -756,9 +747,6 @@ export default function DateTimeDiff() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Bottom Ad */}
-      <AdSlot position="bottom" id="DTD-003" size="large" />
     </div>
   );
 }

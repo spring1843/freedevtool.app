@@ -11,7 +11,6 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface BrowserInfo {
   // Navigator properties
@@ -293,7 +292,6 @@ export default function BrowserInfo() {
       </div>
 
       {/* Top Ad */}
-      <AdSlot position="top" id="BRW-001" size="medium" />
 
       {/* Controls */}
       <Card className="mb-6">
@@ -556,9 +554,7 @@ export default function BrowserInfo() {
       </div>
 
       {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="BRW-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Browser Features */}
       <Card className="mb-8">
@@ -645,7 +641,6 @@ export default function BrowserInfo() {
       ) : null}
 
       {/* Bottom Ad */}
-      <AdSlot position="bottom" id="BRW-003" size="large" />
     </div>
   );
 }

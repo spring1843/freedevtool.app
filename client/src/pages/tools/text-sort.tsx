@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ArrowUpDown, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 type SortType = "alphabetical" | "numerical" | "length" | "reverse";
@@ -99,8 +99,6 @@ export default function TextSorter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="TS-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -218,8 +216,6 @@ export default function TextSorter() {
           </CardContent>
         </Card>
       </div>
-
-      <AdSlot position="sidebar" id="TS-002" size="medium" className="mt-6" />
     </div>
   );
 }

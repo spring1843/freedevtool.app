@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Link, Unlink, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const defaultPlainText =
@@ -59,8 +59,6 @@ export default function URLEncoder() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="UE-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -181,8 +179,6 @@ export default function URLEncoder() {
           </div>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="UE-002" size="medium" className="mt-6" />
     </div>
   );
 }

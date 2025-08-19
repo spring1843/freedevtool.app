@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Camera, Square, RotateCcw, Download } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function WebcamTest() {
@@ -193,8 +193,6 @@ export default function WebcamTest() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <AdSlot position="top" id="WT-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -370,8 +368,6 @@ export default function WebcamTest() {
           </div>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="WT-002" size="medium" className="mt-6" />
     </div>
   );
 }

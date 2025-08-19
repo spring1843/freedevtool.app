@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, RotateCcw, Clock, Copy } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
 
@@ -292,8 +292,6 @@ export default function DateConverter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="DC-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -514,8 +512,6 @@ export default function DateConverter() {
           </div>
         </CardContent>
       </Card>
-
-      <AdSlot position="sidebar" id="DC-002" size="medium" className="mt-6" />
     </div>
   );
 }

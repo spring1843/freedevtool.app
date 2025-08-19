@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface DiffLine {
@@ -152,8 +152,6 @@ export default function TextDiff() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="TD-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -281,8 +279,6 @@ export default function TextDiff() {
           </CardContent>
         </Card>
       )}
-
-      <AdSlot position="sidebar" id="TD-002" size="medium" className="mt-6" />
     </div>
   );
 }
