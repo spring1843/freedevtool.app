@@ -81,6 +81,21 @@ The application operates without authentication requirements as all tools functi
 - Input validation and sanitization.
 - No telemetry or tracking.
 
+## Issue Management and Community
+
+**GitHub Issue Templates:**
+- **Bug Report**: Comprehensive bug reporting with tool-specific categorization, browser/device info, and reproduction steps
+- **Feature Request**: Structured feature requests with user stories, priority assessment, and technical considerations
+- **New Tool Request**: Specialized template for requesting additional developer tools with detailed requirements
+- **Performance Issue**: Focused template for performance problems with device specs and impact assessment
+- **Documentation Issue**: Template for documentation improvements and corrections
+
+**Issue Classification:**
+- Tool-specific categorization covering all 45+ tools in the application
+- Clear priority levels and impact assessment
+- User type targeting (developers, designers, students, etc.)
+- Technical complexity estimation for proper resource allocation
+
 ## CI/CD and Release Management
 
 **GitHub Actions Workflows:**

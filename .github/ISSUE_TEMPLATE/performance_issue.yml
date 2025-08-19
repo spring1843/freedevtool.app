@@ -1,0 +1,260 @@
+name: ⚡ Performance Issue
+description: Report performance problems, slow loading, or resource usage issues
+title: "[Performance]: "
+labels: ["performance", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve performance! Please provide detailed information about the performance issue you're experiencing.
+
+  - type: dropdown
+    id: performance-type
+    attributes:
+      label: Performance Issue Type
+      description: What type of performance issue are you experiencing?
+      options:
+        - "Slow Loading - Page or tool takes too long to load"
+        - "Processing Speed - Tool processing is slow"
+        - "UI Responsiveness - Interface is laggy or unresponsive"
+        - "Memory Usage - High memory consumption"
+        - "Battery Drain - Excessive battery usage on mobile"
+        - "Network Usage - Excessive data usage"
+        - "Bundle Size - Large JavaScript download"
+        - "Rendering Performance - Visual glitches or slow rendering"
+        - "Mobile Performance - Poor performance on mobile devices"
+        - "Other"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-tool
+    attributes:
+      label: Which tool is affected?
+      description: Select the tool experiencing performance issues
+      options:
+        - "Homepage/Navigation"
+        - "ASCII Art Generator"
+        - "Barcode Generator"  
+        - "Base64 Encoder/Decoder"
+        - "Color Converter"
+        - "Color Palette Generator"
+        - "Countdown Timer"
+        - "CPU Benchmark"
+        - "CSV to JSON"
+        - "Date Converter"
+        - "Diff Checker"
+        - "GPU Test"
+        - "Hash Generator (MD5)"
+        - "HTML Formatter"
+        - "HTML to Markdown"
+        - "HTTP Status Codes"
+        - "Image Optimizer"
+        - "JSON Formatter"
+        - "JSON to CSV"
+        - "JWT Decoder"
+        - "Lorem Ipsum Generator"
+        - "Markdown Formatter"  
+        - "Memory Test"
+        - "Metronome"
+        - "Monitor Test"
+        - "Number Base Converter"
+        - "Password Generator"
+        - "QR Code Generator"
+        - "Regex Tester"
+        - "Screen Resolution"
+        - "Search & Replace"
+        - "Stopwatch"
+        - "Text Counter"
+        - "Text Sort"
+        - "Text Split"
+        - "Time Formatter"
+        - "Timezone Converter"
+        - "TLS Certificate Decoder"
+        - "Unicode Characters"
+        - "Unit Converter"
+        - "URL Encoder/Decoder"
+        - "URL to JSON"
+        - "UUID Generator"
+        - "Webcam Test"
+        - "World Clock"
+        - "YAML Formatter"
+        - "Multiple tools"
+        - "Application-wide"
+    validations:
+      required: true
+
+  - type: textarea
+    id: performance-description
+    attributes:
+      label: Performance Issue Description
+      description: Describe the performance problem in detail
+      placeholder: "When I [action], the tool/page [describe slowness/issue]. It takes approximately [time] to [complete action]."
+    validations:
+      required: true
+
+  - type: input
+    id: expected-time
+    attributes:
+      label: Expected Performance
+      description: How fast should this operation be?
+      placeholder: "e.g., Should complete in under 1 second, Should load immediately"
+
+  - type: input
+    id: actual-time
+    attributes:
+      label: Actual Performance
+      description: How long does it actually take?
+      placeholder: "e.g., Takes 5-10 seconds, Takes over 30 seconds"
+
+  - type: textarea
+    id: data-size
+    attributes:
+      label: Data Size/Complexity
+      description: Describe the size or complexity of data being processed
+      placeholder: |
+        - File size: 1MB CSV file
+        - Text length: 50,000 characters
+        - Number of items: 1000+ lines
+        - Image resolution: 4K (3840x2160)
+
+  - type: dropdown
+    id: device-specs
+    attributes:
+      label: Device Performance Level
+      description: What type of device are you using?
+      options:
+        - "High-end Desktop (powerful CPU, 16GB+ RAM)"
+        - "Mid-range Desktop (moderate CPU, 8-16GB RAM)"
+        - "Low-end Desktop (older CPU, 4-8GB RAM)"
+        - "High-end Laptop (powerful CPU, 16GB+ RAM)"
+        - "Mid-range Laptop (moderate CPU, 8-16GB RAM)"
+        - "Low-end Laptop (older CPU, 4-8GB RAM)"
+        - "High-end Mobile (flagship phone/tablet)"
+        - "Mid-range Mobile (moderate phone/tablet)"
+        - "Low-end Mobile (budget phone/tablet)"
+        - "Other/Unknown"
+    validations:
+      required: true
+
+  - type: input
+    id: device-details
+    attributes:
+      label: Device Details
+      description: Specific device information if known
+      placeholder: "e.g., MacBook Pro M2, iPhone 14, Windows PC with Intel i5"
+
+  - type: dropdown
+    id: browser-performance
+    attributes:
+      label: Browser
+      description: Which browser are you using?
+      options:
+        - "Chrome"
+        - "Firefox"
+        - "Safari"
+        - "Edge"
+        - "Opera"
+        - "Mobile Safari (iOS)"
+        - "Chrome Mobile (Android)"
+        - "Other (specify in additional context)"
+    validations:
+      required: true
+
+  - type: input
+    id: browser-version
+    attributes:
+      label: Browser Version
+      description: Browser version number
+      placeholder: "e.g., Chrome 120.0.0.0"
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does this occur?
+      description: Is this a consistent performance issue?
+      options:
+        - "Always - Every time I use the tool"
+        - "Often - Most of the time"
+        - "Sometimes - With larger data or specific conditions"
+        - "Rarely - Only with very large data sets"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the performance issue
+      placeholder: |
+        1. Go to [tool name]
+        2. Input [specific data/file]
+        3. Click [button/action]
+        4. Notice the delay/performance issue
+    validations:
+      required: true
+
+  - type: textarea
+    id: workarounds
+    attributes:
+      label: Workarounds Found
+      description: Any workarounds or ways to mitigate the performance issue?
+      placeholder: "Using smaller data sets works fine... Refreshing the page helps... Switching browsers improves performance..."
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages
+      description: Any error messages or console warnings related to performance?
+      placeholder: "Paste any error messages, console warnings, or browser developer tools information"
+      render: text
+
+  - type: dropdown
+    id: impact-level
+    attributes:
+      label: Impact Level
+      description: How does this performance issue affect your work?
+      options:
+        - "Low - Minor inconvenience, still usable"
+        - "Medium - Noticeable delay, but manageable"
+        - "High - Significantly impacts productivity"
+        - "Critical - Makes the tool unusable"
+    validations:
+      required: true
+
+  - type: textarea
+    id: performance-comparison
+    attributes:
+      label: Performance Comparison
+      description: How does this compare to similar tools or previous versions?
+      placeholder: "Other tools like [tool name] handle this instantly... This used to be faster... Compared to [similar tool], this is much slower..."
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information about the performance issue
+      placeholder: "Network conditions, other running applications, system load, etc."
+
+  - type: checkboxes
+    id: debugging-steps
+    attributes:
+      label: Debugging Steps Taken
+      description: Have you tried any of these debugging steps?
+      options:
+        - label: Tested with different browsers
+        - label: Tested with smaller data sets
+        - label: Checked browser console for errors
+        - label: Tested on different devices/networks
+        - label: Cleared browser cache and cookies
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

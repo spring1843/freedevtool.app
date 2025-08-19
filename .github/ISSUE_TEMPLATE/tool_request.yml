@@ -1,0 +1,213 @@
+name: 🛠️ New Tool Request
+description: Request a new developer tool to be added to the application
+title: "[New Tool]: "
+labels: ["new-tool", "enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Request a new developer tool! Please provide detailed information about the tool you'd like to see added.
+
+  - type: input
+    id: tool-name
+    attributes:
+      label: Tool Name
+      description: What should this tool be called?
+      placeholder: "e.g., CSS Minifier, SQL Formatter, Image Converter"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tool-category
+    attributes:
+      label: Tool Category
+      description: Which category does this tool belong to?
+      options:
+        - "Converters - Transform data between formats"
+        - "Formatters - Format and beautify code/data"
+        - "Encoders/Decoders - Encode or decode data"
+        - "Generators - Generate code, data, or assets"
+        - "Validators - Validate syntax or data integrity"
+        - "Analyzers - Analyze and provide insights about data"
+        - "Utilities - General purpose developer utilities"
+        - "Testing - Tools for testing and debugging"
+        - "Security - Security-related tools"
+        - "Performance - Performance analysis tools"
+        - "Text Processing - Advanced text manipulation"
+        - "Image/Media - Image or media processing"
+        - "API Tools - API development and testing"
+        - "Database - Database-related utilities"
+        - "DevOps - Development operations tools"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tool-description
+    attributes:
+      label: Tool Description
+      description: Describe what this tool does and why it's useful
+      placeholder: "This tool would... It helps developers... The main purpose is to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: input-output
+    attributes:
+      label: Input and Output
+      description: Describe what users would input and what the tool would output
+      placeholder: |
+        Input: What format/type of data users would provide (e.g., CSS code, JSON data, image file)
+        Output: What the tool would produce (e.g., minified CSS, formatted JSON, optimized image)
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: example-usage
+    attributes:
+      label: Example Usage
+      description: Provide a concrete example of how this tool would be used
+      placeholder: |
+        Input Example:
+        ```css
+        body {
+            color: red;
+            background-color: blue;
+        }
+        ```
+        
+        Expected Output:
+        ```css
+        body{color:red;background-color:blue}
+        ```
+
+  - type: dropdown
+    id: use-cases
+    attributes:
+      label: Primary Use Cases
+      description: Who would use this tool and for what purpose?
+      multiple: true
+      options:
+        - "Web Development"
+        - "Backend Development" 
+        - "Mobile Development"
+        - "Data Analysis"
+        - "DevOps/Infrastructure"
+        - "Content Creation"
+        - "Testing/QA"
+        - "Security Analysis"
+        - "Performance Optimization"
+        - "Documentation"
+        - "Design/UI Work"
+        - "Database Management"
+        - "API Development"
+        - "Education/Learning"
+        - "Other"
+
+  - type: textarea
+    id: similar-tools
+    attributes:
+      label: Similar Existing Tools
+      description: List similar tools that exist elsewhere (web tools, CLI tools, etc.)
+      placeholder: |
+        - Tool Name 1 - URL (what it does well, what it lacks)
+        - Tool Name 2 - URL (what it does well, what it lacks)
+        - CLI tool xyz (what it does well, what it lacks)
+
+  - type: textarea
+    id: required-features
+    attributes:
+      label: Required Features
+      description: List the essential features this tool must have
+      placeholder: |
+        - Feature 1 (e.g., Support for CSS3 syntax)
+        - Feature 2 (e.g., Error highlighting)
+        - Feature 3 (e.g., Copy to clipboard)
+      render: markdown
+
+  - type: textarea
+    id: nice-to-have-features
+    attributes:
+      label: Nice-to-Have Features
+      description: List additional features that would be great but not essential
+      placeholder: |
+        - Optional feature 1 (e.g., Multiple output formats)
+        - Optional feature 2 (e.g., Batch processing)
+        - Optional feature 3 (e.g., Integration with external APIs)
+      render: markdown
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Implementation Complexity
+      description: How complex do you think this tool would be to build?
+      options:
+        - "Simple - Basic text transformation or formatting"
+        - "Medium - Requires parsing or moderate logic"
+        - "Complex - Advanced algorithms or external dependencies"
+        - "Very Complex - Requires specialized libraries or services"
+        - "Not sure"
+
+  - type: textarea
+    id: technical-requirements
+    attributes:
+      label: Technical Requirements
+      description: Any specific technical considerations or requirements?
+      placeholder: |
+        - Must work offline (no external API calls)
+        - Needs to support large files (>1MB)
+        - Requires specific parsing library
+        - Must be accessible/screen-reader friendly
+        - Performance requirements
+
+  - type: input
+    id: priority-justification
+    attributes:
+      label: Priority Justification
+      description: Why should this tool be prioritized? How many developers would benefit?
+      placeholder: "This tool would help because... Many developers struggle with... It would save time by..."
+
+  - type: textarea
+    id: user-workflow
+    attributes:
+      label: User Workflow
+      description: Describe the step-by-step workflow for using this tool
+      placeholder: |
+        1. User opens the [Tool Name] tool
+        2. User pastes/uploads their [input type]
+        3. User configures options (if any): [list options]
+        4. User clicks "Process" or similar action
+        5. Tool displays [output type] with copy/download options
+        6. User can share the result via URL
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other information about this tool request
+      placeholder: "Any other details, use cases, or considerations"
+
+  - type: checkboxes
+    id: research
+    attributes:
+      label: Research Confirmation
+      description: Please confirm you've done the following
+      options:
+        - label: I have searched existing tools to confirm this doesn't already exist in the application
+          required: true
+        - label: I have researched similar tools to understand the feature requirements
+          required: true
+        - label: I believe this tool would benefit multiple developers, not just my specific use case
+          required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

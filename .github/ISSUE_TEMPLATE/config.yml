@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 General Discussion
+    url: https://github.com/your-username/developer-tools/discussions
+    about: Ask questions, share ideas, or discuss the project with the community
+  - name: 🔒 Security Issue
+    url: https://github.com/your-username/developer-tools/security/advisories/new
+    about: Report security vulnerabilities privately
+  - name: 📚 Documentation
+    url: https://github.com/your-username/developer-tools/wiki
+    about: Check the documentation and FAQ before opening an issue
