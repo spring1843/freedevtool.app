@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Copy, WrapText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface RichTextareaProps extends React.ComponentProps<"textarea"> {
+interface TextareaProps extends React.ComponentProps<"textarea"> {
   showLineNumbers?: boolean;
   showStats?: boolean;
   enableWordWrap?: boolean;
@@ -12,7 +12,7 @@ interface RichTextareaProps extends React.ComponentProps<"textarea"> {
   resizable?: boolean;
 }
 
-const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
+const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       className,
@@ -190,10 +190,6 @@ const RichTextarea = React.forwardRef<HTMLTextAreaElement, RichTextareaProps>(
   }
 );
 
-RichTextarea.displayName = "RichTextarea";
+Textarea.displayName = "Textarea";
 
-// Legacy export for backward compatibility
-const Textarea = RichTextarea;
-type TextareaProps = RichTextareaProps;
-
-export { RichTextarea, Textarea, type RichTextareaProps, type TextareaProps };
+export { Textarea, type TextareaProps };
