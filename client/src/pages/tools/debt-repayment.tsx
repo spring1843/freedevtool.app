@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, RotateCcw, CreditCard, BarChart3 } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import {
   LineChart,
@@ -117,8 +116,6 @@ export default function DebtRepaymentCalculator() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="DR-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -407,8 +404,6 @@ export default function DebtRepaymentCalculator() {
           </Card>
         </>
       ) : null}
-
-      <AdSlot position="sidebar" id="DR-002" size="medium" className="mt-6" />
     </div>
   );
 }

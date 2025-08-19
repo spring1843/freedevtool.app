@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
 import { Clock, Copy, Check, RefreshCw } from "lucide-react";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface TimeFormat {
   name: string;
@@ -272,9 +271,6 @@ export default function TimeFormatter() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="TF-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -339,11 +335,6 @@ export default function TimeFormatter() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="TF-002" size="medium" />
-      </div>
 
       {/* Formatted Times */}
       {formats.length > 0 && (
@@ -423,11 +414,6 @@ export default function TimeFormatter() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="TF-003" size="large" />
-      </div>
     </div>
   );
 }

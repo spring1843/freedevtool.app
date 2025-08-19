@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Keyboard, RotateCcw, Info } from "lucide-react";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface KeyPress {
   key: string;
@@ -138,9 +137,6 @@ export default function KeyboardTest() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="KT-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -300,11 +296,6 @@ export default function KeyboardTest() {
         </CardContent>
       </Card>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="KT-002" size="medium" />
-      </div>
-
       {/* Statistics */}
       <Card>
         <CardHeader>
@@ -399,11 +390,6 @@ export default function KeyboardTest() {
           </Alert>
         </CardContent>
       </Card>
-
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="KT-003" size="large" />
-      </div>
     </div>
   );
 }
