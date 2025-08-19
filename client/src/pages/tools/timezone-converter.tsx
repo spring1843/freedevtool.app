@@ -122,6 +122,7 @@ export default function TimezoneConverter() {
       setSourceDate(dateStr);
       setSourceTime(timeStr);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const convertTimezones = () => {

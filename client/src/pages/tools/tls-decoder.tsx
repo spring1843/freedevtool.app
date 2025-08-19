@@ -105,7 +105,7 @@ export default function TLSDecoder() {
 
   useEffect(() => {
     decodeCertificate();
-  }, []);
+  }, [decodeCertificate]);
 
   const formatDate = (dateString: string) => {
     try {

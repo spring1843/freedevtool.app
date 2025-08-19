@@ -92,7 +92,7 @@ export default function UUIDGenerator() {
 
   useEffect(() => {
     generateUUID();
-  }, []);
+  }, [generateUUID]);
 
   const getFormatDescription = (fmt: string) => {
     switch (fmt) {
