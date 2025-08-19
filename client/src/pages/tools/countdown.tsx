@@ -132,7 +132,7 @@ export default function Countdown() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isActive, isComplete, startCountdown, pauseCountdown, stopCountdown]);
+  }, [isActive, isComplete, pauseCountdown, startCountdown, stopCountdown]);
 
   // Auto-start on component mount
   useEffect(() => {
@@ -156,60 +156,6 @@ export default function Countdown() {
 
     return { days, hours, minutes, seconds };
   };
-
-  const calculateTimeRemaining = useCallback(() => {
-    if (!targetDate || !targetTime) return 0;
-
-    const targetDateTime = new Date(`${targetDate}T${targetTime}`);
-    const now = new Date();
-
-    return Math.max(0, targetDateTime.getTime() - now.getTime());
-  }, [targetDate, targetTime]);
-
-  const startCountdown = useCallback(() => {
-    if (!targetDate || !targetTime) return;
-
-    setIsActive(true);
-    setIsComplete(false);
-
-    intervalRef.current = setInterval(() => {
-      const remaining = calculateTimeRemaining();
-      setTimeRemaining(remaining);
-
-      if (remaining <= 0) {
-        setIsActive(false);
-        setIsComplete(true);
-
-        // Play sound if enabled
-        if (soundEnabled && audioRef.current) {
-          audioRef.current.play().catch(console.error);
-        }
-
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-        }
-      }
-    }, 1000);
-  }, [targetDate, targetTime, soundEnabled, calculateTimeRemaining]);
-
-  const pauseCountdown = useCallback(() => {
-    setIsActive(false);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }, []);
-
-  const stopCountdown = useCallback(() => {
-    setIsActive(false);
-    setIsComplete(false);
-    setTimeRemaining(0);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-  }, []);
 
   const handleReset = () => {
     stopCountdown();

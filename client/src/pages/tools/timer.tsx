@@ -70,7 +70,7 @@ export default function Timer() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isRunning, isFinished, startTimer, pauseTimer, stopTimer]);
+  }, [isRunning, isFinished, startTimer, stopTimer]);
 
   useEffect(() => {
     audioContextRef.current = createTimerSound();
@@ -118,7 +118,7 @@ export default function Timer() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning, timeLeft]);
+  }, [isRunning, timeLeft, startBeeping]);
 
   const startBeeping = useCallback(() => {
     if (audioContextRef.current) {
@@ -138,7 +138,7 @@ export default function Timer() {
     }
   };
 
-  const startTimer = () => {
+  const startTimer = useCallback(() => {
     if (isFinished) {
       stopBeeping();
       setIsFinished(false);
@@ -158,15 +158,15 @@ export default function Timer() {
       // Resume
       setIsRunning(true);
     }
-  };
+  }, [timeLeft, isFinished, days, hours, minutes, seconds, isRunning, reset]);
 
   const pauseTimer = () => {
     setIsRunning(false);
   };
 
-  const stopTimer = () => {
+  const stopTimer = useCallback(() => {
     reset();
-  };
+  }, [reset]);
 
   const startPause = () => {
     if (isRunning) {
