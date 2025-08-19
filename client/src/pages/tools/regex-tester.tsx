@@ -238,10 +238,8 @@ export default function RegexTester() {
               onChange={e => setText(e.target.value)}
               placeholder="Enter text to test against..."
               data-testid="test-text"
-              className="min-h-[300px] font-mono text-sm"
+              className="min-h-[300px] font-mono text-sm resize-none"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>
@@ -251,26 +249,12 @@ export default function RegexTester() {
             <CardTitle>Highlighted Results</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="border border-slate-200 dark:border-slate-700 rounded-lg">
-              {/* Stats Bar */}
-              <div className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 text-xs text-slate-600 dark:text-slate-400">
-                <div className="flex items-center space-x-4">
-                  <span>Characters: {text.length}</span>
-                  <span>Matches: {matches.length}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span>Word wrap</span>
-                  <span className="text-blue-600 dark:text-blue-400">On</span>
-                </div>
-              </div>
-              {/* Content Area */}
-              <div
-                className="min-h-[300px] p-3 bg-white dark:bg-slate-900 font-mono text-sm whitespace-pre-wrap overflow-auto"
-                dangerouslySetInnerHTML={{
-                  __html: highlightMatches(text, matches),
-                }}
-              />
-            </div>
+            <div
+              className="min-h-[300px] p-3 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-sm whitespace-pre-wrap overflow-auto"
+              dangerouslySetInnerHTML={{
+                __html: highlightMatches(text, matches),
+              }}
+            />
           </CardContent>
         </Card>
       </div>
