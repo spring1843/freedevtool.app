@@ -23,5 +23,5 @@ export function useToolDefault(
       executeFunction();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [executeFunction, ...dependencies]);
+  }, [executeFunction, ...dependencies, dependencies.length]);
 }
