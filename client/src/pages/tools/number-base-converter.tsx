@@ -279,8 +279,6 @@ export default function NumberBaseConverter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -543,7 +541,6 @@ export default function NumberBaseConverter() {
         </div>
       </div>
 
-      {/* Middle Ad */}
       <div className="flex justify-center my-8" />
 
       {/* Information */}
@@ -625,7 +622,6 @@ export default function NumberBaseConverter() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
       <div className="flex justify-center mt-8" />
     </div>
   );

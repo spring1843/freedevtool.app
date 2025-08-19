@@ -291,8 +291,6 @@ export default function BrowserInfo() {
         </p>
       </div>
 
-      {/* Top Ad */}
-
       {/* Controls */}
       <Card className="mb-6">
         <CardHeader>
@@ -553,7 +551,6 @@ export default function BrowserInfo() {
         </Card>
       </div>
 
-      {/* Middle Ad */}
       <div className="flex justify-center my-8" />
 
       {/* Browser Features */}
@@ -639,8 +636,6 @@ export default function BrowserInfo() {
           </CardContent>
         </Card>
       ) : null}
-
-      {/* Bottom Ad */}
     </div>
   );
 }

@@ -333,8 +333,6 @@ export default function UnitConverter() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Top Ad */}
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -478,7 +476,6 @@ export default function UnitConverter() {
         </CardContent>
       </Card>
 
-      {/* Middle Ad */}
       <div className="flex justify-center my-8" />
 
       {/* Quick Conversion Reference */}
@@ -535,7 +532,6 @@ export default function UnitConverter() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
       <div className="flex justify-center mt-8" />
     </div>
   );
