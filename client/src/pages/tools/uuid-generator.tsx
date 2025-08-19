@@ -12,7 +12,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Copy, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -24,7 +24,7 @@ export default function UUIDGenerator() {
     "standard" | "uppercase" | "lowercase" | "nodashes" | "brackets"
   >("standard");
 
-  const generateUUID = () => {
+  const generateUUID = useCallback(() => {
     const newUuids: string[] = [];
 
     for (let i = 0; i < count; i++) {
@@ -68,7 +68,7 @@ export default function UUIDGenerator() {
     }
 
     setUuids(newUuids);
-  };
+  }, [version, count, format]);
 
   const handleReset = () => {
     setUuids([]);

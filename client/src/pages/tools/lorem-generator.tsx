@@ -110,7 +110,7 @@ export default function LoremGenerator() {
     return loremWords[randomIndex];
   };
 
-  const generateSentence = (wordCount = 10): string => {
+  const generateSentence = useCallback((wordCount = 10): string => {
     const words: string[] = [];
 
     for (let i = 0; i < wordCount; i++) {
@@ -123,9 +123,9 @@ export default function LoremGenerator() {
     }
 
     return `${words.join(" ")}.`;
-  };
+  }, []);
 
-  const generateParagraph = (sentenceCount = 5): string => {
+  const generateParagraph = useCallback((sentenceCount = 5): string => {
     const sentences: string[] = [];
 
     for (let i = 0; i < sentenceCount; i++) {
@@ -134,7 +134,7 @@ export default function LoremGenerator() {
     }
 
     return sentences.join(" ");
-  };
+  }, [generateSentence]);
 
   const generateLorem = useCallback(() => {
     let result = "";
@@ -202,7 +202,7 @@ export default function LoremGenerator() {
     }
 
     setGenerated(result);
-  }, [type, count, startWithLorem]);
+  }, [type, count, startWithLorem, generateParagraph, generateSentence]);
 
   const handleReset = () => {
     setType("paragraphs");

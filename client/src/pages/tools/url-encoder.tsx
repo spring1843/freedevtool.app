@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Link, Unlink, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -13,7 +13,7 @@ export default function URLEncoder() {
   const [plainText, setPlainText] = useState(defaultPlainText);
   const [encodedText, setEncodedText] = useState("");
 
-  const encodeURL = () => {
+  const encodeURL = useCallback(() => {
     try {
       const encoded = encodeURIComponent(plainText);
       setEncodedText(encoded);
@@ -21,7 +21,7 @@ export default function URLEncoder() {
       console.error("Encoding error:", error);
       setEncodedText("Error: Invalid input for URL encoding");
     }
-  };
+  }, [plainText]);
 
   const decodeURL = () => {
     try {

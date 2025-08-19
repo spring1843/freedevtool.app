@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -42,7 +42,7 @@ export default function TLSDecoder() {
     useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const decodeCertificate = () => {
+  const decodeCertificate = useCallback(() => {
     try {
       setError(null);
 
@@ -88,7 +88,7 @@ export default function TLSDecoder() {
       );
       setCertificateInfo(null);
     }
-  };
+  }, [certificate]);
 
   const handleCertificateChange = (value: string) => {
     setCertificate(value);
