@@ -17,4 +17,6 @@ export interface DemoContextType {
   totalTools: number;
 }
 
-export const DemoContext = createContext<DemoContextType | undefined>(undefined);
+export const DemoContext = createContext<DemoContextType | undefined>(
+  undefined
+);
