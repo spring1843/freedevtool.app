@@ -149,8 +149,8 @@ export default function Home() {
                   {speed === "very-fast"
                     ? "Very Fast"
                     : speed === "crazy-fast"
-                      ? "Crazy Fast"
-                      : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                    ? "Crazy Fast"
+                    : speed.charAt(0).toUpperCase() + speed.slice(1)}
                 </Button>
               ))}
             </div>
@@ -189,8 +189,8 @@ export default function Home() {
                     {speed === "very-fast"
                       ? "Very Fast"
                       : speed === "crazy-fast"
-                        ? "Crazy Fast"
-                        : speed.charAt(0).toUpperCase() + speed.slice(1)}
+                      ? "Crazy Fast"
+                      : speed.charAt(0).toUpperCase() + speed.slice(1)}
                   </Button>
                 ))}
               </div>
@@ -508,7 +508,7 @@ export default function Home() {
       {Object.keys(filteredToolsData).length === 0 && searchQuery.trim() && (
         <div className="text-center py-12">
           <p className="text-slate-500 dark:text-slate-400">
-            No tools found matching "{searchQuery}"
+            No tools found matching &quot;{searchQuery}&quot;
           </p>
         </div>
       )}
