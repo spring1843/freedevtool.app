@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { ToolTextArea } from "@/components/ui/tool-text-area";
 import { Badge } from "@/components/ui/badge";
 import { RefreshCw, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";

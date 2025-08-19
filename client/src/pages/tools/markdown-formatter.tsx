@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { ToolTextArea } from "@/components/ui/tool-text-area";
 import { formatMarkdown } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { FileText, RotateCcw } from "lucide-react";
@@ -133,15 +133,18 @@ export default function MarkdownFormatter() {
             <CardTitle>Input</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <ToolTextArea
+              title=""
               value={input}
-              onChange={e => handleInputChange(e.target.value)}
+              onChange={handleInputChange}
               placeholder="Paste your Markdown here..."
               data-testid="markdown-input"
-              className="min-h-[500px] font-mono text-sm"
+              className="min-h-[500px]"
               rows={25}
               showLineNumbers={true}
-              showStats={true}
+              showCharacterCount={true}
+              showWordCount={true}
+              language="markdown"
             />
           </CardContent>
         </Card>
@@ -151,15 +154,18 @@ export default function MarkdownFormatter() {
             <CardTitle>Formatted Output</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <ToolTextArea
+              title=""
               value={output}
               readOnly={true}
               placeholder="Formatted Markdown will appear here..."
               data-testid="markdown-output"
-              className="min-h-[500px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
+              className="min-h-[500px] bg-slate-50 dark:bg-slate-900"
               rows={25}
               showLineNumbers={true}
-              showStats={true}
+              showCharacterCount={true}
+              showWordCount={true}
+              language="markdown"
             />
           </CardContent>
         </Card>
