@@ -5,7 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_CERT = `-----BEGIN CERTIFICATE-----
@@ -145,8 +145,6 @@ export default function TLSDecoder() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="TLS-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -319,8 +317,6 @@ export default function TLSDecoder() {
           </Card>
         </div>
       ) : null}
-
-      <AdSlot position="sidebar" id="TLS-002" size="medium" className="mt-6" />
     </div>
   );
 }

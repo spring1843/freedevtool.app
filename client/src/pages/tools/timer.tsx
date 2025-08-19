@@ -18,7 +18,6 @@ import {
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 export default function Timer() {
   const [days, setDays] = useState(0);
@@ -262,9 +261,6 @@ export default function Timer() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="TM-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -487,10 +483,7 @@ export default function Timer() {
         </div>
       )}
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="TM-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card>
@@ -525,10 +518,7 @@ export default function Timer() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="TM-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

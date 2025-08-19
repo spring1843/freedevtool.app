@@ -15,7 +15,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 
@@ -241,9 +241,6 @@ export default function PasswordGenerator() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="PWD-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -425,10 +422,7 @@ export default function PasswordGenerator() {
         </CardContent>
       </Card>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="PWD-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Generated Passwords */}
       {passwords.length > 0 && (
@@ -546,9 +540,6 @@ export default function PasswordGenerator() {
           </CardContent>
         </Card>
       )}
-
-      {/* Bottom Ad */}
-      <AdSlot position="bottom" id="PWD-003" size="large" />
     </div>
   );
 }
