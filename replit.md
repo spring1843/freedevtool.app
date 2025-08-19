@@ -103,9 +103,9 @@ The application operates without authentication requirements as all tools functi
 
 ### Core Framework Dependencies
 - **Node.js 24.4.0**: Runtime environment with latest features and performance improvements.
-- **React 19**: UI component library with latest features and performance improvements.
+- **React 19.1.1**: UI component library with latest features and performance improvements.
 - **TypeScript**: Type safety.
-- **Vite**: Build tool and development server.
+- **Vite 6.3.5**: Build tool and development server with security updates.
 - **Express.js**: Backend API foundation.
 - **Tailwind CSS**: Styling framework.
 
