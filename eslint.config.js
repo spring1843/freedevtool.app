@@ -48,15 +48,15 @@ export default tseslint.config(
 
       // React specific rules
       "react-refresh/only-export-components": [
-        "warn",
+        "error",
         { allowConstantExport: true },
       ],
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
-      "react/jsx-no-leaked-render": "warn",
+      "react/jsx-no-leaked-render": "error",
       "react/jsx-no-useless-fragment": "error",
       "react/self-closing-comp": "error",
-      "react/no-unescaped-entities": "warn",
+      "react/no-unescaped-entities": "error",
       "react/no-unknown-property": [
         "error",
         { ignore: ["data-cmdk-input-wrapper"] },
@@ -91,7 +91,7 @@ export default tseslint.config(
       "no-unused-expressions": "error",
       "prefer-const": "error",
       "no-var": "error",
-      "no-nested-ternary": "warn",
+      "no-nested-ternary": "error",
       "no-unneeded-ternary": "error",
       "no-else-return": "error",
       "prefer-template": "error",

@@ -16,7 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSearch } from "@/hooks/use-search";
-import { useDemo } from "@/providers/demo-provider";
+import { useDemo } from "@/hooks/use-demo-hook";
 import { getToolsCount } from "@/data/tools";
 
 export default function Home() {

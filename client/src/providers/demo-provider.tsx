@@ -1,31 +1,8 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { getDemoTools } from "@/data/tools";
-
-type DemoSpeed = "slow" | "normal" | "fast" | "very-fast" | "crazy-fast";
-
-interface DemoContextType {
-  isDemoRunning: boolean;
-  isDemoPaused: boolean;
-  currentDemoTool: string;
-  demoProgress: number;
-  demoSpeed: DemoSpeed;
-  startDemo: () => void;
-  stopDemo: () => void;
-  pauseDemo: () => void;
-  resumeDemo: () => void;
-  skipToNext: () => void;
-  setDemoSpeed: (speed: DemoSpeed) => void;
-  totalTools: number;
-}
-
-const DemoContext = createContext<DemoContextType | undefined>(undefined);
+import type { DemoSpeed, DemoContextType } from "@/contexts/demo-context";
+import { DemoContext } from "@/contexts/demo-context";
 
 interface DemoProviderProps {
   children: React.ReactNode;
@@ -197,10 +174,4 @@ export function DemoProvider({ children }: DemoProviderProps) {
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;
 }
 
-export function useDemo() {
-  const context = useContext(DemoContext);
-  if (context === undefined) {
-    throw new Error("useDemo must be used within a DemoProvider");
-  }
-  return context;
-}
+// Hook moved to separate file to fix fast refresh
