@@ -18,7 +18,6 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface ConversionResult {
   base: number;
@@ -281,7 +280,6 @@ export default function NumberBaseConverter() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Top Ad */}
-      <AdSlot position="top" id="NBC-001" size="large" className="mb-6" />
 
       {/* Header */}
       <div className="mb-6">
@@ -546,9 +544,7 @@ export default function NumberBaseConverter() {
       </div>
 
       {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="NBC-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card className="mt-6">
@@ -630,9 +626,7 @@ export default function NumberBaseConverter() {
       </Card>
 
       {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="NBC-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

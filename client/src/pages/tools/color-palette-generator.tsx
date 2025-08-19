@@ -29,7 +29,7 @@ import {
   Share,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
 
 export default function ColorPaletteGenerator() {
@@ -280,7 +280,6 @@ export default function ColorPaletteGenerator() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Top Ad */}
-      <AdSlot position="top" id="CPG-001" size="large" className="mb-6" />
 
       {/* Header */}
       <div className="mb-6">
@@ -396,9 +395,7 @@ export default function ColorPaletteGenerator() {
       </Card>
 
       {/* Middle Ad */}
-      <div className="flex justify-center mb-8">
-        <AdSlot position="middle" id="CPG-002" size="medium" />
-      </div>
+      <div className="flex justify-center mb-8" />
 
       {/* Generated Palettes */}
       {generatedPalettes.length > 0 && (
@@ -456,9 +453,7 @@ export default function ColorPaletteGenerator() {
       )}
 
       {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="CPG-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

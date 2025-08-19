@@ -5,7 +5,7 @@ import { formatCSS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_CSS = `.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0}.card{background-color:white;padding:20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}.button{background-color:#007bff;color:white;border:none;padding:10px 20px;border-radius:4px;cursor:pointer}.button:hover{background-color:#0056b3}`;
@@ -40,8 +40,6 @@ export default function CSSFormatter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="CF-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -142,8 +140,6 @@ export default function CSSFormatter() {
           </div>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="CF-002" size="medium" className="mt-6" />
     </div>
   );
 }

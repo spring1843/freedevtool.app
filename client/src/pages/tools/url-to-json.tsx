@@ -11,7 +11,6 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface URLComponents {
   protocol?: string;
@@ -202,7 +201,6 @@ export default function URLToJSON() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Top Ad */}
-      <AdSlot position="top" id="UTJ-001" size="large" className="mb-6" />
 
       {/* Header */}
       <div className="mb-6">
@@ -392,9 +390,7 @@ export default function URLToJSON() {
       </div>
 
       {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="UTJ-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card className="mt-6">
@@ -463,9 +459,7 @@ export default function URLToJSON() {
       </Card>
 
       {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="UTJ-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

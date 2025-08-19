@@ -16,7 +16,6 @@ import {
 } from "@/lib/time-tools";
 import { Clock, Globe, Plus, X, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 export default function WorldClock() {
   const [currentTimes, setCurrentTimes] = useState<
@@ -165,7 +164,6 @@ export default function WorldClock() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Top Ad */}
-      <AdSlot position="top" id="WC-001" size="large" className="mb-6" />
 
       {/* Header */}
       <div className="mb-6">
@@ -489,9 +487,7 @@ export default function WorldClock() {
       )}
 
       {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="WC-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card>
@@ -528,9 +524,7 @@ export default function WorldClock() {
       </Card>
 
       {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="WC-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

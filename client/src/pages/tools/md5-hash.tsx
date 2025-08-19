@@ -13,7 +13,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 // MD5-like hash using crypto subtle API
@@ -121,8 +121,6 @@ export default function MD5Hash() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="MD5-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -317,8 +315,6 @@ export default function MD5Hash() {
           </ul>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="MD5-002" size="medium" className="mt-6" />
     </div>
   );
 }

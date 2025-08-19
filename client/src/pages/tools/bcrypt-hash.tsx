@@ -21,7 +21,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function BcryptHash() {
@@ -163,8 +163,6 @@ export default function BcryptHash() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="BH-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -364,8 +362,6 @@ export default function BcryptHash() {
           </ul>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="BH-002" size="medium" className="mt-6" />
     </div>
   );
 }

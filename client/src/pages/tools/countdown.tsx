@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, Square, RotateCcw, Clock } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function Countdown() {
@@ -249,8 +249,6 @@ export default function Countdown() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <AdSlot position="top" id="CD-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -471,8 +469,6 @@ export default function Countdown() {
           ) : null}
         </CardContent>
       </Card>
-
-      <AdSlot position="sidebar" id="CD-002" size="medium" className="mt-6" />
     </div>
   );
 }
