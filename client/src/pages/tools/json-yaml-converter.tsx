@@ -79,7 +79,7 @@ export default function JSONYAMLConverter() {
   useEffect(() => {
     convertToYAML();
     convertToJSON();
-  }, []);
+  }, [convertToYAML, convertToJSON]);
 
   return (
     <div className="max-w-6xl mx-auto">

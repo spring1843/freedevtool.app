@@ -375,8 +375,9 @@ export default function UnicodeCharacters() {
     selectedCategory,
     searchQuery,
     customRange,
-    currentPage,
-    customRangePage,
+    getAllViewCharacters,
+    getCustomRangeCharacters,
+    searchCharacters,
   ]);
 
   // Copy character to clipboard
