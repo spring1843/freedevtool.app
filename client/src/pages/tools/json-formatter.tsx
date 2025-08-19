@@ -63,8 +63,6 @@ export default function JsonFormatter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">

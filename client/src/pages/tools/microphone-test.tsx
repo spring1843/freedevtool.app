@@ -366,8 +366,6 @@ export default function MicrophoneTest() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
@@ -638,7 +636,6 @@ export default function MicrophoneTest() {
         </Card>
       </div>
 
-      {/* Middle Ad */}
       <div className="flex justify-center my-8" />
 
       {/* Information */}
@@ -678,7 +675,6 @@ export default function MicrophoneTest() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
       <div className="flex justify-center mt-8" />
     </div>
   );
