@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -70,8 +70,7 @@ export default function Timer() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isRunning, isFinished]);
+  }, [isRunning, isFinished, startTimer, pauseTimer, stopTimer]);
 
   useEffect(() => {
     audioContextRef.current = createTimerSound();
@@ -121,7 +120,7 @@ export default function Timer() {
     };
   }, [isRunning, timeLeft]);
 
-  const startBeeping = () => {
+  const startBeeping = useCallback(() => {
     if (audioContextRef.current) {
       playTimerBeep(audioContextRef.current);
       beepIntervalRef.current = setInterval(() => {
@@ -130,7 +129,7 @@ export default function Timer() {
         }
       }, 1000);
     }
-  };
+  }, []);
 
   const stopBeeping = () => {
     if (beepIntervalRef.current) {

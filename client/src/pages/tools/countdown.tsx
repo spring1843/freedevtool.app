@@ -12,7 +12,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, Square, RotateCcw, Clock } from "lucide-react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -39,6 +39,60 @@ export default function Countdown() {
   );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const calculateTimeRemaining = useCallback(() => {
+    if (!targetDate || !targetTime) return 0;
+
+    const targetDateTime = new Date(`${targetDate}T${targetTime}`);
+    const now = new Date();
+
+    return Math.max(0, targetDateTime.getTime() - now.getTime());
+  }, [targetDate, targetTime]);
+
+  const startCountdown = useCallback(() => {
+    if (!targetDate || !targetTime) return;
+
+    setIsActive(true);
+    setIsComplete(false);
+
+    intervalRef.current = setInterval(() => {
+      const remaining = calculateTimeRemaining();
+      setTimeRemaining(remaining);
+
+      if (remaining <= 0) {
+        setIsActive(false);
+        setIsComplete(true);
+
+        // Play sound if enabled
+        if (soundEnabled && audioRef.current) {
+          audioRef.current.play().catch(console.error);
+        }
+
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+      }
+    }, 1000);
+  }, [targetDate, targetTime, soundEnabled, calculateTimeRemaining]);
+
+  const pauseCountdown = useCallback(() => {
+    setIsActive(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
+  const stopCountdown = useCallback(() => {
+    setIsActive(false);
+    setIsComplete(false);
+    setTimeRemaining(0);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -78,8 +132,7 @@ export default function Countdown() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isActive, isComplete]);
+  }, [isActive, isComplete, startCountdown, pauseCountdown, stopCountdown]);
 
   // Auto-start on component mount
   useEffect(() => {
@@ -90,8 +143,7 @@ export default function Countdown() {
     }, 500); // Small delay to ensure UI is ready
 
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [targetDate, targetTime]);
+  }, [targetDate, targetTime, startCountdown]);
 
   const formatTime = (milliseconds: number) => {
     if (milliseconds <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -105,16 +157,16 @@ export default function Countdown() {
     return { days, hours, minutes, seconds };
   };
 
-  const calculateTimeRemaining = () => {
+  const calculateTimeRemaining = useCallback(() => {
     if (!targetDate || !targetTime) return 0;
 
     const targetDateTime = new Date(`${targetDate}T${targetTime}`);
     const now = new Date();
 
     return Math.max(0, targetDateTime.getTime() - now.getTime());
-  };
+  }, [targetDate, targetTime]);
 
-  const startCountdown = () => {
+  const startCountdown = useCallback(() => {
     if (!targetDate || !targetTime) return;
 
     setIsActive(true);
@@ -139,17 +191,17 @@ export default function Countdown() {
         }
       }
     }, 1000);
-  };
+  }, [targetDate, targetTime, soundEnabled, calculateTimeRemaining]);
 
-  const pauseCountdown = () => {
+  const pauseCountdown = useCallback(() => {
     setIsActive(false);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  };
+  }, []);
 
-  const stopCountdown = () => {
+  const stopCountdown = useCallback(() => {
     setIsActive(false);
     setIsComplete(false);
     setTimeRemaining(0);
@@ -157,7 +209,7 @@ export default function Countdown() {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-  };
+  }, []);
 
   const handleReset = () => {
     stopCountdown();
@@ -235,8 +287,7 @@ export default function Countdown() {
       const remaining = calculateTimeRemaining();
       setTimeRemaining(remaining);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [targetDate, targetTime, isActive]);
+  }, [targetDate, targetTime, isActive, calculateTimeRemaining]);
 
   const timeComponents = formatTime(timeRemaining);
   const isExpired = timeRemaining <= 0 && targetDate && targetTime;

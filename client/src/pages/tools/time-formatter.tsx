@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,10 +34,9 @@ export default function TimeFormatter() {
     if (inputDate && inputTime) {
       formatTime();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputDate, inputTime, inputTimezone]);
+  }, [inputDate, inputTime, inputTimezone, formatTime]);
 
-  const formatTime = () => {
+  const formatTime = useCallback(() => {
     try {
       // Create date object from input
       const dateTime = new Date(`${inputDate}T${inputTime}`);
@@ -204,7 +203,7 @@ export default function TimeFormatter() {
       console.error("Time formatting error");
       setFormats([]);
     }
-  };
+  }, [inputDate, inputTime, inputTimezone]);
 
   const convertToDecimalTime = (date: Date): string => {
     const hours = date.getHours();

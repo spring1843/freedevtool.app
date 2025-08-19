@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -122,10 +122,9 @@ export default function TimezoneConverter() {
       setSourceDate(dateStr);
       setSourceTime(timeStr);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [convertTimezones]);
 
-  const convertTimezones = () => {
+  const convertTimezones = useCallback(() => {
     if (!sourceDate || !sourceTime) {
       toast({
         title: "Missing input",
@@ -236,7 +235,7 @@ export default function TimezoneConverter() {
         variant: "destructive",
       });
     }
-  };
+  }, [sourceDate, sourceTime, targetTimezones, sourceTimezone, toast]);
 
   const addTargetTimezone = (timezone: string) => {
     if (!targetTimezones.includes(timezone)) {

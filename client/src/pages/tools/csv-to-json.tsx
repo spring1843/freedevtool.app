@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -80,8 +80,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
       csv: encodeURIComponent(fields.csvInput.slice(0, 500)), // Limit URL length
       delimiter: fields.selectedDelimiter,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fields.csvInput, fields.selectedDelimiter]);
+  }, [fields.csvInput, fields.selectedDelimiter, convertCSV]);
 
   const parseCSVLine = (line: string, delimiter: string): string[] => {
     const result: string[] = [];
@@ -118,7 +117,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
     return result;
   };
 
-  const convertCSV = () => {
+  const convertCSV = useCallback(() => {
     try {
       updateField("error", "");
 
@@ -181,7 +180,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
       updateField("headers", []);
       updateField("rowCount", 0);
     }
-  };
+  }, [fields.csvInput, fields.selectedDelimiter, updateField]);
 
   const shareConverter = async () => {
     const success = await copyShareableURL({

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -91,8 +91,7 @@ export default function NumberBaseConverter() {
       from: inputBase.toString(),
       to: outputBases.join(","),
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputNumber, inputBase, outputBases]);
+  }, [inputNumber, inputBase, outputBases, convertNumber]);
 
   const getBaseCharacters = (base: number): string => {
     const commonBase = commonBases.find(b => b.value === base);
@@ -168,7 +167,7 @@ export default function NumberBaseConverter() {
     return decimal < 0 ? `-${result}` : result;
   };
 
-  const convertNumber = () => {
+  const convertNumber = useCallback(() => {
     try {
       setError("");
 
@@ -204,7 +203,7 @@ export default function NumberBaseConverter() {
       setError(errorMessage);
       setResults([]);
     }
-  };
+  }, [inputNumber, inputBase, outputBases]);
 
   const addCustomBase = () => {
     const base = parseInt(customBase, 10);
