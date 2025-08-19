@@ -173,7 +173,6 @@ export function formatHTML(
       "wbr",
     ]);
 
-
     // Define tags that should preserve whitespace
     const preformattedTags = new Set(["pre", "code", "script", "style"]);
 
