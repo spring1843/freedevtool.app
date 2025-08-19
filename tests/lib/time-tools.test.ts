@@ -71,9 +71,9 @@ describe("Time and Date Utilities", () => {
     });
 
     it("should add days to date", () => {
-      const date = new Date("2024-01-15");
+      const date = new Date("2024-01-15T00:00:00Z");
       const newDate = new Date(date.getTime() + 7 * 24 * 60 * 60 * 1000);
-      expect(newDate.getDate()).toBe(22);
+      expect(newDate.getUTCDate()).toBe(22);
     });
 
     it("should calculate age from birthdate", () => {
@@ -85,9 +85,9 @@ describe("Time and Date Utilities", () => {
     });
 
     it("should handle leap years", () => {
-      const leapYear = new Date("2024-02-29");
-      expect(leapYear.getMonth()).toBe(1); // February
-      expect(leapYear.getDate()).toBe(29);
+      const leapYear = new Date("2024-02-29T00:00:00Z");
+      expect(leapYear.getUTCMonth()).toBe(1); // February
+      expect(leapYear.getUTCDate()).toBe(29);
     });
   });
 
@@ -256,13 +256,13 @@ describe("Time and Date Utilities", () => {
 
     it("should check if date is weekend", () => {
       const isWeekend = (date: Date): boolean => {
-        const day = date.getDay();
+        const day = date.getUTCDay();
         return day === 0 || day === 6; // Sunday = 0, Saturday = 6
       };
 
-      const saturday = new Date("2024-01-13"); // Saturday
-      const sunday = new Date("2024-01-14"); // Sunday
-      const monday = new Date("2024-01-15"); // Monday
+      const saturday = new Date("2024-01-13T00:00:00Z"); // Saturday
+      const sunday = new Date("2024-01-14T00:00:00Z"); // Sunday
+      const monday = new Date("2024-01-15T00:00:00Z"); // Monday
 
       expect(isWeekend(saturday)).toBe(true);
       expect(isWeekend(sunday)).toBe(true);
