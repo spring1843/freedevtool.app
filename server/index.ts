@@ -1,7 +1,6 @@
 import express, {
   type Request,
   type Response,
-  type NextFunction,
 } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -64,7 +63,6 @@ app.use((req, res, next) => {
       err: Error & { status?: number; statusCode?: number },
       _req: Request,
       res: Response,
-      _next: NextFunction
     ) => {
       const status = err.status || err.statusCode || 500;
       const message = err.message || "Internal Server Error";

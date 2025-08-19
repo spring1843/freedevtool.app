@@ -156,7 +156,7 @@ export default function URLToJSON() {
       // Remove undefined values for cleaner JSON
       const cleanComponents = Object.fromEntries(
         Object.entries(components).filter(
-          ([_, value]) => value !== undefined && value !== ""
+          ([, value]) => value !== undefined && value !== ""
         )
       );
 

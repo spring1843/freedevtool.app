@@ -173,40 +173,6 @@ export function formatHTML(
       "wbr",
     ]);
 
-    // Define inline tags that shouldn't force newlines
-    const _inlineTags = new Set([
-      "a",
-      "abbr",
-      "acronym",
-      "b",
-      "bdo",
-      "big",
-      "br",
-      "button",
-      "cite",
-      "code",
-      "dfn",
-      "em",
-      "i",
-      "img",
-      "input",
-      "kbd",
-      "label",
-      "map",
-      "object",
-      "q",
-      "samp",
-      "script",
-      "select",
-      "small",
-      "span",
-      "strong",
-      "sub",
-      "sup",
-      "textarea",
-      "tt",
-      "var",
-    ]);
 
     // Define tags that should preserve whitespace
     const preformattedTags = new Set(["pre", "code", "script", "style"]);

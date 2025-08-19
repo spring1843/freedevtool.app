@@ -432,9 +432,6 @@ export default function WorldClock() {
             })
             .map((city, index) => {
               const timeData = currentTimes[city.timezone];
-              const _isCustom = !defaultWorldClockCities.some(
-                defaultCity => defaultCity.timezone === city.timezone
-              );
 
               return (
                 <Card
