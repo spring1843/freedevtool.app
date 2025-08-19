@@ -18,13 +18,13 @@ export function CodeEditor({
   placeholder,
   readOnly = false,
   className,
-  showCopy = true
+  showCopy = true,
 }: CodeEditorProps) {
   return (
     <div className="relative">
       <Textarea
         value={value}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={e => onChange?.(e.target.value)}
         placeholder={placeholder}
         readOnly={readOnly}
         className={cn(
@@ -34,9 +34,11 @@ export function CodeEditor({
         )}
         data-testid={readOnly ? "code-output" : "code-input"}
       />
-      {showCopy && value ? <div className="absolute top-2 right-2">
+      {showCopy && value ? (
+        <div className="absolute top-2 right-2">
           <CopyButton text={value} />
-        </div> : null}
+        </div>
+      ) : null}
     </div>
   );
 }

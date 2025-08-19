@@ -3,7 +3,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { countTextStats } from "@/lib/text-tools";
-import { FileText, Hash, Type, List, FileIcon, BarChart3, RotateCcw } from "lucide-react";
+import {
+  FileText,
+  Hash,
+  Type,
+  List,
+  FileIcon,
+  BarChart3,
+  RotateCcw,
+} from "lucide-react";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 
 const defaultFields = {
@@ -13,11 +21,14 @@ Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad mi
 
 Nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 };
 
 export default function TextCounter() {
-  const { fields, updateField, resetFields } = usePersistentForm('text-counter', defaultFields);
+  const { fields, updateField, resetFields } = usePersistentForm(
+    "text-counter",
+    defaultFields
+  );
 
   const stats = countTextStats(fields.text);
 
@@ -26,44 +37,44 @@ export default function TextCounter() {
       label: "Characters",
       value: stats.characters,
       icon: Type,
-      description: "Including spaces and punctuation"
+      description: "Including spaces and punctuation",
     },
     {
       label: "Characters (no spaces)",
       value: stats.charactersNoSpaces,
       icon: Hash,
-      description: "Excluding whitespace"
+      description: "Excluding whitespace",
     },
     {
       label: "Words",
       value: stats.words,
       icon: FileText,
-      description: "Separated by whitespace"
+      description: "Separated by whitespace",
     },
     {
       label: "Sentences",
       value: stats.sentences,
       icon: List,
-      description: "Ending with . ! or ?"
+      description: "Ending with . ! or ?",
     },
     {
       label: "Paragraphs",
       value: stats.paragraphs,
       icon: FileIcon,
-      description: "Separated by blank lines"
+      description: "Separated by blank lines",
     },
     {
       label: "Lines",
       value: stats.lines,
       icon: BarChart3,
-      description: "Total line breaks"
+      description: "Total line breaks",
     },
     {
       label: "Data Size",
       value: stats.bytes,
       icon: FileIcon,
-      description: "UTF-8 bytes (Unicode support)"
-    }
+      description: "UTF-8 bytes (Unicode support)",
+    },
   ];
 
   return (
@@ -87,7 +98,7 @@ export default function TextCounter() {
           <CardContent>
             <Textarea
               value={fields.text}
-              onChange={(e) => updateField('text', e.target.value)}
+              onChange={e => updateField("text", e.target.value)}
               placeholder="Enter or paste your text here..."
               className="min-h-[400px] font-mono text-sm"
               data-testid="text-input"
@@ -96,7 +107,12 @@ export default function TextCounter() {
               showStats={true}
             />
             <div className="mt-4 flex justify-end">
-              <Button onClick={resetFields} variant="outline" size="sm" data-testid="reset-button">
+              <Button
+                onClick={resetFields}
+                variant="outline"
+                size="sm"
+                data-testid="reset-button"
+              >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Reset
               </Button>
@@ -111,13 +127,13 @@ export default function TextCounter() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {statItems.map((item) => {
+              {statItems.map(item => {
                 const Icon = item.icon;
                 return (
                   <div
                     key={item.label}
                     className="flex items-center justify-between p-4 border border-slate-200 dark:border-slate-700 rounded-lg"
-                    data-testid={`stat-${item.label.toLowerCase().replace(/\s+/g, '-').replace(/[()]/g, '')}`}
+                    data-testid={`stat-${item.label.toLowerCase().replace(/\s+/g, "-").replace(/[()]/g, "")}`}
                   >
                     <div className="flex items-center space-x-3">
                       <Icon className="w-5 h-5 text-slate-500 dark:text-slate-400" />
@@ -130,8 +146,13 @@ export default function TextCounter() {
                         </div>
                       </div>
                     </div>
-                    <Badge variant="secondary" className="text-lg font-mono font-bold px-3 py-1">
-                      {item.label === "Data Size" ? `${item.value.toLocaleString()} B` : item.value.toLocaleString()}
+                    <Badge
+                      variant="secondary"
+                      className="text-lg font-mono font-bold px-3 py-1"
+                    >
+                      {item.label === "Data Size"
+                        ? `${item.value.toLocaleString()} B`
+                        : item.value.toLocaleString()}
                     </Badge>
                   </div>
                 );
@@ -145,13 +166,16 @@ export default function TextCounter() {
               </h4>
               <div className="text-sm text-slate-600 dark:text-slate-400">
                 <div>
-                  Average reader (200 WPM): ~{Math.max(1, Math.ceil(stats.words / 200))} minutes
+                  Average reader (200 WPM): ~
+                  {Math.max(1, Math.ceil(stats.words / 200))} minutes
                 </div>
                 <div>
-                  Fast reader (300 WPM): ~{Math.max(1, Math.ceil(stats.words / 300))} minutes
+                  Fast reader (300 WPM): ~
+                  {Math.max(1, Math.ceil(stats.words / 300))} minutes
                 </div>
                 <div>
-                  Slow reader (150 WPM): ~{Math.max(1, Math.ceil(stats.words / 150))} minutes
+                  Slow reader (150 WPM): ~
+                  {Math.max(1, Math.ceil(stats.words / 150))} minutes
                 </div>
               </div>
             </div>
@@ -163,27 +187,43 @@ export default function TextCounter() {
               </h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-slate-500 dark:text-slate-400">Avg words per sentence:</span>
+                  <span className="text-slate-500 dark:text-slate-400">
+                    Avg words per sentence:
+                  </span>
                   <span className="ml-2 font-mono">
-                    {stats.sentences > 0 ? (stats.words / stats.sentences).toFixed(1) : '0'}
+                    {stats.sentences > 0
+                      ? (stats.words / stats.sentences).toFixed(1)
+                      : "0"}
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-500 dark:text-slate-400">Avg chars per word:</span>
+                  <span className="text-slate-500 dark:text-slate-400">
+                    Avg chars per word:
+                  </span>
                   <span className="ml-2 font-mono">
-                    {stats.words > 0 ? (stats.charactersNoSpaces / stats.words).toFixed(1) : '0'}
+                    {stats.words > 0
+                      ? (stats.charactersNoSpaces / stats.words).toFixed(1)
+                      : "0"}
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-500 dark:text-slate-400">Sentences per paragraph:</span>
+                  <span className="text-slate-500 dark:text-slate-400">
+                    Sentences per paragraph:
+                  </span>
                   <span className="ml-2 font-mono">
-                    {stats.paragraphs > 0 ? (stats.sentences / stats.paragraphs).toFixed(1) : '0'}
+                    {stats.paragraphs > 0
+                      ? (stats.sentences / stats.paragraphs).toFixed(1)
+                      : "0"}
                   </span>
                 </div>
                 <div>
-                  <span className="text-slate-500 dark:text-slate-400">Words per paragraph:</span>
+                  <span className="text-slate-500 dark:text-slate-400">
+                    Words per paragraph:
+                  </span>
                   <span className="ml-2 font-mono">
-                    {stats.paragraphs > 0 ? (stats.words / stats.paragraphs).toFixed(1) : '0'}
+                    {stats.paragraphs > 0
+                      ? (stats.words / stats.paragraphs).toFixed(1)
+                      : "0"}
                   </span>
                 </div>
               </div>

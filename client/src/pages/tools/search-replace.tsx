@@ -6,8 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+import { useState, useEffect, useCallback } from "react";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -29,34 +29,36 @@ export default function SearchReplace() {
   const [matchCount, setMatchCount] = useState(0);
   const [error, setError] = useState("");
 
-  const performSearchReplace = () => {
+  const performSearchReplace = useCallback(() => {
     try {
       setError("");
-      
+
       if (!searchText) {
         setError("Search text cannot be empty");
         return;
       }
 
       let searchPattern: string | RegExp = searchText;
-      
+
       if (isRegex) {
-        let flags = '';
-        if (!isCaseSensitive) flags += 'i';
-        if (isGlobal) flags += 'g';
-        
+        let flags = "";
+        if (!isCaseSensitive) flags += "i";
+        if (isGlobal) flags += "g";
+
         try {
           searchPattern = new RegExp(searchText, flags);
         } catch (regexError) {
-          setError(`Invalid regex pattern: ${regexError instanceof Error ? regexError.message : String(regexError)}`);
+          setError(
+            `Invalid regex pattern: ${regexError instanceof Error ? regexError.message : String(regexError)}`
+          );
           return;
         }
       } else {
         // Escape special regex characters for literal search
-        const escapedSearch = searchText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        let flags = '';
-        if (!isCaseSensitive) flags += 'i';
-        if (isGlobal) flags += 'g';
+        const escapedSearch = searchText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        let flags = "";
+        if (!isCaseSensitive) flags += "i";
+        if (isGlobal) flags += "g";
         searchPattern = new RegExp(escapedSearch, flags);
       }
 
@@ -67,13 +69,12 @@ export default function SearchReplace() {
       // Perform replacement
       const replacedText = text.replace(searchPattern, replaceText);
       setResult(replacedText);
-      
     } catch (err) {
       setError(`Error: ${err instanceof Error ? err.message : String(err)}`);
       setResult("");
       setMatchCount(0);
     }
-  };
+  }, [text, searchText, replaceText, isRegex, isCaseSensitive, isGlobal]);
 
   const handleReset = () => {
     setText(DEFAULT_TEXT);
@@ -89,12 +90,10 @@ export default function SearchReplace() {
 
   useEffect(() => {
     performSearchReplace();
-  }, []);
+  }, [performSearchReplace]);
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="SR-001" size="large" className="mb-6" />
-      
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -120,7 +119,7 @@ export default function SearchReplace() {
               <Input
                 id="search-text"
                 value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
+                onChange={e => setSearchText(e.target.value)}
                 placeholder="Text to search for..."
                 data-testid="search-input"
               />
@@ -130,7 +129,7 @@ export default function SearchReplace() {
               <Input
                 id="replace-text"
                 value={replaceText}
-                onChange={(e) => setReplaceText(e.target.value)}
+                onChange={e => setReplaceText(e.target.value)}
                 placeholder="Replacement text..."
                 data-testid="replace-input"
               />
@@ -164,11 +163,13 @@ export default function SearchReplace() {
             </div>
           </div>
 
-          {error && (
+          {error ? (
             <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-              <div className="text-sm text-red-800 dark:text-red-200">{error}</div>
+              <div className="text-sm text-red-800 dark:text-red-200">
+                {error}
+              </div>
             </div>
-          )}
+          ) : null}
 
           <div className="flex items-center justify-between">
             <div className="flex gap-3">
@@ -184,7 +185,10 @@ export default function SearchReplace() {
                 Reset
               </Button>
             </div>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            <Badge
+              variant="outline"
+              className="bg-blue-50 text-blue-700 border-blue-200"
+            >
               {matchCount} matches found
             </Badge>
           </div>
@@ -199,7 +203,7 @@ export default function SearchReplace() {
           <CardContent>
             <Textarea
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={e => setText(e.target.value)}
               placeholder="Enter text to search and replace..."
               data-testid="text-input"
               className="min-h-[400px] font-mono text-sm"
@@ -228,8 +232,6 @@ export default function SearchReplace() {
           </CardContent>
         </Card>
       </div>
-
-      <AdSlot position="sidebar" id="SR-002" size="medium" className="mt-6" />
     </div>
   );
 }

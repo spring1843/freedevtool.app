@@ -4,8 +4,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+import { useState, useEffect, useCallback } from "react";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_JSON = `{
@@ -17,7 +17,7 @@ const DEFAULT_JSON = `{
     "city": "New York",
     "zipCode": "10001"
   },
-  "hobbies": ["reading", "swimming", "coding"],
+  "loves": ["free", "dev", "tool", "app"],
   "isActive": true
 }`;
 
@@ -28,10 +28,11 @@ address:
   street: 123 Main St
   city: New York
   zipCode: "10001"
-hobbies:
-  - reading
-  - swimming
-  - coding
+loves:
+  - free
+  - dev
+  - tool
+  - app
 isActive: true`;
 
 export default function JSONYAMLConverter() {
@@ -41,29 +42,29 @@ export default function JSONYAMLConverter() {
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const convertToYAML = () => {
+  const convertToYAML = useCallback(() => {
     const { converted, error: convertError } = convertJSONToYAML(jsonInput);
     setYamlOutput(converted);
     setError(convertError || null);
-  };
+  }, [jsonInput]);
 
-  const convertToJSON = () => {
+  const convertToJSON = useCallback(() => {
     const { converted, error: convertError } = convertYAMLToJSON(yamlInput);
     setJsonOutput(converted);
     setError(convertError || null);
-  };
+  }, [yamlInput]);
 
   const handleJsonInputChange = (value: string) => {
     setJsonInput(value);
     if (yamlOutput) {
-      setYamlOutput('');
+      setYamlOutput("");
     }
   };
 
   const handleYamlInputChange = (value: string) => {
     setYamlInput(value);
     if (jsonOutput) {
-      setJsonOutput('');
+      setJsonOutput("");
     }
   };
 
@@ -78,12 +79,10 @@ export default function JSONYAMLConverter() {
   useEffect(() => {
     convertToYAML();
     convertToJSON();
-  }, []);
+  }, [convertToYAML, convertToJSON]);
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="JYC-001" size="large" className="mb-6" />
-      
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -98,11 +97,13 @@ export default function JSONYAMLConverter() {
         </div>
       </div>
 
-      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert> : null}
+        </Alert>
+      ) : null}
 
       <div className="mb-6 flex flex-wrap gap-3">
         <Button
@@ -129,12 +130,14 @@ export default function JSONYAMLConverter() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-blue-600 dark:text-blue-400">JSON Input</CardTitle>
+              <CardTitle className="text-blue-600 dark:text-blue-400">
+                JSON Input
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={jsonInput}
-                onChange={(e) => handleJsonInputChange(e.target.value)}
+                onChange={e => handleJsonInputChange(e.target.value)}
                 placeholder="Paste your JSON here..."
                 data-testid="json-input"
                 className="min-h-[300px] font-mono text-sm"
@@ -147,7 +150,9 @@ export default function JSONYAMLConverter() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-purple-600 dark:text-purple-400">YAML Output</CardTitle>
+              <CardTitle className="text-purple-600 dark:text-purple-400">
+                YAML Output
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
@@ -167,12 +172,14 @@ export default function JSONYAMLConverter() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-green-600 dark:text-green-400">YAML Input</CardTitle>
+              <CardTitle className="text-green-600 dark:text-green-400">
+                YAML Input
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
                 value={yamlInput}
-                onChange={(e) => handleYamlInputChange(e.target.value)}
+                onChange={e => handleYamlInputChange(e.target.value)}
                 placeholder="Paste your YAML here..."
                 data-testid="yaml-input"
                 className="min-h-[300px] font-mono text-sm"
@@ -185,7 +192,9 @@ export default function JSONYAMLConverter() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-orange-600 dark:text-orange-400">JSON Output</CardTitle>
+              <CardTitle className="text-orange-600 dark:text-orange-400">
+                JSON Output
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <Textarea
@@ -202,8 +211,6 @@ export default function JSONYAMLConverter() {
           </Card>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="JYC-002" size="medium" className="mt-6" />
     </div>
   );
 }

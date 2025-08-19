@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CopyButton } from "@/components/ui/copy-button";
 import { Link, Globe, Hash, Share } from "lucide-react";
-import { updateURL, copyShareableURL, getValidatedParam } from "@/lib/url-sharing";
+import {
+  updateURL,
+  copyShareableURL,
+  getValidatedParam,
+} from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
-
 
 interface URLComponents {
   protocol?: string;
@@ -25,7 +27,9 @@ interface URLComponents {
 }
 
 export default function URLToJSON() {
-  const [inputUrl, setInputUrl] = useState("https://example.com/path?param1=value1&param2=value2#section");
+  const [inputUrl, setInputUrl] = useState(
+    "https://example.com/path?param1=value1&param2=value2#section"
+  );
   const [urlComponents, setUrlComponents] = useState<URLComponents>({});
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState("");
@@ -33,46 +37,70 @@ export default function URLToJSON() {
 
   useEffect(() => {
     // Load parameters from URL with validation
-    const urlInput = getValidatedParam('url', 'https://example.com/path?param1=value1&param2=value2#section', {
-      type: 'string',
-      pattern: /^https?:\/\/[^\s<>"{}|\\^`[\]]*$/,
-      maxLength: 2048 // Standard max URL length
-    });
-    setInputUrl(urlInput);
+    const urlInput = getValidatedParam(
+      "url",
+      "https://example.com/path?param1=value1&param2=value2#section",
+      {
+        type: "string",
+        pattern: /^https?:\/\/[^\s<>"{}|\\^`[\]]*$/,
+        maxLength: 2048, // Standard max URL length
+      }
+    );
+    setInputUrl(urlInput as string);
   }, []);
 
   useEffect(() => {
     parseURL();
     // Update URL when input changes
     updateURL({ url: inputUrl });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputUrl]);
 
-  const extractTLD = (hostname: string): { tld: string; domain: string; subdomain: string } => {
-    const parts = hostname.split('.');
+  const extractTLD = (
+    hostname: string
+  ): { tld: string; domain: string; subdomain: string } => {
+    const parts = hostname.split(".");
     if (parts.length < 2) {
-      return { tld: '', domain: hostname, subdomain: '' };
+      return { tld: "", domain: hostname, subdomain: "" };
     }
 
     // Common TLDs and their patterns
     const commonTLDs = [
-      'com', 'org', 'net', 'edu', 'gov', 'mil', 'int',
-      'co.uk', 'co.jp', 'co.au', 'co.nz', 'co.za',
-      'com.au', 'com.br', 'com.cn', 'com.mx', 'com.sg',
-      'org.uk', 'net.au', 'edu.au', 'gov.au'
+      "com",
+      "org",
+      "net",
+      "edu",
+      "gov",
+      "mil",
+      "int",
+      "co.uk",
+      "co.jp",
+      "co.au",
+      "co.nz",
+      "co.za",
+      "com.au",
+      "com.br",
+      "com.cn",
+      "com.mx",
+      "com.sg",
+      "org.uk",
+      "net.au",
+      "edu.au",
+      "gov.au",
     ];
 
-    let tld = '';
-    let domain = '';
-    let subdomain = '';
+    let tld = "";
+    let domain = "";
+    let subdomain = "";
 
     // Check for multi-part TLDs first
-    for (const multiTLD of commonTLDs.filter(t => t.includes('.'))) {
-      if (hostname.endsWith(`.${  multiTLD}`)) {
+    for (const multiTLD of commonTLDs.filter(t => t.includes("."))) {
+      if (hostname.endsWith(`.${multiTLD}`)) {
         tld = multiTLD;
         const remaining = hostname.slice(0, -(multiTLD.length + 1));
-        const remainingParts = remaining.split('.');
+        const remainingParts = remaining.split(".");
         domain = remainingParts[remainingParts.length - 1];
-        subdomain = remainingParts.slice(0, -1).join('.');
+        subdomain = remainingParts.slice(0, -1).join(".");
         return { tld, domain, subdomain };
       }
     }
@@ -80,15 +108,15 @@ export default function URLToJSON() {
     // Single-part TLD
     tld = parts[parts.length - 1];
     domain = parts[parts.length - 2];
-    subdomain = parts.slice(0, -2).join('.');
+    subdomain = parts.slice(0, -2).join(".");
 
     return { tld, domain, subdomain };
   };
 
-  const parseURL = () => {
+  const parseURL = useCallback(() => {
     try {
       setError("");
-      
+
       if (!inputUrl.trim()) {
         setUrlComponents({});
         setJsonOutput("");
@@ -96,10 +124,10 @@ export default function URLToJSON() {
       }
 
       let urlToParse = inputUrl.trim();
-      
+
       // Add protocol if missing
       if (!urlToParse.match(/^https?:\/\//)) {
-        urlToParse = `https://${  urlToParse}`;
+        urlToParse = `https://${urlToParse}`;
       }
 
       const url = new URL(urlToParse);
@@ -122,12 +150,15 @@ export default function URLToJSON() {
         tld: tld || undefined,
         domain: domain || undefined,
         subdomain: subdomain || undefined,
-        queryParams: Object.keys(queryParams).length > 0 ? queryParams : undefined,
+        queryParams:
+          Object.keys(queryParams).length > 0 ? queryParams : undefined,
       };
 
       // Remove undefined values for cleaner JSON
       const cleanComponents = Object.fromEntries(
-        Object.entries(components).filter(([_, value]) => value !== undefined && value !== '')
+        Object.entries(components).filter(
+          ([_, value]) => value !== undefined && value !== ""
+        )
       );
 
       setUrlComponents(cleanComponents);
@@ -137,7 +168,7 @@ export default function URLToJSON() {
       setUrlComponents({});
       setJsonOutput("");
     }
-  };
+  }, [inputUrl]);
 
   const shareConverter = async () => {
     const success = await copyShareableURL({ url: inputUrl });
@@ -163,21 +194,21 @@ export default function URLToJSON() {
   };
 
   const loadExample = () => {
-    setInputUrl("https://api.example.com:8080/v1/users/123?include=profile,settings&format=json&sort=name#results");
+    setInputUrl(
+      "https://api.example.com:8080/v1/users/123?include=profile,settings&format=json&sort=name#results"
+    );
   };
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="UTJ-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
           URL to JSON Converter
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
-          Break down URLs into their components including protocol, hostname, TLD, and query parameters
+          Break down URLs into their components including protocol, hostname,
+          TLD, and query parameters
         </p>
       </div>
 
@@ -198,29 +229,31 @@ export default function URLToJSON() {
                 <Textarea
                   id="url-input"
                   value={inputUrl}
-                  onChange={(e) => setInputUrl(e.target.value)}
+                  onChange={e => setInputUrl(e.target.value)}
                   placeholder="https://example.com/path?param1=value1&param2=value2#section"
-                  className="font-mono min-h-[100px]"
+                  className="font-mono min-h-[100px] resize-none"
                   data-testid="url-input"
-                  showLineNumbers={true}
-                  showStats={true}
                 />
               </div>
 
-              {error ? <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
-                  <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
-                </div> : null}
+              {error ? (
+                <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-sm text-red-700 dark:text-red-400">
+                    {error}
+                  </p>
+                </div>
+              ) : null}
 
               <div className="flex gap-2">
-                <Button 
-                  onClick={parseURL} 
-                  className="flex-1" 
+                <Button
+                  onClick={parseURL}
+                  className="flex-1"
                   data-testid="parse-button"
                 >
                   <Globe className="w-4 h-4 mr-2" />
                   Parse URL
                 </Button>
-                
+
                 <Button
                   onClick={shareConverter}
                   variant="outline"
@@ -241,7 +274,7 @@ export default function URLToJSON() {
                 >
                   Load Example
                 </Button>
-                
+
                 <Button
                   onClick={clearInput}
                   variant="outline"
@@ -265,52 +298,82 @@ export default function URLToJSON() {
                   <Hash className="w-5 h-5 mr-2" />
                   JSON Output
                 </CardTitle>
-                {jsonOutput ? <CopyButton 
-                    text={jsonOutput} 
-                    variant="outline" 
-                    size="sm"
-                  /> : null}
+                {jsonOutput ? (
+                  <CopyButton text={jsonOutput} variant="outline" size="sm" />
+                ) : null}
               </div>
             </CardHeader>
             <CardContent>
               {jsonOutput ? (
                 <div className="space-y-4">
-                  <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/50">
-                    <pre className="text-sm font-mono text-slate-800 dark:text-slate-200 whitespace-pre-wrap break-all">
-                      {jsonOutput}
-                    </pre>
-                  </div>
-                  
+                  <Textarea
+                    value={jsonOutput}
+                    readOnly={true}
+                    className="font-mono text-sm min-h-[300px] resize-none"
+                    placeholder="JSON output will appear here..."
+                  />
+
                   {/* URL Components Summary */}
                   <div className="grid grid-cols-1 gap-3">
-                    {urlComponents.protocol ? <div className="flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
-                        <span className="text-sm font-medium text-blue-700 dark:text-blue-400">Protocol:</span>
-                        <span className="text-sm font-mono text-blue-900 dark:text-blue-100">{urlComponents.protocol}</span>
-                      </div> : null}
-                    
-                    {urlComponents.hostname ? <div className="flex justify-between items-center p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
-                        <span className="text-sm font-medium text-green-700 dark:text-green-400">Hostname:</span>
-                        <span className="text-sm font-mono text-green-900 dark:text-green-100">{urlComponents.hostname}</span>
-                      </div> : null}
-                    
-                    {urlComponents.tld ? <div className="flex justify-between items-center p-2 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
-                        <span className="text-sm font-medium text-purple-700 dark:text-purple-400">TLD:</span>
-                        <span className="text-sm font-mono text-purple-900 dark:text-purple-100">{urlComponents.tld}</span>
-                      </div> : null}
-                    
-                    {urlComponents.queryParams && Object.keys(urlComponents.queryParams).length > 0 ? <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded border border-orange-200 dark:border-orange-800">
+                    {urlComponents.protocol ? (
+                      <div className="flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+                        <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
+                          Protocol:
+                        </span>
+                        <span className="text-sm font-mono text-blue-900 dark:text-blue-100">
+                          {urlComponents.protocol}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {urlComponents.hostname ? (
+                      <div className="flex justify-between items-center p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
+                        <span className="text-sm font-medium text-green-700 dark:text-green-400">
+                          Hostname:
+                        </span>
+                        <span className="text-sm font-mono text-green-900 dark:text-green-100">
+                          {urlComponents.hostname}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {urlComponents.tld ? (
+                      <div className="flex justify-between items-center p-2 bg-purple-50 dark:bg-purple-900/20 rounded border border-purple-200 dark:border-purple-800">
+                        <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
+                          TLD:
+                        </span>
+                        <span className="text-sm font-mono text-purple-900 dark:text-purple-100">
+                          {urlComponents.tld}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {urlComponents.queryParams &&
+                    Object.keys(urlComponents.queryParams).length > 0 ? (
+                      <div className="p-2 bg-orange-50 dark:bg-orange-900/20 rounded border border-orange-200 dark:border-orange-800">
                         <span className="text-sm font-medium text-orange-700 dark:text-orange-400 block mb-2">
-                          Query Parameters ({Object.keys(urlComponents.queryParams).length}):
+                          Query Parameters (
+                          {Object.keys(urlComponents.queryParams).length}):
                         </span>
                         <div className="space-y-1">
-                          {Object.entries(urlComponents.queryParams).map(([key, value]) => (
-                            <div key={key} className="flex justify-between items-center">
-                              <span className="text-sm font-mono text-orange-800 dark:text-orange-200">{key}:</span>
-                              <span className="text-sm font-mono text-orange-900 dark:text-orange-100">{value}</span>
-                            </div>
-                          ))}
+                          {Object.entries(urlComponents.queryParams).map(
+                            ([key, value]) => (
+                              <div
+                                key={key}
+                                className="flex justify-between items-center"
+                              >
+                                <span className="text-sm font-mono text-orange-800 dark:text-orange-200">
+                                  {key}:
+                                </span>
+                                <span className="text-sm font-mono text-orange-900 dark:text-orange-100">
+                                  {value}
+                                </span>
+                              </div>
+                            )
+                          )}
                         </div>
-                      </div> : null}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               ) : (
@@ -324,10 +387,7 @@ export default function URLToJSON() {
         </div>
       </div>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="UTJ-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card className="mt-6">
@@ -339,14 +399,30 @@ export default function URLToJSON() {
             <div>
               <h4 className="font-semibold mb-2">Extracted Components:</h4>
               <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• <strong>Protocol:</strong> HTTP, HTTPS, FTP, etc.</li>
-                <li>• <strong>Hostname:</strong> Full domain name</li>
-                <li>• <strong>TLD:</strong> Top-level domain (.com, .org, etc.)</li>
-                <li>• <strong>Domain:</strong> Main domain name</li>
-                <li>• <strong>Subdomain:</strong> www, api, etc.</li>
-                <li>• <strong>Port:</strong> Custom port numbers</li>
-                <li>• <strong>Path:</strong> URL path segments</li>
-                <li>• <strong>Query Parameters:</strong> Individual URL parameters</li>
+                <li>
+                  • <strong>Protocol:</strong> HTTP, HTTPS, FTP, etc.
+                </li>
+                <li>
+                  • <strong>Hostname:</strong> Full domain name
+                </li>
+                <li>
+                  • <strong>TLD:</strong> Top-level domain (.com, .org, etc.)
+                </li>
+                <li>
+                  • <strong>Domain:</strong> Main domain name
+                </li>
+                <li>
+                  • <strong>Subdomain:</strong> www, api, etc.
+                </li>
+                <li>
+                  • <strong>Port:</strong> Custom port numbers
+                </li>
+                <li>
+                  • <strong>Path:</strong> URL path segments
+                </li>
+                <li>
+                  • <strong>Query Parameters:</strong> Individual URL parameters
+                </li>
               </ul>
             </div>
             <div>
@@ -361,7 +437,7 @@ export default function URLToJSON() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
             <h4 className="font-semibold mb-2">Example URLs to try:</h4>
             <div className="space-y-2 text-sm">
@@ -379,10 +455,7 @@ export default function URLToJSON() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="UTJ-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

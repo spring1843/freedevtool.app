@@ -3,9 +3,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Lightbulb } from "lucide-react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
 const DEFAULT_JSON = `{"name":"John Doe","age":30,"city":"New York","hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zipCode":"10001"}}`;
@@ -15,11 +15,11 @@ export default function JsonFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const formatCode = () => {
+  const formatCode = useCallback(() => {
     const { formatted, error: formatError } = formatJSON(input);
     setOutput(formatted);
     setError(formatError || null);
-  };
+  }, [input]);
 
   const minifyCode = () => {
     try {
@@ -27,7 +27,7 @@ export default function JsonFormatter() {
       setOutput(JSON.stringify(parsed));
       setError(null);
     } catch {
-      setError('Invalid JSON: Unable to parse');
+      setError("Invalid JSON: Unable to parse");
     }
   };
 
@@ -37,7 +37,7 @@ export default function JsonFormatter() {
       setError(null);
       return true;
     } catch {
-      setError('Invalid JSON: Unable to parse');
+      setError("Invalid JSON: Unable to parse");
       return false;
     }
   };
@@ -46,7 +46,7 @@ export default function JsonFormatter() {
     setInput(value);
     // Clear output when input changes
     if (output) {
-      setOutput('');
+      setOutput("");
     }
   };
 
@@ -59,13 +59,10 @@ export default function JsonFormatter() {
   // Execute formatting with default value on component mount
   useEffect(() => {
     formatCode();
-  }, [input]);
+  }, [input, formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="JF-001" size="large" className="mb-6" />
-      
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
@@ -74,18 +71,21 @@ export default function JsonFormatter() {
               JSON Formatter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Format, validate, and minify JSON with syntax highlighting for enhanced security
+              Format, validate, and minify JSON with syntax highlighting for
+              enhanced security
             </p>
           </div>
           <SecurityBanner variant="compact" />
         </div>
       </div>
 
-      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert> : null}
+        </Alert>
+      ) : null}
 
       {/* Controls */}
       <div className="mb-6 flex flex-wrap gap-3">
@@ -127,7 +127,7 @@ export default function JsonFormatter() {
           <CardContent>
             <Textarea
               value={input}
-              onChange={(e) => handleInputChange(e.target.value)}
+              onChange={e => handleInputChange(e.target.value)}
               placeholder="Paste your JSON here..."
               data-testid="json-input"
               className="min-h-[400px] font-mono text-sm"
@@ -164,10 +164,14 @@ export default function JsonFormatter() {
             <div className="flex items-start space-x-3">
               <Lightbulb className="text-blue-600 dark:text-blue-400 mt-1 h-5 w-5" />
               <div>
-                <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Pro Tips</h4>
+                <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                  Pro Tips
+                </h4>
                 <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
                   <li>• Use Ctrl+A to select all text quickly</li>
-                  <li>• The formatter will auto-detect and fix common JSON issues</li>
+                  <li>
+                    • The formatter will auto-detect and fix common JSON issues
+                  </li>
                   <li>• Validation shows specific error locations</li>
                   <li>• Minified JSON is optimized for data transmission</li>
                 </ul>

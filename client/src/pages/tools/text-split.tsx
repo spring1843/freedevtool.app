@@ -6,8 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Split, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+import { useState, useEffect, useCallback } from "react";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const defaultText = `apple,banana,cherry
@@ -21,14 +21,14 @@ export default function TextSplit() {
   const [trimWhitespace, setTrimWhitespace] = useState(true);
   const [splitResult, setSplitResult] = useState<string[]>([]);
 
-  const splitText = () => {
+  const splitText = useCallback(() => {
     try {
       let parts: string[] = [];
-      
-      if (delimiter === '\\n') {
-        parts = text.split('\n');
-      } else if (delimiter === '\\t') {
-        parts = text.split('\t');
+
+      if (delimiter === "\\n") {
+        parts = text.split("\n");
+      } else if (delimiter === "\\t") {
+        parts = text.split("\t");
       } else {
         parts = text.split(delimiter);
       }
@@ -43,9 +43,11 @@ export default function TextSplit() {
 
       setSplitResult(parts);
     } catch (error) {
-      setSplitResult([`Error: ${error instanceof Error ? error.message : 'Unknown error'}`]);
+      setSplitResult([
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
+      ]);
     }
-  };
+  }, [text, delimiter, removeEmpty, trimWhitespace]);
 
   const handleReset = () => {
     setText(defaultText);
@@ -57,21 +59,23 @@ export default function TextSplit() {
 
   useEffect(() => {
     splitText();
-  }, []);
+  }, [splitText]);
 
   const getDelimiterDisplay = (delim: string) => {
     switch (delim) {
-      case '\\n': return 'New Line';
-      case '\\t': return 'Tab';
-      case ' ': return 'Space';
-      default: return delim;
+      case "\\n":
+        return "New Line";
+      case "\\t":
+        return "Tab";
+      case " ":
+        return "Space";
+      default:
+        return delim;
     }
   };
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="TS-001" size="large" className="mb-6" />
-      
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -96,7 +100,7 @@ export default function TextSplit() {
             <Input
               id="delimiter"
               value={delimiter}
-              onChange={(e) => setDelimiter(e.target.value)}
+              onChange={e => setDelimiter(e.target.value)}
               placeholder="Enter delimiter (e.g., comma, space, \\n, \\t)..."
               data-testid="delimiter-input"
             />
@@ -138,7 +142,10 @@ export default function TextSplit() {
                 Reset
               </Button>
             </div>
-            <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
+            <Badge
+              variant="outline"
+              className="bg-orange-50 text-orange-700 border-orange-200"
+            >
               Delimiter: {getDelimiterDisplay(delimiter)}
             </Badge>
           </div>
@@ -153,7 +160,7 @@ export default function TextSplit() {
           <CardContent>
             <Textarea
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={e => setText(e.target.value)}
               placeholder="Enter text to split..."
               data-testid="text-input"
               className="min-h-[300px] font-mono text-sm"
@@ -168,9 +175,7 @@ export default function TextSplit() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Split Results
-              <Badge variant="outline">
-                {splitResult.length} parts
-              </Badge>
+              <Badge variant="outline">{splitResult.length} parts</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -183,7 +188,7 @@ export default function TextSplit() {
                   >
                     <div className="flex items-start justify-between">
                       <div className="font-mono text-sm flex-1 break-words">
-                        {part || '<empty>'}
+                        {part || "<empty>"}
                       </div>
                       <Badge variant="outline" className="ml-2 text-xs">
                         {index + 1}
@@ -205,20 +210,60 @@ export default function TextSplit() {
       </div>
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Common Delimiters:</h3>
+        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+          Common Delimiters:
+        </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-blue-700 dark:text-blue-300">
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">,</span> Comma</div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">;</span> Semicolon</div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">|</span> Pipe</div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">\\n</span> New Line</div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">\\t</span> Tab</div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded"> </span> Space</div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">:</span> Colon</div>
-          <div><span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">-</span> Dash</div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              ,
+            </span>{" "}
+            Comma
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              ;
+            </span>{" "}
+            Semicolon
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              |
+            </span>{" "}
+            Pipe
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              \\n
+            </span>{" "}
+            New Line
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              \\t
+            </span>{" "}
+            Tab
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              {" "}
+            </span>{" "}
+            Space
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              :
+            </span>{" "}
+            Colon
+          </div>
+          <div>
+            <span className="font-mono bg-white dark:bg-gray-800 px-1 rounded">
+              -
+            </span>{" "}
+            Dash
+          </div>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="TS-002" size="medium" className="mt-6" />
     </div>
   );
 }

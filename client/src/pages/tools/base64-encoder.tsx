@@ -4,25 +4,26 @@ import { encodeBase64, decodeBase64 } from "@/lib/encoders";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
-const DEFAULT_TEXT = "Hello, World!\nThis is a test message for Base64 encoding.";
+const DEFAULT_TEXT =
+  "Hello, World!\nThis is a test message for Base64 encoding.";
 
 export default function Base64Encoder() {
   const [plainText, setPlainText] = useState(DEFAULT_TEXT);
   const [encodedText, setEncodedText] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const encode = () => {
+  const encode = useCallback(() => {
     try {
       const result = encodeBase64(plainText);
       setEncodedText(result);
       setError(null);
     } catch {
-      setError('Encoding failed');
+      setError("Encoding failed");
     }
-  };
+  }, [plainText]);
 
   const decode = () => {
     try {
@@ -30,7 +31,7 @@ export default function Base64Encoder() {
       setPlainText(result);
       setError(null);
     } catch {
-      setError('Decoding failed');
+      setError("Decoding failed");
     }
   };
 
@@ -44,7 +45,7 @@ export default function Base64Encoder() {
   const handlePlainTextChange = (value: string) => {
     setPlainText(value);
     if (encodedText) {
-      setEncodedText('');
+      setEncodedText("");
     }
   };
 
@@ -64,7 +65,7 @@ export default function Base64Encoder() {
   // Execute encoding with default value on component mount
   useEffect(() => {
     encode();
-  }, []);
+  }, [encode]);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -81,11 +82,13 @@ export default function Base64Encoder() {
         </div>
       </div>
 
-      {error ? <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
+      {error ? (
+        <Alert className="mb-6 border-red-200 bg-red-50 dark:bg-red-900/20">
           <AlertDescription className="text-red-800 dark:text-red-200">
             {error}
           </AlertDescription>
-        </Alert> : null}
+        </Alert>
+      ) : null}
 
       {/* Controls */}
       <div className="mb-6 flex flex-wrap gap-3">
@@ -128,7 +131,7 @@ export default function Base64Encoder() {
           <CardContent>
             <Textarea
               value={plainText}
-              onChange={(e) => handlePlainTextChange(e.target.value)}
+              onChange={e => handlePlainTextChange(e.target.value)}
               placeholder="Enter text to encode..."
               data-testid="base64-plain-text"
               className="min-h-[400px] font-mono text-sm"
@@ -146,7 +149,7 @@ export default function Base64Encoder() {
           <CardContent>
             <Textarea
               value={encodedText}
-              onChange={(e) => handleEncodedTextChange(e.target.value)}
+              onChange={e => handleEncodedTextChange(e.target.value)}
               placeholder="Enter Base64 encoded text to decode..."
               data-testid="base64-encoded-text"
               className="min-h-[400px] font-mono text-sm"

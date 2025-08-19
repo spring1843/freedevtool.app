@@ -6,11 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
-import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+import { useState, useEffect, useCallback } from "react";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
-const DEFAULT_PATTERN = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b";
+const DEFAULT_PATTERN =
+  "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b";
 const DEFAULT_TEXT = `Here are some email addresses:
 john.doe@example.com
 jane_smith123@company.org
@@ -37,31 +38,31 @@ export default function RegexTester() {
   const [isValidRegex, setIsValidRegex] = useState(true);
   const [error, setError] = useState("");
 
-  const updateFlags = () => {
+  const updateFlags = useCallback(() => {
     let newFlags = "";
     if (globalFlag) newFlags += "g";
     if (caseInsensitiveFlag) newFlags += "i";
     if (multilineFlag) newFlags += "m";
     setFlags(newFlags);
-  };
+  }, [globalFlag, caseInsensitiveFlag, multilineFlag]);
 
-  const testRegex = () => {
+  const testRegex = useCallback(() => {
     try {
       setError("");
       const regex = new RegExp(pattern, flags);
       setIsValidRegex(true);
-      
+
       const foundMatches: RegexMatch[] = [];
       let match;
-      
+
       if (globalFlag) {
         while ((match = regex.exec(text)) !== null) {
           foundMatches.push({
             match: match[0],
             index: match.index,
-            groups: match.slice(1)
+            groups: match.slice(1),
           });
-          
+
           // Prevent infinite loop
           if (!regex.global) break;
         }
@@ -71,18 +72,20 @@ export default function RegexTester() {
           foundMatches.push({
             match: match[0],
             index: match.index,
-            groups: match.slice(1)
+            groups: match.slice(1),
           });
         }
       }
-      
+
       setMatches(foundMatches);
     } catch (err) {
       setIsValidRegex(false);
-      setError(`Invalid regex: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setError(
+        `Invalid regex: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
       setMatches([]);
     }
-  };
+  }, [pattern, flags, text, globalFlag]);
 
   const handleReset = () => {
     setPattern(DEFAULT_PATTERN);
@@ -98,33 +101,32 @@ export default function RegexTester() {
 
   useEffect(() => {
     updateFlags();
-  }, [globalFlag, caseInsensitiveFlag, multilineFlag]);
+  }, [globalFlag, caseInsensitiveFlag, multilineFlag, updateFlags]);
 
   useEffect(() => {
     testRegex();
-  }, []);
+  }, [testRegex]);
 
   const highlightMatches = (text: string, matches: RegexMatch[]) => {
     if (matches.length === 0) return text;
-    
+
     let highlighted = text;
     let offset = 0;
-    
-    matches.forEach((match, index) => {
+
+    matches.forEach(match => {
       const start = match.index + offset;
       const end = start + match.match.length;
       const highlightedMatch = `<mark class="bg-yellow-200 dark:bg-yellow-800">${match.match}</mark>`;
-      highlighted = highlighted.slice(0, start) + highlightedMatch + highlighted.slice(end);
+      highlighted =
+        highlighted.slice(0, start) + highlightedMatch + highlighted.slice(end);
       offset += highlightedMatch.length - match.match.length;
     });
-    
+
     return highlighted;
   };
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="RT-001" size="large" className="mb-6" />
-      
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -164,14 +166,14 @@ export default function RegexTester() {
             <Input
               id="regex-pattern"
               value={pattern}
-              onChange={(e) => setPattern(e.target.value)}
+              onChange={e => setPattern(e.target.value)}
               placeholder="Enter regex pattern..."
               data-testid="regex-pattern"
-              className={`font-mono ${!isValidRegex ? 'border-red-500' : ''}`}
+              className={`font-mono ${!isValidRegex ? "border-red-500" : ""}`}
             />
-            {error && (
+            {error ? (
               <div className="text-sm text-red-600 mt-1">{error}</div>
-            )}
+            ) : null}
           </div>
 
           <div className="flex flex-wrap gap-4">
@@ -215,7 +217,10 @@ export default function RegexTester() {
                 Reset
               </Button>
             </div>
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+            <Badge
+              variant="outline"
+              className="bg-blue-50 text-blue-700 border-blue-200"
+            >
               {matches.length} matches found
             </Badge>
           </div>
@@ -230,13 +235,11 @@ export default function RegexTester() {
           <CardContent>
             <Textarea
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={e => setText(e.target.value)}
               placeholder="Enter text to test against..."
               data-testid="test-text"
-              className="min-h-[300px] font-mono text-sm"
+              className="min-h-[300px] font-mono text-sm resize-none"
               rows={15}
-              showLineNumbers={true}
-              showStats={true}
             />
           </CardContent>
         </Card>
@@ -246,9 +249,11 @@ export default function RegexTester() {
             <CardTitle>Highlighted Results</CardTitle>
           </CardHeader>
           <CardContent>
-            <div 
+            <div
               className="min-h-[300px] p-3 border rounded-md bg-gray-50 dark:bg-gray-800 font-mono text-sm whitespace-pre-wrap overflow-auto"
-              dangerouslySetInnerHTML={{ __html: highlightMatches(text, matches) }}
+              dangerouslySetInnerHTML={{
+                __html: highlightMatches(text, matches),
+              }}
             />
           </CardContent>
         </Card>
@@ -273,10 +278,16 @@ export default function RegexTester() {
                 <tbody>
                   {matches.map((match, index) => (
                     <tr key={index} className="border-b">
-                      <td className="p-2 font-mono bg-yellow-50 dark:bg-yellow-900/20">{match.match}</td>
+                      <td className="p-2 font-mono bg-yellow-50 dark:bg-yellow-900/20">
+                        {match.match}
+                      </td>
                       <td className="p-2">{match.index}</td>
                       <td className="p-2">{match.match.length}</td>
-                      <td className="p-2">{match.groups.length > 0 ? match.groups.join(', ') : 'None'}</td>
+                      <td className="p-2">
+                        {match.groups.length > 0
+                          ? match.groups.join(", ")
+                          : "None"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -285,8 +296,6 @@ export default function RegexTester() {
           </CardContent>
         </Card>
       )}
-
-      <AdSlot position="sidebar" id="RT-002" size="medium" className="mt-6" />
     </div>
   );
 }

@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 General Discussion
+    url: https://github.com/spring1843/FreeDevTool.App/discussions
+    about: Ask questions, share ideas, or discuss the project with the community
+  - name: 🔒 Security Issue
+    url: https://github.com/spring1843/FreeDevTool.App/security/advisories/new
+    about: Report security vulnerabilities privately
+  - name: 📚 Documentation
+    url: https://github.com/spring1843/FreeDevTool.App#readme
+    about: Check the documentation and FAQ before opening an issue

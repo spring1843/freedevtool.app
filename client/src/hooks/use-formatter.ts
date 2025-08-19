@@ -7,7 +7,9 @@ interface FormatterHook {
   setInput: (value: string) => void;
   setOutput: (value: string) => void;
   setError: (error: string | null) => void;
-  format: (formatFn: (input: string) => { formatted: string; error?: string }) => void;
+  format: (
+    formatFn: (input: string) => { formatted: string; error?: string }
+  ) => void;
   reset: () => void;
 }
 
@@ -16,7 +18,9 @@ export function useFormatter(initialInput = ""): FormatterHook {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const format = (formatFn: (input: string) => { formatted: string; error?: string }) => {
+  const format = (
+    formatFn: (input: string) => { formatted: string; error?: string }
+  ) => {
     const result = formatFn(input);
     setOutput(result.formatted);
     setError(result.error || null);
@@ -35,6 +39,6 @@ export function useFormatter(initialInput = ""): FormatterHook {
     setOutput,
     setError,
     format,
-    reset
+    reset,
   };
 }

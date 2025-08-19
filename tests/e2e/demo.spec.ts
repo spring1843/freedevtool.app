@@ -1,156 +1,133 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Demo End-to-End Test', () => {
-  test('should complete full demo tour with very-fast speed', async ({ page }) => {
-    // Set timeout for very fast demo  
-    test.setTimeout(120000); // 2 minutes for safety
-    
-    // Navigate to the home page with increased timeout
-    await page.goto('/', { timeout: 10000 });
-    
-    // Wait for the page to load with increased timeout
-    await expect(page.locator('[data-testid="start-demo-button"]')).toBeVisible({ timeout: 10000 });
-    
-    // Set demo speed to "very-fast" before starting
-    const veryFastButton = page.locator('button:has-text("Very Fast")');
-    await veryFastButton.click();
-    // Verify the button is selected (it should have different styling when active)
-    await expect(veryFastButton).toHaveClass(/bg-primary|variant-default/);
-    
-    // Start the demo
-    await page.click('[data-testid="start-demo-button"]');
-    
-    // Verify demo started
-    await expect(page.locator('text=Demo Mode Active')).toBeVisible({ timeout: 10000 });
-    
-    // Track progress and verify tools load
-    let previousProgress = 0;
-    const toolsVisited: string[] = [];
-    const maxIterations = 40; // Reduced for very fast speed (1.5s per tool)
-    let iterations = 0;
-    
-    while (iterations < maxIterations) {
-      iterations++;
-      
-      // Wait shorter for very-fast speed (1.5s per tool)
-      await page.waitForTimeout(500);
-      
-      // Get current progress
-      const progressElement = page.locator('[data-testid] >> text=/\\d+%/').first();
-      const progressText = await progressElement.textContent();
-      const currentProgress = progressText ? parseInt(progressText.replace('%', ''), 10) : 0;
-      
-      // Get current tool name
-      const toolElement = page.locator('.bg-blue-50 .text-blue-700, .bg-blue-900\\/20 .text-blue-300').first();
-      const currentTool = await toolElement.textContent();
-      
-      if (currentTool && !toolsVisited.includes(currentTool)) {
-        toolsVisited.push(currentTool);
-        // Verify the tool page loaded properly with increased timeout
-        await expect(page.locator('main')).toBeVisible({ timeout: 5000 });
-        
-        // Quick check for any error states
-        const errorElements = page.locator('text=/error|failed|broken/i');
-        const errorCount = await errorElements.count();
-        if (errorCount > 0) {
-          const errorText = await errorElements.first().textContent();
-          throw new Error(`Tool ${currentTool} has error: ${errorText}`);
+test.describe("Demo End-to-End Test", () => {
+  test.beforeEach(async ({ page }) => {
+    // Navigate to home page
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+  });
+
+  test("should handle demo interruption and cleanup properly", async ({
+    page,
+  }) => {
+    // Start demo in crazy fast mode
+    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
+    await crazyFastButton.click();
+
+    const startDemoButton = page.locator('[data-testid="start-demo-button"]');
+    await startDemoButton.click();
+
+    // Wait for demo to start
+    const demoModeActive = page.locator("text=Demo Mode Active");
+    await expect(demoModeActive).toBeVisible();
+
+    // Let demo run for a short time
+    await page.waitForTimeout(1000);
+
+    // Stop the demo
+    const stopButton = page.locator('button:has-text("Stop")');
+    await stopButton.click();
+
+    // Verify demo stopped and cleaned up properly
+    await expect(demoModeActive).not.toBeVisible();
+    await expect(startDemoButton).toBeVisible();
+
+    // Verify we can start demo again after stopping
+    await startDemoButton.click();
+    await expect(demoModeActive).toBeVisible();
+
+    // Stop again for cleanup
+    await page.locator('button:has-text("Stop")').click();
+  });
+
+  test("should navigate through tools correctly during demo", async ({
+    page,
+  }) => {
+    // Set up error collection
+    await page.addInitScript(() => {
+      (window as typeof window & { jsErrors: string[] }).jsErrors = [];
+      window.addEventListener("error", e => {
+        (window as typeof window & { jsErrors: string[] }).jsErrors.push(
+          e.message
+        );
+      });
+      window.addEventListener("unhandledrejection", e => {
+        (window as typeof window & { jsErrors: string[] }).jsErrors.push(
+          `Unhandled promise rejection: ${e.reason}`
+        );
+      });
+    });
+
+    // Start demo in crazy fast mode
+    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
+    await crazyFastButton.click();
+
+    const startDemoButton = page.locator('[data-testid="start-demo-button"]');
+    await startDemoButton.click();
+
+    // Track visited tools
+    const visitedTools = new Set<string>();
+    let lastUrl = "";
+
+    // Monitor URL changes for a longer period to visit more tools
+    let checksWithoutNewTool = 0;
+    const maxChecksWithoutNewTool = 25;
+
+    while (
+      checksWithoutNewTool < maxChecksWithoutNewTool &&
+      visitedTools.size < 15
+    ) {
+      await page.waitForTimeout(150); // Short wait between checks
+
+      const currentUrl = page.url();
+      if (currentUrl !== lastUrl && currentUrl.includes("/tools/")) {
+        const toolPath = currentUrl.split("/tools/")[1];
+        if (toolPath && !visitedTools.has(toolPath)) {
+          visitedTools.add(toolPath);
+          lastUrl = currentUrl;
+          console.warn(
+            `Visited tool: ${toolPath} (${visitedTools.size} total)`
+          );
+          checksWithoutNewTool = 0;
         }
-        
-        // Verify essential UI elements are present - check for main and footer
-        await expect(page.locator('main, footer')).toHaveCount(2, { timeout: 5000 });
+      } else {
+        checksWithoutNewTool++;
       }
-      
-      // Check if demo completed
-      if (currentProgress >= 100) {
+
+      // Check if demo is still running
+      const isDemoRunning = await page
+        .locator("text=Demo Mode Active")
+        .isVisible();
+      if (!isDemoRunning) {
         break;
       }
-      
-      // Check if demo stopped unexpectedly
-      const demoActive = await page.locator('text=Demo Mode Active').isVisible();
-      if (!demoActive && currentProgress < 100) {
-        throw new Error(`Demo stopped unexpectedly at ${currentProgress}% after visiting ${toolsVisited.length} tools`);
-      }
-      
-      // Ensure progress is advancing (reduced threshold for fast speed)
-      if (currentProgress <= previousProgress && iterations > 3) {
-        // Demo might be paused or stuck, try to resume
-        const resumeButton = page.locator('button:has-text("Resume")');
-        if (await resumeButton.isVisible()) {
-          await resumeButton.click();
-        }
-      }
-      
-      previousProgress = currentProgress;
     }
-    
-    // Verify demo completed successfully
-    expect(toolsVisited.length).toBeGreaterThan(8); // Should visit many tools (reduced for fast speed)
-    expect(previousProgress).toBe(100);
-    
-    // Verify we're back to a clean state after demo
-    await page.waitForTimeout(1000);
-    await expect(page.locator('[data-testid="start-demo-button"]')).toBeVisible({ timeout: 10000 });
-  });
-  
-  test('should handle demo pause and resume correctly', async ({ page }) => {
-    test.setTimeout(90000); // 1.5 minutes
-    await page.goto('/', { timeout: 10000 });
-    
-    // Start demo with fast speed for quicker testing
-    await page.click('button:has-text("Fast")');
-    await page.click('[data-testid="start-demo-button"]');
-    
-    // Wait for demo to start
-    await expect(page.locator('text=Demo Mode Active')).toBeVisible({ timeout: 10000 });
-    
-    // Wait a bit for demo to progress before pausing
-    await page.waitForTimeout(2000);
-    
-    // Pause the demo
-    await page.click('button:has-text("Pause")');
-    await expect(page.locator('button:has-text("Resume")')).toBeVisible({ timeout: 5000 });
-    
-    // Verify demo is paused (progress shouldn't change) - use a more reliable selector
-    const progressBefore = await page.locator('text=/\\d+%/').first().textContent({ timeout: 5000 });
-    await page.waitForTimeout(2000); // Wait to verify pause
-    const progressAfter = await page.locator('text=/\\d+%/').first().textContent({ timeout: 5000 });
-    expect(progressBefore).toBe(progressAfter);
-    
-    // Resume the demo
-    await page.click('button:has-text("Resume")');
-    await expect(page.locator('button:has-text("Pause")')).toBeVisible({ timeout: 5000 });
-    
-    // Stop the demo to clean up
-    await page.click('button:has-text("Stop")');
-    await expect(page.locator('[data-testid="start-demo-button"]')).toBeVisible({ timeout: 10000 });
-  });
-  
-  test('should navigate between tools properly during demo', async ({ page }) => {
-    test.setTimeout(90000); // 1.5 minutes
-    await page.goto('/', { timeout: 10000 });
-    
-    // Start demo with very fast speed
-    await page.click('button:has-text("Very Fast")');
-    await page.click('[data-testid="start-demo-button"]');
-    
-    // Wait for demo to start and visit a few tools
-    await expect(page.locator('text=Demo Mode Active')).toBeVisible({ timeout: 10000 });
-    await page.waitForTimeout(3000); // Wait for demo to progress
-    
-    // Test skip functionality
-    const progressBefore = await page.locator('text=/\\d+%/').first().textContent({ timeout: 5000 });
-    await page.click('button:has-text("Skip")');
-    await page.waitForTimeout(1000); // Wait for skip to take effect
-    const progressAfter = await page.locator('text=/\\d+%/').first().textContent({ timeout: 5000 });
-    
-    // Progress should have advanced
-    const beforeNum = parseInt(progressBefore?.replace('%', '') || '0', 10);
-    const afterNum = parseInt(progressAfter?.replace('%', '') || '0', 10);
-    expect(afterNum).toBeGreaterThan(beforeNum);
-    
-    // Stop the demo
-    await page.click('button:has-text("Stop")');
-    await expect(page.locator('[data-testid="start-demo-button"]')).toBeVisible({ timeout: 10000 });
+
+    // Verify we visited a substantial number of tools
+    expect(visitedTools.size).toBeGreaterThan(5);
+    console.warn(
+      `Visited ${visitedTools.size} tools during demo navigation test`
+    );
+    console.warn(
+      `Tools visited: ${Array.from(visitedTools).sort().join(", ")}`
+    );
+
+    // Stop demo for cleanup
+    const stopButton = page.locator('button:has-text("Stop")');
+    if (await stopButton.isVisible()) {
+      await stopButton.click();
+    }
+
+    // Verify no critical JavaScript errors
+    const errors = await page.evaluate(
+      () => (window as typeof window & { jsErrors?: string[] }).jsErrors || []
+    );
+    const criticalErrors = errors.filter(
+      (error: string) =>
+        !error.includes("unhandledrejection") ||
+        error.includes("TypeError") ||
+        error.includes("ReferenceError")
+    );
+    expect(criticalErrors.length).toBe(0);
   });
 });

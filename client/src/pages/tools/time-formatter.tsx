@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
 import { Clock, Copy, Check, RefreshCw } from "lucide-react";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface TimeFormat {
   name: string;
@@ -24,8 +23,8 @@ export default function TimeFormatter() {
   // Set current date and time on load
   useEffect(() => {
     const now = new Date();
-    const dateStr = now.toISOString().split('T')[0];
-    const timeStr = now.toTimeString().split(' ')[0];
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0];
     setInputDate(dateStr);
     setInputTime(timeStr);
   }, []);
@@ -35,13 +34,14 @@ export default function TimeFormatter() {
     if (inputDate && inputTime) {
       formatTime();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputDate, inputTime, inputTimezone]);
 
-  const formatTime = () => {
+  const formatTime = useCallback(() => {
     try {
       // Create date object from input
       const dateTime = new Date(`${inputDate}T${inputTime}`);
-      
+
       if (isNaN(dateTime.getTime())) {
         throw new Error("Invalid date/time");
       }
@@ -49,154 +49,162 @@ export default function TimeFormatter() {
       const timeFormats: TimeFormat[] = [
         {
           name: "24-Hour Format (HH:MM:SS)",
-          value: dateTime.toLocaleTimeString('en-GB', { 
+          value: dateTime.toLocaleTimeString("en-GB", {
             hour12: false,
-            hour: '2-digit',
-            minute: '2-digit', 
-            second: '2-digit',
-            timeZone: inputTimezone
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZone: inputTimezone,
           }),
-          description: "Standard 24-hour military time format"
+          description: "Standard 24-hour military time format",
         },
         {
           name: "12-Hour Format (h:MM:SS AM/PM)",
-          value: dateTime.toLocaleTimeString('en-US', { 
+          value: dateTime.toLocaleTimeString("en-US", {
             hour12: true,
-            hour: 'numeric',
-            minute: '2-digit', 
-            second: '2-digit',
-            timeZone: inputTimezone
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZone: inputTimezone,
           }),
-          description: "Standard 12-hour format with AM/PM"
+          description: "Standard 12-hour format with AM/PM",
         },
         {
           name: "ISO 8601 Time (HH:MM:SSZ)",
-          value: dateTime.toISOString().split('T')[1],
-          description: "International standard time format with UTC"
+          value: dateTime.toISOString().split("T")[1],
+          description: "International standard time format with UTC",
         },
         {
           name: "RFC 3339 DateTime",
           value: dateTime.toISOString(),
-          description: "Internet date/time format based on ISO 8601"
+          description: "Internet date/time format based on ISO 8601",
         },
         {
           name: "Unix Timestamp",
           value: Math.floor(dateTime.getTime() / 1000).toString(),
-          description: "Seconds since January 1, 1970 UTC"
+          description: "Seconds since January 1, 1970 UTC",
         },
         {
           name: "Unix Timestamp (Milliseconds)",
           value: dateTime.getTime().toString(),
-          description: "Milliseconds since January 1, 1970 UTC"
+          description: "Milliseconds since January 1, 1970 UTC",
         },
         {
           name: "UTC Time",
-          value: dateTime.toUTCString().split(' ')[4],
-          description: "Time in Coordinated Universal Time"
+          value: dateTime.toUTCString().split(" ")[4],
+          description: "Time in Coordinated Universal Time",
         },
         {
           name: "Local Time (Long)",
-          value: dateTime.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'long',
-            timeZone: inputTimezone
+          value: dateTime.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZoneName: "long",
+            timeZone: inputTimezone,
           }),
-          description: "Local time with full timezone name"
+          description: "Local time with full timezone name",
         },
         {
           name: "Local Time (Short)",
-          value: dateTime.toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'short',
-            timeZone: inputTimezone
+          value: dateTime.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZoneName: "short",
+            timeZone: inputTimezone,
           }),
-          description: "Local time with abbreviated timezone"
+          description: "Local time with abbreviated timezone",
         },
         {
           name: "Time Only (No Seconds)",
-          value: dateTime.toLocaleTimeString('en-GB', { 
+          value: dateTime.toLocaleTimeString("en-GB", {
             hour12: false,
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: inputTimezone
+            hour: "2-digit",
+            minute: "2-digit",
+            timeZone: inputTimezone,
           }),
-          description: "24-hour format without seconds"
+          description: "24-hour format without seconds",
         },
         {
           name: "12-Hour (No Seconds)",
-          value: dateTime.toLocaleTimeString('en-US', { 
+          value: dateTime.toLocaleTimeString("en-US", {
             hour12: true,
-            hour: 'numeric',
-            minute: '2-digit',
-            timeZone: inputTimezone
+            hour: "numeric",
+            minute: "2-digit",
+            timeZone: inputTimezone,
           }),
-          description: "12-hour format without seconds"
+          description: "12-hour format without seconds",
         },
         {
           name: "Microseconds Format",
-          value: `${dateTime.toLocaleTimeString('en-GB', { 
+          value: `${dateTime.toLocaleTimeString("en-GB", {
             hour12: false,
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZone: inputTimezone
-          })}.${dateTime.getMilliseconds().toString().padStart(3, '0')}000`,
-          description: "Time with microsecond precision"
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            timeZone: inputTimezone,
+          })}.${dateTime.getMilliseconds().toString().padStart(3, "0")}000`,
+          description: "Time with microsecond precision",
         },
         {
           name: "Time with Offset",
-          value: `${new Intl.DateTimeFormat('en', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            timeZoneName: 'longOffset',
-            timeZone: inputTimezone
-          }).format(dateTime).split(' ')[1]  } ${  new Intl.DateTimeFormat('en', {
-            timeZoneName: 'longOffset',
-            timeZone: inputTimezone
-          }).format(dateTime).split(' ').pop()}`,
-          description: "Time with timezone offset (±HH:MM)"
+          value: `${
+            new Intl.DateTimeFormat("en", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              timeZoneName: "longOffset",
+              timeZone: inputTimezone,
+            })
+              .format(dateTime)
+              .split(" ")[1]
+          } ${new Intl.DateTimeFormat("en", {
+            timeZoneName: "longOffset",
+            timeZone: inputTimezone,
+          })
+            .format(dateTime)
+            .split(" ")
+            .pop()}`,
+          description: "Time with timezone offset (±HH:MM)",
         },
         {
           name: "Decimal Time",
           value: convertToDecimalTime(dateTime),
-          description: "French Revolutionary decimal time format"
+          description: "French Revolutionary decimal time format",
         },
         {
           name: "Internet Time (.beats)",
           value: convertToInternetTime(dateTime),
-          description: "Swatch Internet Time (BMT - Biel Mean Time)"
+          description: "Swatch Internet Time (BMT - Biel Mean Time)",
         },
         {
           name: "Julian Day Number",
           value: calculateJulianDay(dateTime).toFixed(6),
-          description: "Days since January 1, 4713 BCE proleptic Julian calendar"
+          description:
+            "Days since January 1, 4713 BCE proleptic Julian calendar",
         },
         {
           name: "Modified Julian Day",
           value: (calculateJulianDay(dateTime) - 2400000.5).toFixed(6),
-          description: "Modified Julian Day (MJD) for astronomical use"
+          description: "Modified Julian Day (MJD) for astronomical use",
         },
         {
           name: "Excel Serial Date",
           value: convertToExcelDate(dateTime).toFixed(6),
-          description: "Excel date serial number format"
-        }
+          description: "Excel date serial number format",
+        },
       ];
 
       setFormats(timeFormats);
     } catch {
-      console.error('Time formatting error');
+      console.error("Time formatting error");
       setFormats([]);
     }
-  };
+  }, [inputDate, inputTime, inputTimezone]);
 
   const convertToDecimalTime = (date: Date): string => {
     const hours = date.getHours();
@@ -207,23 +215,34 @@ export default function TimeFormatter() {
     const decimalHours = Math.floor(decimalTime / 10000);
     const decimalMinutes = Math.floor((decimalTime % 10000) / 100);
     const decimalSeconds = Math.floor(decimalTime % 100);
-    return `${decimalHours}:${decimalMinutes.toString().padStart(2, '0')}:${decimalSeconds.toString().padStart(2, '0')}`;
+    return `${decimalHours}:${decimalMinutes.toString().padStart(2, "0")}:${decimalSeconds.toString().padStart(2, "0")}`;
   };
 
   const convertToInternetTime = (date: Date): string => {
-    const utc = date.getTime() + (date.getTimezoneOffset() * 60000);
-    const bmt = new Date(utc + (1 * 3600000)); // BMT is UTC+1
-    const totalSeconds = bmt.getHours() * 3600 + bmt.getMinutes() * 60 + bmt.getSeconds();
-    const beats = Math.floor((totalSeconds / 86.4));
-    return `@${beats.toString().padStart(3, '0')}`;
+    const utc = date.getTime() + date.getTimezoneOffset() * 60000;
+    const bmt = new Date(utc + 1 * 3600000); // BMT is UTC+1
+    const totalSeconds =
+      bmt.getHours() * 3600 + bmt.getMinutes() * 60 + bmt.getSeconds();
+    const beats = Math.floor(totalSeconds / 86.4);
+    return `@${beats.toString().padStart(3, "0")}`;
   };
 
   const calculateJulianDay = (date: Date): number => {
     const a = Math.floor((14 - (date.getMonth() + 1)) / 12);
     const y = date.getFullYear() + 4800 - a;
-    const m = (date.getMonth() + 1) + 12 * a - 3;
-    const jdn = date.getDate() + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
-    const dayFraction = (date.getHours() - 12) / 24 + date.getMinutes() / 1440 + date.getSeconds() / 86400;
+    const m = date.getMonth() + 1 + 12 * a - 3;
+    const jdn =
+      date.getDate() +
+      Math.floor((153 * m + 2) / 5) +
+      365 * y +
+      Math.floor(y / 4) -
+      Math.floor(y / 100) +
+      Math.floor(y / 400) -
+      32045;
+    const dayFraction =
+      (date.getHours() - 12) / 24 +
+      date.getMinutes() / 1440 +
+      date.getSeconds() / 86400;
     return jdn + dayFraction;
   };
 
@@ -239,25 +258,20 @@ export default function TimeFormatter() {
       setCopiedIndex(index);
       setTimeout(() => setCopiedIndex(null), 2000);
     } catch {
-      console.error('Failed to copy');
+      console.error("Failed to copy");
     }
   };
 
   const setCurrentDateTime = () => {
     const now = new Date();
-    const dateStr = now.toISOString().split('T')[0];
-    const timeStr = now.toTimeString().split(' ')[0];
+    const dateStr = now.toISOString().split("T")[0];
+    const timeStr = now.toTimeString().split(" ")[0];
     setInputDate(dateStr);
     setInputTime(timeStr);
   };
 
-
-
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="TF-001" size="large" className="mb-6" />
-      
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -284,7 +298,7 @@ export default function TimeFormatter() {
                 id="input-date"
                 type="date"
                 value={inputDate}
-                onChange={(e) => setInputDate(e.target.value)}
+                onChange={e => setInputDate(e.target.value)}
                 data-testid="input-date"
               />
             </div>
@@ -295,7 +309,7 @@ export default function TimeFormatter() {
                 type="time"
                 step="1"
                 value={inputTime}
-                onChange={(e) => setInputTime(e.target.value)}
+                onChange={e => setInputTime(e.target.value)}
                 data-testid="input-time"
               />
             </div>
@@ -309,7 +323,7 @@ export default function TimeFormatter() {
               />
             </div>
             <div className="flex items-end">
-              <Button 
+              <Button
                 onClick={setCurrentDateTime}
                 variant="outline"
                 className="w-full"
@@ -322,11 +336,6 @@ export default function TimeFormatter() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="TF-002" size="medium" />
-      </div>
 
       {/* Formatted Times */}
       {formats.length > 0 && (
@@ -406,11 +415,6 @@ export default function TimeFormatter() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="TF-003" size="large" />
-      </div>
     </div>
   );
 }

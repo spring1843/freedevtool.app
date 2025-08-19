@@ -2,17 +2,19 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, develop ]
-  pull_request:
     branches: [ main ]
+  workflow_dispatch:
+  pull_request:
 
-permissions:
-  contents: read
-  pull-requests: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  test:
-    name: Test and Build
+  ci:
+    name: Continuous Integration
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     
     steps:
@@ -22,29 +24,32 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
+
+      - run: make install
+
+      - run: make type-check
+      - run: make test
+      - run: make format-check
+      - run: make lint
+      - run: make build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
       
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Run type checking
-        run: npm run check
-      
-      - name: Run unit tests
-        run: npm run test --if-present
-        continue-on-error: false
-      
-      - name: Build application
-        run: npm run build
-      
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
-      
-      - name: Run E2E tests
-        run: npm run test:e2e --if-present
-        continue-on-error: true
-      
+      - run: make e2e-install
+      - run: make e2e-test
+
+        # Running the above should not cause a git diff.
+        # Investigate why this file change occurred and eliminate the cause
+      - name: Check for changes
+        run: git diff --exit-code
+
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -55,40 +60,3 @@ jobs:
             playwright-report/
           retention-days: 7
       
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: |
-            dist/
-            client/dist/
-          retention-days: 7
-
-  security-scan:
-    name: Security Scan
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Run security audit
-        run: npm audit --audit-level=moderate
-        continue-on-error: true
-      
-      - name: Run CodeQL Analysis
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript-typescript
-      
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3

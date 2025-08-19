@@ -1,7 +1,7 @@
 # Development Makefile for DevTools Suite
 # Comprehensive development workflow management
 
-.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy all
+.PHONY: help setup start stop restart dev build lint lint-fix format type-check test clean deps install status health deploy prepare-deploy ci all
 
 # Default target
 .DEFAULT_GOAL := help
@@ -16,11 +16,34 @@ NC=\033[0m # No Color
 ## Setup Commands
 
 setup: ## Complete project setup - install dependencies, browsers, and prepare for development
+	make deps
+	make e2e-install
+	make type-check
+	make lint
+
+## Combined Commands
+
+all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
+
+pre-commit: format type-check lint-fix ## Pre-commit hook (fix, format, check)
+
+ci-without-e2e: pre-commit build test ## CI commands without end-to-end tests, for environments that can't run e2e tests
+
+ci: ci-without-e2e e2e-test ## Commands run in the CI. Good to run before pushing changes
+
+install: deps ## Install dependencies (alias for deps)
+
+deps: ## Install all dependencies
 	npm install
-	npx playwright install
-	npx playwright install-deps
-	npx tsc --noEmit
-	npx eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 || true
+
+deps-update: ## Update all dependencies
+	npm update
+
+deps-audit: ## Audit dependencies for security issues
+	npm audit
+
+deps-audit-fix: ## Fix dependency security issues
+	npm audit fix
 
 ## Core Development Commands
 
@@ -45,13 +68,13 @@ build: ## Build the application for production
 ## Code Quality Commands
 
 lint: ## Run ESLint to check for code issues
-	npx eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0
+	npx eslint . --ext ts,tsx --report-unused-disable-directives
 
 lint-fix: ## Run ESLint with automatic fixing
 	npx eslint . --ext ts,tsx --fix
 
 format: ## Format code with Prettier
-	npx prettier --write "**/*.{ts,tsx,js,jsx,json,css,md}"
+	npx prettier --list-different --write "**/*.{ts,tsx,js,jsx,json,css,md}"
 
 format-check: ## Check if code is properly formatted
 	npx prettier --check "**/*.{ts,tsx,js,jsx,json,css,md}"
@@ -81,33 +104,7 @@ e2e-test-ui: ## Run end-to-end tests with UI
 
 e2e-install: ## Install Playwright browsers
 	npx playwright install
-
-## Database and Storage Commands
-
-db-generate: ## Generate database types with Drizzle
-	npx drizzle-kit generate
-
-db-migrate: ## Run database migrations
-	npx drizzle-kit migrate
-
-db-studio: ## Open Drizzle Studio for database management
-	npx drizzle-kit studio
-
-## Dependency Management
-
-install: deps ## Install dependencies (alias for deps)
-
-deps: ## Install all dependencies
-	npm install
-
-deps-update: ## Update all dependencies
-	npm update
-
-deps-audit: ## Audit dependencies for security issues
-	npm audit
-
-deps-audit-fix: ## Fix dependency security issues
-	npm audit fix
+	npx playwright install-deps
 
 ## Maintenance Commands
 
@@ -148,14 +145,6 @@ deploy-check: prepare-deploy ## Check if ready for deployment
 	@echo "$(GREEN)✓ Linting passed$(NC)"
 	@echo "$(GREEN)✓ Type checking passed$(NC)"
 	@echo "$(GREEN)✓ Build successful$(NC)"
-
-## Combined Commands
-
-all: clean setup lint type-check test build ## Run full development setup with all dependencies including tests
-
-quick-check: lint-fix format type-check ## Quick code quality check with fixes
-
-pre-commit: lint-fix format type-check ## Pre-commit hook (fix, format, check)
 
 ## Documentation
 

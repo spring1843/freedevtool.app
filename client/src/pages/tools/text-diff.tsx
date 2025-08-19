@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { GitCompare, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+import { useState, useEffect, useCallback } from "react";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 interface DiffLine {
-  type: 'added' | 'removed' | 'unchanged' | 'modified';
+  type: "added" | "removed" | "unchanged" | "modified";
   line1?: string;
   line2?: string;
   lineNumber1?: number;
@@ -40,70 +40,70 @@ export default function TextDiff() {
     charactersModified: number;
   } | null>(null);
 
-  const calculateDiff = () => {
-    const lines1 = text1.split('\n');
-    const lines2 = text2.split('\n');
+  const calculateDiff = useCallback(() => {
+    const lines1 = text1.split("\n");
+    const lines2 = text2.split("\n");
     const result: DiffLine[] = [];
-    
-    let stats = {
+
+    const stats = {
       linesAdded: 0,
       linesRemoved: 0,
       linesModified: 0,
       charactersAdded: 0,
       charactersRemoved: 0,
-      charactersModified: 0
+      charactersModified: 0,
     };
 
     const maxLines = Math.max(lines1.length, lines2.length);
-    
+
     for (let i = 0; i < maxLines; i++) {
       const line1 = lines1[i];
       const line2 = lines2[i];
-      
+
       if (line1 === undefined) {
         // Line added in text2
         result.push({
-          type: 'added',
-          line2: line2,
-          lineNumber2: i + 1
+          type: "added",
+          line2,
+          lineNumber2: i + 1,
         });
         stats.linesAdded++;
         stats.charactersAdded += line2.length;
       } else if (line2 === undefined) {
         // Line removed from text1
         result.push({
-          type: 'removed',
-          line1: line1,
-          lineNumber1: i + 1
+          type: "removed",
+          line1,
+          lineNumber1: i + 1,
         });
         stats.linesRemoved++;
         stats.charactersRemoved += line1.length;
       } else if (line1 === line2) {
         // Lines are identical
         result.push({
-          type: 'unchanged',
-          line1: line1,
-          line2: line2,
+          type: "unchanged",
+          line1,
+          line2,
           lineNumber1: i + 1,
-          lineNumber2: i + 1
+          lineNumber2: i + 1,
         });
       } else {
         // Lines are different
         result.push({
-          type: 'modified',
-          line1: line1,
-          line2: line2,
+          type: "modified",
+          line1,
+          line2,
           lineNumber1: i + 1,
-          lineNumber2: i + 1
+          lineNumber2: i + 1,
         });
         stats.linesModified++;
         stats.charactersModified += Math.abs(line1.length - line2.length);
       }
     }
-    
+
     setDiffResult(result);
     setDiffStats(stats);
-  };
+  }, [text1, text2]);
 
   const handleReset = () => {
     setText1(defaultText1);
@@ -114,19 +114,19 @@ export default function TextDiff() {
 
   useEffect(() => {
     calculateDiff();
-  }, []);
+  }, [calculateDiff]);
 
   const renderDiffLine = (diff: DiffLine, index: number) => {
     const getLineClass = (type: string) => {
       switch (type) {
-        case 'added':
-          return 'bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500';
-        case 'removed':
-          return 'bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500';
-        case 'modified':
-          return 'bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500';
+        case "added":
+          return "bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500";
+        case "removed":
+          return "bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500";
+        case "modified":
+          return "bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500";
         default:
-          return 'bg-gray-50 dark:bg-gray-800';
+          return "bg-gray-50 dark:bg-gray-800";
       }
     };
 
@@ -134,16 +134,16 @@ export default function TextDiff() {
       <div key={index} className={`p-2 ${getLineClass(diff.type)}`}>
         <div className="grid grid-cols-2 gap-4 text-sm font-mono">
           <div>
-            {diff.lineNumber1 && (
+            {diff.lineNumber1 ? (
               <span className="text-gray-500 mr-2">{diff.lineNumber1}:</span>
-            )}
-            {diff.line1 || ''}
+            ) : null}
+            {diff.line1 || ""}
           </div>
           <div>
-            {diff.lineNumber2 && (
+            {diff.lineNumber2 ? (
               <span className="text-gray-500 mr-2">{diff.lineNumber2}:</span>
-            )}
-            {diff.line2 || ''}
+            ) : null}
+            {diff.line2 || ""}
           </div>
         </div>
       </div>
@@ -152,8 +152,6 @@ export default function TextDiff() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="TD-001" size="large" className="mb-6" />
-      
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -168,29 +166,44 @@ export default function TextDiff() {
         </div>
       </div>
 
-      {diffStats && (
+      {diffStats ? (
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Diff Statistics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-4">
-              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+              <Badge
+                variant="outline"
+                className="bg-green-50 text-green-700 border-green-200"
+              >
                 +{diffStats.linesAdded} lines
               </Badge>
-              <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+              <Badge
+                variant="outline"
+                className="bg-red-50 text-red-700 border-red-200"
+              >
                 -{diffStats.linesRemoved} lines
               </Badge>
-              <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">
+              <Badge
+                variant="outline"
+                className="bg-yellow-50 text-yellow-700 border-yellow-200"
+              >
                 ~{diffStats.linesModified} modified
               </Badge>
-              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                {diffStats.charactersAdded + diffStats.charactersRemoved + diffStats.charactersModified} chars changed
+              <Badge
+                variant="outline"
+                className="bg-blue-50 text-blue-700 border-blue-200"
+              >
+                {diffStats.charactersAdded +
+                  diffStats.charactersRemoved +
+                  diffStats.charactersModified}{" "}
+                chars changed
               </Badge>
             </div>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       <div className="mb-6 flex gap-3">
         <Button
@@ -209,12 +222,14 @@ export default function TextDiff() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-red-600 dark:text-red-400">Text 1 (Original)</CardTitle>
+            <CardTitle className="text-red-600 dark:text-red-400">
+              Text 1 (Original)
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
               value={text1}
-              onChange={(e) => setText1(e.target.value)}
+              onChange={e => setText1(e.target.value)}
               placeholder="Enter original text here..."
               data-testid="text1-input"
               className="min-h-[300px] font-mono text-sm"
@@ -227,12 +242,14 @@ export default function TextDiff() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-green-600 dark:text-green-400">Text 2 (Modified)</CardTitle>
+            <CardTitle className="text-green-600 dark:text-green-400">
+              Text 2 (Modified)
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
               value={text2}
-              onChange={(e) => setText2(e.target.value)}
+              onChange={e => setText2(e.target.value)}
               placeholder="Enter modified text here..."
               data-testid="text2-input"
               className="min-h-[300px] font-mono text-sm"
@@ -262,8 +279,6 @@ export default function TextDiff() {
           </CardContent>
         </Card>
       )}
-
-      <AdSlot position="sidebar" id="TD-002" size="medium" className="mt-6" />
     </div>
   );
 }

@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, Monitor, Globe, HardDrive, Cpu, RefreshCw, RotateCcw } from "lucide-react";
+import {
+  Copy,
+  Monitor,
+  Globe,
+  HardDrive,
+  Cpu,
+  RefreshCw,
+  RotateCcw,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface BrowserInfo {
   // Navigator properties
@@ -21,7 +28,7 @@ interface BrowserInfo {
   appName: string;
   appVersion: string;
   appCodeName: string;
-  
+
   // Screen properties
   screenWidth: number;
   screenHeight: number;
@@ -30,13 +37,13 @@ interface BrowserInfo {
   availableWidth: number;
   availableHeight: number;
   devicePixelRatio: number;
-  
+
   // Window properties
   windowWidth: number;
   windowHeight: number;
   scrollX: number;
   scrollY: number;
-  
+
   // Location properties
   href: string;
   hostname: string;
@@ -45,12 +52,12 @@ interface BrowserInfo {
   hash: string;
   protocol: string;
   port: string;
-  
+
   // Time and timezone
   timezone: string;
   timezoneOffset: number;
   currentTime: string;
-  
+
   // Browser features
   localStorage: boolean;
   sessionStorage: boolean;
@@ -67,24 +74,24 @@ interface BrowserInfo {
   deviceMotion: boolean;
   deviceOrientation: boolean;
   gamepad: boolean;
-  
+
   // Media capabilities
   mediaDevices: boolean;
   mediaRecorder: boolean;
   speechRecognition: boolean;
   speechSynthesis: boolean;
-  
+
   // Memory (if available)
   jsHeapSizeLimit?: number;
   totalJSHeapSize?: number;
   usedJSHeapSize?: number;
-  
+
   // Connection (if available)
   connectionType?: string;
   connectionEffectiveType?: string;
   connectionDownlink?: number;
   connectionRtt?: number;
-  
+
   // Device memory (if available)
   deviceMemory?: number;
 }
@@ -96,37 +103,64 @@ export default function BrowserInfo() {
   const { toast } = useToast();
 
   const getBrowserInfo = (): BrowserInfo => {
-    const nav = navigator as any;
-    const {screen} = window;
-    const {location} = window;
-    const {performance} = (window as any);
-    const connection = (nav.connection || nav.mozConnection || nav.webkitConnection) as any;
+    const nav = navigator as Navigator & {
+      connection?: {
+        type?: string;
+        effectiveType?: string;
+        downlink?: number;
+        rtt?: number;
+      };
+      mozConnection?: {
+        type?: string;
+        effectiveType?: string;
+        downlink?: number;
+        rtt?: number;
+      };
+      webkitConnection?: {
+        type?: string;
+        effectiveType?: string;
+        downlink?: number;
+        rtt?: number;
+      };
+      deviceMemory?: number;
+    };
+    const { screen } = window;
+    const { location } = window;
+    const performance = window.performance as Performance & {
+      memory?: {
+        jsHeapSizeLimit?: number;
+        totalJSHeapSize?: number;
+        usedJSHeapSize?: number;
+      };
+    };
+    const connection =
+      nav.connection || nav.mozConnection || nav.webkitConnection;
 
     // Test WebGL support
-    const canvas = document.createElement('canvas');
-    const webGL = !!canvas.getContext('webgl');
-    const webGL2 = !!canvas.getContext('webgl2');
+    const canvas = document.createElement("canvas");
+    const webGL = !!canvas.getContext("webgl");
+    const webGL2 = !!canvas.getContext("webgl2");
 
     // Test various browser features
-    const testFeature = (feature: any) => typeof feature !== 'undefined';
+    const testFeature = (feature: unknown) => typeof feature !== "undefined";
 
     return {
       // Navigator properties
-      userAgent: nav.userAgent || 'Unknown',
-      platform: nav.platform || 'Unknown',
-      language: nav.language || 'Unknown',
-      languages: nav.languages || [],
+      userAgent: nav.userAgent || "Unknown",
+      platform: nav.platform || "Unknown",
+      language: nav.language || "Unknown",
+      languages: Array.from(nav.languages || []),
       cookieEnabled: nav.cookieEnabled || false,
       onLine: nav.onLine || false,
       hardwareConcurrency: nav.hardwareConcurrency || 0,
       maxTouchPoints: nav.maxTouchPoints || 0,
-      vendor: nav.vendor || '',
-      vendorSub: nav.vendorSub || '',
-      productSub: nav.productSub || '',
-      appName: nav.appName || '',
-      appVersion: nav.appVersion || '',
-      appCodeName: nav.appCodeName || '',
-      
+      vendor: nav.vendor || "",
+      vendorSub: nav.vendorSub || "",
+      productSub: nav.productSub || "",
+      appName: nav.appName || "",
+      appVersion: nav.appVersion || "",
+      appCodeName: nav.appCodeName || "",
+
       // Screen properties
       screenWidth: screen.width || 0,
       screenHeight: screen.height || 0,
@@ -135,36 +169,40 @@ export default function BrowserInfo() {
       availableWidth: screen.availWidth || 0,
       availableHeight: screen.availHeight || 0,
       devicePixelRatio: window.devicePixelRatio || 1,
-      
+
       // Window properties
       windowWidth: window.innerWidth || 0,
       windowHeight: window.innerHeight || 0,
       scrollX: window.scrollX || 0,
       scrollY: window.scrollY || 0,
-      
+
       // Location properties
-      href: location.href || '',
-      hostname: location.hostname || '',
-      pathname: location.pathname || '',
-      search: location.search || '',
-      hash: location.hash || '',
-      protocol: location.protocol || '',
-      port: location.port || '',
-      
+      href: location.href || "",
+      hostname: location.hostname || "",
+      pathname: location.pathname || "",
+      search: location.search || "",
+      hash: location.hash || "",
+      protocol: location.protocol || "",
+      port: location.port || "",
+
       // Time and timezone
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown",
       timezoneOffset: new Date().getTimezoneOffset(),
       currentTime: new Date().toISOString(),
-      
+
       // Browser features
       localStorage: testFeature(window.localStorage),
       sessionStorage: testFeature(window.sessionStorage),
       indexedDB: testFeature(window.indexedDB),
       webGL,
       webGL2,
-      canvas: testFeature(document.createElement('canvas').getContext),
+      canvas: testFeature(document.createElement("canvas").getContext),
       webRTC: testFeature(window.RTCPeerConnection),
-      webAudio: testFeature(window.AudioContext || (window as any).webkitAudioContext),
+      webAudio: testFeature(
+        window.AudioContext ||
+          (window as typeof window & { webkitAudioContext?: unknown })
+            .webkitAudioContext
+      ),
       webWorkers: testFeature(window.Worker),
       serviceWorkers: testFeature(nav.serviceWorker),
       geolocation: testFeature(nav.geolocation),
@@ -172,26 +210,39 @@ export default function BrowserInfo() {
       deviceMotion: testFeature(window.DeviceMotionEvent),
       deviceOrientation: testFeature(window.DeviceOrientationEvent),
       gamepad: testFeature(nav.getGamepads),
-      
+
       // Media capabilities
       mediaDevices: testFeature(nav.mediaDevices),
       mediaRecorder: testFeature(window.MediaRecorder),
-      speechRecognition: testFeature((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition),
+      speechRecognition: testFeature(
+        (
+          window as typeof window & {
+            SpeechRecognition?: unknown;
+            webkitSpeechRecognition?: unknown;
+          }
+        ).SpeechRecognition ||
+          (
+            window as typeof window & {
+              SpeechRecognition?: unknown;
+              webkitSpeechRecognition?: unknown;
+            }
+          ).webkitSpeechRecognition
+      ),
       speechSynthesis: testFeature(window.speechSynthesis),
-      
+
       // Memory (if available)
       jsHeapSizeLimit: performance?.memory?.jsHeapSizeLimit,
       totalJSHeapSize: performance?.memory?.totalJSHeapSize,
       usedJSHeapSize: performance?.memory?.usedJSHeapSize,
-      
+
       // Connection (if available)
       connectionType: connection?.type,
       connectionEffectiveType: connection?.effectiveType,
       connectionDownlink: connection?.downlink,
       connectionRtt: connection?.rtt,
-      
+
       // Device memory (if available)
-      deviceMemory: nav.deviceMemory
+      deviceMemory: nav.deviceMemory,
     };
   };
 
@@ -209,9 +260,6 @@ export default function BrowserInfo() {
     setLastUpdated(new Date());
     setRefreshCount(1);
   }, []); // Only run once on mount
-  
-  // Debug logging
-  console.log('Current browserInfo state:', browserInfo);
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -220,7 +268,8 @@ export default function BrowserInfo() {
         title: "Copied to clipboard",
         description: "Browser information copied successfully",
       });
-    } catch {
+    } catch (error) {
+      console.error("Clipboard copy failed:", error);
       toast({
         title: "Copy failed",
         description: "Could not copy to clipboard",
@@ -231,27 +280,34 @@ export default function BrowserInfo() {
 
   const copyAllInfo = () => {
     if (!browserInfo) return;
-    
+
     const infoText = Object.entries(browserInfo)
-      .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
-      .join('\n');
-    
-    copyToClipboard(infoText);
+      .map(
+        ([key, value]) =>
+          `${key}: ${Array.isArray(value) ? value.join(", ") : value}`
+      )
+      .join("\n");
+
+    copyToClipboard(infoText).catch(error => {
+      console.error("Failed to copy browser info:", error);
+    });
   };
 
   const formatBytes = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))  } ${  sizes[i]}`;
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
   };
 
   if (!browserInfo) {
     return (
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex items-center justify-center h-64">
-          <p className="text-slate-500 dark:text-slate-400">Loading browser information...</p>
+          <p className="text-slate-500 dark:text-slate-400">
+            Loading browser information...
+          </p>
         </div>
       </div>
     );
@@ -271,9 +327,6 @@ export default function BrowserInfo() {
           Comprehensive browser and system information available to JavaScript
         </p>
       </div>
-
-      {/* Top Ad */}
-      <AdSlot position="top" id="BRW-001" size="medium" />
 
       {/* Controls */}
       <Card className="mb-6">
@@ -303,7 +356,12 @@ export default function BrowserInfo() {
                 <Copy className="w-4 h-4" />
                 <span>Copy All</span>
               </Button>
-              <Button onClick={refreshInfo} variant="outline" size="sm" data-testid="reset-browser-info-button">
+              <Button
+                onClick={refreshInfo}
+                variant="outline"
+                size="sm"
+                data-testid="reset-browser-info-button"
+              >
                 <RotateCcw className="w-4 h-4" />
               </Button>
             </div>
@@ -311,7 +369,8 @@ export default function BrowserInfo() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-slate-600 dark:text-slate-400">
-            Last updated: {lastUpdated.toLocaleString()} • Refreshed {refreshCount} times
+            Last updated: {lastUpdated.toLocaleString()} • Refreshed{" "}
+            {refreshCount} times
           </p>
         </CardContent>
       </Card>
@@ -330,7 +389,9 @@ export default function BrowserInfo() {
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">User Agent:</span>
-                <span className="font-mono text-xs break-all">{browserInfo.userAgent}</span>
+                <span className="font-mono text-xs break-all">
+                  {browserInfo.userAgent}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">App Name:</span>
@@ -338,7 +399,9 @@ export default function BrowserInfo() {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">App Version:</span>
-                <span className="font-mono text-xs">{browserInfo.appVersion}</span>
+                <span className="font-mono text-xs">
+                  {browserInfo.appVersion}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Platform:</span>
@@ -354,18 +417,30 @@ export default function BrowserInfo() {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Languages:</span>
-                <span className="text-xs">{browserInfo.languages.join(', ')}</span>
+                <span className="text-xs">
+                  {browserInfo.languages.join(", ")}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Online:</span>
-                <span className={browserInfo.onLine ? 'text-green-600' : 'text-red-600'}>
-                  {browserInfo.onLine ? 'Yes' : 'No'}
+                <span
+                  className={
+                    browserInfo.onLine ? "text-green-600" : "text-red-600"
+                  }
+                >
+                  {browserInfo.onLine ? "Yes" : "No"}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Cookies Enabled:</span>
-                <span className={browserInfo.cookieEnabled ? 'text-green-600' : 'text-red-600'}>
-                  {browserInfo.cookieEnabled ? 'Yes' : 'No'}
+                <span
+                  className={
+                    browserInfo.cookieEnabled
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }
+                >
+                  {browserInfo.cookieEnabled ? "Yes" : "No"}
                 </span>
               </div>
             </div>
@@ -384,15 +459,21 @@ export default function BrowserInfo() {
             <div className="space-y-2 text-sm">
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Screen Resolution:</span>
-                <span>{browserInfo.screenWidth} × {browserInfo.screenHeight}</span>
+                <span>
+                  {browserInfo.screenWidth} × {browserInfo.screenHeight}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Available Size:</span>
-                <span>{browserInfo.availableWidth} × {browserInfo.availableHeight}</span>
+                <span>
+                  {browserInfo.availableWidth} × {browserInfo.availableHeight}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Window Size:</span>
-                <span>{browserInfo.windowWidth} × {browserInfo.windowHeight}</span>
+                <span>
+                  {browserInfo.windowWidth} × {browserInfo.windowHeight}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Color Depth:</span>
@@ -408,7 +489,9 @@ export default function BrowserInfo() {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Scroll Position:</span>
-                <span>{browserInfo.scrollX}, {browserInfo.scrollY}</span>
+                <span>
+                  {browserInfo.scrollX}, {browserInfo.scrollY}
+                </span>
               </div>
             </div>
           </CardContent>
@@ -432,11 +515,14 @@ export default function BrowserInfo() {
                 <span className="font-medium">Max Touch Points:</span>
                 <span>{browserInfo.maxTouchPoints}</span>
               </div>
-              {browserInfo.deviceMemory ? <div className="grid grid-cols-2 gap-2">
+              {browserInfo.deviceMemory ? (
+                <div className="grid grid-cols-2 gap-2">
                   <span className="font-medium">Device Memory:</span>
                   <span>{browserInfo.deviceMemory} GB</span>
-                </div> : null}
-              {browserInfo.jsHeapSizeLimit ? <>
+                </div>
+              ) : null}
+              {browserInfo.jsHeapSizeLimit ? (
+                <>
                   <div className="grid grid-cols-2 gap-2">
                     <span className="font-medium">JS Heap Limit:</span>
                     <span>{formatBytes(browserInfo.jsHeapSizeLimit)}</span>
@@ -449,7 +535,8 @@ export default function BrowserInfo() {
                     <span className="font-medium">JS Heap Total:</span>
                     <span>{formatBytes(browserInfo.totalJSHeapSize || 0)}</span>
                   </div>
-                </> : null}
+                </>
+              ) : null}
             </div>
           </CardContent>
         </Card>
@@ -474,11 +561,13 @@ export default function BrowserInfo() {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Port:</span>
-                <span>{browserInfo.port || 'Default'}</span>
+                <span>{browserInfo.port || "Default"}</span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Pathname:</span>
-                <span className="font-mono text-xs break-all">{browserInfo.pathname}</span>
+                <span className="font-mono text-xs break-all">
+                  {browserInfo.pathname}
+                </span>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Timezone:</span>
@@ -490,17 +579,16 @@ export default function BrowserInfo() {
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <span className="font-medium">Current Time:</span>
-                <span className="font-mono text-xs">{new Date(browserInfo.currentTime).toLocaleString()}</span>
+                <span className="font-mono text-xs">
+                  {new Date(browserInfo.currentTime).toLocaleString()}
+                </span>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="BRW-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Browser Features */}
       <Card className="mb-8">
@@ -513,30 +601,35 @@ export default function BrowserInfo() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-sm">
             {Object.entries({
-              'Local Storage': browserInfo.localStorage,
-              'Session Storage': browserInfo.sessionStorage,
-              'IndexedDB': browserInfo.indexedDB,
-              'WebGL': browserInfo.webGL,
-              'WebGL 2': browserInfo.webGL2,
-              'Canvas': browserInfo.canvas,
-              'WebRTC': browserInfo.webRTC,
-              'Web Audio': browserInfo.webAudio,
-              'Web Workers': browserInfo.webWorkers,
-              'Service Workers': browserInfo.serviceWorkers,
-              'Geolocation': browserInfo.geolocation,
-              'Notifications': browserInfo.notifications,
-              'Device Motion': browserInfo.deviceMotion,
-              'Device Orientation': browserInfo.deviceOrientation,
-              'Gamepad': browserInfo.gamepad,
-              'Media Devices': browserInfo.mediaDevices,
-              'Media Recorder': browserInfo.mediaRecorder,
-              'Speech Recognition': browserInfo.speechRecognition,
-              'Speech Synthesis': browserInfo.speechSynthesis,
+              "Local Storage": browserInfo.localStorage,
+              "Session Storage": browserInfo.sessionStorage,
+              IndexedDB: browserInfo.indexedDB,
+              WebGL: browserInfo.webGL,
+              "WebGL 2": browserInfo.webGL2,
+              Canvas: browserInfo.canvas,
+              WebRTC: browserInfo.webRTC,
+              "Web Audio": browserInfo.webAudio,
+              "Web Workers": browserInfo.webWorkers,
+              "Service Workers": browserInfo.serviceWorkers,
+              Geolocation: browserInfo.geolocation,
+              Notifications: browserInfo.notifications,
+              "Device Motion": browserInfo.deviceMotion,
+              "Device Orientation": browserInfo.deviceOrientation,
+              Gamepad: browserInfo.gamepad,
+              "Media Devices": browserInfo.mediaDevices,
+              "Media Recorder": browserInfo.mediaRecorder,
+              "Speech Recognition": browserInfo.speechRecognition,
+              "Speech Synthesis": browserInfo.speechSynthesis,
             }).map(([feature, supported]) => (
-              <div key={feature} className="flex items-center justify-between p-2 border border-slate-200 dark:border-slate-700 rounded">
+              <div
+                key={feature}
+                className="flex items-center justify-between p-2 border border-slate-200 dark:border-slate-700 rounded"
+              >
                 <span>{feature}</span>
-                <span className={`font-bold ${supported ? 'text-green-600' : 'text-red-600'}`}>
-                  {supported ? '✓' : '✗'}
+                <span
+                  className={`font-bold ${supported ? "text-green-600" : "text-red-600"}`}
+                >
+                  {supported ? "✓" : "✗"}
                 </span>
               </div>
             ))}
@@ -545,34 +638,41 @@ export default function BrowserInfo() {
       </Card>
 
       {/* Connection Info */}
-      {(browserInfo.connectionType || browserInfo.connectionEffectiveType) ? <Card className="mb-8">
+      {browserInfo.connectionType || browserInfo.connectionEffectiveType ? (
+        <Card className="mb-8">
           <CardHeader>
             <CardTitle>Network Connection</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">
-              {browserInfo.connectionType ? <div className="grid grid-cols-2 gap-2">
+              {browserInfo.connectionType ? (
+                <div className="grid grid-cols-2 gap-2">
                   <span className="font-medium">Connection Type:</span>
                   <span>{browserInfo.connectionType}</span>
-                </div> : null}
-              {browserInfo.connectionEffectiveType ? <div className="grid grid-cols-2 gap-2">
+                </div>
+              ) : null}
+              {browserInfo.connectionEffectiveType ? (
+                <div className="grid grid-cols-2 gap-2">
                   <span className="font-medium">Effective Type:</span>
                   <span>{browserInfo.connectionEffectiveType}</span>
-                </div> : null}
-              {browserInfo.connectionDownlink ? <div className="grid grid-cols-2 gap-2">
+                </div>
+              ) : null}
+              {browserInfo.connectionDownlink ? (
+                <div className="grid grid-cols-2 gap-2">
                   <span className="font-medium">Downlink:</span>
                   <span>{browserInfo.connectionDownlink} Mbps</span>
-                </div> : null}
-              {browserInfo.connectionRtt ? <div className="grid grid-cols-2 gap-2">
+                </div>
+              ) : null}
+              {browserInfo.connectionRtt ? (
+                <div className="grid grid-cols-2 gap-2">
                   <span className="font-medium">RTT:</span>
                   <span>{browserInfo.connectionRtt} ms</span>
-                </div> : null}
+                </div>
+              ) : null}
             </div>
           </CardContent>
-        </Card> : null}
-
-      {/* Bottom Ad */}
-      <AdSlot position="bottom" id="BRW-003" size="large" />
+        </Card>
+      ) : null}
     </div>
   );
 }

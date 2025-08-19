@@ -24,7 +24,7 @@
   --input: hsl(214 32% 91%);
   --ring: hsl(217 91% 60%);
   --radius: 0rem;
-  
+
   /* Custom colors matching design */
   --slate-50: hsl(210 40% 98%);
   --slate-100: hsl(210 40% 96%);
@@ -36,10 +36,14 @@
   --slate-700: hsl(215 25% 27%);
   --slate-800: hsl(217 33% 17%);
   --slate-900: hsl(222 84% 5%);
-  
+
   /* Font families - System fonts for offline security */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue",
+    Arial, sans-serif;
+  --font-mono:
+    "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New",
+    monospace;
 }
 
 .dark {
@@ -67,21 +71,32 @@
 @layer base {
   * {
     @apply border-border;
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
   }
-  
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }
-  
+
   /* Additional transitions for theme-aware components */
   .transition-theme {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Ensure buttons and interactive elements transition smoothly */
-  button, a, input, textarea, select {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  button,
+  a,
+  input,
+  textarea,
+  select {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
   }
 }
 
@@ -89,82 +104,127 @@
   .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: hsl(213 27% 84%);
     border-radius: 0;
   }
-  
+
   .dark .custom-scrollbar::-webkit-scrollbar-thumb {
     background: hsl(215 19% 35%);
   }
-  
+
   /* Syntax highlighting */
   .hljs {
     background: transparent !important;
   }
-  
-  .hljs-keyword { color: #c792ea; }
-  .hljs-string { color: #c3e88d; }
-  .hljs-number { color: #f78c6c; }
-  .hljs-attr { color: #82b1ff; }
-  .hljs-punctuation { color: #89ddff; }
-  
-  .dark .hljs-keyword { color: #bb9af7; }
-  .dark .hljs-string { color: #9ece6a; }
-  .dark .hljs-number { color: #ff9e64; }
-  .dark .hljs-attr { color: #7aa2f7; }
-  .dark .hljs-punctuation { color: #73daca; }
-  
+
+  .hljs-keyword {
+    color: #c792ea;
+  }
+  .hljs-string {
+    color: #c3e88d;
+  }
+  .hljs-number {
+    color: #f78c6c;
+  }
+  .hljs-attr {
+    color: #82b1ff;
+  }
+  .hljs-punctuation {
+    color: #89ddff;
+  }
+
+  .dark .hljs-keyword {
+    color: #bb9af7;
+  }
+  .dark .hljs-string {
+    color: #9ece6a;
+  }
+  .dark .hljs-number {
+    color: #ff9e64;
+  }
+  .dark .hljs-attr {
+    color: #7aa2f7;
+  }
+  .dark .hljs-punctuation {
+    color: #73daca;
+  }
+
   /* Diff styles */
   .diff-line-add {
     background-color: hsl(142 76% 90%);
     border-left: 3px solid hsl(142 76% 36%);
   }
-  
+
   .dark .diff-line-add {
     background-color: hsl(142 76% 15%);
   }
-  
+
   .diff-line-remove {
     background-color: hsl(0 84% 95%);
     border-left: 3px solid hsl(0 84% 60%);
   }
-  
+
   .dark .diff-line-remove {
     background-color: hsl(0 84% 15%);
   }
-  
+
   /* Word-level diff highlighting */
   .diff-word-modified {
     background-color: hsl(142 76% 70%);
     font-weight: bold;
     padding: 0 2px;
   }
-  
+
   .dark .diff-word-modified {
     background-color: hsl(142 76% 30%);
     color: white;
   }
 
   /* Flat Design - Remove all rounded corners */
-  .rounded-none { border-radius: 0 !important; }
-  .rounded { border-radius: 0 !important; }
-  .rounded-sm { border-radius: 0 !important; }
-  .rounded-md { border-radius: 0 !important; }
-  .rounded-lg { border-radius: 0 !important; }
-  .rounded-xl { border-radius: 0 !important; }
-  .rounded-2xl { border-radius: 0 !important; }
-  .rounded-3xl { border-radius: 0 !important; }
-  .rounded-full { border-radius: 0 !important; }
-  
+  .rounded-none {
+    border-radius: 0 !important;
+  }
+  .rounded {
+    border-radius: 0 !important;
+  }
+  .rounded-sm {
+    border-radius: 0 !important;
+  }
+  .rounded-md {
+    border-radius: 0 !important;
+  }
+  .rounded-lg {
+    border-radius: 0 !important;
+  }
+  .rounded-xl {
+    border-radius: 0 !important;
+  }
+  .rounded-2xl {
+    border-radius: 0 !important;
+  }
+  .rounded-3xl {
+    border-radius: 0 !important;
+  }
+  .rounded-full {
+    border-radius: 0 !important;
+  }
+
   /* Override component rounded corners */
-  .card, .button, .input, .textarea, .select, .badge { border-radius: 0 !important; }
-  
+  .card,
+  .button,
+  .input,
+  .textarea,
+  .select,
+  .badge {
+    border-radius: 0 !important;
+  }
+
   /* Mind map specific styles */
   .mind-map-container {
     position: relative;
@@ -173,7 +233,7 @@
     overflow: hidden;
     border-radius: 0 !important;
   }
-  
+
   .mind-map-center {
     position: absolute;
     width: 120px;
@@ -191,11 +251,11 @@
     cursor: pointer;
     transition: transform 0.2s;
   }
-  
+
   .mind-map-center:hover {
     transform: translate(-50%, -50%) scale(1.1);
   }
-  
+
   .mind-map-section {
     position: absolute;
     min-width: 100px;
@@ -213,7 +273,7 @@
     transition: all 0.2s;
     padding: 8px;
   }
-  
+
   .mind-map-tool {
     position: absolute;
     min-width: 80px;
@@ -230,7 +290,7 @@
     transition: all 0.2s;
     padding: 6px;
   }
-  
+
   .mind-map-line {
     position: absolute;
     height: 2px;
@@ -239,7 +299,7 @@
     z-index: 1;
     opacity: 0.5;
   }
-  
+
   /* Advertisement spots */
   .ad-slot {
     border: 2px dashed #ccc;
@@ -249,19 +309,19 @@
     margin: 20px 0;
     border-radius: 0 !important;
   }
-  
+
   .dark .ad-slot {
     border-color: #555;
     background: #2a2a2a;
   }
-  
+
   /* Word-level diff highlighting */
   .diff-word-modified {
     background-color: hsl(142 76% 70%);
     font-weight: bold;
     padding: 0 2px;
   }
-  
+
   .dark .diff-word-modified {
     background-color: hsl(142 76% 30%);
     color: white;
@@ -274,7 +334,7 @@
     height: 600px;
     overflow: hidden;
   }
-  
+
   .mind-map-center {
     position: absolute;
     top: 50%;
@@ -290,7 +350,7 @@
     font-size: 14px;
     text-align: center;
   }
-  
+
   .mind-map-section {
     position: absolute;
     width: 100px;
@@ -305,7 +365,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  
+
   .mind-map-tool {
     position: absolute;
     width: 80px;
@@ -319,14 +379,14 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  
+
   .mind-map-line {
     position: absolute;
     background: currentColor;
     height: 2px;
     transform-origin: left center;
   }
-  
+
   /* Ad slots */
   .ad-slot {
     border: 2px dashed;
@@ -336,7 +396,7 @@
     opacity: 0.7;
     margin: 20px 0;
   }
-  
+
   /* Flat design - remove all border radius */
   * {
     border-radius: 0 !important;

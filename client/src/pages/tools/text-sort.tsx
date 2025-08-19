@@ -1,12 +1,18 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { ArrowUpDown, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+import { useState, useEffect, useCallback } from "react";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 type SortType = "alphabetical" | "numerical" | "length" | "reverse";
@@ -38,20 +44,20 @@ export default function TextSorter() {
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [sortedOutput, setSortedOutput] = useState("");
 
-  const sortText = () => {
-    const lines = input.split('\n').filter(line => line.trim() !== '');
-    
-    let sorted = [...lines];
-    
+  const sortText = useCallback(() => {
+    const lines = input.split("\n").filter(line => line.trim() !== "");
+
+    const sorted = [...lines];
+
     switch (sortType) {
-      case 'alphabetical':
+      case "alphabetical":
         sorted.sort((a, b) => {
           const strA = caseSensitive ? a : a.toLowerCase();
           const strB = caseSensitive ? b : b.toLowerCase();
           return strA.localeCompare(strB);
         });
         break;
-      case 'numerical':
+      case "numerical":
         sorted.sort((a, b) => {
           const numA = parseFloat(a);
           const numB = parseFloat(b);
@@ -61,20 +67,23 @@ export default function TextSorter() {
           return numA - numB;
         });
         break;
-      case 'length':
+      case "length":
         sorted.sort((a, b) => a.length - b.length);
         break;
-      case 'reverse':
+      case "reverse":
         sorted.reverse();
         break;
+      default: {
+        // Handle default case
+      }
     }
-    
-    if (sortOrder === 'desc' && sortType !== 'reverse') {
+
+    if (sortOrder === "desc" && sortType !== "reverse") {
       sorted.reverse();
     }
-    
-    setSortedOutput(sorted.join('\n'));
-  };
+
+    setSortedOutput(sorted.join("\n"));
+  }, [input, sortType, sortOrder, caseSensitive]);
 
   const handleReset = () => {
     setInput(defaultInput);
@@ -86,12 +95,10 @@ export default function TextSorter() {
 
   useEffect(() => {
     sortText();
-  }, []);
+  }, [sortText]);
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="TS-001" size="large" className="mb-6" />
-      
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -114,7 +121,10 @@ export default function TextSorter() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <Label htmlFor="sort-type">Sort Type</Label>
-              <Select value={sortType} onValueChange={(value: SortType) => setSortType(value)}>
+              <Select
+                value={sortType}
+                onValueChange={(value: SortType) => setSortType(value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -129,7 +139,10 @@ export default function TextSorter() {
 
             <div>
               <Label htmlFor="sort-order">Sort Order</Label>
-              <Select value={sortOrder} onValueChange={(value: SortOrder) => setSortOrder(value)}>
+              <Select
+                value={sortOrder}
+                onValueChange={(value: SortOrder) => setSortOrder(value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -174,7 +187,7 @@ export default function TextSorter() {
           <CardContent>
             <Textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={e => setInput(e.target.value)}
               placeholder="Enter lines of text to sort..."
               data-testid="text-input"
               className="min-h-[400px] font-mono text-sm"
@@ -203,8 +216,6 @@ export default function TextSorter() {
           </CardContent>
         </Card>
       </div>
-
-      <AdSlot position="sidebar" id="TS-002" size="medium" className="mt-6" />
     </div>
   );
 }

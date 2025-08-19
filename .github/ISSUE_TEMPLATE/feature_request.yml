@@ -1,0 +1,168 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement for the application
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please provide detailed information about your idea.
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you requesting?
+      options:
+        - "New Tool - Add a completely new developer tool"
+        - "Tool Enhancement - Improve an existing tool"
+        - "UI/UX Improvement - Better user interface or experience"
+        - "Performance - Speed or efficiency improvements"
+        - "Accessibility - Better accessibility features"
+        - "Mobile/Responsive - Better mobile experience"
+        - "Integration - Connect with external services"
+        - "Export/Import - New file format support"
+        - "Demo/Tutorial - Better onboarding or help"
+        - "Developer Experience - Build, testing, or development improvements"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: feature-title
+    attributes:
+      label: Feature Title
+      description: A concise title for your feature request
+      placeholder: "e.g., Add CSS Minifier Tool, Dark mode toggle, Export to PDF"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve? What pain point are you experiencing?
+      placeholder: "I'm frustrated when... It would be helpful if... Currently there's no way to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution
+      description: Describe the solution you'd like to see implemented
+      placeholder: "I would like to see... The tool should be able to... It should work by..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-stories
+    attributes:
+      label: User Stories
+      description: Describe how users would interact with this feature
+      placeholder: |
+        As a [type of user], I want [functionality] so that [benefit].
+        
+        Example:
+        - As a web developer, I want to minify CSS code so that I can reduce file sizes
+        - As a designer, I want to convert colors between formats so that I can match brand guidelines
+
+  - type: dropdown
+    id: target-users
+    attributes:
+      label: Target Users
+      description: Who would benefit from this feature?
+      multiple: true
+      options:
+        - "Web Developers"
+        - "Software Engineers"
+        - "Designers"
+        - "Data Analysts"
+        - "DevOps Engineers"
+        - "Students"
+        - "Content Creators"
+        - "QA Testers"
+        - "System Administrators"
+        - "General Users"
+        - "Other (specify in details)"
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this feature to you?
+      options:
+        - "Low - Nice to have"
+        - "Medium - Would be helpful"
+        - "High - Important for my workflow"
+        - "Critical - Blocking my work"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What alternatives have you considered or are currently using?
+      placeholder: "I currently use [tool/method]... I've considered [alternative]... This doesn't work because..."
+
+  - type: textarea
+    id: mockups-examples
+    attributes:
+      label: Mockups or Examples
+      description: Provide mockups, wireframes, or examples of similar tools/features
+      placeholder: "Attach images, links to similar tools, or describe the UI you envision"
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: Technical Considerations
+      description: Any technical aspects, requirements, or constraints to consider?
+      placeholder: "Should support... Must be compatible with... Performance requirements..."
+
+  - type: dropdown
+    id: complexity
+    attributes:
+      label: Estimated Complexity
+      description: How complex do you think this feature would be to implement?
+      options:
+        - "Simple - Small UI change or minor feature"
+        - "Medium - New tool or significant enhancement"  
+        - "Complex - Major feature requiring architecture changes"
+        - "Not sure"
+
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: Success Criteria
+      description: How would you measure if this feature is successful?
+      placeholder: "This feature would be successful if... Users should be able to... The expected outcome is..."
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or information about the feature request
+      placeholder: "Any other information that would help us understand your request"
+
+  - type: checkboxes
+    id: existing-check
+    attributes:
+      label: Due Diligence
+      description: Please confirm you've done the following
+      options:
+        - label: I have searched existing issues to ensure this feature hasn't been requested
+          required: true
+        - label: I have checked the current application to confirm this feature doesn't already exist
+          required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

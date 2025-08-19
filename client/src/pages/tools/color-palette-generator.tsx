@@ -1,40 +1,52 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import type { 
-  ColorPalette,
-  ColorInfo
+import {
+  getAllPaletteTypes,
+  generateRandomColor,
+  getContrastColor,
+  type ColorPalette,
+  type ColorInfo,
 } from "@/lib/color-tools";
-import { 
-  getAllPaletteTypes, 
-  generateRandomColor, 
-  getContrastColor
-} from "@/lib/color-tools";
-import { Palette, Copy, Download, RefreshCw, Shuffle, RotateCcw, Share, Link } from "lucide-react";
+
+import {
+  Palette,
+  Copy,
+  Download,
+  RefreshCw,
+  Shuffle,
+  RotateCcw,
+  Share,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
-import { useLocation } from "wouter";
+
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
 
 export default function ColorPaletteGenerator() {
   const [baseColor, setBaseColor] = useState("#3B82F6");
   const [selectedType, setSelectedType] = useState("complementary");
-  const [generatedPalettes, setGeneratedPalettes] = useState<ColorPalette[]>([]);
+  const [generatedPalettes, setGeneratedPalettes] = useState<ColorPalette[]>(
+    []
+  );
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
-  const [location, setLocation] = useLocation();
 
   const paletteTypes = getAllPaletteTypes();
 
   // Load state from URL parameters on component mount
   useEffect(() => {
-    const urlBaseColor = getParam('baseColor', '');
-    const urlSelectedType = getParam('selectedType', '');
+    const urlBaseColor = getParam("baseColor", "");
+    const urlSelectedType = getParam("selectedType", "");
     if (urlBaseColor) {
       setBaseColor(urlBaseColor);
     }
@@ -47,46 +59,48 @@ export default function ColorPaletteGenerator() {
   const updateUrl = (newBaseColor?: string, newSelectedType?: string) => {
     updateURL({
       baseColor: newBaseColor || baseColor,
-      selectedType: newSelectedType || selectedType
+      selectedType: newSelectedType || selectedType,
     });
   };
 
-  const generatePalette = () => {
+  const generatePalette = useCallback(() => {
     setIsGenerating(true);
-    
+
     try {
-      const selectedGenerator = paletteTypes.find(type => type.key === selectedType);
+      const selectedGenerator = paletteTypes.find(
+        type => type.key === selectedType
+      );
       if (selectedGenerator) {
         const palette = selectedGenerator.generator(baseColor);
         setGeneratedPalettes([palette]);
-        
+
         toast({
           title: "Palette Generated!",
           description: `Created ${selectedGenerator.name} palette with ${palette.colors.length} colors`,
         });
       }
     } catch (error) {
-      console.error('Color generation error:', error);
+      console.error("Color generation error:", error);
       toast({
-        title: "Error", 
+        title: "Error",
         description: "Invalid color format. Please use a valid hex color.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
-    
+
     setIsGenerating(false);
-  };
+  }, [baseColor, selectedType, paletteTypes, toast]);
 
   // Auto-generate palette on initial load
   useEffect(() => {
     if (generatedPalettes.length === 0) {
       generatePalette();
     }
-  }, [generatedPalettes.length]); // Remove generatePalette from dependencies
+  }, [generatePalette, generatedPalettes.length]);
 
   const generateAllPalettes = () => {
     setIsGenerating(true);
-    
+
     try {
       const palettes = paletteTypes.map(type => type.generator(baseColor));
       setGeneratedPalettes(palettes);
@@ -94,10 +108,10 @@ export default function ColorPaletteGenerator() {
       toast({
         title: "Error",
         description: "Invalid color format. Please use a valid hex color.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
-    
+
     setIsGenerating(false);
   };
 
@@ -121,18 +135,19 @@ export default function ColorPaletteGenerator() {
   const shareCurrentPalette = async () => {
     const shareUrl = generateShareableURL({
       baseColor,
-      selectedType
+      selectedType,
     });
-    
+
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast({
         title: "Link Copied!",
-        description: "Palette link copied to clipboard. Share it to recreate this exact palette.",
+        description:
+          "Palette link copied to clipboard. Share it to recreate this exact palette.",
       });
     } catch (error) {
       // Fallback for browsers that don't support clipboard API
-      console.error('Failed to copy to clipboard:', error);
+      console.error("Failed to copy to clipboard:", error);
       toast({
         title: "Share Link",
         description: shareUrl,
@@ -149,7 +164,7 @@ export default function ColorPaletteGenerator() {
   };
 
   const copyPaletteToClipboard = (palette: ColorPalette) => {
-    const colors = palette.colors.map(color => color.hex).join(', ');
+    const colors = palette.colors.map(color => color.hex).join(", ");
     navigator.clipboard.writeText(colors);
     toast({
       title: "Palette Copied!",
@@ -158,17 +173,20 @@ export default function ColorPaletteGenerator() {
   };
 
   const exportPaletteAsCSS = (palette: ColorPalette) => {
-    const cssVariables = palette.colors.map((color, index) => 
-      `  --color-${palette.name.toLowerCase().replace(/\s+/g, '-')}-${index + 1}: ${color.hex};`
-    ).join('\n');
-    
+    const cssVariables = palette.colors
+      .map(
+        (color, index) =>
+          `  --color-${palette.name.toLowerCase().replace(/\s+/g, "-")}-${index + 1}: ${color.hex};`
+      )
+      .join("\n");
+
     const cssContent = `:root {\n${cssVariables}\n}`;
-    
-    const blob = new Blob([cssContent], { type: 'text/css' });
+
+    const blob = new Blob([cssContent], { type: "text/css" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `${palette.name.toLowerCase().replace(/\s+/g, '-')}-palette.css`;
+    a.download = `${palette.name.toLowerCase().replace(/\s+/g, "-")}-palette.css`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -177,24 +195,26 @@ export default function ColorPaletteGenerator() {
 
   const ColorCard = ({ color, index }: { color: ColorInfo; index: number }) => {
     const textColor = getContrastColor(color.hex);
-    
+
     return (
-      <div 
+      <div
         className="relative group cursor-pointer transition-transform hover:scale-105"
         style={{ backgroundColor: color.hex }}
         onClick={() => copyColorToClipboard(color.hex)}
         data-testid={`color-${index}`}
       >
-        <div 
+        <div
           className="p-4 min-h-[120px] flex flex-col justify-between"
           style={{ color: textColor }}
         >
-          <div className="text-sm font-mono font-semibold">
-            {color.hex}
-          </div>
+          <div className="text-sm font-mono font-semibold">{color.hex}</div>
           <div className="text-xs opacity-75">
-            <div>RGB({color.rgb.r}, {color.rgb.g}, {color.rgb.b})</div>
-            <div>HSL({color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%)</div>
+            <div>
+              RGB({color.rgb.r}, {color.rgb.g}, {color.rgb.b})
+            </div>
+            <div>
+              HSL({color.hsl.h}°, {color.hsl.s}%, {color.hsl.l}%)
+            </div>
           </div>
           <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <Copy className="w-4 h-4" />
@@ -219,7 +239,7 @@ export default function ColorPaletteGenerator() {
               variant="outline"
               size="sm"
               onClick={() => copyPaletteToClipboard(palette)}
-              data-testid={`copy-palette-${palette.name.toLowerCase().replace(/\s+/g, '-')}`}
+              data-testid={`copy-palette-${palette.name.toLowerCase().replace(/\s+/g, "-")}`}
             >
               <Copy className="w-4 h-4 mr-1" />
               Copy
@@ -228,7 +248,7 @@ export default function ColorPaletteGenerator() {
               variant="outline"
               size="sm"
               onClick={() => exportPaletteAsCSS(palette)}
-              data-testid={`export-palette-${palette.name.toLowerCase().replace(/\s+/g, '-')}`}
+              data-testid={`export-palette-${palette.name.toLowerCase().replace(/\s+/g, "-")}`}
             >
               <Download className="w-4 h-4 mr-1" />
               CSS
@@ -244,8 +264,8 @@ export default function ColorPaletteGenerator() {
         </div>
         <div className="flex flex-wrap gap-2 mt-4">
           {palette.colors.map((color, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="px-2 py-1 bg-slate-200 dark:bg-slate-700 font-mono text-xs cursor-pointer hover:bg-slate-300 dark:hover:bg-slate-600 border"
               onClick={() => copyColorToClipboard(color.hex)}
             >
@@ -259,16 +279,14 @@ export default function ColorPaletteGenerator() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="CPG-001" size="large" className="mb-6" />
-      
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
           Color Palette Generator
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
-          Generate beautiful color palettes from any base color using color theory principles
+          Generate beautiful color palettes from any base color using color
+          theory principles
         </p>
       </div>
 
@@ -289,14 +307,14 @@ export default function ColorPaletteGenerator() {
                   id="base-color"
                   type="color"
                   value={baseColor}
-                  onChange={(e) => handleBaseColorChange(e.target.value)}
+                  onChange={e => handleBaseColorChange(e.target.value)}
                   className="w-16 h-10 p-1 border"
                   data-testid="color-picker"
                 />
                 <Input
                   type="text"
                   value={baseColor}
-                  onChange={(e) => handleBaseColorChange(e.target.value)}
+                  onChange={e => handleBaseColorChange(e.target.value)}
                   placeholder="#3B82F6"
                   className="flex-1 font-mono"
                   data-testid="color-input"
@@ -311,7 +329,7 @@ export default function ColorPaletteGenerator() {
                 </Button>
               </div>
             </div>
-            
+
             <div>
               <Label htmlFor="palette-type">Palette Type</Label>
               <Select value={selectedType} onValueChange={handleTypeChange}>
@@ -327,7 +345,7 @@ export default function ColorPaletteGenerator() {
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="flex items-end gap-2">
               <Button
                 onClick={generatePalette}
@@ -335,7 +353,11 @@ export default function ColorPaletteGenerator() {
                 className="flex-1"
                 data-testid="generate-palette-button"
               >
-                {isGenerating ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Palette className="w-4 h-4 mr-2" />}
+                {isGenerating ? (
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Palette className="w-4 h-4 mr-2" />
+                )}
                 Generate Palette
               </Button>
               <Button
@@ -353,12 +375,16 @@ export default function ColorPaletteGenerator() {
               >
                 <Share className="w-4 h-4" />
               </Button>
-              <Button onClick={() => {
-                setBaseColor("#3B82F6");
-                setSelectedType("complementary");
-                setGeneratedPalettes([]);
-                updateUrl("#3B82F6", "complementary");
-              }} variant="outline" data-testid="reset-color-palette-button">
+              <Button
+                onClick={() => {
+                  setBaseColor("#3B82F6");
+                  setSelectedType("complementary");
+                  setGeneratedPalettes([]);
+                  updateUrl("#3B82F6", "complementary");
+                }}
+                variant="outline"
+                data-testid="reset-color-palette-button"
+              >
                 <RotateCcw className="w-4 h-4" />
               </Button>
             </div>
@@ -366,12 +392,7 @@ export default function ColorPaletteGenerator() {
         </CardContent>
       </Card>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center mb-8">
-        <AdSlot position="middle" id="CPG-002" size="medium" />
-      </div>
-
-
+      <div className="flex justify-center mb-8" />
 
       {/* Generated Palettes */}
       {generatedPalettes.length > 0 && (
@@ -400,10 +421,18 @@ export default function ColorPaletteGenerator() {
               <div>
                 <h4 className="font-semibold mb-2">Palette Types:</h4>
                 <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                  <li>• <strong>Complementary:</strong> Two opposite colors</li>
-                  <li>• <strong>Triadic:</strong> Three evenly spaced colors</li>
-                  <li>• <strong>Analogous:</strong> Adjacent colors on the wheel</li>
-                  <li>• <strong>Monochromatic:</strong> Shades of one color</li>
+                  <li>
+                    • <strong>Complementary:</strong> Two opposite colors
+                  </li>
+                  <li>
+                    • <strong>Triadic:</strong> Three evenly spaced colors
+                  </li>
+                  <li>
+                    • <strong>Analogous:</strong> Adjacent colors on the wheel
+                  </li>
+                  <li>
+                    • <strong>Monochromatic:</strong> Shades of one color
+                  </li>
                 </ul>
               </div>
               <div>
@@ -420,10 +449,7 @@ export default function ColorPaletteGenerator() {
         </Card>
       )}
 
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="CPG-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

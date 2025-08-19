@@ -1,0 +1,139 @@
+name: 📚 Documentation Issue
+description: Report issues with documentation or request documentation improvements
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve our documentation! Report issues or suggest improvements.
+
+  - type: dropdown
+    id: doc-type
+    attributes:
+      label: Documentation Type
+      description: What type of documentation issue is this?
+      options:
+        - "Missing Documentation - Feature lacks documentation"
+        - "Incorrect Information - Documentation contains errors"
+        - "Outdated Information - Documentation needs updates"
+        - "Unclear Instructions - Documentation is confusing"
+        - "Broken Links - Links don't work or go to wrong pages"
+        - "Typos/Grammar - Text needs corrections"
+        - "Missing Examples - Need more examples or use cases"
+        - "Accessibility - Documentation accessibility issues"
+        - "Translation - Multi-language documentation needs"
+        - "API Documentation - Technical API documentation issues"
+        - "Other"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: doc-location
+    attributes:
+      label: Documentation Location
+      description: Where is the documentation issue located?
+      options:
+        - "README.md"
+        - "Tool-specific help text"
+        - "In-app tooltips or hints"
+        - "GitHub Wiki"
+        - "API Documentation"
+        - "Contributing Guidelines"
+        - "Installation Instructions"
+        - "User Guide"
+        - "Developer Guide"
+        - "FAQ"
+        - "Code Comments"
+        - "Error Messages"
+        - "Other/Multiple locations"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-documentation
+    attributes:
+      label: Current Documentation
+      description: Copy/paste the current documentation that has issues (if applicable)
+      placeholder: "Paste the current text that needs improvement..."
+      render: markdown
+
+  - type: textarea
+    id: issue-description
+    attributes:
+      label: Issue Description
+      description: Describe what's wrong with the current documentation
+      placeholder: "The documentation says... but it should say... This is confusing because..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggested-improvement
+    attributes:
+      label: Suggested Improvement
+      description: How should the documentation be improved?
+      placeholder: "The documentation should explain... It would be clearer if... Add an example showing..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: Target Audience
+      description: Who would benefit from this documentation improvement?
+      multiple: true
+      options:
+        - "New Users - First time using the application"
+        - "Experienced Users - Regular users needing advanced info"
+        - "Developers - Contributors or developers extending the app"
+        - "API Users - Using the application programmatically"
+        - "Mobile Users - Users on mobile devices"
+        - "Accessibility Users - Users with accessibility needs"
+        - "Non-English Speakers - Users needing translation"
+        - "All Users"
+
+  - type: textarea
+    id: examples-needed
+    attributes:
+      label: Examples Needed
+      description: What examples would make this documentation clearer?
+      placeholder: |
+        - Example 1: Show how to [specific use case]
+        - Example 2: Demonstrate [common workflow]
+        - Example 3: Code snippet for [integration]
+
+  - type: input
+    id: priority
+    attributes:
+      label: Priority Level
+      description: How important is this documentation improvement?
+      placeholder: "e.g., High - blocks new users, Medium - would be helpful, Low - nice to have"
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context about the documentation issue
+      placeholder: "This confusion led to... Other users have mentioned... Related to issue #..."
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution Willingness
+      description: Are you willing to help improve this documentation?
+      options:
+        - label: I'm willing to submit a pull request with the documentation improvements
+        - label: I can provide additional examples or use cases
+        - label: I can help review documentation improvements
+        - label: I'm only reporting the issue
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

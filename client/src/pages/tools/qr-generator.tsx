@@ -1,31 +1,46 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { QrCode, Download, Copy, Smartphone, Globe, Mail, Phone, Wifi, CreditCard } from "lucide-react";
+import {
+  QrCode,
+  Download,
+  Copy,
+  Smartphone,
+  Globe,
+  Mail,
+  Phone,
+  Wifi,
+  CreditCard,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
-// @ts-ignore
+
 import QRCodeLib from "qrcode-generator";
 
 // Standalone QR Code generation using qrcode-generator library
 const generateQRCode = (text: string, size = 200): string => {
   try {
-    const qr = QRCodeLib(0, 'M'); // Type 0 (auto), Error correction level M
+    const qr = QRCodeLib(0, "M"); // Type 0 (auto), Error correction level M
     qr.addData(text);
     qr.make();
-    
+
     // Create SVG
     const cellSize = Math.floor(size / qr.getModuleCount());
     const margin = cellSize * 2;
     const svgSize = qr.getModuleCount() * cellSize + margin * 2;
-    
+
     let svg = `<svg width="${svgSize}" height="${svgSize}" xmlns="http://www.w3.org/2000/svg">`;
     svg += `<rect width="${svgSize}" height="${svgSize}" fill="white"/>`;
-    
+
     for (let row = 0; row < qr.getModuleCount(); row++) {
       for (let col = 0; col < qr.getModuleCount(); col++) {
         if (qr.isDark(row, col)) {
@@ -35,17 +50,17 @@ const generateQRCode = (text: string, size = 200): string => {
         }
       }
     }
-    svg += '</svg>';
-    
+    svg += "</svg>";
+
     // Convert SVG to data URL
     return `data:image/svg+xml;base64,${btoa(svg)}`;
   } catch {
-    console.error('QR Code generation failed');
-    return '';
+    console.error("QR Code generation failed");
+    return "";
   }
 };
 
-type QRType = 'text' | 'url' | 'email' | 'phone' | 'sms' | 'wifi' | 'vcard';
+type QRType = "text" | "url" | "email" | "phone" | "sms" | "wifi" | "vcard";
 
 interface QRPreset {
   type: QRType;
@@ -57,80 +72,80 @@ interface QRPreset {
 
 const qrPresets: QRPreset[] = [
   {
-    type: 'text',
-    name: 'Plain Text',
+    type: "text",
+    name: "Plain Text",
     icon: <QrCode className="w-4 h-4" />,
-    placeholder: 'Enter any text...',
-    format: (input: string) => input
+    placeholder: "Enter any text...",
+    format: (input: string) => input,
   },
   {
-    type: 'url',
-    name: 'Website URL',
+    type: "url",
+    name: "Website URL",
     icon: <Globe className="w-4 h-4" />,
-    placeholder: 'https://example.com',
-    format: (input: string) => input.startsWith('http') ? input : `https://${input}`
+    placeholder: "https://example.com",
+    format: (input: string) =>
+      input.startsWith("http") ? input : `https://${input}`,
   },
   {
-    type: 'email',
-    name: 'Email Address',
+    type: "email",
+    name: "Email Address",
     icon: <Mail className="w-4 h-4" />,
-    placeholder: 'user@example.com',
-    format: (input: string) => `mailto:${input}`
+    placeholder: "user@example.com",
+    format: (input: string) => `mailto:${input}`,
   },
   {
-    type: 'phone',
-    name: 'Phone Number',
+    type: "phone",
+    name: "Phone Number",
     icon: <Phone className="w-4 h-4" />,
-    placeholder: '+1234567890',
-    format: (input: string) => `tel:${input}`
+    placeholder: "+1234567890",
+    format: (input: string) => `tel:${input}`,
   },
   {
-    type: 'sms',
-    name: 'SMS Message',
+    type: "sms",
+    name: "SMS Message",
     icon: <Smartphone className="w-4 h-4" />,
-    placeholder: '+1234567890:Hello!',
+    placeholder: "+1234567890:Hello!",
     format: (input: string) => {
-      const [phone, ...messageParts] = input.split(':');
-      const message = messageParts.join(':');
-      return `sms:${phone}${message ? `?body=${encodeURIComponent(message)}` : ''}`;
-    }
+      const [phone, ...messageParts] = input.split(":");
+      const message = messageParts.join(":");
+      return `sms:${phone}${message ? `?body=${encodeURIComponent(message)}` : ""}`;
+    },
   },
   {
-    type: 'wifi',
-    name: 'WiFi Network',
+    type: "wifi",
+    name: "WiFi Network",
     icon: <Wifi className="w-4 h-4" />,
-    placeholder: 'NetworkName:password:WPA',
+    placeholder: "NetworkName:password:WPA",
     format: (input: string) => {
-      const [ssid, password, security = 'WPA'] = input.split(':');
+      const [ssid, password, security = "WPA"] = input.split(":");
       return `WIFI:T:${security};S:${ssid};P:${password};;`;
-    }
+    },
   },
   {
-    type: 'vcard',
-    name: 'Contact Card',
+    type: "vcard",
+    name: "Contact Card",
     icon: <CreditCard className="w-4 h-4" />,
-    placeholder: 'John Doe:+1234567890:john@example.com',
+    placeholder: "John Doe:+1234567890:john@example.com",
     format: (input: string) => {
-      const [name, phone, email] = input.split(':');
-      return `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\n${phone ? `TEL:${phone}\n` : ''}${email ? `EMAIL:${email}\n` : ''}END:VCARD`;
-    }
-  }
+      const [name, phone, email] = input.split(":");
+      return `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\n${phone ? `TEL:${phone}\n` : ""}${email ? `EMAIL:${email}\n` : ""}END:VCARD`;
+    },
+  },
 ];
 
 export default function QRGenerator() {
   const [inputText, setInputText] = useState("https://freedevtool.app");
-  const [qrType, setQrType] = useState<QRType>('url');
+  const [qrType, setQrType] = useState<QRType>("url");
   const [qrSize, setQrSize] = useState(300);
   const [qrUrl, setQrUrl] = useState("");
   const [error, setError] = useState("");
-  
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   const { toast } = useToast();
 
   const currentPreset = qrPresets.find(p => p.type === qrType) || qrPresets[0];
 
   // Generate QR code
-  const generateQR = () => {
+  const generateQR = useCallback(() => {
     if (!inputText.trim()) {
       setError("Please enter some text to generate a QR code");
       setQrUrl("");
@@ -142,7 +157,7 @@ export default function QRGenerator() {
       const url = generateQRCode(formattedText, qrSize);
       setQrUrl(url);
       setError("");
-      
+
       toast({
         title: "QR Code Generated",
         description: `Generated ${currentPreset.name} QR code successfully.`,
@@ -151,36 +166,35 @@ export default function QRGenerator() {
       setError("Failed to generate QR code. Please check your input.");
       setQrUrl("");
     }
-  };
+  }, [inputText, currentPreset, qrSize, toast]);
 
   // Auto-generate on input change
   useEffect(() => {
     if (inputText.trim()) {
       const timer = setTimeout(generateQR, 500);
       return () => clearTimeout(timer);
-    } 
-      setQrUrl("");
-      setError("");
-    
-  }, [inputText, qrType, qrSize]);
+    }
+    setQrUrl("");
+    setError("");
+  }, [inputText, qrType, qrSize, generateQR]);
 
   // Download QR code
   const downloadQR = async () => {
     if (!qrUrl) return;
-    
+
     try {
       const response = await fetch(qrUrl);
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
+
+      const a = document.createElement("a");
       a.href = url;
       a.download = `qr-code-${Date.now()}.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      
+
       toast({
         title: "Download Started",
         description: "Your QR code is being downloaded.",
@@ -189,7 +203,7 @@ export default function QRGenerator() {
       toast({
         title: "Download Failed",
         description: "Failed to download QR code.",
-        variant: "destructive"
+        variant: "destructive",
       });
     }
   };
@@ -197,52 +211,69 @@ export default function QRGenerator() {
   // Copy QR code URL
   const copyQRUrl = () => {
     if (!qrUrl) return;
-    
-    navigator.clipboard.writeText(qrUrl).then(() => {
-      toast({
-        title: "URL Copied",
-        description: "QR code image URL copied to clipboard.",
+
+    navigator.clipboard
+      .writeText(qrUrl)
+      .then(() => {
+        toast({
+          title: "URL Copied",
+          description: "QR code image URL copied to clipboard.",
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Copy Failed",
+          description: "Failed to copy URL to clipboard.",
+          variant: "destructive",
+        });
       });
-    }).catch(() => {
-      toast({
-        title: "Copy Failed",
-        description: "Failed to copy URL to clipboard.",
-        variant: "destructive"
-      });
-    });
   };
 
   // Quick preset buttons
-  const usePreset = (preset: string) => {
+  const applyPreset = (preset: string) => {
     setInputText(preset);
   };
 
   const getQuickPresets = () => {
     const presets = {
       text: ["Hello World!", "DevTools Suite", "Generated with QR Tool"],
-      url: ["https://github.com", "https://google.com", "https://stackoverflow.com"],
+      url: [
+        "https://freedevtool.app",
+        "https://github.com",
+        "https://google.com",
+      ],
       email: ["contact@example.com", "support@company.com", "hello@domain.com"],
       phone: ["+1-555-0123", "+44-20-7946-0958", "+81-3-1234-5678"],
-      sms: ["+1234567890:Hello!", "+1234567890:Meeting at 3pm", "+1234567890:Thanks!"],
-      wifi: ["HomeNetwork:password123:WPA", "OfficeWiFi:secure2024:WPA2", "GuestNet::nopass"],
-      vcard: ["John Smith:+1234567890:john@company.com", "Jane Doe:+0987654321:jane@email.com", "Bob Wilson::bob@domain.com"]
+      sms: [
+        "+1234567890:Hello!",
+        "+1234567890:Meeting at 3pm",
+        "+1234567890:Thanks!",
+      ],
+      wifi: [
+        "HomeNetwork:password123:WPA",
+        "OfficeWiFi:secure2024:WPA2",
+        "GuestNet::nopass",
+      ],
+      vcard: [
+        "John Smith:+1234567890:john@company.com",
+        "Jane Doe:+0987654321:jane@email.com",
+        "Bob Wilson::bob@domain.com",
+      ],
     };
-    
+
     return presets[qrType] || [];
   };
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="QR-001" size="large" className="mb-6" />
-      
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
           QR Code Generator
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
-          Generate QR codes for text, URLs, contact info, WiFi credentials, and more
+          Generate QR codes for text, URLs, contact info, WiFi credentials, and
+          more
         </p>
       </div>
 
@@ -259,12 +290,15 @@ export default function QRGenerator() {
             <CardContent className="space-y-4">
               <div>
                 <Label htmlFor="qr-type">QR Code Type</Label>
-                <Select value={qrType} onValueChange={(value: QRType) => setQrType(value)}>
+                <Select
+                  value={qrType}
+                  onValueChange={(value: QRType) => setQrType(value)}
+                >
                   <SelectTrigger data-testid="qr-type-select">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {qrPresets.map((preset) => (
+                    {qrPresets.map(preset => (
                       <SelectItem key={preset.type} value={preset.type}>
                         <div className="flex items-center gap-2">
                           {preset.icon}
@@ -278,7 +312,10 @@ export default function QRGenerator() {
 
               <div>
                 <Label htmlFor="qr-size">QR Code Size</Label>
-                <Select value={qrSize.toString()} onValueChange={(value) => setQrSize(parseInt(value))}>
+                <Select
+                  value={qrSize.toString()}
+                  onValueChange={value => setQrSize(parseInt(value))}
+                >
                   <SelectTrigger data-testid="qr-size-select">
                     <SelectValue />
                   </SelectTrigger>
@@ -293,14 +330,12 @@ export default function QRGenerator() {
               </div>
 
               <div>
-                <Label htmlFor="input-text">
-                  {currentPreset.name} Content
-                </Label>
+                <Label htmlFor="input-text">{currentPreset.name} Content</Label>
                 <Textarea
                   id="input-text"
                   placeholder={currentPreset.placeholder}
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
+                  onChange={e => setInputText(e.target.value)}
                   rows={4}
                   data-testid="qr-input"
                   showLineNumbers={true}
@@ -308,29 +343,41 @@ export default function QRGenerator() {
                 />
               </div>
 
-              {error ? <Alert variant="destructive">
+              {error ? (
+                <Alert variant="destructive">
                   <AlertDescription className="text-sm">
                     {error}
                   </AlertDescription>
-                </Alert> : null}
+                </Alert>
+              ) : null}
 
               <div className="flex gap-2">
-                <Button 
-                  onClick={generateQR} 
+                <Button
+                  onClick={generateQR}
                   className="flex-1"
                   disabled={!inputText.trim()}
                   data-testid="generate-qr"
                 >
                   Generate QR Code
                 </Button>
-                {qrUrl ? <>
-                    <Button onClick={downloadQR} variant="outline" data-testid="download-qr">
+                {qrUrl ? (
+                  <>
+                    <Button
+                      onClick={downloadQR}
+                      variant="outline"
+                      data-testid="download-qr"
+                    >
                       <Download className="w-4 h-4" />
                     </Button>
-                    <Button onClick={copyQRUrl} variant="outline" data-testid="copy-qr-url">
+                    <Button
+                      onClick={copyQRUrl}
+                      variant="outline"
+                      data-testid="copy-qr-url"
+                    >
                       <Copy className="w-4 h-4" />
                     </Button>
-                  </> : null}
+                  </>
+                ) : null}
               </div>
             </CardContent>
           </Card>
@@ -347,7 +394,7 @@ export default function QRGenerator() {
                     key={index}
                     variant="outline"
                     size="sm"
-                    onClick={() => usePreset(preset)}
+                    onClick={() => applyPreset(preset)}
                     className="justify-start text-left h-auto p-2"
                     data-testid={`preset-${index}`}
                   >
@@ -379,27 +426,28 @@ export default function QRGenerator() {
                 <div className="text-center text-slate-500 dark:text-slate-400">
                   <QrCode className="w-16 h-16 mx-auto mb-4 opacity-50" />
                   <p className="text-lg font-medium">No QR Code Generated</p>
-                  <p className="text-sm">Enter text above to generate a QR code</p>
+                  <p className="text-sm">
+                    Enter text above to generate a QR code
+                  </p>
                 </div>
               )}
             </div>
-            
-            {qrUrl ? <div className="mt-4 text-center">
+
+            {qrUrl ? (
+              <div className="mt-4 text-center">
                 <div className="text-sm text-slate-600 dark:text-slate-400 mb-2">
                   Size: {qrSize}x{qrSize} pixels
                 </div>
                 <div className="text-xs text-slate-500 dark:text-slate-500 break-all">
                   Content: {currentPreset.format(inputText)}
                 </div>
-              </div> : null}
+              </div>
+            ) : null}
           </CardContent>
         </Card>
       </div>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="QR-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card>
@@ -411,13 +459,29 @@ export default function QRGenerator() {
             <div>
               <h4 className="font-semibold mb-2">Supported QR Types:</h4>
               <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• <strong>Plain Text:</strong> Any text content</li>
-                <li>• <strong>Website URL:</strong> Links to web pages</li>
-                <li>• <strong>Email:</strong> Email addresses with mailto links</li>
-                <li>• <strong>Phone Number:</strong> Clickable phone numbers</li>
-                <li>• <strong>SMS Message:</strong> Pre-filled text messages</li>
-                <li>• <strong>WiFi Network:</strong> Network credentials for easy connection</li>
-                <li>• <strong>Contact Card:</strong> vCard format contact information</li>
+                <li>
+                  • <strong>Plain Text:</strong> Any text content
+                </li>
+                <li>
+                  • <strong>Website URL:</strong> Links to web pages
+                </li>
+                <li>
+                  • <strong>Email:</strong> Email addresses with mailto links
+                </li>
+                <li>
+                  • <strong>Phone Number:</strong> Clickable phone numbers
+                </li>
+                <li>
+                  • <strong>SMS Message:</strong> Pre-filled text messages
+                </li>
+                <li>
+                  • <strong>WiFi Network:</strong> Network credentials for easy
+                  connection
+                </li>
+                <li>
+                  • <strong>Contact Card:</strong> vCard format contact
+                  information
+                </li>
               </ul>
             </div>
             <div>
@@ -432,19 +496,10 @@ export default function QRGenerator() {
               </ul>
             </div>
           </div>
-          <Alert>
-            <AlertDescription className="text-sm">
-              <strong>Note:</strong> QR codes are generated using Google Charts API for simplicity. 
-              For production use, consider using a client-side QR code library for better privacy and reliability.
-            </AlertDescription>
-          </Alert>
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="QR-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

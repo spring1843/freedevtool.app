@@ -1,0 +1,202 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior in the application
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the sections below to help us understand and fix the issue.
+
+  - type: dropdown
+    id: tool-affected
+    attributes:
+      label: Which tool is affected?
+      description: Select the tool where you encountered the bug
+      options:
+        - "Homepage/Navigation"
+        - "ASCII Art Generator"
+        - "Barcode Generator"  
+        - "Base64 Encoder/Decoder"
+        - "Color Converter"
+        - "Color Palette Generator"
+        - "Countdown Timer"
+        - "CPU Benchmark"
+        - "CSV to JSON"
+        - "Date Converter"
+        - "Diff Checker"
+        - "GPU Test"
+        - "Hash Generator (MD5)"
+        - "HTML Formatter"
+        - "HTML to Markdown"
+        - "HTTP Status Codes"
+        - "Image Optimizer"
+        - "JSON Formatter"
+        - "JSON to CSV"
+        - "JWT Decoder"
+        - "Lorem Ipsum Generator"
+        - "Markdown Formatter"  
+        - "Memory Test"
+        - "Metronome"
+        - "Monitor Test"
+        - "Number Base Converter"
+        - "Password Generator"
+        - "QR Code Generator"
+        - "Regex Tester"
+        - "Screen Resolution"
+        - "Search & Replace"
+        - "Stopwatch"
+        - "Text Counter"
+        - "Text Sort"
+        - "Text Split"
+        - "Time Formatter"
+        - "Timezone Converter"
+        - "TLS Certificate Decoder"
+        - "Unicode Characters"
+        - "Unit Converter"
+        - "URL Encoder/Decoder"
+        - "URL to JSON"
+        - "UUID Generator"
+        - "Webcam Test"
+        - "World Clock"
+        - "YAML Formatter"
+        - "Multiple tools"
+        - "Other/Unknown"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Bug Category
+      description: What type of issue are you experiencing?
+      options:
+        - "Functionality - Tool not working as expected"
+        - "Performance - Tool is slow or unresponsive"
+        - "UI/UX - Visual or interaction problems"
+        - "Data Processing - Incorrect results or parsing errors"
+        - "Browser Compatibility - Works in some browsers but not others"
+        - "Mobile/Responsive - Issues on mobile devices"
+        - "Accessibility - Screen reader or keyboard navigation issues"
+        - "Error Handling - Crashes or unhelpful error messages"
+        - "URL Sharing - Problems with shareable links"
+        - "Demo Mode - Issues with the demo functionality"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Bug Description
+      description: Clearly describe what the bug is and what you expected to happen
+      placeholder: "When I [describe action], [describe what happens] instead of [describe expected behavior]"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Provide detailed steps to reproduce the issue
+      placeholder: |
+        1. Go to [tool name]
+        2. Enter the following input: [example]
+        3. Click on [button/action]
+        4. See error/unexpected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: input-data
+    attributes:
+      label: Input Data (if applicable)
+      description: Provide the exact input data that causes the issue
+      placeholder: "Paste the input data that triggers the bug here"
+      render: text
+
+  - type: textarea
+    id: expected-output
+    attributes:
+      label: Expected Output
+      description: What output or behavior did you expect?
+      placeholder: "Describe what you expected to happen"
+
+  - type: textarea
+    id: actual-output
+    attributes:
+      label: Actual Output
+      description: What actually happened? Include error messages if any
+      placeholder: "Describe what actually happened, including any error messages"
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser are you using?
+      options:
+        - "Chrome"
+        - "Firefox"
+        - "Safari"
+        - "Edge"
+        - "Opera"
+        - "Other (specify in additional context)"
+    validations:
+      required: true
+
+  - type: input
+    id: browser-version
+    attributes:
+      label: Browser Version
+      description: What version of the browser are you using?
+      placeholder: "e.g., Chrome 120.0.0.0"
+
+  - type: dropdown
+    id: device-type
+    attributes:
+      label: Device Type
+      description: What type of device are you using?
+      options:
+        - "Desktop"
+        - "Laptop"
+        - "Tablet"
+        - "Mobile Phone"
+        - "Other"
+
+  - type: input
+    id: screen-resolution
+    attributes:
+      label: Screen Resolution (if relevant)
+      description: Your screen resolution, if the issue seems display-related
+      placeholder: "e.g., 1920x1080"
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does this occur?
+      description: Is this a consistent issue?
+      options:
+        - "Always - Every time I try"
+        - "Often - Most of the time"
+        - "Sometimes - Intermittently"
+        - "Rarely - Only happened once or twice"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+      placeholder: "Any other information that might help us understand the issue"
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

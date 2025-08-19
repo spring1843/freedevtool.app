@@ -11,14 +11,15 @@ on:
         required: true
         type: string
 
-permissions:
-  contents: write
-  pull-requests: read
-
 jobs:
   build-and-release:
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    name: Build and Release
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,52 +29,27 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
-      
-      - name: Run type checking
-        run: npm run check
-      
-      - name: Run tests
-        run: npm test
-        continue-on-error: true # Don't fail release if tests fail
+        run: make deps
       
       - name: Build application
-        run: npm run build
+        run: make build
       
       - name: Create dist archive
         run: |
-          # Create a clean build directory
+          # Create a clean build directory for release
           mkdir -p release-build
           
-          # Copy built application files
-          cp -r dist/* release-build/
-          cp -r client/dist/* release-build/public/ 2>/dev/null || true
-          
-          # Copy necessary files
-          cp package.json release-build/
-          cp README.md release-build/
-          cp LICENSE release-build/
-          
-          # Create production package.json (only production dependencies)
-          node -e "
-            const pkg = require('./package.json');
-            const prodPkg = {
-              name: pkg.name,
-              version: pkg.version,
-              type: pkg.type,
-              license: pkg.license,
-              scripts: { start: pkg.scripts.start },
-              dependencies: pkg.dependencies
-            };
-            require('fs').writeFileSync('release-build/package.json', JSON.stringify(prodPkg, null, 2));
-          "
-          
+          # Copy deployable public files
+          if [ -d "dist" ]; then
+            cp -r dist/public/* release-build/
+          fi
+           
           # Create archive
-          cd release-build
+          cd dist
           tar -czf ../freedevtool-app.tar.gz .
           cd ..
           
@@ -81,7 +57,7 @@ jobs:
           cd release-build
           zip -r ../freedevtool-app.zip .
           cd ..
-      
+
       - name: Get version from tag or input
         id: version
         run: |
@@ -91,21 +67,12 @@ jobs:
             echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
       
-      - name: Get previous tag
-        id: previous_tag
-        run: |
-          # Get the previous tag
-          PREVIOUS_TAG=$(git tag --sort=-version:refname | grep -v "${{ steps.version.outputs.version }}" | head -n 1)
-          echo "previous_tag=${PREVIOUS_TAG}" >> $GITHUB_OUTPUT
-          echo "Previous tag: ${PREVIOUS_TAG}"
-      
       - name: Generate changelog
         id: changelog
         run: |
           CURRENT_TAG="${{ steps.version.outputs.version }}"
-          PREVIOUS_TAG="${{ steps.previous_tag.outputs.previous_tag }}"
           
-          echo "Generating changelog from ${PREVIOUS_TAG} to ${CURRENT_TAG}"
+          echo "Generating changelog for ${CURRENT_TAG}"
           
           # Create changelog content
           CHANGELOG_FILE="CHANGELOG.md"
@@ -115,55 +82,19 @@ jobs:
           echo "" >> ${CHANGELOG_FILE}
           echo "Released on $(date '+%Y-%m-%d')" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
-          
-          # Get commits since last tag
-          if [ -n "${PREVIOUS_TAG}" ]; then
-            echo "## 🚀 Changes" >> ${CHANGELOG_FILE}
-            echo "" >> ${CHANGELOG_FILE}
-            
-            # Get merged PRs since last tag
-            PR_LIST=$(git log ${PREVIOUS_TAG}..HEAD --grep="Merge pull request" --oneline --pretty=format:"%s" | grep "Merge pull request" || true)
-            
-            if [ -n "${PR_LIST}" ]; then
-              echo "### 📋 Pull Requests Merged" >> ${CHANGELOG_FILE}
-              echo "" >> ${CHANGELOG_FILE}
-              echo "${PR_LIST}" | while IFS= read -r line; do
-                # Extract PR number and title
-                PR_INFO=$(echo "$line" | sed -E 's/.*Merge pull request #([0-9]+) from [^/]*\/(.+)/- #\1: \2/')
-                echo "$PR_INFO" >> ${CHANGELOG_FILE}
-              done
-              echo "" >> ${CHANGELOG_FILE}
-            fi
-            
-            # Get all commits (excluding merges)
-            echo "### 📝 All Changes" >> ${CHANGELOG_FILE}
-            echo "" >> ${CHANGELOG_FILE}
-            git log ${PREVIOUS_TAG}..HEAD --no-merges --oneline --pretty=format:"- %s (%h)" >> ${CHANGELOG_FILE}
-          else
-            echo "## 🎉 Initial Release" >> ${CHANGELOG_FILE}
-            echo "" >> ${CHANGELOG_FILE}
-            echo "This is the first release of FreeDev Tool App!" >> ${CHANGELOG_FILE}
-            echo "" >> ${CHANGELOG_FILE}
-            echo "### ✨ Features" >> ${CHANGELOG_FILE}
-            echo "- Complete offline developer tools suite" >> ${CHANGELOG_FILE}
-            echo "- 49+ tools for development workflows" >> ${CHANGELOG_FILE}
-            echo "- Privacy-focused design with local processing" >> ${CHANGELOG_FILE}
-            echo "- Open source and community-driven" >> ${CHANGELOG_FILE}
-          fi
-          
-          echo "" >> ${CHANGELOG_FILE}
           echo "---" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
           echo "## 📦 Installation" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
           echo '1. Download `freedevtool-app.tar.gz` or `freedevtool-app.zip`' >> ${CHANGELOG_FILE}
           echo "2. Extract the archive" >> ${CHANGELOG_FILE}
-          echo "3. Run \`npm install --production\`" >> ${CHANGELOG_FILE}
-          echo "4. Run \`npm start\`" >> ${CHANGELOG_FILE}
+          echo "3. Run \`make deps\`" >> ${CHANGELOG_FILE}
+          echo "4. Run \`make start\`" >> ${CHANGELOG_FILE}
           echo "5. Open http://localhost:5000 in your browser" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
           echo "## 🔗 Links" >> ${CHANGELOG_FILE}
           echo "" >> ${CHANGELOG_FILE}
+          echo "- [Live FreeDevTool.App](https://freedevtool.app)" >> ${CHANGELOG_FILE}
           echo "- [GitHub Repository](https://github.com/spring1843/freedevtool.app)" >> ${CHANGELOG_FILE}
           echo "- [Documentation](https://github.com/spring1843/freedevtool.app#readme)" >> ${CHANGELOG_FILE}
           echo "- [Report Issues](https://github.com/spring1843/freedevtool.app/issues)" >> ${CHANGELOG_FILE}
@@ -182,24 +113,26 @@ jobs:
             freedevtool-app.zip
             ${{ steps.changelog.outputs.changelog_file }}
           draft: false
-          prerelease: false
+          prerelease: ${{ github.event_name == 'workflow_dispatch' && inputs.bypass_ci }}
           generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Update package.json version
-        if: github.event_name == 'workflow_dispatch'
+
+      - name: Setup GitHub Pages
         run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          # Remove 'v' prefix if present
-          VERSION_NUMBER=${VERSION#v}
+            # Create a clean build directory for release
+            mkdir -p gh-pages-deploy
           
-          # Update package.json version
-          npm version ${VERSION_NUMBER} --no-git-tag-version
-          
-          # Commit and push changes
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add package.json
-          git commit -m "chore: bump version to ${VERSION_NUMBER}" || exit 0
-          git push origin main
+            # Copy deployable public files
+            if [ -d "dist" ]; then
+              cp -r dist/public/* gh-pages-deploy/
+            fi
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: gh-pages-deploy
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

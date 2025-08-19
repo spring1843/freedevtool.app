@@ -63,16 +63,22 @@ function Router() {
       <Switch>
         {/* Home */}
         <Route path="/" component={Home} />
-        
+
         {/* Conversions */}
         <Route path="/tools/date-converter" component={DateConverter} />
-        <Route path="/tools/json-yaml-converter" component={JsonYamlConverter} />
+        <Route
+          path="/tools/json-yaml-converter"
+          component={JsonYamlConverter}
+        />
         <Route path="/tools/timezone-converter" component={TimezoneConverter} />
         <Route path="/tools/unit-converter" component={UnitConverter} />
         <Route path="/tools/url-to-json" component={URLToJSON} />
         <Route path="/tools/csv-to-json" component={CSVToJSON} />
-        <Route path="/tools/number-base-converter" component={NumberBaseConverter} />
-        
+        <Route
+          path="/tools/number-base-converter"
+          component={NumberBaseConverter}
+        />
+
         {/* Formatters */}
         <Route path="/tools/json-formatter" component={JsonFormatter} />
         <Route path="/tools/html-formatter" component={HtmlFormatter} />
@@ -81,7 +87,7 @@ function Router() {
         <Route path="/tools/css-formatter" component={CssFormatter} />
         <Route path="/tools/less-formatter" component={LessFormatter} />
         <Route path="/tools/time-formatter" component={TimeFormatter} />
-        
+
         {/* Encoders */}
         <Route path="/tools/base64" component={Base64Encoder} />
         <Route path="/tools/url-encoder" component={UrlEncoder} />
@@ -89,7 +95,7 @@ function Router() {
         <Route path="/tools/tls-decoder" component={TlsDecoder} />
         <Route path="/tools/md5-hash" component={MD5Hash} />
         <Route path="/tools/bcrypt-hash" component={BCryptHash} />
-        
+
         {/* Text Tools */}
         <Route path="/tools/text-diff" component={TextDiff} />
         <Route path="/tools/regex-tester" component={RegexTester} />
@@ -103,7 +109,7 @@ function Router() {
         <Route path="/tools/unicode-characters" component={UnicodeCharacters} />
         <Route path="/tools/password-generator" component={PasswordGenerator} />
         <Route path="/tools/uuid-generator" component={UUIDGenerator} />
-        
+
         {/* Time Tools */}
         <Route path="/tools/world-clock" component={WorldClock} />
         <Route path="/tools/timer" component={Timer} />
@@ -111,22 +117,25 @@ function Router() {
         <Route path="/tools/countdown" component={Countdown} />
         <Route path="/tools/datetime-diff" component={DateTimeDiff} />
         <Route path="/tools/metronome" component={Metronome} />
-        
+
         {/* Financial Tools */}
         <Route path="/tools/compound-interest" component={CompoundInterest} />
         <Route path="/tools/debt-repayment" component={DebtRepayment} />
-        
+
         {/* Color Tools */}
-        <Route path="/tools/color-palette-generator" component={ColorPaletteGenerator} />
-        
+        <Route
+          path="/tools/color-palette-generator"
+          component={ColorPaletteGenerator}
+        />
+
         {/* Hardware Tools */}
         <Route path="/tools/webcam-test" component={CameraTest} />
         <Route path="/tools/microphone-test" component={MicrophoneTest} />
         <Route path="/tools/keyboard-test" component={KeyboardTest} />
-        
+
         {/* Browser Tools */}
         <Route path="/tools/browser-info" component={BrowserInfo} />
-        
+
         {/* Fallback to 404 */}
         <Route component={NotFound} />
       </Switch>
@@ -136,16 +145,16 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="system" storageKey="freedevtool-theme">
+    <ThemeProvider defaultTheme="light">
+      <QueryClientProvider client={queryClient}>
         <DemoProvider>
           <TooltipProvider>
             <Toaster />
             <Router />
           </TooltipProvider>
         </DemoProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 

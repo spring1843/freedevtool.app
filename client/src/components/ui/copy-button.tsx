@@ -10,11 +10,11 @@ interface CopyButtonProps {
   size?: "sm" | "lg";
 }
 
-export function CopyButton({ 
-  text, 
-  className, 
-  variant = "ghost", 
-  size = "sm" 
+export function CopyButton({
+  text,
+  className,
+  variant = "ghost",
+  size = "sm",
 }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
@@ -24,7 +24,7 @@ export function CopyButton({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      console.error('Failed to copy text');
+      console.error("Failed to copy text");
     }
   };
 

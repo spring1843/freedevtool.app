@@ -4,3 +4,7 @@ dist
 server/public
 vite.config.ts.*
 *.tar.gz
+.vscode
+test-results
+playwright-report
+arrached_assets

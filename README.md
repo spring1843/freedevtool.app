@@ -1,9 +1,11 @@
-# freedevtool.app
+# FreeDevTool.app
+
+[FreeDevTool.App](https://FreeDevTool.App)
 
 **A comprehensive collection of 49+ open source developer tools with offline functionality**
 
 ## Overview
-freedevtool.app is a comprehensive web-based collection of open source developer and productivity utilities. It provides a wide range of tools across sections like Conversions, Formatters, Encoders, Text, Time, Financial, Color, and Hardware tools. Built as a full-stack TypeScript application with a privacy-first design, it offers a modern, responsive UI with dark/light theme support, optimized for desktop, mobile, and TV displays. Key advantages include: Open Source & Community-Driven, Browser-Based Computation for Enhanced Security, Zero Data Transmission, and Offline Functionality. All current tools are free to use since computation happens entirely in your browser, providing both security and performance benefits.
+FreeDevTool.App is a comprehensive web-based collection of open source developer and productivity utilities. It provides a wide range of tools across sections like Conversions, Formatters, Encoders, Text, Time, Financial, Color, and Hardware tools. Built as a full-stack TypeScript application with a privacy-first design, it offers a modern, responsive UI with dark/light theme support, optimized for desktop, mobile, and TV displays. Key advantages include: Open Source & Community-Driven, Browser-Based Computation for Enhanced Security, Zero Data Transmission, and Offline Functionality. All current tools are free to use since computation happens entirely in your browser, providing both security and performance benefits.
 
 ## Tenets
 
@@ -28,7 +30,11 @@ Preferred UI behavior: All menu sections collapsed by default, with minimize but
 Preferred terminology: "Camera" instead of "Webcam" for video capture devices.
 Monetization: Application includes advertisements. Current features are free since computation happens in user browsers, but future premium features may be introduced.
 
-## Recent Updates (August 14, 2025)
+## Recent Updates (August 16, 2025)
+- **CI-Dependent Releases**: Release workflow now requires CI to pass before allowing releases, with emergency bypass option
+- **Make Target Integration**: Updated all build scripts and release automation to use make targets instead of npm commands
+- **Release Automation**: Comprehensive GitHub Actions workflows with automated building, packaging, and changelog generation
+- **Search Testing**: Added end-to-end tests for search functionality including text tool discovery and keyboard navigation
 - **Enhanced Mobile UX**: Improved hamburger menu with larger touch targets, better accessibility, and enhanced sidebar layout
 - **Centralized Architecture**: Created unified data source for all components (sidebar, homepage, search, demo) to eliminate inconsistencies
 - **Navigation Fixes**: Resolved double "/tools" path issues and demo system routing for seamless user experience
@@ -61,6 +67,38 @@ Not implemented
 - **URL Sharing**: Implemented across all major tools, including timing tools, for state persistence and sharing.
 - **Monetization**: Includes a 3-ad placement system for revenue generation.
 - **Security**: Implemented Content Security Policy and removed external dependencies enforcing a privacy-first, zero-network-dependency architecture suitable for air-gapped environments. Strict validation and sanitization are applied to all URL parameters.
+
+## Quick Start
+
+### Development Setup
+```bash
+make setup    # Install dependencies and setup development environment
+make start    # Start the development server
+```
+
+### Available Commands
+```bash
+make help     # Show all available commands
+make deps     # Install dependencies
+make build    # Build for production
+make test     # Run tests
+make lint     # Check code quality
+make format   # Format code
+```
+
+### Testing
+```bash
+make test          # Run unit tests
+make e2e-test      # Run end-to-end tests
+make test-coverage # Run tests with coverage
+```
+
+### Release Process
+- **Automatic**: Push a git tag (e.g., `v1.0.0`) to trigger a release
+- **Manual**: Use GitHub Actions workflow dispatch with version input
+- **CI Requirement**: All releases require CI to pass first
+- **Emergency Bypass**: Manual releases can bypass CI if needed (creates prerelease with warning)
+- **GitHub Pages**: Each release deploys the same gzip package to GitHub Pages as a standalone web application
 
 ## External Dependencies
 
@@ -98,7 +136,7 @@ Not implemented
 Licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for full details.
 
 ```
-Copyright 2025 freedevtool.app
+Copyright 2025 FreeDevTool.App
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
