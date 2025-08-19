@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatYAML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_YAML = `name: John Doe
@@ -41,11 +41,11 @@ export default function YAMLFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const formatCode = () => {
+  const formatCode = useCallback(() => {
     const { formatted, error: formatError } = formatYAML(input);
     setOutput(formatted);
     setError(formatError || null);
-  };
+  }, [input]);
 
   const handleInputChange = (value: string) => {
     setInput(value);
@@ -62,7 +62,7 @@ export default function YAMLFormatter() {
 
   useEffect(() => {
     formatCode();
-  }, []);
+  }, [formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">

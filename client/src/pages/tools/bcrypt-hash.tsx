@@ -20,7 +20,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -81,7 +81,7 @@ export default function BcryptHash() {
     }
   };
 
-  const generateHash = async () => {
+  const generateHash = useCallback(async () => {
     if (!plaintext.trim()) {
       setError("Password cannot be empty");
       return;
@@ -102,7 +102,7 @@ export default function BcryptHash() {
     } finally {
       setIsHashing(false);
     }
-  };
+  }, [plaintext, rounds]);
 
   const verifyHash = async () => {
     if (!verifyText.trim() || !hash.trim()) {
@@ -139,7 +139,7 @@ export default function BcryptHash() {
 
   useEffect(() => {
     generateHash();
-  }, []);
+  }, [generateHash]);
 
   const getVerificationDisplay = () => {
     if (verificationResult === null) return null;

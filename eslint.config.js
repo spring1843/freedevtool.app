@@ -62,6 +62,9 @@ export default tseslint.config(
         { ignore: ["data-cmdk-input-wrapper"] },
       ],
 
+      // React Hooks rules - override defaults to be stricter
+      "react-hooks/exhaustive-deps": "error",
+
       // Import/Export management
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [

@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Split, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -21,7 +21,7 @@ export default function TextSplit() {
   const [trimWhitespace, setTrimWhitespace] = useState(true);
   const [splitResult, setSplitResult] = useState<string[]>([]);
 
-  const splitText = () => {
+  const splitText = useCallback(() => {
     try {
       let parts: string[] = [];
 
@@ -47,7 +47,7 @@ export default function TextSplit() {
         `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       ]);
     }
-  };
+  }, [text, delimiter, removeEmpty, trimWhitespace]);
 
   const handleReset = () => {
     setText(defaultText);
@@ -59,7 +59,7 @@ export default function TextSplit() {
 
   useEffect(() => {
     splitText();
-  }, []);
+  }, [splitText]);
 
   const getDelimiterDisplay = (delim: string) => {
     switch (delim) {

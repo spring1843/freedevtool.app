@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { convertJSONToYAML, convertYAMLToJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -42,17 +42,17 @@ export default function JSONYAMLConverter() {
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const convertToYAML = () => {
+  const convertToYAML = useCallback(() => {
     const { converted, error: convertError } = convertJSONToYAML(jsonInput);
     setYamlOutput(converted);
     setError(convertError || null);
-  };
+  }, [jsonInput]);
 
-  const convertToJSON = () => {
+  const convertToJSON = useCallback(() => {
     const { converted, error: convertError } = convertYAMLToJSON(yamlInput);
     setJsonOutput(converted);
     setError(convertError || null);
-  };
+  }, [yamlInput]);
 
   const handleJsonInputChange = (value: string) => {
     setJsonInput(value);
@@ -79,7 +79,7 @@ export default function JSONYAMLConverter() {
   useEffect(() => {
     convertToYAML();
     convertToJSON();
-  }, []);
+  }, [convertToYAML, convertToJSON]);
 
   return (
     <div className="max-w-6xl mx-auto">

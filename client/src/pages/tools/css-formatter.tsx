@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatCSS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -15,11 +15,14 @@ export default function CSSFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const formatCode = (minify = false) => {
-    const { formatted, error: formatError } = formatCSS(input, minify);
-    setOutput(formatted);
-    setError(formatError || null);
-  };
+  const formatCode = useCallback(
+    (minify = false) => {
+      const { formatted, error: formatError } = formatCSS(input, minify);
+      setOutput(formatted);
+      setError(formatError || null);
+    },
+    [input]
+  );
 
   const handleInputChange = (value: string) => {
     setInput(value);
@@ -36,7 +39,7 @@ export default function CSSFormatter() {
 
   useEffect(() => {
     formatCode(false); // Beautify by default
-  }, []);
+  }, [formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">
