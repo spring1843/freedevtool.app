@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Calculator, RotateCcw, TrendingUp, BarChart3 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import {
@@ -50,7 +50,7 @@ export default function CompoundInterestCalculator() {
   >("yearly");
   const [result, setResult] = useState<CompoundInterestResult | null>(null);
 
-  const calculateCompoundInterest = () => {
+  const calculateCompoundInterest = useCallback(() => {
     const monthlyRate = annualRate / 100 / 12;
     const yearlyRate = annualRate / 100;
 
@@ -118,7 +118,14 @@ export default function CompoundInterestCalculator() {
     };
 
     setResult(finalResult);
-  };
+  }, [
+    principal,
+    annualRate,
+    years,
+    monthlyContribution,
+    contributionFrequency,
+    interestFrequency,
+  ]);
 
   const handleReset = () => {
     setPrincipal(10000);

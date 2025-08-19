@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, RotateCcw, Clock, Copy } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
@@ -233,7 +233,7 @@ export default function DateConverter() {
     }
   };
 
-  const convertDate = () => {
+  const convertDate = useCallback(() => {
     const date = parseInputDate(inputDate.trim());
 
     if (!date) {
@@ -257,7 +257,7 @@ export default function DateConverter() {
     }));
 
     setFormats(newFormats);
-  };
+  }, [inputDate]);
 
   const handleReset = () => {
     setInputDate("1699123456");

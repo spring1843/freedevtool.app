@@ -4,7 +4,7 @@ import { encodeBase64, decodeBase64 } from "@/lib/encoders";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
 const DEFAULT_TEXT =
@@ -15,7 +15,7 @@ export default function Base64Encoder() {
   const [encodedText, setEncodedText] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const encode = () => {
+  const encode = useCallback(() => {
     try {
       const result = encodeBase64(plainText);
       setEncodedText(result);
@@ -23,7 +23,7 @@ export default function Base64Encoder() {
     } catch {
       setError("Encoding failed");
     }
-  };
+  }, [plainText]);
 
   const decode = () => {
     try {
