@@ -70,7 +70,7 @@ export function Layout({ children }: LayoutProps) {
         return;
       }
 
-      if (event.ctrlKey || event.metaKey) {
+      if (event.ctrlKey) {
         // Handle menu toggle with Ctrl+M (case-sensitive check)
         if (event.key === "m" || event.key === "M") {
           event.preventDefault();
@@ -98,11 +98,7 @@ export function Layout({ children }: LayoutProps) {
             const shortcutParts = tool.shortcut.split("+");
             let matches = true;
 
-            if (
-              shortcutParts.includes("Ctrl") &&
-              !event.ctrlKey &&
-              !event.metaKey
-            )
+            if (shortcutParts.includes("Ctrl") && !event.ctrlKey)
               matches = false;
             if (shortcutParts.includes("Shift") && !event.shiftKey)
               matches = false;
