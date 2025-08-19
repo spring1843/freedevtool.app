@@ -167,7 +167,7 @@ export default function BarcodeGenerator() {
 
   useEffect(() => {
     generateBarcode();
-  }, []);
+  }, [generateBarcode]);
 
   const inputError = validateInput(text, format);
 

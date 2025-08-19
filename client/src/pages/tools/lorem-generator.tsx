@@ -221,7 +221,7 @@ export default function LoremGenerator() {
 
   useEffect(() => {
     generateLorem();
-  }, []);
+  }, [generateLorem]);
 
   return (
     <div className="max-w-4xl mx-auto">

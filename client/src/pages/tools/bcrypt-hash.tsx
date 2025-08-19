@@ -139,7 +139,7 @@ export default function BcryptHash() {
 
   useEffect(() => {
     generateHash();
-  }, []);
+  }, [generateHash]);
 
   const getVerificationDisplay = () => {
     if (verificationResult === null) return null;

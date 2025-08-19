@@ -90,7 +90,7 @@ export default function SearchReplace() {
 
   useEffect(() => {
     performSearchReplace();
-  }, []);
+  }, [performSearchReplace]);
 
   return (
     <div className="max-w-6xl mx-auto">

@@ -81,7 +81,7 @@ export default function JWTDecoder() {
 
   useEffect(() => {
     decodeToken();
-  }, []);
+  }, [decodeToken]);
 
   return (
     <div className="max-w-6xl mx-auto">

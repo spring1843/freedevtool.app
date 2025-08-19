@@ -114,7 +114,7 @@ export default function TextDiff() {
 
   useEffect(() => {
     calculateDiff();
-  }, []);
+  }, [calculateDiff]);
 
   const renderDiffLine = (diff: DiffLine, index: number) => {
     const getLineClass = (type: string) => {

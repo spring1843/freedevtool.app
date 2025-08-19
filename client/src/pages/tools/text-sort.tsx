@@ -95,7 +95,7 @@ export default function TextSorter() {
 
   useEffect(() => {
     sortText();
-  }, []);
+  }, [sortText]);
 
   return (
     <div className="max-w-6xl mx-auto">

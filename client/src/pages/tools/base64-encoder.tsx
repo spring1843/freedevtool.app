@@ -65,7 +65,7 @@ export default function Base64Encoder() {
   // Execute encoding with default value on component mount
   useEffect(() => {
     encode();
-  }, []);
+  }, [encode]);
 
   return (
     <div className="max-w-6xl mx-auto">

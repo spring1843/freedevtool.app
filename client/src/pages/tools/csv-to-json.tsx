@@ -71,7 +71,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
       updateField("csvInput", urlCsv);
     }
     updateField("selectedDelimiter", urlDelimiter);
-  }, []);
+  }, [updateField]);
 
   useEffect(() => {
     convertCSV();
@@ -80,6 +80,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
       csv: encodeURIComponent(fields.csvInput.slice(0, 500)), // Limit URL length
       delimiter: fields.selectedDelimiter,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fields.csvInput, fields.selectedDelimiter]);
 
   const parseCSVLine = (line: string, delimiter: string): string[] => {

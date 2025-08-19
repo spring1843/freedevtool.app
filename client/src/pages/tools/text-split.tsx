@@ -59,7 +59,7 @@ export default function TextSplit() {
 
   useEffect(() => {
     splitText();
-  }, []);
+  }, [splitText]);
 
   const getDelimiterDisplay = (delim: string) => {
     switch (delim) {

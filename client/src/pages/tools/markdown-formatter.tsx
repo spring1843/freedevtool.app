@@ -87,7 +87,7 @@ export default function MarkdownFormatter() {
 
   useEffect(() => {
     formatCode();
-  }, []);
+  }, [formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">

@@ -96,7 +96,7 @@ export default function ColorPaletteGenerator() {
     if (generatedPalettes.length === 0) {
       generatePalette();
     }
-  }, [generatedPalettes.length]); // Remove generatePalette from dependencies
+  }, [generatePalette, generatedPalettes.length]);
 
   const generateAllPalettes = () => {
     setIsGenerating(true);

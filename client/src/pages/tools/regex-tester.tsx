@@ -101,11 +101,11 @@ export default function RegexTester() {
 
   useEffect(() => {
     updateFlags();
-  }, [globalFlag, caseInsensitiveFlag, multilineFlag]);
+  }, [globalFlag, caseInsensitiveFlag, multilineFlag, updateFlags]);
 
   useEffect(() => {
     testRegex();
-  }, []);
+  }, [testRegex]);
 
   const highlightMatches = (text: string, matches: RegexMatch[]) => {
     if (matches.length === 0) return text;

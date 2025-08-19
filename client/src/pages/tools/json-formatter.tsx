@@ -59,7 +59,7 @@ export default function JsonFormatter() {
   // Execute formatting with default value on component mount
   useEffect(() => {
     formatCode();
-  }, [input]);
+  }, [input, formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">

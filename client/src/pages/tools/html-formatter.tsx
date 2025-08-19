@@ -74,7 +74,7 @@ export default function HTMLFormatter() {
 
   useEffect(() => {
     formatCode(false); // Beautify by default
-  }, []);
+  }, [formatCode]);
 
   return (
     <div className="max-w-6xl mx-auto">

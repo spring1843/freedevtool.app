@@ -272,7 +272,7 @@ export default function DateConverter() {
 
   useEffect(() => {
     convertDate();
-  }, []);
+  }, [convertDate]);
 
   const copyToClipboard = async (text: string) => {
     try {

@@ -132,7 +132,7 @@ export default function CompoundInterestCalculator() {
 
   useEffect(() => {
     calculateCompoundInterest();
-  }, []);
+  }, [calculateCompoundInterest]);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat("en-US", {

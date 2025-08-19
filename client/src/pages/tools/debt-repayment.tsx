@@ -96,7 +96,7 @@ export default function DebtRepaymentCalculator() {
 
   useEffect(() => {
     calculateDebtRepayment();
-  }, []);
+  }, [calculateDebtRepayment]);
 
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat("en-US", {

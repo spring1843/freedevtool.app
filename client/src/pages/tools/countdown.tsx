@@ -78,6 +78,7 @@ export default function Countdown() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isActive, isComplete]);
 
   // Auto-start on component mount
@@ -89,7 +90,8 @@ export default function Countdown() {
     }, 500); // Small delay to ensure UI is ready
 
     return () => clearTimeout(timer);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetDate, targetTime]);
 
   const formatTime = (milliseconds: number) => {
     if (milliseconds <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -233,6 +235,7 @@ export default function Countdown() {
       const remaining = calculateTimeRemaining();
       setTimeRemaining(remaining);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [targetDate, targetTime, isActive]);
 
   const timeComponents = formatTime(timeRemaining);

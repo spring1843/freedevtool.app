@@ -117,7 +117,7 @@ export default function MD5Hash() {
 
   useEffect(() => {
     generateHash();
-  }, []);
+  }, [generateHash]);
 
   return (
     <div className="max-w-6xl mx-auto">

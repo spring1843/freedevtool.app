@@ -22,5 +22,6 @@ export function useToolDefault(
     if (hasExecuted.current && dependencies.length > 0) {
       executeFunction();
     }
-  }, [executeFunction, dependencies.length, ...dependencies]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [executeFunction, ...dependencies]);
 }
