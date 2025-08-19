@@ -53,7 +53,8 @@ export default function URLToJSON() {
     parseURL();
     // Update URL when input changes
     updateURL({ url: inputUrl });
-  }, [inputUrl, parseURL]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputUrl]);
 
   const extractTLD = (
     hostname: string

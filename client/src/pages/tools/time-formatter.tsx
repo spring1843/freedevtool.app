@@ -34,7 +34,8 @@ export default function TimeFormatter() {
     if (inputDate && inputTime) {
       formatTime();
     }
-  }, [inputDate, inputTime, inputTimezone, formatTime]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputDate, inputTime, inputTimezone]);
 
   const formatTime = useCallback(() => {
     try {

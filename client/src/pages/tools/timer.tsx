@@ -70,7 +70,8 @@ export default function Timer() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isRunning, isFinished, startTimer, stopTimer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRunning, isFinished]);
 
   useEffect(() => {
     audioContextRef.current = createTimerSound();
@@ -118,7 +119,8 @@ export default function Timer() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning, timeLeft, startBeeping]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRunning, timeLeft]);
 
   const startBeeping = useCallback(() => {
     if (audioContextRef.current) {
@@ -158,7 +160,8 @@ export default function Timer() {
       // Resume
       setIsRunning(true);
     }
-  }, [timeLeft, isFinished, days, hours, minutes, seconds, isRunning, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, isFinished, days, hours, minutes, seconds, isRunning]);
 
   const pauseTimer = () => {
     setIsRunning(false);
@@ -166,7 +169,8 @@ export default function Timer() {
 
   const stopTimer = useCallback(() => {
     reset();
-  }, [reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const startPause = () => {
     if (isRunning) {

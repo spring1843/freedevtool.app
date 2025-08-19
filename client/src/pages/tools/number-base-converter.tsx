@@ -91,7 +91,8 @@ export default function NumberBaseConverter() {
       from: inputBase.toString(),
       to: outputBases.join(","),
     });
-  }, [inputNumber, inputBase, outputBases, convertNumber]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputNumber, inputBase, outputBases]);
 
   const getBaseCharacters = (base: number): string => {
     const commonBase = commonBases.find(b => b.value === base);

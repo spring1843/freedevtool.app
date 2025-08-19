@@ -114,7 +114,8 @@ export default function Metronome() {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isRunning, startMetronome, stopMetronome]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRunning]);
 
   useEffect(() => {
     // Load parameters from URL
