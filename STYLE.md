@@ -1,0 +1,24 @@
+# Style Guide
+
+# User Interface and Experience
+
+* We pick good defaults, and we let users customize where it makes sense
+* Buttons should have a tooltip explaining what the button does
+* Buttons that do the same thing should look identical in all tools. e.g. a button that copies to clipboard should look exactly the same in every tool
+* Tools must have a default value
+*   Each tool must have a primary action button that processes the user's input.
+*   An "Auto-update" checkbox, enabled by default, should be placed near the main action button. When checked, any change to the input automatically triggers the main action.
+*   Tools should automatically process their default input upon launch. The exception is for tools that produce sound or request browser permissions, which should require user interaction to start.
+*   For tools with a text input area, the keyboard focus should be set to that area on launch.
+*   Tools should be keyboard-friendly. Use standard keys like `Enter`, `Space`, and `Escape` for common actions like start, pause, and stop.
+*   Provide immediate feedback for user actions with a toast notification. This confirms that the action was registered. Toasts can be disabled globally.
+*   Do not request elevated permissions (e.g., camera access) on launch. Prompt for permissions only when the user explicitly tries to use the feature.
+
+# Linters
+
+*   Run all linters with `make lint`.
+*   We use ESLint for TypeScript.
+
+# Formatters
+
+*   Format all applicable files with `make format`.
