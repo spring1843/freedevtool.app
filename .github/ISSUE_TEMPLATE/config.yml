@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
   - name: 💬 General Discussion
-    url: https://github.com/your-username/developer-tools/discussions
+    url: https://github.com/spring1843/FreeDevTool.App/discussions
     about: Ask questions, share ideas, or discuss the project with the community
   - name: 🔒 Security Issue
-    url: https://github.com/your-username/developer-tools/security/advisories/new
+    url: https://github.com/spring1843/FreeDevTool.App/security/advisories/new
     about: Report security vulnerabilities privately
   - name: 📚 Documentation
-    url: https://github.com/your-username/developer-tools/wiki
+    url: https://github.com/spring1843/FreeDevTool.App/wiki
     about: Check the documentation and FAQ before opening an issue
