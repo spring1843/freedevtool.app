@@ -8,6 +8,7 @@ Preferred communication style: Simple, everyday language.
 Theme preferences: Smooth theme transitions with local storage persistence, respecting browser/OS theme selection by default, falling back to light mode when system preference unavailable.
 Timezone behavior: All time-related tools should default to the user's local timezone instead of UTC for better user experience.
 Build system preferences: Use make targets instead of npm commands for all development, testing, and release operations (e.g., `make deps` instead of `npm install`, `make start` instead of `npm run dev`).
+Quality assurance: Always run `make ci-without-e2e` after making changes to ensure no regressions were introduced.
 
 ## System Architecture
 
