@@ -7,3 +7,4 @@ vite.config.ts.*
 .vscode
 test-results
 playwright-report
+arrached_assets
