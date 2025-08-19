@@ -1,7 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { getDemoTools } from "@/data/tools";
-import { DemoSpeed, DemoContextType, DemoContext } from "@/contexts/demo-context";
+import {
+  DemoContext,
+  type DemoSpeed,
+  type DemoContextType,
+} from "@/contexts/demo-context";
 
 interface DemoProviderProps {
   children: React.ReactNode;
