@@ -7,5 +7,5 @@ contact_links:
     url: https://github.com/spring1843/FreeDevTool.App/security/advisories/new
     about: Report security vulnerabilities privately
   - name: 📚 Documentation
-    url: https://github.com/spring1843/FreeDevTool.App/wiki
+    url: https://github.com/spring1843/FreeDevTool.App#readme
     about: Check the documentation and FAQ before opening an issue
