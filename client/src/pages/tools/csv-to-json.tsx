@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,6 +54,7 @@ Bob Johnson,bob@example.com,35,Chicago`,
     error: "",
     rowCount: 0,
   });
+  const [conversionTrigger, setConversionTrigger] = useState(0);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -73,15 +74,83 @@ Bob Johnson,bob@example.com,35,Chicago`,
     updateField("selectedDelimiter", urlDelimiter);
   }, [updateField]);
 
+  // Update URL when input changes
   useEffect(() => {
-    convertCSV();
-    // Update URL when input changes
     updateURL({
       csv: encodeURIComponent(fields.csvInput.slice(0, 500)), // Limit URL length
       delimiter: fields.selectedDelimiter,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fields.csvInput, fields.selectedDelimiter]);
+  }, [fields.csvInput, fields.selectedDelimiter, updateURL]);
+
+  // Convert CSV when input changes or manually triggered
+  useEffect(() => {
+    const performConversion = () => {
+      try {
+        updateField("error", "");
+
+        if (!fields.csvInput.trim()) {
+          updateField("parsedData", []);
+          updateField("jsonOutput", "");
+          updateField("headers", []);
+          updateField("rowCount", 0);
+          return;
+        }
+
+        const lines = fields.csvInput
+          .trim()
+          .split("\n")
+          .filter((line: string) => line.trim());
+
+        if (lines.length === 0) {
+          throw new Error("No data found");
+        }
+
+        // Parse headers from first line
+        const headerLine = lines[0];
+        const parsedHeaders = parseCSVLine(headerLine, fields.selectedDelimiter)
+          .map(header => header.replace(/^["']|["']$/g, "").trim())
+          .filter(header => header.length > 0);
+
+        if (parsedHeaders.length === 0) {
+          throw new Error("No headers found in the first line");
+        }
+
+        updateField("headers", parsedHeaders);
+
+        // Parse data rows
+        const dataRows: CSVRow[] = [];
+
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+
+          const values = parseCSVLine(line, fields.selectedDelimiter);
+          const row: CSVRow = {};
+
+          // Map values to headers
+          parsedHeaders.forEach((header, index) => {
+            const value = values[index] || "";
+            row[header] = value.replace(/^["']|["']$/g, "").trim();
+          });
+
+          dataRows.push(row);
+        }
+
+        updateField("parsedData", dataRows);
+        updateField("rowCount", dataRows.length);
+        updateField("jsonOutput", JSON.stringify(dataRows, null, 2));
+      } catch {
+        const errorMessage = "Failed to parse CSV";
+        updateField("error", errorMessage);
+        updateField("parsedData", []);
+        updateField("jsonOutput", "");
+        updateField("headers", []);
+        updateField("rowCount", 0);
+      }
+    };
+
+    performConversion();
+  }, [fields.csvInput, fields.selectedDelimiter, conversionTrigger, updateField]);
 
   const parseCSVLine = (line: string, delimiter: string): string[] => {
     const result: string[] = [];
@@ -118,70 +187,10 @@ Bob Johnson,bob@example.com,35,Chicago`,
     return result;
   };
 
-  const convertCSV = useCallback(() => {
-    try {
-      updateField("error", "");
-
-      if (!fields.csvInput.trim()) {
-        updateField("parsedData", []);
-        updateField("jsonOutput", "");
-        updateField("headers", []);
-        updateField("rowCount", 0);
-        return;
-      }
-
-      const lines = fields.csvInput
-        .trim()
-        .split("\n")
-        .filter((line: string) => line.trim());
-
-      if (lines.length === 0) {
-        throw new Error("No data found");
-      }
-
-      // Parse headers from first line
-      const headerLine = lines[0];
-      const parsedHeaders = parseCSVLine(headerLine, fields.selectedDelimiter)
-        .map(header => header.replace(/^["']|["']$/g, "").trim())
-        .filter(header => header.length > 0);
-
-      if (parsedHeaders.length === 0) {
-        throw new Error("No headers found in the first line");
-      }
-
-      updateField("headers", parsedHeaders);
-
-      // Parse data rows
-      const dataRows: CSVRow[] = [];
-
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
-
-        const values = parseCSVLine(line, fields.selectedDelimiter);
-        const row: CSVRow = {};
-
-        // Map values to headers
-        parsedHeaders.forEach((header, index) => {
-          const value = values[index] || "";
-          row[header] = value.replace(/^["']|["']$/g, "").trim();
-        });
-
-        dataRows.push(row);
-      }
-
-      updateField("parsedData", dataRows);
-      updateField("rowCount", dataRows.length);
-      updateField("jsonOutput", JSON.stringify(dataRows, null, 2));
-    } catch {
-      const errorMessage = "Failed to parse CSV";
-      updateField("error", errorMessage);
-      updateField("parsedData", []);
-      updateField("jsonOutput", "");
-      updateField("headers", []);
-      updateField("rowCount", 0);
-    }
-  }, [fields.csvInput, fields.selectedDelimiter, updateField]);
+  const convertCSV = () => {
+    // Trigger conversion by updating trigger counter
+    setConversionTrigger((prev: number) => prev + 1);
+  };
 
   const shareConverter = async () => {
     const success = await copyShareableURL({
