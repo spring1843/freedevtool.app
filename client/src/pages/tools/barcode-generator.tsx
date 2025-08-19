@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { BarChart3, Download, RotateCcw } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import JsBarcode from "jsbarcode";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 export default function BarcodeGenerator() {
@@ -173,8 +173,6 @@ export default function BarcodeGenerator() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="BG-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -364,8 +362,6 @@ export default function BarcodeGenerator() {
           </ul>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="BG-002" size="medium" className="mt-6" />
     </div>
   );
 }

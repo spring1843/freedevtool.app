@@ -17,7 +17,6 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
 
 interface UnitGroup {
   name: string;
@@ -334,9 +333,6 @@ export default function UnitConverter() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="UC-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -480,10 +476,7 @@ export default function UnitConverter() {
         </CardContent>
       </Card>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="UC-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Quick Conversion Reference */}
       <Card className="mb-8">
@@ -539,10 +532,7 @@ export default function UnitConverter() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="UC-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

@@ -23,7 +23,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import AdSlot from "@/components/ui/ad-slot";
+
 import QRCodeLib from "qrcode-generator";
 
 // Standalone QR Code generation using qrcode-generator library
@@ -266,9 +266,6 @@ export default function QRGenerator() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="QR-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -450,10 +447,7 @@ export default function QRGenerator() {
         </Card>
       </div>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="QR-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Information */}
       <Card>
@@ -505,10 +499,7 @@ export default function QRGenerator() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="QR-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

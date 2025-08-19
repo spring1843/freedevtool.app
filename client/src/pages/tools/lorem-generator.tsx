@@ -13,7 +13,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const loremWords = [
@@ -226,8 +225,6 @@ export default function LoremGenerator() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <AdSlot position="top" id="LG-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -359,8 +356,6 @@ export default function LoremGenerator() {
           </div>
         </div>
       </div>
-
-      <AdSlot position="sidebar" id="LG-002" size="medium" className="mt-6" />
     </div>
   );
 }

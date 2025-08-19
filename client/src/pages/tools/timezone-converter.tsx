@@ -12,7 +12,7 @@ import {
   RefreshCw,
   Share,
 } from "lucide-react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
 import {
@@ -290,9 +290,6 @@ export default function TimezoneConverter() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="TZ-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
@@ -378,10 +375,7 @@ export default function TimezoneConverter() {
         </CardContent>
       </Card>
 
-      {/* Middle Ad */}
-      <div className="flex justify-center my-8">
-        <AdSlot position="middle" id="TZ-002" size="medium" />
-      </div>
+      <div className="flex justify-center my-8" />
 
       {/* Target Timezones Management */}
       <Card className="mb-6">
@@ -518,10 +512,7 @@ export default function TimezoneConverter() {
         </CardContent>
       </Card>
 
-      {/* Bottom Ad */}
-      <div className="flex justify-center mt-8">
-        <AdSlot position="bottom" id="TZ-003" size="large" />
-      </div>
+      <div className="flex justify-center mt-8" />
     </div>
   );
 }

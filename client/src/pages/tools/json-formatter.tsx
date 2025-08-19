@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { formatJSON } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Lightbulb } from "lucide-react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
@@ -63,9 +63,6 @@ export default function JsonFormatter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      {/* Top Ad */}
-      <AdSlot position="top" id="JF-001" size="large" className="mb-6" />
-
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">

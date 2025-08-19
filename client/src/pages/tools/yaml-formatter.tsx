@@ -5,7 +5,6 @@ import { formatYAML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_YAML = `name: John Doe
@@ -67,8 +66,6 @@ export default function YAMLFormatter() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="YF-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -156,8 +153,6 @@ export default function YAMLFormatter() {
           <li>• Strict indentation rules using spaces (not tabs)</li>
         </ul>
       </div>
-
-      <AdSlot position="sidebar" id="YF-002" size="medium" className="mt-6" />
     </div>
   );
 }

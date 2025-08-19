@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect } from "react";
-import AdSlot from "@/components/ui/ad-slot";
+
 import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_PATTERN =
@@ -127,8 +127,6 @@ export default function RegexTester() {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <AdSlot position="top" id="RT-001" size="large" className="mb-6" />
-
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -314,8 +312,6 @@ export default function RegexTester() {
           </CardContent>
         </Card>
       )}
-
-      <AdSlot position="sidebar" id="RT-002" size="medium" className="mt-6" />
     </div>
   );
 }
