@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // Session-based state storage (clears on page refresh)
-const sessionState = new Map<string, any>();
+const sessionState = new Map<string, unknown>();
 
 /**
  * Hook for persisting component state across navigation within the same session
@@ -15,7 +15,7 @@ export function usePersistentState<T>(
 ): [T, (value: T | ((prev: T) => T)) => void] {
   // Get stored value from session state or use initial value
   const [storedValue, setStoredValue] = useState<T>(() =>
-    sessionState.has(key) ? sessionState.get(key) : initialValue
+    sessionState.has(key) ? (sessionState.get(key) as T) : initialValue
   );
 
   // Save to session state whenever value changes

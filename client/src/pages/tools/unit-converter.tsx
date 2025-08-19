@@ -171,7 +171,9 @@ export default function UnitConverter() {
       allowedValues: validCategories,
     });
 
-    const categoryUnits = Object.keys(unitGroups[urlCategory].units);
+    const categoryUnits = Object.keys(
+      unitGroups[urlCategory as keyof typeof unitGroups].units
+    );
     const urlFrom = getValidatedParam("from", "", {
       type: "enum",
       allowedValues: categoryUnits,
@@ -186,12 +188,16 @@ export default function UnitConverter() {
       maxLength: 20,
     });
 
-    setSelectedCategory(urlCategory);
-    setInputValue(urlValue);
+    setSelectedCategory(urlCategory as string);
+    setInputValue(urlValue as string);
 
-    if (urlFrom && urlTo && unitGroups[urlCategory]) {
-      setFromUnit(urlFrom);
-      setToUnit(urlTo);
+    if (
+      urlFrom &&
+      urlTo &&
+      unitGroups[urlCategory as keyof typeof unitGroups]
+    ) {
+      setFromUnit(urlFrom as string);
+      setToUnit(urlTo as string);
     }
   }, []);
 

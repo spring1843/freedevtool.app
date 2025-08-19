@@ -3,9 +3,9 @@ import * as yaml from "js-yaml";
 export function encodeBase64(input: string): string {
   try {
     return btoa(unescape(encodeURIComponent(input)));
-  } catch (error: any) {
+  } catch (error: unknown) {
     throw new Error(
-      `Failed to encode Base64: ${error?.message || "Unknown error"}`
+      `Failed to encode Base64: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 }
@@ -13,9 +13,9 @@ export function encodeBase64(input: string): string {
 export function decodeBase64(input: string): string {
   try {
     return decodeURIComponent(escape(atob(input)));
-  } catch (error: any) {
+  } catch (error: unknown) {
     throw new Error(
-      `Failed to decode Base64: ${error?.message || "Unknown error"}`
+      `Failed to decode Base64: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 }
@@ -27,9 +27,9 @@ export function encodeURL(input: string): string {
 export function decodeURL(input: string): string {
   try {
     return decodeURIComponent(input);
-  } catch (error: any) {
+  } catch (error: unknown) {
     throw new Error(
-      `Failed to decode URL: ${error?.message || "Unknown error"}`
+      `Failed to decode URL: ${error instanceof Error ? error.message : "Unknown error"}`
     );
   }
 }
@@ -60,9 +60,25 @@ export function yamlToJson(input: string): { result: string; error?: string } {
   }
 }
 
+interface JWTHeader {
+  alg?: string;
+  typ?: string;
+  [key: string]: unknown;
+}
+
+interface JWTPayload {
+  sub?: string;
+  iss?: string;
+  aud?: string | string[];
+  exp?: number;
+  iat?: number;
+  nbf?: number;
+  [key: string]: unknown;
+}
+
 export function decodeJWT(token: string): {
-  header: any;
-  payload: any;
+  header: JWTHeader;
+  payload: JWTPayload;
   signature: string;
   isValid: boolean;
   error?: string;

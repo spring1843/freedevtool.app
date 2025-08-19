@@ -70,8 +70,8 @@ export default function NumberBaseConverter() {
       arrayMaxLength: 10,
     });
 
-    setInputNumber(urlNumber);
-    setInputBase(urlInputBase);
+    setInputNumber(urlNumber as string);
+    setInputBase(urlInputBase as number);
 
     if (Array.isArray(urlOutputBases)) {
       const validBases = urlOutputBases

@@ -39,16 +39,19 @@ export default function WebcamTest() {
 
       setHasPermission(true);
       await getVideoDevices();
-    } catch (err: any) {
+    } catch (err: unknown) {
       setHasPermission(false);
-      if (err.name === "NotAllowedError") {
+      const error = err as DOMException;
+      if (error.name === "NotAllowedError") {
         setError(
           "Camera permission denied. Please allow camera access to use this tool."
         );
-      } else if (err.name === "NotFoundError") {
+      } else if (error.name === "NotFoundError") {
         setError("No camera found. Please connect a camera device.");
       } else {
-        setError(`Failed to access camera: ${err?.message || "Unknown error"}`);
+        setError(
+          `Failed to access camera: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
       }
     }
   };
@@ -67,9 +70,9 @@ export default function WebcamTest() {
           setSelectedDevice(firstDevice.deviceId);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(
-        `Failed to enumerate devices: ${err?.message || "Unknown error"}`
+        `Failed to enumerate devices: ${err instanceof Error ? err.message : "Unknown error"}`
       );
     }
   };
@@ -99,8 +102,10 @@ export default function WebcamTest() {
 
       // Get updated device list with labels
       await getVideoDevices();
-    } catch (err: any) {
-      setError(`Camera access failed: ${err?.message || "Unknown error"}`);
+    } catch (err: unknown) {
+      setError(
+        `Camera access failed: ${err instanceof Error ? err.message : "Unknown error"}`
+      );
       setHasPermission(false);
       setIsActive(false);
     }
@@ -168,9 +173,9 @@ export default function WebcamTest() {
         if (videoDevices.length > 0) {
           setDevices(videoDevices);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError(
-          `Failed to get basic devices: ${err?.message || "Unknown error"}`
+          `Failed to get basic devices: ${err instanceof Error ? err.message : "Unknown error"}`
         );
       }
     };

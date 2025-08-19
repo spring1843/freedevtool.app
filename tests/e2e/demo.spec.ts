@@ -45,12 +45,14 @@ test.describe("Demo End-to-End Test", () => {
   }) => {
     // Set up error collection
     await page.addInitScript(() => {
-      (window as any).jsErrors = [];
+      (window as typeof window & { jsErrors: string[] }).jsErrors = [];
       window.addEventListener("error", e => {
-        (window as any).jsErrors.push(e.message);
+        (window as typeof window & { jsErrors: string[] }).jsErrors.push(
+          e.message
+        );
       });
       window.addEventListener("unhandledrejection", e => {
-        (window as any).jsErrors.push(
+        (window as typeof window & { jsErrors: string[] }).jsErrors.push(
           `Unhandled promise rejection: ${e.reason}`
         );
       });
@@ -113,7 +115,9 @@ test.describe("Demo End-to-End Test", () => {
     }
 
     // Verify no critical JavaScript errors
-    const errors = await page.evaluate(() => (window as any).jsErrors || []);
+    const errors = await page.evaluate(
+      () => (window as typeof window & { jsErrors?: string[] }).jsErrors || []
+    );
     const criticalErrors = errors.filter(
       (error: string) =>
         !error.includes("unhandledrejection") ||

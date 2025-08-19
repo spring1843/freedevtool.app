@@ -46,7 +46,7 @@ export default function URLToJSON() {
         maxLength: 2048, // Standard max URL length
       }
     );
-    setInputUrl(urlInput);
+    setInputUrl(urlInput as string);
   }, []);
 
   useEffect(() => {

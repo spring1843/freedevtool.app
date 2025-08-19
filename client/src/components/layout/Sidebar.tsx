@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Link, useLocation } from "wouter";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { toolsData } from "@/data/tools";
 import {
   Calendar,
@@ -173,12 +173,12 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
   };
 
   // Define functions before they are used in useEffect
-  const toggleSection = (categoryName: string) => {
+  const toggleSection = useCallback((categoryName: string) => {
     setExpandedSections(prev => ({
       ...prev,
       [categoryName]: !prev[categoryName],
     }));
-  };
+  }, []);
 
   const expandAll = () => {
     const allExpanded = Object.keys(toolsData).reduce(

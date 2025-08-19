@@ -71,10 +71,10 @@ function sanitizeString(value: string, maxLength = 1000): string {
  * Validate a parameter value against a validation rule
  */
 function validateParam(
-  value: any,
+  value: unknown,
   rule: ValidationRule,
-  defaultValue: any
-): any {
+  defaultValue: unknown
+): unknown {
   try {
     switch (rule.type) {
       case "string":
@@ -155,7 +155,7 @@ export function getParam(
 ): string | undefined;
 export function getParam(key: string, defaultValue: number): number;
 export function getParam(key: string, defaultValue: boolean): boolean;
-export function getParam(key: string, defaultValue?: any): any {
+export function getParam(key: string, defaultValue?: unknown): unknown {
   const params = getURLParams();
   const value = params.get(key);
 
@@ -188,9 +188,9 @@ export function getParam(key: string, defaultValue?: any): any {
  */
 export function getValidatedParam(
   key: string,
-  defaultValue: any,
+  defaultValue: unknown,
   validationRule: ValidationRule
-): any {
+): unknown {
   const params = getURLParams();
   const value = params.get(key);
 

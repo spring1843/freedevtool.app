@@ -63,18 +63,19 @@ export default function MicrophoneTest() {
         description:
           "Microphone access has been granted. You can now test your microphone.",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       setHasPermission(false);
       let errorMessage = "Microphone permission denied.";
+      const error = err as DOMException;
 
-      if (err.name === "NotAllowedError") {
+      if (error.name === "NotAllowedError") {
         errorMessage =
           "Microphone permission denied. Please allow microphone access to use this tool.";
-      } else if (err.name === "NotFoundError") {
+      } else if (error.name === "NotFoundError") {
         errorMessage =
           "No microphone found. Please connect a microphone device.";
       } else {
-        errorMessage = `Failed to access microphone: ${err?.message || "Unknown error"}`;
+        errorMessage = `Failed to access microphone: ${error instanceof Error ? error.message : "Unknown error"}`;
       }
 
       setError(errorMessage);
@@ -99,9 +100,9 @@ export default function MicrophoneTest() {
           setSelectedDevice(firstDevice.deviceId);
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(
-        `Failed to enumerate devices: ${err?.message || "Please check microphone permissions"}`
+        `Failed to enumerate devices: ${err instanceof Error ? err.message : "Please check microphone permissions"}`
       );
     }
   };
@@ -117,9 +118,9 @@ export default function MicrophoneTest() {
         if (audioDevices.length > 0) {
           setDevices(audioDevices);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError(
-          `Failed to enumerate devices: ${err?.message || "Please check microphone permissions"}`
+          `Failed to enumerate devices: ${err instanceof Error ? err.message : "Please check microphone permissions"}`
         );
       }
     };
@@ -168,7 +169,8 @@ export default function MicrophoneTest() {
 
       // Set up audio analysis
       const audioContext = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+        (window as typeof window & { webkitAudioContext?: typeof AudioContext })
+          .webkitAudioContext)();
       const analyser = audioContext.createAnalyser();
       const source = audioContext.createMediaStreamSource(mediaStream);
 
@@ -186,24 +188,28 @@ export default function MicrophoneTest() {
         description:
           "Your microphone is now active and monitoring audio levels.",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       let errorMessage = "Unknown error";
+      const error = err as DOMException;
 
-      if (err.name === "NotAllowedError") {
+      if (error.name === "NotAllowedError") {
         errorMessage =
           "Permission denied. Please allow microphone access in your browser.";
-      } else if (err.name === "NotFoundError") {
+      } else if (error.name === "NotFoundError") {
         errorMessage =
           "No microphone found. Please connect a microphone device.";
-      } else if (err.name === "NotReadableError") {
+      } else if (error.name === "NotReadableError") {
         errorMessage = "Microphone is already in use by another application.";
-      } else if (err.name === "OverconstrainedError") {
+      } else if (error.name === "OverconstrainedError") {
         errorMessage = "Selected microphone device is not available.";
-      } else if (err.name === "SecurityError") {
+      } else if (error.name === "SecurityError") {
         errorMessage =
           "Microphone access is blocked due to security restrictions.";
       } else {
-        errorMessage = err.message || "Failed to access microphone";
+        errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Failed to access microphone";
       }
 
       setError(`Microphone access failed: ${errorMessage}`);
@@ -357,9 +363,9 @@ export default function MicrophoneTest() {
         title: "Devices Refreshed",
         description: `Found ${devices.length} microphone(s).`,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(
-        `Failed to refresh devices: ${err?.message || "Please check microphone permissions"}`
+        `Failed to refresh devices: ${err instanceof Error ? err.message : "Please check microphone permissions"}`
       );
     }
   };

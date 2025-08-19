@@ -508,7 +508,7 @@ export default function Home() {
       {Object.keys(filteredToolsData).length === 0 && searchQuery.trim() && (
         <div className="text-center py-12">
           <p className="text-slate-500 dark:text-slate-400">
-            No tools found matching "{searchQuery}"
+            No tools found matching &quot;{searchQuery}&quot;
           </p>
         </div>
       )}

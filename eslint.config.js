@@ -76,7 +76,7 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off", // Use unused-imports instead
       "@typescript-eslint/explicit-function-return-type": "off",
       "@typescript-eslint/explicit-module-boundary-types": "off",
-      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/array-type": ["error", { default: "array-simple" }],
       "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
       "@typescript-eslint/consistent-type-imports": "error",

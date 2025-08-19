@@ -281,10 +281,10 @@ export default function DateConverter() {
         title: "Copied!",
         description: "Date format copied to clipboard",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: "Copy failed",
-        description: `Could not copy to clipboard: ${error?.message || "Unknown error"}`,
+        description: `Could not copy to clipboard: ${error instanceof Error ? error.message : "Unknown error"}`,
         variant: "destructive",
       });
     }
