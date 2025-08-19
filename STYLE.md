@@ -14,6 +14,7 @@ We strive to:
 
 * Tools must have a default value
 * Each tool must have a primary action button that processes the user's input.
+* Allow uploading data to input, downloading and copying the output
 * An "Auto-update" checkbox, enabled by default, should be placed near the main action button. When checked, any change to the input automatically triggers the main action.
 * Tools should automatically process their default input upon launch. The exception is for tools that produce sound or request browser permissions, which should require user interaction to start.
 * For tools with a text input area, the keyboard focus should be set to that area on launch.
