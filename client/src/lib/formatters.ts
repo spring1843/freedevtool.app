@@ -627,62 +627,117 @@ export async function formatTypeScript(
 ): Promise<{ formatted: string; error?: string }> {
   try {
     if (minify) {
-      try {
-        // Use Prettier to format TypeScript first, then minify
-        const prettierFormatted = await prettier.format(input, {
-          parser: "typescript",
-          printWidth: 1000,
-          tabWidth: 0,
-          useTabs: false,
-          semi: true,
-          singleQuote: true,
-          trailingComma: "none",
-        });
+      // Basic minification for TypeScript/JavaScript
+      const minified = input
+        .replace(/\/\*[\s\S]*?\*\//g, "") // Remove block comments
+        .replace(/\/\/.*$/gm, "") // Remove line comments
+        .replace(/\s+/g, " ") // Collapse whitespace
+        .replace(/\s*{\s*/g, "{")
+        .replace(/\s*}\s*/g, "}")
+        .replace(/\s*;\s*/g, ";")
+        .replace(/\s*,\s*/g, ",")
+        .replace(/\s*:\s*/g, ":")
+        .replace(/\s*\(\s*/g, "(")
+        .replace(/\s*\)\s*/g, ")")
+        .trim();
 
-        // Basic minification for TypeScript
-        const minified = prettierFormatted
-          .replace(/\/\*[\s\S]*?\*\//g, "")
-          .replace(/\/\/.*$/gm, "")
-          .replace(/\s+/g, " ")
-          .replace(/\s*{\s*/g, "{")
-          .replace(/\s*}\s*/g, "}")
-          .replace(/\s*;\s*/g, ";")
-          .replace(/\s*,\s*/g, ",")
-          .replace(/\s*:\s*/g, ":")
-          .trim();
+      return { formatted: minified };
+    }
 
-        return { formatted: minified };
-      } catch {
-        // Fallback minification
-        const minified = input
-          .replace(/\/\*[\s\S]*?\*\//g, "")
-          .replace(/\/\/.*$/gm, "")
-          .replace(/\s+/g, " ")
-          .trim();
-        return { formatted: minified };
+    // Custom TypeScript/JavaScript beautifier since Prettier's typescript parser isn't available
+    const formatted = input.trim();
+    let indentLevel = 0;
+    const indentStr = "  ";
+    const lines: string[] = [];
+    let currentLine = "";
+    let inString = false;
+    let stringChar = "";
+    let inComment = false;
+
+    for (let i = 0; i < formatted.length; i++) {
+      const char = formatted[i];
+      const nextChar = formatted[i + 1] || "";
+
+      // Handle string literals
+      if (!inComment && (char === '"' || char === "'" || char === "`")) {
+        if (!inString) {
+          inString = true;
+          stringChar = char;
+        } else if (char === stringChar && formatted[i - 1] !== "\\") {
+          inString = false;
+          stringChar = "";
+        }
+        currentLine += char;
+        continue;
+      }
+
+      // Handle comments
+      if (!inString) {
+        if (char === "/" && nextChar === "/") {
+          inComment = true;
+          currentLine += char;
+          continue;
+        }
+        if (char === "/" && nextChar === "*") {
+          // Block comment start
+          currentLine += char;
+          continue;
+        }
+        if (char === "*" && nextChar === "/") {
+          // Block comment end
+          currentLine += char + nextChar;
+          i++; // Skip next char
+          continue;
+        }
+      }
+
+      if (inString || inComment) {
+        currentLine += char;
+        if (inComment && char === "\n") {
+          inComment = false;
+          lines.push(indentStr.repeat(indentLevel) + currentLine.trim());
+          currentLine = "";
+        }
+        continue;
+      }
+
+      // Handle structural characters
+      if (char === "{") {
+        currentLine += char;
+        lines.push(indentStr.repeat(indentLevel) + currentLine.trim());
+        currentLine = "";
+        indentLevel++;
+      } else if (char === "}") {
+        if (currentLine.trim()) {
+          lines.push(indentStr.repeat(indentLevel) + currentLine.trim());
+          currentLine = "";
+        }
+        indentLevel = Math.max(0, indentLevel - 1);
+        lines.push(indentStr.repeat(indentLevel) + char);
+      } else if (char === ";") {
+        currentLine += char;
+        if (nextChar !== " " && nextChar !== "\n" && nextChar !== "\t") {
+          lines.push(indentStr.repeat(indentLevel) + currentLine.trim());
+          currentLine = "";
+        }
+      } else if (char === "\n" || char === "\r") {
+        if (currentLine.trim()) {
+          lines.push(indentStr.repeat(indentLevel) + currentLine.trim());
+          currentLine = "";
+        }
+      } else {
+        currentLine += char;
       }
     }
 
-    try {
-      // Use Prettier for TypeScript beautification
-      const formatted = await prettier.format(input, {
-        parser: "typescript",
-        printWidth: 80,
-        tabWidth: 2,
-        useTabs: false,
-        semi: true,
-        singleQuote: true,
-        trailingComma: "es5",
-        bracketSpacing: true,
-        arrowParens: "avoid",
-      });
-      return { formatted };
-    } catch (prettierError) {
-      return {
-        formatted: input,
-        error: `TypeScript formatting error: ${prettierError instanceof Error ? prettierError.message : "Prettier formatting failed"}`,
-      };
+    // Add any remaining content
+    if (currentLine.trim()) {
+      lines.push(indentStr.repeat(indentLevel) + currentLine.trim());
     }
+
+    const result = lines.filter(line => line.trim().length > 0).join("\n");
+
+    return { formatted: result };
   } catch (error) {
     return {
       formatted: input,
