@@ -1,24 +1,24 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { formatCSS } from "@/lib/formatters";
+import { formatTypeScript } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
-const DEFAULT_CSS = `.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0}.card{background-color:white;padding:20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}.button{background-color:#007bff;color:white;border:none;padding:10px 20px;border-radius:4px;cursor:pointer}.button:hover{background-color:#0056b3}`;
+const DEFAULT_TYPESCRIPT = `interface User{name:string;age:number;email?:string;isActive:boolean;}type UserStatus="active"|"inactive"|"pending";class UserManager{private users:User[]=[];constructor(initialUsers:User[]=[]){this.users=initialUsers;}addUser(user:User):void{this.users.push(user);}getActiveUsers():User[]{return this.users.filter(user=>user.isActive);}getUserByName<T extends User>(name:string):T|undefined{return this.users.find(user=>user.name===name)as T|undefined;}}const createUserGreeting=(user:User,status:UserStatus="active"):string=>{const greeting=status==="active"?"Welcome":"Hello";return \`\${greeting} \${user.name}! You are \${user.age} years old.\`;};enum Permission{READ="read",WRITE="write",DELETE="delete"}function hasPermission(userRole:string,required:Permission):boolean{const rolePermissions:{[key:string]:Permission[]}={admin:[Permission.READ,Permission.WRITE,Permission.DELETE],editor:[Permission.READ,Permission.WRITE],viewer:[Permission.READ]};return rolePermissions[userRole]?.includes(required)??false;}`;
 
-export default function CSSFormatter() {
-  const [input, setInput] = useState(DEFAULT_CSS);
+export default function TypeScriptFormatter() {
+  const [input, setInput] = useState(DEFAULT_TYPESCRIPT);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const formatCode = useCallback(
     async (minify = false) => {
       try {
-        const { formatted, error: formatError } = await formatCSS(
+        const { formatted, error: formatError } = await formatTypeScript(
           input,
           minify
         );
@@ -41,7 +41,7 @@ export default function CSSFormatter() {
   };
 
   const handleReset = () => {
-    setInput(DEFAULT_CSS);
+    setInput(DEFAULT_TYPESCRIPT);
     setOutput("");
     setError(null);
   };
@@ -56,10 +56,10 @@ export default function CSSFormatter() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-              CSS Formatter
+              TypeScript Formatter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Format, beautify, or minify CSS code
+              Format, beautify, or minify TypeScript code using Prettier
             </p>
           </div>
           <SecurityBanner variant="compact" />
@@ -80,14 +80,14 @@ export default function CSSFormatter() {
           className="bg-green-600 hover:bg-green-700 text-white"
         >
           <Code className="w-4 h-4 mr-2" />
-          Beautify CSS
+          Beautify TypeScript
         </Button>
         <Button
           onClick={() => formatCode(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           <Minimize2 className="w-4 h-4 mr-2" />
-          Minify CSS
+          Minify TypeScript
         </Button>
         <Button onClick={handleReset} variant="outline">
           <RotateCcw className="w-4 h-4 mr-2" />
@@ -98,14 +98,14 @@ export default function CSSFormatter() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Input CSS</CardTitle>
+            <CardTitle>Input TypeScript</CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
-              placeholder="Paste your CSS here..."
-              data-testid="css-input"
+              placeholder="Paste your TypeScript code here..."
+              data-testid="typescript-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
               showLineNumbers={true}
@@ -122,8 +122,8 @@ export default function CSSFormatter() {
             <Textarea
               value={output}
               readOnly={true}
-              placeholder="Formatted CSS will appear here..."
-              data-testid="css-output"
+              placeholder="Formatted TypeScript will appear here..."
+              data-testid="typescript-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={20}
               showLineNumbers={true}
@@ -133,24 +133,43 @@ export default function CSSFormatter() {
         </Card>
       </div>
 
-      <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-        <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          CSS Formatting Options:
-        </h3>
-        <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
-          <div>
-            • <strong>Beautify:</strong> Adds proper indentation, line breaks,
-            and spacing for readability
-          </div>
-          <div>
-            • <strong>Minify:</strong> Removes all unnecessary whitespace and
-            comments to reduce file size
-          </div>
-          <div>
-            • <strong>Benefits:</strong> Beautified CSS is easier to maintain,
-            minified CSS loads faster
-          </div>
-        </div>
+      <div className="mt-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center text-slate-700 dark:text-slate-300">
+              <Code className="w-5 h-5 mr-2" />
+              TypeScript Formatting Features
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  Beautification Features:
+                </h4>
+                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                  <li>• Type annotation formatting</li>
+                  <li>• Interface and type definition styling</li>
+                  <li>• Generic type parameter alignment</li>
+                  <li>• Enum and namespace formatting</li>
+                  <li>• Decorator and metadata styling</li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="font-medium text-slate-700 dark:text-slate-300 mb-2">
+                  TypeScript Benefits:
+                </h4>
+                <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+                  <li>• Preserves type information</li>
+                  <li>• Maintains type safety</li>
+                  <li>• Consistent code style</li>
+                  <li>• Improved readability</li>
+                  <li>• Professional formatting standards</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

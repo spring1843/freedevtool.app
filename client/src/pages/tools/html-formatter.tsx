@@ -47,15 +47,23 @@ export default function HTMLFormatter() {
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
 
   const formatCode = useCallback(
-    (minify = false) => {
-      const {
-        formatted,
-        error: formatError,
-        warnings: formatWarnings,
-      } = formatHTML(input, minify);
-      setOutput(formatted);
-      setError(formatError || null);
-      setWarnings(formatWarnings || []);
+    async (minify = false) => {
+      try {
+        const {
+          formatted,
+          error: formatError,
+          warnings: formatWarnings,
+        } = await formatHTML(input, minify);
+        setOutput(formatted);
+        setError(formatError || null);
+        setWarnings(formatWarnings || []);
+      } catch (error) {
+        setError(
+          `Formatting error: ${error instanceof Error ? error.message : "Unknown error"}`
+        );
+        setOutput("");
+        setWarnings([]);
+      }
     },
     [input]
   );
