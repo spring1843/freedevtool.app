@@ -999,6 +999,8 @@ export async function formatGraphQL(input: string): Promise<{
         if (formatted[i - 1] !== "(") {
           indentLevel = Math.max(0, indentLevel - 1);
         }
+      } else if (char === ":") {
+        currentLine += `${char} `;
       } else if (char === ",") {
         currentLine += char;
         lines.push(indentStr.repeat(indentLevel) + currentLine.trim());

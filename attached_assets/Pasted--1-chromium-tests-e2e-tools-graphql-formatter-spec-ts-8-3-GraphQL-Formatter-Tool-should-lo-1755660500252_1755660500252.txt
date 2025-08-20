@@ -1,0 +1,318 @@
+  1) [chromium] › tests/e2e/tools/graphql-formatter.spec.ts:8:3 › GraphQL Formatter Tool › should load GraphQL formatter page without errors 
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /GraphQL Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      26 |
+      27 |     // Should display the correct title
+    > 28 |     await expect(page).toHaveTitle(/GraphQL Formatter/);
+         |                        ^
+      29 |
+      30 |     // Should have the main elements
+      31 |     await expect(page.locator("h2")).toContainText("GraphQL Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/graphql-formatter.spec.ts:28:24
+    Error Context: test-results/tools-graphql-formatter-Gr-51579-rmatter-page-without-errors-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /GraphQL Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      26 |
+      27 |     // Should display the correct title
+    > 28 |     await expect(page).toHaveTitle(/GraphQL Formatter/);
+         |                        ^
+      29 |
+      30 |     // Should have the main elements
+      31 |     await expect(page.locator("h2")).toContainText("GraphQL Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/graphql-formatter.spec.ts:28:24
+    Error Context: test-results/tools-graphql-formatter-Gr-51579-rmatter-page-without-errors-chromium-retry1/error-context.md
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tools-graphql-formatter-Gr-51579-rmatter-page-without-errors-chromium-retry1/trace.zip
+    Usage:
+        npx playwright show-trace test-results/tools-graphql-formatter-Gr-51579-rmatter-page-without-errors-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /GraphQL Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      26 |
+      27 |     // Should display the correct title
+    > 28 |     await expect(page).toHaveTitle(/GraphQL Formatter/);
+         |                        ^
+      29 |
+      30 |     // Should have the main elements
+      31 |     await expect(page.locator("h2")).toContainText("GraphQL Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/graphql-formatter.spec.ts:28:24
+    Error Context: test-results/tools-graphql-formatter-Gr-51579-rmatter-page-without-errors-chromium-retry2/error-context.md
+  2) [chromium] › tests/e2e/tools/graphql-formatter.spec.ts:51:3 › GraphQL Formatter Tool › should format GraphQL queries correctly 
+    Error: expect(received).toContain(expected) // indexOf
+    Expected substring: "user(id: 1)"
+    Received string:    "query GetUser {
+      user(id:1) {
+        name age
+      }
+    }"
+      60 |     const output = await page.inputValue('[data-testid="graphql-output"]');
+      61 |     expect(output).toContain("query GetUser");
+    > 62 |     expect(output).toContain("user(id: 1)");
+         |                    ^
+      63 |   });
+      64 |
+      65 |   test("should reset to default content", async ({ page }) => {
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/graphql-formatter.spec.ts:62:20
+    Error Context: test-results/tools-graphql-formatter-Gr-97ddb-t-GraphQL-queries-correctly-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: expect(received).toContain(expected) // indexOf
+    Expected substring: "user(id: 1)"
+    Received string:    "query GetUser {
+      user(id:1) {
+        name age
+      }
+    }"
+      60 |     const output = await page.inputValue('[data-testid="graphql-output"]');
+      61 |     expect(output).toContain("query GetUser");
+    > 62 |     expect(output).toContain("user(id: 1)");
+         |                    ^
+      63 |   });
+      64 |
+      65 |   test("should reset to default content", async ({ page }) => {
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/graphql-formatter.spec.ts:62:20
+    Error Context: test-results/tools-graphql-formatter-Gr-97ddb-t-GraphQL-queries-correctly-chromium-retry1/error-context.md
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tools-graphql-formatter-Gr-97ddb-t-GraphQL-queries-correctly-chromium-retry1/trace.zip
+    Usage:
+        npx playwright show-trace test-results/tools-graphql-formatter-Gr-97ddb-t-GraphQL-queries-correctly-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: expect(received).toContain(expected) // indexOf
+    Expected substring: "user(id: 1)"
+    Received string:    "query GetUser {
+      user(id:1) {
+        name age
+      }
+    }"
+      60 |     const output = await page.inputValue('[data-testid="graphql-output"]');
+      61 |     expect(output).toContain("query GetUser");
+    > 62 |     expect(output).toContain("user(id: 1)");
+         |                    ^
+      63 |   });
+      64 |
+      65 |   test("should reset to default content", async ({ page }) => {
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/graphql-formatter.spec.ts:62:20
+    Error Context: test-results/tools-graphql-formatter-Gr-97ddb-t-GraphQL-queries-correctly-chromium-retry2/error-context.md
+  3) [chromium] › tests/e2e/tools/jsonc-formatter.spec.ts:8:3 › JSONC Formatter Tool › should load JSONC formatter page without errors 
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /JSONC Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      24 |
+      25 |     // Should display the correct title
+    > 26 |     await expect(page).toHaveTitle(/JSONC Formatter/);
+         |                        ^
+      27 |
+      28 |     // Should have the main elements
+      29 |     await expect(page.locator("h2")).toContainText("JSONC Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/jsonc-formatter.spec.ts:26:24
+    Error Context: test-results/tools-jsonc-formatter-JSON-277c1-rmatter-page-without-errors-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /JSONC Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      24 |
+      25 |     // Should display the correct title
+    > 26 |     await expect(page).toHaveTitle(/JSONC Formatter/);
+         |                        ^
+      27 |
+      28 |     // Should have the main elements
+      29 |     await expect(page.locator("h2")).toContainText("JSONC Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/jsonc-formatter.spec.ts:26:24
+    Error Context: test-results/tools-jsonc-formatter-JSON-277c1-rmatter-page-without-errors-chromium-retry1/error-context.md
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tools-jsonc-formatter-JSON-277c1-rmatter-page-without-errors-chromium-retry1/trace.zip
+    Usage:
+        npx playwright show-trace test-results/tools-jsonc-formatter-JSON-277c1-rmatter-page-without-errors-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /JSONC Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      24 |
+      25 |     // Should display the correct title
+    > 26 |     await expect(page).toHaveTitle(/JSONC Formatter/);
+         |                        ^
+      27 |
+      28 |     // Should have the main elements
+      29 |     await expect(page.locator("h2")).toContainText("JSONC Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/jsonc-formatter.spec.ts:26:24
+    Error Context: test-results/tools-jsonc-formatter-JSON-277c1-rmatter-page-without-errors-chromium-retry2/error-context.md
+  4) [chromium] › tests/e2e/tools/typescript-formatter.spec.ts:8:3 › TypeScript Formatter Tool › should load TypeScript formatter page without errors 
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /TypeScript Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      26 |
+      27 |     // Should display the correct title
+    > 28 |     await expect(page).toHaveTitle(/TypeScript Formatter/);
+         |                        ^
+      29 |
+      30 |     // Should have the main elements
+      31 |     await expect(page.locator("h2")).toContainText("TypeScript Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:28:24
+    Error Context: test-results/tools-typescript-formatter-85110-rmatter-page-without-errors-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /TypeScript Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      26 |
+      27 |     // Should display the correct title
+    > 28 |     await expect(page).toHaveTitle(/TypeScript Formatter/);
+         |                        ^
+      29 |
+      30 |     // Should have the main elements
+      31 |     await expect(page.locator("h2")).toContainText("TypeScript Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:28:24
+    Error Context: test-results/tools-typescript-formatter-85110-rmatter-page-without-errors-chromium-retry1/error-context.md
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tools-typescript-formatter-85110-rmatter-page-without-errors-chromium-retry1/trace.zip
+    Usage:
+        npx playwright show-trace test-results/tools-typescript-formatter-85110-rmatter-page-without-errors-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+    Error: Timed out 5000ms waiting for expect(page).toHaveTitle(expected)
+    Expected pattern: /TypeScript Formatter/
+    Received string:  "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+    Call log:
+      - Expect "toHaveTitle" with timeout 5000ms
+        9 × unexpected value "FreeDevTool.App - Free, Secure, Open Source, and Offline Developer Tools"
+      26 |
+      27 |     // Should display the correct title
+    > 28 |     await expect(page).toHaveTitle(/TypeScript Formatter/);
+         |                        ^
+      29 |
+      30 |     // Should have the main elements
+      31 |     await expect(page.locator("h2")).toContainText("TypeScript Formatter");
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:28:24
+    Error Context: test-results/tools-typescript-formatter-85110-rmatter-page-without-errors-chromium-retry2/error-context.md
+  5) [chromium] › tests/e2e/tools/typescript-formatter.spec.ts:40:3 › TypeScript Formatter Tool › should format TypeScript code correctly 
+    Test timeout of 30000ms exceeded.
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('text=Beautify TypeScript')
+      42 |
+      43 |     await page.fill('[data-testid="typescript-input"]', input);
+    > 44 |     await page.click("text=Beautify TypeScript");
+         |                ^
+      45 |
+      46 |     // Wait for formatting to complete
+      47 |     await page.waitForTimeout(500);
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:44:16
+    Error Context: test-results/tools-typescript-formatter-70bc9-t-TypeScript-code-correctly-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Test timeout of 30000ms exceeded.
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('text=Beautify TypeScript')
+      42 |
+      43 |     await page.fill('[data-testid="typescript-input"]', input);
+    > 44 |     await page.click("text=Beautify TypeScript");
+         |                ^
+      45 |
+      46 |     // Wait for formatting to complete
+      47 |     await page.waitForTimeout(500);
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:44:16
+    Error Context: test-results/tools-typescript-formatter-70bc9-t-TypeScript-code-correctly-chromium-retry1/error-context.md
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tools-typescript-formatter-70bc9-t-TypeScript-code-correctly-chromium-retry1/trace.zip
+    Usage:
+        npx playwright show-trace test-results/tools-typescript-formatter-70bc9-t-TypeScript-code-correctly-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+    Test timeout of 30000ms exceeded.
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('text=Beautify TypeScript')
+      42 |
+      43 |     await page.fill('[data-testid="typescript-input"]', input);
+    > 44 |     await page.click("text=Beautify TypeScript");
+         |                ^
+      45 |
+      46 |     // Wait for formatting to complete
+      47 |     await page.waitForTimeout(500);
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:44:16
+    Error Context: test-results/tools-typescript-formatter-70bc9-t-TypeScript-code-correctly-chromium-retry2/error-context.md
+  6) [chromium] › tests/e2e/tools/typescript-formatter.spec.ts:55:3 › TypeScript Formatter Tool › should minify TypeScript code correctly 
+    Test timeout of 30000ms exceeded.
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('text=Minify TypeScript')
+      57 |
+      58 |     await page.fill('[data-testid="typescript-input"]', input);
+    > 59 |     await page.click("text=Minify TypeScript");
+         |                ^
+      60 |
+      61 |     // Wait for formatting to complete
+      62 |     await page.waitForTimeout(500);
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:59:16
+    Error Context: test-results/tools-typescript-formatter-ee7de-y-TypeScript-code-correctly-chromium/error-context.md
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+    Test timeout of 30000ms exceeded.
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('text=Minify TypeScript')
+      57 |
+      58 |     await page.fill('[data-testid="typescript-input"]', input);
+    > 59 |     await page.click("text=Minify TypeScript");
+         |                ^
+      60 |
+      61 |     // Wait for formatting to complete
+      62 |     await page.waitForTimeout(500);
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:59:16
+    Error Context: test-results/tools-typescript-formatter-ee7de-y-TypeScript-code-correctly-chromium-retry1/error-context.md
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/tools-typescript-formatter-ee7de-y-TypeScript-code-correctly-chromium-retry1/trace.zip
+    Usage:
+        npx playwright show-trace test-results/tools-typescript-formatter-ee7de-y-TypeScript-code-correctly-chromium-retry1/trace.zip
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+    Retry #2 ───────────────────────────────────────────────────────────────────────────────────────
+    Test timeout of 30000ms exceeded.
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('text=Minify TypeScript')
+      57 |
+      58 |     await page.fill('[data-testid="typescript-input"]', input);
+    > 59 |     await page.click("text=Minify TypeScript");
+         |                ^
+      60 |
+      61 |     // Wait for formatting to complete
+      62 |     await page.waitForTimeout(500);
+        at /home/runner/work/FreeDevTool.App/FreeDevTool.App/tests/e2e/tools/typescript-formatter.spec.ts:59:16
+    Error Context: test-results/tools-typescript-formatter-ee7de-y-TypeScript-code-correctly-chromium-retry2/error-context.md
+  6 failed
+    [chromium] › tests/e2e/tools/graphql-formatter.spec.ts:8:3 › GraphQL Formatter Tool › should load GraphQL formatter page without errors 
+    [chromium] › tests/e2e/tools/graphql-formatter.spec.ts:51:3 › GraphQL Formatter Tool › should format GraphQL queries correctly 
+    [chromium] › tests/e2e/tools/jsonc-formatter.spec.ts:8:3 › JSONC Formatter Tool › should load JSONC formatter page without errors 
+    [chromium] › tests/e2e/tools/typescript-formatter.spec.ts:8:3 › TypeScript Formatter Tool › should load TypeScript formatter page without errors 
+    [chromium] › tests/e2e/tools/typescript-formatter.spec.ts:40:3 › TypeScript Formatter Tool › should format TypeScript code correctly 
+    [chromium] › tests/e2e/tools/typescript-formatter.spec.ts:55:3 › TypeScript Formatter Tool › should minify TypeScript code correctly 
+  20 passed (4.9m)
+make: *** [Makefile:100: e2e-test] Error 1

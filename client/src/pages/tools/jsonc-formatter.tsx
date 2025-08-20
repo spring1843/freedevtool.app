@@ -80,6 +80,7 @@ export default function JSONCFormatter() {
   };
 
   useEffect(() => {
+    document.title = "JSONC Formatter - FreeDevTool.App";
     formatCode();
   }, [formatCode]);
 

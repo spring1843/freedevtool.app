@@ -47,6 +47,7 @@ export default function TypeScriptFormatter() {
   };
 
   useEffect(() => {
+    document.title = "TypeScript Formatter - FreeDevTool.App";
     formatCode(false); // Beautify by default
   }, [formatCode]);
 

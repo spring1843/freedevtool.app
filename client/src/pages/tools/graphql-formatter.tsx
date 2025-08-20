@@ -41,6 +41,7 @@ export default function GraphQLFormatter() {
   };
 
   useEffect(() => {
+    document.title = "GraphQL Formatter - FreeDevTool.App";
     formatCode();
   }, [formatCode]);
 
