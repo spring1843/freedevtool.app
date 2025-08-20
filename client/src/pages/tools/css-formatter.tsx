@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { useLocation } from "wouter";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -24,8 +25,27 @@ const DEFAULT_LESS = `@primary-color:#007bff;@secondary-color:#6c757d;@border-ra
 type FormatType = "css" | "scss" | "less";
 
 export default function CSSFormatter() {
-  const [format, setFormat] = useState<FormatType>("css");
-  const [input, setInput] = useState(DEFAULT_CSS);
+  const [location] = useLocation();
+
+  // Determine initial format based on route
+  const getInitialFormat = (): FormatType => {
+    if (location.includes("/tools/scss-formatter")) return "scss";
+    if (location.includes("/tools/less-formatter")) return "less";
+    return "css";
+  };
+
+  const [format, setFormat] = useState<FormatType>(getInitialFormat());
+  const [input, setInput] = useState(() => {
+    const initialFormat = getInitialFormat();
+    switch (initialFormat) {
+      case "scss":
+        return DEFAULT_SCSS;
+      case "less":
+        return DEFAULT_LESS;
+      default:
+        return DEFAULT_CSS;
+    }
+  });
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -99,6 +119,26 @@ export default function CSSFormatter() {
     setOutput("");
     setError(null);
   };
+
+  // Update format when route changes
+  useEffect(() => {
+    const newFormat = getInitialFormat();
+    if (newFormat !== format) {
+      setFormat(newFormat);
+      switch (newFormat) {
+        case 'scss':
+          setInput(DEFAULT_SCSS);
+          break;
+        case 'less':
+          setInput(DEFAULT_LESS);
+          break;
+        default:
+          setInput(DEFAULT_CSS);
+      }
+      setOutput("");
+      setError(null);
+    }
+  }, [location, format]);
 
   useEffect(() => {
     formatCode(false); // Beautify by default
