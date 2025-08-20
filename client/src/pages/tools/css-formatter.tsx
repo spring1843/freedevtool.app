@@ -16,105 +16,11 @@ import { useLocation } from "wouter";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
-const DEFAULT_CSS = `/* Standard CSS Example */
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
-}
+const DEFAULT_CSS = `.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0}.card{background-color:white;padding:20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}.button{background-color:#007bff;color:white;border:none;padding:10px 20px;border-radius:4px;cursor:pointer}.button:hover{background-color:#0056b3}`;
 
-.card {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
+const DEFAULT_SCSS = `$primary-color:#007bff;$secondary-color:#6c757d;$border-radius:4px;.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0;.card{background-color:white;padding:20px;border-radius:$border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);.button{background-color:$primary-color;color:white;border:none;padding:10px 20px;border-radius:$border-radius;cursor:pointer;&:hover{background-color:darken($primary-color,10%);}}}}`;
 
-.button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.button:hover {
-  background-color: #0056b3;
-}`;
-
-const DEFAULT_SCSS = `// SCSS Variables and Nesting
-$primary-color: #28a745;
-$secondary-color: #6c757d;
-$border-radius: 8px;
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f8f9fa;
-  
-  .card {
-    background-color: white;
-    padding: 2rem;
-    border-radius: $border-radius;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    
-    .button {
-      background-color: $primary-color;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: $border-radius;
-      cursor: pointer;
-      
-      &:hover {
-        background-color: darken($primary-color, 10%);
-      }
-    }
-  }
-}`;
-
-const DEFAULT_LESS = `// LESS Variables and Mixins
-@primary-color: #dc3545;
-@secondary-color: #ffc107;
-@border-radius: 6px;
-@transition: all 0.3s ease;
-
-.button-style() {
-  border: none;
-  padding: 10px 20px;
-  border-radius: @border-radius;
-  cursor: pointer;
-  transition: @transition;
-}
-
-.container {
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  
-  .card {
-    background: white;
-    padding: 2rem;
-    border-radius: @border-radius;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    
-    .button {
-      .button-style();
-      background-color: @primary-color;
-      color: white;
-      
-      &:hover {
-        background-color: lighten(@primary-color, 10%);
-      }
-    }
-  }
-}`;
+const DEFAULT_LESS = `@primary-color:#007bff;@secondary-color:#6c757d;@border-radius:4px;.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0;.card{background-color:white;padding:20px;border-radius:@border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);.button{background-color:@primary-color;color:white;border:none;padding:10px 20px;border-radius:@border-radius;cursor:pointer;&:hover{background-color:darken(@primary-color,10%);}}}}`;
 
 type FormatType = "css" | "scss" | "less";
 
@@ -122,11 +28,11 @@ export default function CSSFormatter() {
   const [location] = useLocation();
 
   // Determine initial format based on route
-  const getInitialFormat = useCallback((): FormatType => {
+  const getInitialFormat = (): FormatType => {
     if (location.includes("/tools/scss-formatter")) return "scss";
     if (location.includes("/tools/less-formatter")) return "less";
     return "css";
-  }, [location]);
+  };
 
   const [format, setFormat] = useState<FormatType>(getInitialFormat());
   const [input, setInput] = useState(() => {
@@ -220,10 +126,10 @@ export default function CSSFormatter() {
     if (newFormat !== format) {
       setFormat(newFormat);
       switch (newFormat) {
-        case "scss":
+        case 'scss':
           setInput(DEFAULT_SCSS);
           break;
-        case "less":
+        case 'less':
           setInput(DEFAULT_LESS);
           break;
         default:
@@ -232,7 +138,7 @@ export default function CSSFormatter() {
       setOutput("");
       setError(null);
     }
-  }, [location, format, getInitialFormat]);
+  }, [location, format]);
 
   useEffect(() => {
     formatCode(false); // Beautify by default
@@ -354,16 +260,12 @@ export default function CSSFormatter() {
             and spacing for readability
           </div>
           <div>
-            • <strong>Minify:</strong> Removes whitespace, comments, and
-            unnecessary characters to reduce file size
+            • <strong>Minify:</strong> Removes all unnecessary whitespace and
+            comments to reduce file size
           </div>
           <div>
-            • <strong>Auto-format:</strong> Automatically beautifies code when
-            switching between formats
-          </div>
-          <div>
-            • <strong>Copy Output:</strong> Click the copy button to save the
-            formatted code to your clipboard
+            • <strong>Benefits:</strong> Beautified CSS is easier to maintain,
+            minified CSS loads faster
           </div>
         </div>
       </div>
