@@ -116,16 +116,10 @@ export const toolsData: ToolData = {
         description: "Format LESS CSS preprocessor files",
       },
       {
-        name: "JavaScript Formatter",
-        path: "/tools/javascript-formatter",
-        shortcut: "Ctrl+Shift+J",
-        description: "Format and beautify JavaScript code with Babel parser",
-      },
-      {
-        name: "TypeScript Formatter",
+        name: "JavaScript/TypeScript Formatter",
         path: "/tools/typescript-formatter",
         shortcut: "Ctrl+Shift+TS",
-        description: "Format and beautify TypeScript code",
+        description: "Format JavaScript and TypeScript code with Prettier",
       },
       {
         name: "SCSS Formatter",

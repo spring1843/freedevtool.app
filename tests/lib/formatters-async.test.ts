@@ -5,7 +5,6 @@ import {
   formatYAML,
   formatMarkdown,
   formatLESS,
-  formatJavaScript,
   formatTypeScript,
   formatSCSS,
   formatJSONC,
@@ -78,23 +77,6 @@ describe("Async Formatter Functions", () => {
     it("should minify LESS", async () => {
       const input = ".class {\n  color: @primary-color;\n}";
       const result = await formatLESS(input, true);
-      expect(result.error).toBeUndefined();
-      expect(result.formatted.length).toBeLessThan(input.length);
-    });
-  });
-
-  describe("JavaScript Formatting", () => {
-    it("should format JavaScript with Prettier", async () => {
-      const input = "function test(){return'hello';}";
-      const result = await formatJavaScript(input, false);
-      expect(result.error).toBeUndefined();
-      expect(result.formatted).toContain("function test()");
-      expect(result.formatted).toContain("return");
-    });
-
-    it("should minify JavaScript", async () => {
-      const input = "function test() {\n  return 'hello world';\n}";
-      const result = await formatJavaScript(input, true);
       expect(result.error).toBeUndefined();
       expect(result.formatted.length).toBeLessThan(input.length);
     });

@@ -56,10 +56,11 @@ export default function TypeScriptFormatter() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-              TypeScript Formatter
+              JavaScript/TypeScript Formatter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Format, beautify, or minify TypeScript code using Prettier
+              Format, beautify, or minify JavaScript and TypeScript code using
+              Prettier
             </p>
           </div>
           <SecurityBanner variant="compact" />
@@ -80,14 +81,14 @@ export default function TypeScriptFormatter() {
           className="bg-green-600 hover:bg-green-700 text-white"
         >
           <Code className="w-4 h-4 mr-2" />
-          Beautify TypeScript
+          Beautify Code
         </Button>
         <Button
           onClick={() => formatCode(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           <Minimize2 className="w-4 h-4 mr-2" />
-          Minify TypeScript
+          Minify Code
         </Button>
         <Button onClick={handleReset} variant="outline">
           <RotateCcw className="w-4 h-4 mr-2" />
@@ -98,13 +99,13 @@ export default function TypeScriptFormatter() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Input TypeScript</CardTitle>
+            <CardTitle>Input JavaScript/TypeScript</CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
-              placeholder="Paste your TypeScript code here..."
+              placeholder="Paste your JavaScript or TypeScript code here..."
               data-testid="typescript-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
@@ -122,7 +123,7 @@ export default function TypeScriptFormatter() {
             <Textarea
               value={output}
               readOnly={true}
-              placeholder="Formatted TypeScript will appear here..."
+              placeholder="Formatted JavaScript/TypeScript will appear here..."
               data-testid="typescript-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={20}
