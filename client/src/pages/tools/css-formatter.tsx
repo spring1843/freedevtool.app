@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCSS, formatLESS, formatSCSS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
@@ -10,7 +17,14 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 
 const DEFAULT_CSS = `.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0}.card{background-color:white;padding:20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}.button{background-color:#007bff;color:white;border:none;padding:10px 20px;border-radius:4px;cursor:pointer}.button:hover{background-color:#0056b3}`;
 
+const DEFAULT_SCSS = `$primary-color:#007bff;$secondary-color:#6c757d;$border-radius:4px;.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0;.card{background-color:white;padding:20px;border-radius:$border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);.button{background-color:$primary-color;color:white;border:none;padding:10px 20px;border-radius:$border-radius;cursor:pointer;&:hover{background-color:darken($primary-color,10%);}}}}`;
+
+const DEFAULT_LESS = `@primary-color:#007bff;@secondary-color:#6c757d;@border-radius:4px;.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0;.card{background-color:white;padding:20px;border-radius:@border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);.button{background-color:@primary-color;color:white;border:none;padding:10px 20px;border-radius:@border-radius;cursor:pointer;&:hover{background-color:darken(@primary-color,10%);}}}}`;
+
+type FormatType = "css" | "scss" | "less";
+
 export default function CSSFormatter() {
+  const [format, setFormat] = useState<FormatType>("css");
   const [input, setInput] = useState(DEFAULT_CSS);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -18,24 +32,17 @@ export default function CSSFormatter() {
   const formatCode = useCallback(
     async (minify = false) => {
       try {
-        // Auto-detect format based on content patterns
         let formatter = formatCSS;
 
-        // Check for SCSS patterns
-        if (
-          input.includes("$") ||
-          input.includes("@import") ||
-          input.includes("@mixin") ||
-          input.includes("@include")
-        ) {
-          formatter = formatSCSS;
-        }
-        // Check for LESS patterns
-        else if (
-          input.includes("@") &&
-          (input.includes(".") || input.includes("#"))
-        ) {
-          formatter = formatLESS;
+        switch (format) {
+          case "scss":
+            formatter = formatSCSS;
+            break;
+          case "less":
+            formatter = formatLESS;
+            break;
+          default:
+            formatter = formatCSS;
         }
 
         const { formatted, error: formatError } = await formatter(
@@ -50,7 +57,7 @@ export default function CSSFormatter() {
         );
       }
     },
-    [input]
+    [input, format]
   );
 
   const handleInputChange = (value: string) => {
@@ -60,8 +67,35 @@ export default function CSSFormatter() {
     }
   };
 
+  const handleFormatChange = (newFormat: FormatType) => {
+    setFormat(newFormat);
+    setOutput("");
+    setError(null);
+
+    // Change default input based on format
+    switch (newFormat) {
+      case "scss":
+        setInput(DEFAULT_SCSS);
+        break;
+      case "less":
+        setInput(DEFAULT_LESS);
+        break;
+      default:
+        setInput(DEFAULT_CSS);
+    }
+  };
+
   const handleReset = () => {
-    setInput(DEFAULT_CSS);
+    switch (format) {
+      case "scss":
+        setInput(DEFAULT_SCSS);
+        break;
+      case "less":
+        setInput(DEFAULT_LESS);
+        break;
+      default:
+        setInput(DEFAULT_CSS);
+    }
     setOutput("");
     setError(null);
   };
@@ -95,25 +129,43 @@ export default function CSSFormatter() {
         </Alert>
       ) : null}
 
-      <div className="mb-6 flex gap-4">
-        <Button
-          onClick={() => formatCode(false)}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          <Code className="w-4 h-4 mr-2" />
-          Beautify Code
-        </Button>
-        <Button
-          onClick={() => formatCode(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-        >
-          <Minimize2 className="w-4 h-4 mr-2" />
-          Minify Code
-        </Button>
-        <Button onClick={handleReset} variant="outline">
-          <RotateCcw className="w-4 h-4 mr-2" />
-          Reset
-        </Button>
+      <div className="mb-6 flex flex-wrap gap-4 items-center">
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+            Format:
+          </label>
+          <Select value={format} onValueChange={handleFormatChange}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="css">CSS</SelectItem>
+              <SelectItem value="scss">SCSS</SelectItem>
+              <SelectItem value="less">LESS</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex gap-4">
+          <Button
+            onClick={() => formatCode(false)}
+            className="bg-green-600 hover:bg-green-700 text-white"
+          >
+            <Code className="w-4 h-4 mr-2" />
+            Beautify Code
+          </Button>
+          <Button
+            onClick={() => formatCode(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            <Minimize2 className="w-4 h-4 mr-2" />
+            Minify Code
+          </Button>
+          <Button onClick={handleReset} variant="outline">
+            <RotateCcw className="w-4 h-4 mr-2" />
+            Reset
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -159,6 +211,10 @@ export default function CSSFormatter() {
           CSS/LESS/SCSS Formatting Options:
         </h3>
         <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
+          <div>
+            • <strong>Format Selector:</strong> Choose CSS, SCSS, or LESS to use
+            the appropriate parser and formatting rules
+          </div>
           <div>
             • <strong>Beautify:</strong> Adds proper indentation, line breaks,
             and spacing for readability
