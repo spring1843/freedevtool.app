@@ -7,7 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-// import { useTheme } from "@/providers/theme-provider";
+import { useTheme } from "@/providers/theme-provider";
 import { Link } from "wouter";
 import { useSearch } from "@/hooks/use-search";
 import { SearchResults } from "@/components/ui/search-results";
@@ -19,9 +19,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  // Temporarily disabled theme for debugging
-  const theme = "light";
-  const setTheme = () => {};
+  const { theme, setTheme } = useTheme();
   const {
     searchQuery,
     setSearchQuery,

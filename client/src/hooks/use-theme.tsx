@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { type Theme, ThemeProviderContext } from "../contexts/theme-context";
+import { useEffect, useState } from "react";
+import { type Theme, ThemeProviderContext } from "@/contexts/theme-context";
 
 interface ThemeProviderProps {
   children: React.ReactNode;
