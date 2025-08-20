@@ -138,7 +138,7 @@ export default function CSSFormatter() {
       setOutput("");
       setError(null);
     }
-  }, [location, format, getInitialFormat]);
+  }, [getInitialFormat, format]);
 
   useEffect(() => {
     formatCode(false); // Beautify by default
