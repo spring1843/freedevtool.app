@@ -28,11 +28,11 @@ export default function CSSFormatter() {
   const [location] = useLocation();
 
   // Determine initial format based on route
-  const getInitialFormat = (): FormatType => {
+  const getInitialFormat = useCallback((): FormatType => {
     if (location.includes("/tools/scss-formatter")) return "scss";
     if (location.includes("/tools/less-formatter")) return "less";
     return "css";
-  };
+  }, [location]);
 
   const [format, setFormat] = useState<FormatType>(getInitialFormat());
   const [input, setInput] = useState(() => {
@@ -138,7 +138,7 @@ export default function CSSFormatter() {
       setOutput("");
       setError(null);
     }
-  }, [location, format]);
+  }, [location, format, getInitialFormat]);
 
   useEffect(() => {
     formatCode(false); // Beautify by default
