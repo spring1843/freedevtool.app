@@ -1,6 +1,69 @@
 import * as yaml from "js-yaml";
 import * as prettier from "prettier";
 
+// Custom JavaScript/TypeScript formatter fallback
+function customJSFormatter(input: string): string {
+  const lines = input.split("\n");
+  let formatted = "";
+  let indentLevel = 0;
+  const indentStr = "  ";
+  let inString = false;
+  let stringChar = "";
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    if (!line) {
+      formatted += "\n";
+      continue;
+    }
+
+    // Handle comments
+    if (line.startsWith("//") || line.startsWith("/*")) {
+      formatted += `${indentStr.repeat(indentLevel)}${line}\n`;
+      continue;
+    }
+
+    // Track string state
+    for (let j = 0; j < line.length; j++) {
+      const char = line[j];
+      if (
+        (char === '"' || char === "'" || char === "`") &&
+        line[j - 1] !== "\\"
+      ) {
+        if (!inString) {
+          inString = true;
+          stringChar = char;
+        } else if (char === stringChar) {
+          inString = false;
+          stringChar = "";
+        }
+      }
+    }
+
+    // Adjust indentation for closing braces/brackets
+    if (
+      !inString &&
+      (line.startsWith("}") || line.startsWith("]") || line.startsWith(")"))
+    ) {
+      indentLevel = Math.max(0, indentLevel - 1);
+    }
+
+    // Add formatted line
+    formatted += `${indentStr.repeat(indentLevel)}${line}\n`;
+
+    // Adjust indentation for opening braces/brackets
+    if (
+      !inString &&
+      (line.endsWith("{") || line.endsWith("[") || line.endsWith("("))
+    ) {
+      indentLevel++;
+    }
+  }
+
+  return formatted.trim();
+}
+
 export async function formatJSON(input: string): Promise<{
   formatted: string;
   error?: string;
@@ -628,9 +691,9 @@ export async function formatTypeScript(
   try {
     if (minify) {
       try {
-        // Use Prettier to format TypeScript first, then minify
+        // Try babel parser first for minification
         const prettierFormatted = await prettier.format(input, {
-          parser: "typescript",
+          parser: "babel",
           printWidth: 1000,
           tabWidth: 0,
           useTabs: false,
@@ -639,7 +702,7 @@ export async function formatTypeScript(
           trailingComma: "none",
         });
 
-        // Basic minification for TypeScript
+        // Basic minification for TypeScript/JavaScript
         const minified = prettierFormatted
           .replace(/\/\*[\s\S]*?\*\//g, "")
           .replace(/\/\/.*$/gm, "")
@@ -664,9 +727,9 @@ export async function formatTypeScript(
     }
 
     try {
-      // Use Prettier for TypeScript beautification
+      // Try babel parser first (supports both JS and TS)
       const formatted = await prettier.format(input, {
-        parser: "typescript",
+        parser: "babel",
         printWidth: 80,
         tabWidth: 2,
         useTabs: false,
@@ -678,10 +741,16 @@ export async function formatTypeScript(
       });
       return { formatted };
     } catch (prettierError) {
-      return {
-        formatted: input,
-        error: `TypeScript formatting error: ${prettierError instanceof Error ? prettierError.message : "Prettier formatting failed"}`,
-      };
+      // Fallback to custom TypeScript/JavaScript formatting
+      try {
+        const formatted = customJSFormatter(input);
+        return { formatted };
+      } catch {
+        return {
+          formatted: input,
+          error: `TypeScript formatting error: ${prettierError instanceof Error ? prettierError.message : "Prettier formatting failed"}`,
+        };
+      }
     }
   } catch (error) {
     return {
