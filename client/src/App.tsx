@@ -19,9 +19,7 @@ import HtmlFormatter from "@/pages/tools/html-formatter";
 import YamlFormatter from "@/pages/tools/yaml-formatter";
 import MarkdownFormatter from "@/pages/tools/markdown-formatter";
 import CssFormatter from "@/pages/tools/css-formatter";
-import LessFormatter from "@/pages/tools/less-formatter";
 import TypeScriptFormatter from "@/pages/tools/typescript-formatter";
-import SCSSFormatter from "@/pages/tools/scss-formatter";
 import GraphQLFormatter from "@/pages/tools/graphql-formatter";
 import TimeFormatter from "@/pages/tools/time-formatter";
 import Base64Encoder from "@/pages/tools/base64-encoder";
@@ -90,13 +88,13 @@ function Router() {
         <Route path="/tools/yaml-formatter" component={YamlFormatter} />
         <Route path="/tools/markdown-formatter" component={MarkdownFormatter} />
         <Route path="/tools/css-formatter" component={CssFormatter} />
-        <Route path="/tools/less-formatter" component={LessFormatter} />
+        <Route path="/tools/less-formatter" component={CssFormatter} />
+        <Route path="/tools/scss-formatter" component={CssFormatter} />
 
         <Route
           path="/tools/typescript-formatter"
           component={TypeScriptFormatter}
         />
-        <Route path="/tools/scss-formatter" component={SCSSFormatter} />
         <Route path="/tools/graphql-formatter" component={GraphQLFormatter} />
         <Route path="/tools/time-formatter" component={TimeFormatter} />
 

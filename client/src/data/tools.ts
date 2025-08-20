@@ -104,16 +104,10 @@ export const toolsData: ToolData = {
         description: "Format Markdown with live preview",
       },
       {
-        name: "CSS Formatter",
+        name: "CSS/LESS/SCSS Formatter",
         path: "/tools/css-formatter",
         shortcut: "Ctrl+Shift+C",
-        description: "Format and beautify CSS stylesheets",
-      },
-      {
-        name: "LESS Formatter",
-        path: "/tools/less-formatter",
-        shortcut: "Ctrl+L",
-        description: "Format LESS CSS preprocessor files",
+        description: "Format CSS, LESS, and SCSS stylesheets with Prettier",
       },
       {
         name: "JavaScript/TypeScript Formatter",
@@ -121,12 +115,7 @@ export const toolsData: ToolData = {
         shortcut: "Ctrl+Shift+TS",
         description: "Format JavaScript and TypeScript code with Prettier",
       },
-      {
-        name: "SCSS Formatter",
-        path: "/tools/scss-formatter",
-        shortcut: "Ctrl+Shift+S",
-        description: "Format SCSS/Sass preprocessor files",
-      },
+
       {
         name: "GraphQL Formatter",
         path: "/tools/graphql-formatter",

@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { formatCSS } from "@/lib/formatters";
+import { formatCSS, formatLESS, formatSCSS } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
@@ -18,7 +18,27 @@ export default function CSSFormatter() {
   const formatCode = useCallback(
     async (minify = false) => {
       try {
-        const { formatted, error: formatError } = await formatCSS(
+        // Auto-detect format based on content patterns
+        let formatter = formatCSS;
+
+        // Check for SCSS patterns
+        if (
+          input.includes("$") ||
+          input.includes("@import") ||
+          input.includes("@mixin") ||
+          input.includes("@include")
+        ) {
+          formatter = formatSCSS;
+        }
+        // Check for LESS patterns
+        else if (
+          input.includes("@") &&
+          (input.includes(".") || input.includes("#"))
+        ) {
+          formatter = formatLESS;
+        }
+
+        const { formatted, error: formatError } = await formatter(
           input,
           minify
         );
@@ -56,10 +76,11 @@ export default function CSSFormatter() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-              CSS Formatter
+              CSS/LESS/SCSS Formatter
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-              Format, beautify, or minify CSS code
+              Format, beautify, or minify CSS, LESS, and SCSS stylesheets using
+              Prettier
             </p>
           </div>
           <SecurityBanner variant="compact" />
@@ -80,14 +101,14 @@ export default function CSSFormatter() {
           className="bg-green-600 hover:bg-green-700 text-white"
         >
           <Code className="w-4 h-4 mr-2" />
-          Beautify CSS
+          Beautify Code
         </Button>
         <Button
           onClick={() => formatCode(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           <Minimize2 className="w-4 h-4 mr-2" />
-          Minify CSS
+          Minify Code
         </Button>
         <Button onClick={handleReset} variant="outline">
           <RotateCcw className="w-4 h-4 mr-2" />
@@ -98,13 +119,13 @@ export default function CSSFormatter() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Input CSS</CardTitle>
+            <CardTitle>Input CSS/LESS/SCSS</CardTitle>
           </CardHeader>
           <CardContent>
             <Textarea
               value={input}
               onChange={e => handleInputChange(e.target.value)}
-              placeholder="Paste your CSS here..."
+              placeholder="Paste your CSS, LESS, or SCSS code here..."
               data-testid="css-input"
               className="min-h-[400px] font-mono text-sm"
               rows={20}
@@ -122,7 +143,7 @@ export default function CSSFormatter() {
             <Textarea
               value={output}
               readOnly={true}
-              placeholder="Formatted CSS will appear here..."
+              placeholder="Formatted CSS/LESS/SCSS will appear here..."
               data-testid="css-output"
               className="min-h-[400px] font-mono text-sm bg-slate-50 dark:bg-slate-900"
               rows={20}
@@ -135,7 +156,7 @@ export default function CSSFormatter() {
 
       <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
         <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
-          CSS Formatting Options:
+          CSS/LESS/SCSS Formatting Options:
         </h3>
         <div className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
           <div>
