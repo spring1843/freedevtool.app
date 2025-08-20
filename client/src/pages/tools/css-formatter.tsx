@@ -126,10 +126,10 @@ export default function CSSFormatter() {
     if (newFormat !== format) {
       setFormat(newFormat);
       switch (newFormat) {
-        case 'scss':
+        case "scss":
           setInput(DEFAULT_SCSS);
           break;
-        case 'less':
+        case "less":
           setInput(DEFAULT_LESS);
           break;
         default:
