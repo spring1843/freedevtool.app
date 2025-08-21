@@ -14,6 +14,7 @@ import { Calculator, RotateCcw, TrendingUp, BarChart3 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { DEFAULT_COMPOUND_PRINCIPAL, DEFAULT_COMPOUND_ANNUAL_RATE, DEFAULT_COMPOUND_YEARS, DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION } from "@/data/defaults";
 import {
   XAxis,
   YAxis,
@@ -38,10 +39,10 @@ interface CompoundInterestResult {
 }
 
 export default function CompoundInterestCalculator() {
-  const [principal, setPrincipal] = useState(10000);
-  const [annualRate, setAnnualRate] = useState(12);
-  const [years, setYears] = useState(20);
-  const [monthlyContribution, setMonthlyContribution] = useState(500);
+  const [principal, setPrincipal] = useState(DEFAULT_COMPOUND_PRINCIPAL);
+  const [annualRate, setAnnualRate] = useState(DEFAULT_COMPOUND_ANNUAL_RATE);
+  const [years, setYears] = useState(DEFAULT_COMPOUND_YEARS);
+  const [monthlyContribution, setMonthlyContribution] = useState(DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION);
   const [contributionFrequency, setContributionFrequency] = useState<
     "monthly" | "yearly"
   >("monthly");
@@ -128,12 +129,12 @@ export default function CompoundInterestCalculator() {
   ]);
 
   const handleReset = () => {
-    setPrincipal(10000);
-    setAnnualRate(7);
-    setYears(10);
-    setMonthlyContribution(500);
+    setPrincipal(DEFAULT_COMPOUND_PRINCIPAL);
+    setAnnualRate(DEFAULT_COMPOUND_ANNUAL_RATE);
+    setYears(DEFAULT_COMPOUND_YEARS);
+    setMonthlyContribution(DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION);
     setContributionFrequency("monthly");
-    setInterestFrequency("monthly");
+    setInterestFrequency("yearly");
     setResult(null);
   };
 
