@@ -288,12 +288,15 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
     <TooltipProvider>
       <aside
         ref={sidebarRef}
-        className={cn("w-full bg-white dark:bg-slate-900 h-auto", className)}
+        className={cn(
+          "w-full bg-white dark:bg-slate-900 h-full flex flex-col",
+          className
+        )}
         tabIndex={0}
         role="navigation"
         aria-label="Tool navigation menu"
       >
-        <nav className="p-6 space-y-3">
+        <nav className="p-6 space-y-3 flex-1 overflow-y-auto custom-scrollbar min-h-0">
           {/* Expand/Collapse All Controls */}
           <div className="flex gap-2 mb-4">
             <Button
@@ -363,6 +366,16 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                       <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                     ) : null}
                     {categoryName}
+                    <span
+                      className={cn(
+                        "text-xs px-1.5 py-0.5 rounded-full font-medium transition-all duration-300",
+                        isCategoryActive
+                          ? "bg-primary/20 text-primary"
+                          : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400"
+                      )}
+                    >
+                      {categoryData.tools.length}
+                    </span>
                   </span>
                   {isExpanded ? (
                     <ChevronDown
