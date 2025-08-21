@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 
@@ -15,7 +14,7 @@ import {
   getTimezoneOffset,
   getUserTimezone,
 } from "@/lib/time-tools";
-import { Clock, Globe, Plus, X, Search } from "lucide-react";
+import { Clock, Globe, Plus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function WorldClock() {
@@ -28,7 +27,7 @@ export default function WorldClock() {
   const [displayedCities, setDisplayedCities] = useState<
     typeof defaultWorldClockCities
   >([]);
-  const [searchQuery, setSearchQuery] = useState("");
+
   const [selectedTimezone, setSelectedTimezone] = useState(getUserTimezone());
   const [showAddClock, setShowAddClock] = useState(false);
 
@@ -92,14 +91,6 @@ export default function WorldClock() {
       day: "numeric",
     });
 
-  // Filter timezones based on search
-  const filteredTimezones = allTimezones.filter(
-    city =>
-      city.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      city.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      city.timezone.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   // Add new clock
   const addClock = () => {
     if (!selectedTimezone) {
@@ -126,7 +117,7 @@ export default function WorldClock() {
 
     setDisplayedCities([...displayedCities, timezone]);
     setSelectedTimezone("");
-    setSearchQuery("");
+
     setShowAddClock(false);
 
     toast({
@@ -164,64 +155,41 @@ export default function WorldClock() {
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
-          World Clock
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Browse all continents and important time zones, then add the ones
-          you're interested in to your custom clocks
-        </p>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-semibold text-slate-900 dark:text-slate-100 mb-2">
+            World Clock
+          </h2>
+          <p className="text-slate-600 dark:text-slate-400">
+            Browse all continents and important time zones, then add the ones
+            you're interested in to your custom clocks
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            onClick={() => setShowAddClock(!showAddClock)}
+            data-testid="add-clock-toggle"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Clock
+          </Button>
+          {displayedCities.length > 0 && (
+            <Button
+              onClick={resetToDefault}
+              variant="outline"
+              data-testid="reset-clocks"
+            >
+              <X className="w-4 h-4 mr-2" />
+              Clear All
+            </Button>
+          )}
+        </div>
       </div>
 
-      {/* Add Clock Control */}
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span className="flex items-center">
-              <Plus className="w-5 h-5 mr-2" />
-              Add Clock
-            </span>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => setShowAddClock(!showAddClock)}
-                size="sm"
-                data-testid="add-clock-toggle"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                {showAddClock ? "Hide" : "Show"}
-              </Button>
-              {displayedCities.length > 0 && (
-                <Button
-                  onClick={resetToDefault}
-                  variant="outline"
-                  size="sm"
-                  data-testid="reset-clocks"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Clear All
-                </Button>
-              )}
-            </div>
-          </CardTitle>
-        </CardHeader>
-        {showAddClock ? <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="timezone-search">Search Timezone</Label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <Input
-                    id="timezone-search"
-                    placeholder="Search by city or country..."
-                    value={searchQuery}
-                    onChange={e => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                    data-testid="timezone-search"
-                  />
-                </div>
-              </div>
-
+      {/* Add Clock Dropdown */}
+      {showAddClock ? <Card className="mb-6">
+          <CardContent className="pt-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="timezone-select">Select Timezone</Label>
                 <TimezoneSelector
@@ -231,7 +199,6 @@ export default function WorldClock() {
                   data-testid="timezone-select"
                 />
               </div>
-
               <div className="flex items-end">
                 <Button
                   onClick={addClock}
@@ -243,17 +210,8 @@ export default function WorldClock() {
                 </Button>
               </div>
             </div>
-
-            <div className="text-sm text-slate-600 dark:text-slate-400">
-              <p>
-                <strong>Custom clocks:</strong> {displayedCities.length}
-              </p>
-              <p>
-                <strong>Available timezones:</strong> {filteredTimezones.length}
-              </p>
-            </div>
-          </CardContent> : null}
-      </Card>
+          </CardContent>
+        </Card> : null}
 
       {/* Custom Clocks Section - Show above local time */}
       {displayedCities.length > 0 && (
