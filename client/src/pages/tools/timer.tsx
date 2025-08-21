@@ -477,7 +477,7 @@ export default function Timer() {
                   max="59"
                   value={newTimerMinutes}
                   onChange={e =>
-                    setNewTimerMinutes(parseInt(e.target.value) || 0)
+                    setNewTimerMinutes(parseInt(e.target.value, 10) || 0)
                   }
                   data-testid="timer-minutes-input"
                 />
