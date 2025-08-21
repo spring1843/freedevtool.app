@@ -187,7 +187,8 @@ export default function WorldClock() {
       </div>
 
       {/* Add Clock Dropdown */}
-      {showAddClock ? <Card className="mb-6">
+      {showAddClock ? (
+        <Card className="mb-6">
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div>
@@ -211,7 +212,8 @@ export default function WorldClock() {
               </div>
             </div>
           </CardContent>
-        </Card> : null}
+        </Card>
+      ) : null}
 
       {/* Custom Clocks Section - Show above local time */}
       {displayedCities.length > 0 && (
