@@ -69,30 +69,31 @@ test.describe("Demo End-to-End Test", () => {
     const visitedTools = new Set<string>();
     let lastUrl = "";
 
-    // Monitor URL changes for a longer period to visit more tools
-    let checksWithoutNewTool = 0;
-    const maxChecksWithoutNewTool = 25;
-
-    while (
-      checksWithoutNewTool < maxChecksWithoutNewTool &&
-      visitedTools.size < 15
-    ) {
-      await page.waitForTimeout(150); // Short wait between checks
-
+    // Monitor URL changes until demo completes
+    while (true) {
       const currentUrl = page.url();
+
+      // Check if we're back at homepage (demo completed)
+      if (
+        currentUrl.endsWith("/") &&
+        !currentUrl.includes("/tools/") &&
+        visitedTools.size > 0
+      ) {
+        console.warn("Demo completed - returned to homepage");
+        break;
+      }
+
       if (currentUrl !== lastUrl && currentUrl.includes("/tools/")) {
         const toolPath = currentUrl.split("/tools/")[1];
         if (toolPath && !visitedTools.has(toolPath)) {
           visitedTools.add(toolPath);
-          lastUrl = currentUrl;
           console.warn(
             `Visited tool: ${toolPath} (${visitedTools.size} total)`
           );
-          checksWithoutNewTool = 0;
         }
-      } else {
-        checksWithoutNewTool++;
       }
+
+      lastUrl = currentUrl;
 
       // Check if demo is still running
       const isDemoRunning = await page
@@ -103,20 +104,18 @@ test.describe("Demo End-to-End Test", () => {
       }
     }
 
-    // Verify we visited a substantial number of tools
-    expect(visitedTools.size).toBeGreaterThan(5);
-    console.warn(
-      `Visited ${visitedTools.size} tools during demo navigation test`
-    );
-    console.warn(
-      `Tools visited: ${Array.from(visitedTools).sort().join(", ")}`
-    );
+    // Verify we visited all 47 tools
+    expect(visitedTools.size).toBe(47);
 
-    // Stop demo for cleanup
-    const stopButton = page.locator('button:has-text("Stop")');
-    if (await stopButton.isVisible()) {
-      await stopButton.click();
-    }
+    // Verify we're back at homepage with explicit URL check
+    const finalUrl = page.url();
+    expect(finalUrl.endsWith("/")).toBeTruthy();
+    expect(finalUrl).not.toContain("/tools/");
+
+    // Additional check to ensure homepage content is visible
+    await expect(
+      page.locator('[data-testid="start-demo-button"]')
+    ).toBeVisible();
 
     // Verify no critical JavaScript errors
     const errors = await page.evaluate(
