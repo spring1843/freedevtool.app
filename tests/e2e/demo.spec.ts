@@ -119,9 +119,24 @@ test.describe("Demo End-to-End Test", () => {
 
     // Get all available tool paths and find missing ones
     const allToolPaths = getAllToolPaths();
-    const missingTools = allToolPaths.filter(
-      path => !visitedTools.has(path.replace("/tools/", ""))
-    );
+    const visitedToolsArray = Array.from(visitedTools);
+    const missingTools = allToolPaths.filter(path => {
+      const toolName = path.replace("/tools/", "");
+      // Check if any visited tool URL contains this tool name
+      return !visitedToolsArray.some(visitedTool =>
+        visitedTool.includes(toolName)
+      );
+    });
+
+    // Enhanced debugging output
+    console.warn(`\n=== Demo Test Results ===`);
+    console.warn(`Expected tools: ${getToolsCount()}`);
+    console.warn(`Visited tools: ${visitedTools.size}`);
+    console.warn(`Visited tool paths:`, visitedToolsArray.sort());
+    if (missingTools.length > 0) {
+      console.warn(`Missing tools:`, missingTools);
+    }
+    console.warn(`=========================\n`);
 
     expect(
       visitedTools.size,
