@@ -47,6 +47,7 @@ import {
 interface SidebarProps {
   className?: string;
   collapsed?: boolean;
+  onToolClick?: () => void; // Callback for when a tool is clicked (to close mobile menu)
 }
 
 // Icon mapping function based on category and tool name
@@ -121,7 +122,11 @@ function getToolIcon(category: string, toolName: string) {
   return iconMap[category]?.[toolName] || <Square className="w-4 h-4" />;
 }
 
-export function Sidebar({ className, collapsed = false }: SidebarProps) {
+export function Sidebar({
+  className,
+  collapsed = false,
+  onToolClick,
+}: SidebarProps) {
   const [location] = useLocation();
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
@@ -420,6 +425,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                             <Link href={toolPath}>
                               <Button
                                 variant="ghost"
+                                onClick={onToolClick} // Close mobile menu when tool is clicked
                                 className={cn(
                                   "w-full justify-start text-sm transition-all duration-300 relative rounded-xl h-11 group hover:scale-[1.02] hover:shadow-sm",
                                   (() => {

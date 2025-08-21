@@ -306,7 +306,10 @@ export function Layout({ children }: LayoutProps) {
                     </SheetDescription>
                   </SheetHeader>
                   <div className="h-full overflow-y-auto custom-scrollbar">
-                    <Sidebar collapsed={false} />
+                    <Sidebar
+                      collapsed={false}
+                      onToolClick={() => setMobileMenuOpen(false)}
+                    />
                   </div>
                 </SheetContent>
               </Sheet>
@@ -341,7 +344,10 @@ export function Layout({ children }: LayoutProps) {
                     </SheetDescription>
                   </SheetHeader>
                   <div className="h-full overflow-y-auto custom-scrollbar">
-                    <Sidebar collapsed={false} />
+                    <Sidebar
+                      collapsed={false}
+                      onToolClick={() => setMobileMenuOpen(false)}
+                    />
                   </div>
                 </SheetContent>
               </Sheet>
