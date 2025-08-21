@@ -5,8 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
+
 import {
-  defaultWorldClockCities,
+  type defaultWorldClockCities,
   allTimezones,
   continentalCities,
   getTimeForTimezone,
@@ -24,13 +25,13 @@ export default function WorldClock() {
   const [continentalTimes, setContinentalTimes] = useState<
     Record<string, { time: string; date: string; offset: string }>
   >({});
-  const [displayedCities, setDisplayedCities] = useState(
-    defaultWorldClockCities
-  );
+  const [displayedCities, setDisplayedCities] = useState<
+    typeof defaultWorldClockCities
+  >([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTimezone, setSelectedTimezone] = useState(getUserTimezone());
   const [showAddClock, setShowAddClock] = useState(false);
-  const [showContinentalView, setShowContinentalView] = useState(false);
+  const [showContinentalView, setShowContinentalView] = useState(true);
 
   const { toast } = useToast();
 
@@ -152,12 +153,12 @@ export default function WorldClock() {
     });
   };
 
-  // Reset to default clocks
+  // Clear all custom clocks
   const resetToDefault = () => {
-    setDisplayedCities(defaultWorldClockCities);
+    setDisplayedCities([]);
     toast({
-      title: "Reset Complete",
-      description: "World clock reset to default cities.",
+      title: "Custom Clocks Cleared",
+      description: "All custom clocks have been removed.",
     });
   };
 
@@ -169,7 +170,8 @@ export default function WorldClock() {
           World Clock
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
-          View current time across world cities and add your own custom clocks
+          Browse all continents and important time zones, then add the ones
+          you're interested in to your custom clocks
         </p>
       </div>
 
@@ -189,7 +191,9 @@ export default function WorldClock() {
                 data-testid="continental-view-toggle"
               >
                 <Globe className="w-4 h-4 mr-2" />
-                Continental View
+                {showContinentalView
+                  ? "Hide Continental View"
+                  : "Show Continental View"}
               </Button>
               <Button
                 onClick={() => setShowAddClock(!showAddClock)}
@@ -197,7 +201,7 @@ export default function WorldClock() {
                 data-testid="add-clock-toggle"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Add Clock
+                {showAddClock ? "Hide Add Clock" : "Add Clock"}
               </Button>
               <Button
                 onClick={resetToDefault}
@@ -205,7 +209,7 @@ export default function WorldClock() {
                 size="sm"
                 data-testid="reset-clocks"
               >
-                Reset to Default
+                Clear Custom Clocks
               </Button>
             </div>
           </CardTitle>
@@ -416,71 +420,88 @@ export default function WorldClock() {
               </Card>
             ))}
         </div>
-      ) : (
-        /* Custom Cities Grid - Sorted by timezone offset */
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {displayedCities
-            .sort((a, b) => {
-              const timeDataA = currentTimes[a.timezone];
-              const timeDataB = currentTimes[b.timezone];
-              if (!timeDataA || !timeDataB) return 0;
-              const offsetA =
-                parseInt(timeDataA.offset.replace(/[^\d-]/g, ""), 10) || 0;
-              const offsetB =
-                parseInt(timeDataB.offset.replace(/[^\d-]/g, ""), 10) || 0;
-              return offsetA - offsetB;
-            })
-            .map((city, index) => {
-              const timeData = currentTimes[city.timezone];
-              const _isCustom = !defaultWorldClockCities.some(
-                defaultCity => defaultCity.timezone === city.timezone
-              );
+      ) : null}
 
-              return (
-                <Card
-                  key={city.timezone}
-                  className="transition-all hover:shadow-md"
-                >
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-lg flex items-center">
-                        <Globe className="w-4 h-4 mr-2" />
-                        {city.name}
-                      </CardTitle>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="text-xs">
-                          {city.country}
-                        </Badge>
-                        <Button
-                          onClick={() => removeClock(city.timezone)}
-                          size="sm"
-                          variant="ghost"
-                          className="h-6 w-6 p-0 text-slate-400 hover:text-red-500"
-                          data-testid={`remove-clock-${index}`}
-                        >
-                          <X className="w-3 h-3" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    {timeData ? (
-                      <div className="text-center">
-                        <div className="text-2xl font-mono font-bold text-slate-900 dark:text-slate-100 mb-1">
-                          {timeData.time}
-                        </div>
-                        <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">
-                          {timeData.date}
-                        </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-500">
-                          {timeData.offset}
-                        </div>
-                      </div>
-                    ) : null}
-                  </CardContent>
-                </Card>
-              );
-            })}
+      {/* Custom Clocks Section - Always show if there are custom clocks */}
+      {displayedCities.length > 0 && (
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Clock className="w-5 h-5 mr-2" />
+                My Custom Clocks
+                <Badge variant="outline" className="ml-3 text-xs">
+                  {displayedCities.length}{" "}
+                  {displayedCities.length === 1 ? "clock" : "clocks"}
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {displayedCities
+                  .sort((a, b) => {
+                    const timeDataA = currentTimes[a.timezone];
+                    const timeDataB = currentTimes[b.timezone];
+                    if (!timeDataA || !timeDataB) return 0;
+                    const offsetA =
+                      parseInt(timeDataA.offset.replace(/[^\d-]/g, ""), 10) ||
+                      0;
+                    const offsetB =
+                      parseInt(timeDataB.offset.replace(/[^\d-]/g, ""), 10) ||
+                      0;
+                    return offsetA - offsetB;
+                  })
+                  .map((city, index) => {
+                    const timeData = currentTimes[city.timezone];
+
+                    return (
+                      <Card
+                        key={city.timezone}
+                        className="transition-all hover:shadow-md border-primary/20"
+                      >
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-lg flex items-center">
+                              <Globe className="w-4 h-4 mr-2" />
+                              {city.name}
+                            </CardTitle>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="secondary" className="text-xs">
+                                {city.country}
+                              </Badge>
+                              <Button
+                                onClick={() => removeClock(city.timezone)}
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 w-6 p-0 text-slate-400 hover:text-red-500"
+                                data-testid={`remove-clock-${index}`}
+                              >
+                                <X className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="pt-0">
+                          {timeData ? (
+                            <div className="text-center">
+                              <div className="text-2xl font-mono font-bold text-slate-900 dark:text-slate-100 mb-1">
+                                {timeData.time}
+                              </div>
+                              <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">
+                                {timeData.date}
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-slate-500">
+                                {timeData.offset}
+                              </div>
+                            </div>
+                          ) : null}
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       )}
 
@@ -497,23 +518,27 @@ export default function WorldClock() {
               <h4 className="font-semibold mb-2">Features:</h4>
               <ul className="space-y-1 text-slate-600 dark:text-slate-400">
                 <li>• Live time updates every second</li>
-                <li>• Continental view with 5 major cities per continent</li>
+                <li>
+                  • Continental view showing all major time zones by continent
+                </li>
                 <li>• Search from {allTimezones.length}+ world timezones</li>
-                <li>• Add unlimited custom clocks</li>
-                <li>• Remove custom clocks (keep defaults)</li>
+                <li>• Add unlimited custom clocks from any timezone</li>
+                <li>• Remove custom clocks individually</li>
                 <li>• UTC offset display for each timezone</li>
                 <li>• Search by city, country, or timezone ID</li>
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-2">Usage Tips:</h4>
+              <h4 className="font-semibold mb-2">How to Use:</h4>
               <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Toggle "Continental View" to see cities by continent</li>
-                <li>• Click "Add" in continental view to add cities quickly</li>
-                <li>• Use "Add Clock" to search and add any timezone</li>
+                <li>• Browse continental view to see all time zones</li>
+                <li>
+                  • Click "Add" next to any city to add it to your custom clocks
+                </li>
+                <li>• Use "Add Clock" to search and add specific timezones</li>
                 <li>• Remove custom clocks with the X button</li>
-                <li>• Reset to default clocks anytime</li>
-                <li>• Times update automatically in real-time</li>
+                <li>• Clear all custom clocks to start fresh</li>
+                <li>• Your custom clocks appear below the continental view</li>
               </ul>
             </div>
           </div>
