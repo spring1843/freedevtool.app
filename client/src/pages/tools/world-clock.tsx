@@ -31,7 +31,6 @@ export default function WorldClock() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTimezone, setSelectedTimezone] = useState(getUserTimezone());
   const [showAddClock, setShowAddClock] = useState(false);
-  const [showContinentalView, setShowContinentalView] = useState(true);
 
   const { toast } = useToast();
 
@@ -175,47 +174,38 @@ export default function WorldClock() {
         </p>
       </div>
 
-      {/* Controls */}
+      {/* Add Clock Control */}
       <Card className="mb-6">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span className="flex items-center">
-              <Globe className="w-5 h-5 mr-2" />
-              Manage Clocks
+              <Plus className="w-5 h-5 mr-2" />
+              Add Clock
             </span>
             <div className="flex gap-2">
-              <Button
-                onClick={() => setShowContinentalView(!showContinentalView)}
-                variant={showContinentalView ? "default" : "outline"}
-                size="sm"
-                data-testid="continental-view-toggle"
-              >
-                <Globe className="w-4 h-4 mr-2" />
-                {showContinentalView
-                  ? "Hide Continental View"
-                  : "Show Continental View"}
-              </Button>
               <Button
                 onClick={() => setShowAddClock(!showAddClock)}
                 size="sm"
                 data-testid="add-clock-toggle"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                {showAddClock ? "Hide Add Clock" : "Add Clock"}
+                {showAddClock ? "Hide" : "Show"}
               </Button>
-              <Button
-                onClick={resetToDefault}
-                variant="outline"
-                size="sm"
-                data-testid="reset-clocks"
-              >
-                Clear Custom Clocks
-              </Button>
+              {displayedCities.length > 0 && (
+                <Button
+                  onClick={resetToDefault}
+                  variant="outline"
+                  size="sm"
+                  data-testid="reset-clocks"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Clear All
+                </Button>
+              )}
             </div>
           </CardTitle>
         </CardHeader>
-        {showAddClock ? (
-          <CardContent className="space-y-4">
+        {showAddClock ? <CardContent className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               <div>
                 <Label htmlFor="timezone-search">Search Timezone</Label>
@@ -256,175 +246,18 @@ export default function WorldClock() {
 
             <div className="text-sm text-slate-600 dark:text-slate-400">
               <p>
-                <strong>Currently showing:</strong> {displayedCities.length}{" "}
-                clocks
+                <strong>Custom clocks:</strong> {displayedCities.length}
               </p>
               <p>
-                <strong>Available timezones:</strong> {filteredTimezones.length}{" "}
-                found
+                <strong>Available timezones:</strong> {filteredTimezones.length}
               </p>
             </div>
-          </CardContent>
-        ) : null}
+          </CardContent> : null}
       </Card>
 
-      {/* Local Time */}
-      <Card className="mb-6">
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Clock className="w-5 h-5 mr-2" />
-            Local Time
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center">
-            <div className="text-4xl font-mono font-bold text-slate-900 dark:text-slate-100 mb-2">
-              {getLocalTime()}
-            </div>
-            <div className="text-lg text-slate-600 dark:text-slate-400">
-              {getLocalDate()}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Continental View */}
-      {showContinentalView ? (
-        <div className="space-y-8">
-          {Object.entries(continentalCities)
-            .sort(([, citiesA], [, citiesB]) => {
-              // Sort continents by their earliest timezone offset
-              const minOffsetA = Math.min(
-                ...citiesA.map(city => {
-                  const timeData = continentalTimes[city.timezone];
-                  return timeData
-                    ? parseInt(timeData.offset.replace(/[^\d-]/g, ""), 10)
-                    : 0;
-                })
-              );
-              const minOffsetB = Math.min(
-                ...citiesB.map(city => {
-                  const timeData = continentalTimes[city.timezone];
-                  return timeData
-                    ? parseInt(timeData.offset.replace(/[^\d-]/g, ""), 10)
-                    : 0;
-                })
-              );
-              return minOffsetA - minOffsetB;
-            })
-            .map(([continent, cities]) => (
-              <Card key={continent}>
-                <CardHeader>
-                  <CardTitle className="flex items-center text-xl">
-                    <Globe className="w-6 h-6 mr-3" />
-                    {continent}
-                    <Badge variant="outline" className="ml-3 text-xs">
-                      {cities.length} cities
-                    </Badge>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                    {cities
-                      .sort((a, b) => {
-                        // Sort cities within continent by timezone offset (smallest to largest)
-                        const timeDataA = continentalTimes[a.timezone];
-                        const timeDataB = continentalTimes[b.timezone];
-                        if (!timeDataA || !timeDataB) return 0;
-                        const offsetA = parseInt(
-                          timeDataA.offset.replace(/[^\d-]/g, ""),
-                          10
-                        );
-                        const offsetB = parseInt(
-                          timeDataB.offset.replace(/[^\d-]/g, ""),
-                          10
-                        );
-                        return offsetA - offsetB;
-                      })
-                      .map((city, index) => {
-                        const timeData = continentalTimes[city.timezone];
-                        const isInCustomClocks = displayedCities.some(
-                          existing => existing.timezone === city.timezone
-                        );
-
-                        return (
-                          <div
-                            key={city.timezone}
-                            className="text-center p-4 border border-slate-200 dark:border-slate-700 rounded-lg transition-all hover:shadow-sm relative"
-                          >
-                            {/* Remove button for cities that are in custom clocks */}
-                            {isInCustomClocks ? (
-                              <Button
-                                onClick={() => removeClock(city.timezone)}
-                                size="sm"
-                                variant="ghost"
-                                className="absolute top-1 right-1 h-6 w-6 p-0 text-slate-400 hover:text-red-500"
-                                data-testid={`remove-continental-${continent}-${index}`}
-                              >
-                                <X className="w-3 h-3" />
-                              </Button>
-                            ) : null}
-
-                            <div className="flex items-center justify-center mb-2">
-                              <h4 className="font-semibold text-slate-900 dark:text-slate-100">
-                                {city.name}
-                              </h4>
-                            </div>
-                            <Badge variant="secondary" className="text-xs mb-3">
-                              {city.country}
-                            </Badge>
-                            {timeData ? (
-                              <div>
-                                <div className="text-lg font-mono font-bold text-slate-900 dark:text-slate-100 mb-1">
-                                  {timeData.time}
-                                </div>
-                                <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
-                                  {timeData.date}
-                                </div>
-                                <div className="text-xs text-slate-500 dark:text-slate-500">
-                                  {timeData.offset}
-                                </div>
-                              </div>
-                            ) : null}
-
-                            {!isInCustomClocks ? (
-                              <Button
-                                onClick={() => {
-                                  setDisplayedCities([
-                                    ...displayedCities,
-                                    city,
-                                  ]);
-                                  toast({
-                                    title: "Clock Added",
-                                    description: `Added ${city.name} to your custom clocks.`,
-                                  });
-                                }}
-                                size="sm"
-                                variant="ghost"
-                                className="mt-2 text-xs"
-                                data-testid={`add-continental-${continent}-${index}`}
-                              >
-                                <Plus className="w-3 h-3 mr-1" />
-                                Add
-                              </Button>
-                            ) : (
-                              <Badge variant="outline" className="mt-2 text-xs">
-                                In Custom Clocks
-                              </Badge>
-                            )}
-                          </div>
-                        );
-                      })}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-        </div>
-      ) : null}
-
-      {/* Custom Clocks Section - Always show if there are custom clocks */}
+      {/* Custom Clocks Section - Show above local time */}
       {displayedCities.length > 0 && (
-        <div className="space-y-4">
+        <div className="space-y-4 mb-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
@@ -505,47 +338,157 @@ export default function WorldClock() {
         </div>
       )}
 
-      <div className="flex justify-center my-8" />
-
-      {/* Information */}
-      <Card>
+      {/* Local Time */}
+      <Card className="mb-6">
         <CardHeader>
-          <CardTitle>About World Clock</CardTitle>
+          <CardTitle className="flex items-center">
+            <Clock className="w-5 h-5 mr-2" />
+            Local Time
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-            <div>
-              <h4 className="font-semibold mb-2">Features:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Live time updates every second</li>
-                <li>
-                  • Continental view showing all major time zones by continent
-                </li>
-                <li>• Search from {allTimezones.length}+ world timezones</li>
-                <li>• Add unlimited custom clocks from any timezone</li>
-                <li>• Remove custom clocks individually</li>
-                <li>• UTC offset display for each timezone</li>
-                <li>• Search by city, country, or timezone ID</li>
-              </ul>
+        <CardContent>
+          <div className="text-center">
+            <div className="text-4xl font-mono font-bold text-slate-900 dark:text-slate-100 mb-2">
+              {getLocalTime()}
             </div>
-            <div>
-              <h4 className="font-semibold mb-2">How to Use:</h4>
-              <ul className="space-y-1 text-slate-600 dark:text-slate-400">
-                <li>• Browse continental view to see all time zones</li>
-                <li>
-                  • Click "Add" next to any city to add it to your custom clocks
-                </li>
-                <li>• Use "Add Clock" to search and add specific timezones</li>
-                <li>• Remove custom clocks with the X button</li>
-                <li>• Clear all custom clocks to start fresh</li>
-                <li>• Your custom clocks appear below the continental view</li>
-              </ul>
+            <div className="text-lg text-slate-600 dark:text-slate-400 mb-2">
+              {getLocalDate()}
+            </div>
+            <div className="text-sm text-slate-500 dark:text-slate-500">
+              Auto-detected timezone: {getUserTimezone()}
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <div className="flex justify-center mt-8" />
+      {/* Continental View */}
+      <div className="space-y-8">
+        {Object.entries(continentalCities)
+          .sort(([, citiesA], [, citiesB]) => {
+            // Sort continents by their earliest timezone offset
+            const minOffsetA = Math.min(
+              ...citiesA.map(city => {
+                const timeData = continentalTimes[city.timezone];
+                return timeData
+                  ? parseInt(timeData.offset.replace(/[^\d-]/g, ""), 10)
+                  : 0;
+              })
+            );
+            const minOffsetB = Math.min(
+              ...citiesB.map(city => {
+                const timeData = continentalTimes[city.timezone];
+                return timeData
+                  ? parseInt(timeData.offset.replace(/[^\d-]/g, ""), 10)
+                  : 0;
+              })
+            );
+            return minOffsetA - minOffsetB;
+          })
+          .map(([continent, cities]) => (
+            <Card key={continent}>
+              <CardHeader>
+                <CardTitle className="flex items-center text-xl">
+                  <Globe className="w-6 h-6 mr-3" />
+                  {continent}
+                  <Badge variant="outline" className="ml-3 text-xs">
+                    {cities.length} cities
+                  </Badge>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                  {cities
+                    .sort((a, b) => {
+                      // Sort cities within continent by timezone offset (smallest to largest)
+                      const timeDataA = continentalTimes[a.timezone];
+                      const timeDataB = continentalTimes[b.timezone];
+                      if (!timeDataA || !timeDataB) return 0;
+                      const offsetA = parseInt(
+                        timeDataA.offset.replace(/[^\d-]/g, ""),
+                        10
+                      );
+                      const offsetB = parseInt(
+                        timeDataB.offset.replace(/[^\d-]/g, ""),
+                        10
+                      );
+                      return offsetA - offsetB;
+                    })
+                    .map((city, index) => {
+                      const timeData = continentalTimes[city.timezone];
+                      const isInCustomClocks = displayedCities.some(
+                        existing => existing.timezone === city.timezone
+                      );
+
+                      return (
+                        <div
+                          key={city.timezone}
+                          className="text-center p-4 border border-slate-200 dark:border-slate-700 rounded-lg transition-all hover:shadow-sm relative"
+                        >
+                          {/* Remove button for cities that are in custom clocks */}
+                          {isInCustomClocks ? (
+                            <Button
+                              onClick={() => removeClock(city.timezone)}
+                              size="sm"
+                              variant="ghost"
+                              className="absolute top-1 right-1 h-6 w-6 p-0 text-slate-400 hover:text-red-500"
+                              data-testid={`remove-continental-${continent}-${index}`}
+                            >
+                              <X className="w-3 h-3" />
+                            </Button>
+                          ) : null}
+
+                          <div className="flex items-center justify-center mb-2">
+                            <h4 className="font-semibold text-slate-900 dark:text-slate-100">
+                              {city.name}
+                            </h4>
+                          </div>
+                          <Badge variant="secondary" className="text-xs mb-3">
+                            {city.country}
+                          </Badge>
+                          {timeData ? (
+                            <div>
+                              <div className="text-lg font-mono font-bold text-slate-900 dark:text-slate-100 mb-1">
+                                {timeData.time}
+                              </div>
+                              <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">
+                                {timeData.date}
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-slate-500">
+                                {timeData.offset}
+                              </div>
+                            </div>
+                          ) : null}
+
+                          {!isInCustomClocks ? (
+                            <Button
+                              onClick={() => {
+                                setDisplayedCities([...displayedCities, city]);
+                                toast({
+                                  title: "Clock Added",
+                                  description: `Added ${city.name} to your custom clocks.`,
+                                });
+                              }}
+                              size="sm"
+                              variant="ghost"
+                              className="mt-2 text-xs"
+                              data-testid={`add-continental-${continent}-${index}`}
+                            >
+                              <Plus className="w-3 h-3 mr-1" />
+                              Add
+                            </Button>
+                          ) : (
+                            <Badge variant="outline" className="mt-2 text-xs">
+                              In Custom Clocks
+                            </Badge>
+                          )}
+                        </div>
+                      );
+                    })}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+      </div>
     </div>
   );
 }
