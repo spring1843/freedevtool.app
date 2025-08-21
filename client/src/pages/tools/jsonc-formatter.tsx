@@ -8,49 +8,10 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
-const DEFAULT_JSONC = `{
-  // Application configuration
-  "name": "my-awesome-app",
-  "version": "1.0.0",
-  /* Multi-line comment
-     for detailed descriptions */
-  "description": "A sample JSONC configuration file",
-  "main": "index.js",
-  "scripts": {
-    // Development scripts
-    "start": "node index.js",
-    "dev": "nodemon index.js", // Hot reload for development
-    "test": "jest",
-    "build": "webpack --mode=production"
-  },
-  "dependencies": {
-    "express": "^4.18.0", // Web framework
-    "cors": "^2.8.5", // Cross-origin resource sharing
-    "helmet": "^6.0.0" // Security middleware
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20", // Development auto-restart
-    "jest": "^29.0.0", // Testing framework
-    "webpack": "^5.74.0" // Module bundler
-  },
-  // Environment configuration
-  "config": {
-    "port": 3000,
-    "database": {
-      "host": "localhost",
-      "name": "myapp_db", // Database name
-      "user": "admin"
-    },
-    "features": {
-      "enableLogging": true, // Enable application logging
-      "enableMetrics": false, // Disable metrics collection for now
-      "apiRateLimit": 100 // Requests per minute
-    }
-  }
-}`;
+import { toolDefaults } from "@/data/defaults";
 
 export default function JSONCFormatter() {
-  const [input, setInput] = useState(DEFAULT_JSONC);
+  const [input, setInput] = useState(toolDefaults.jsonc);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -74,7 +35,7 @@ export default function JSONCFormatter() {
   };
 
   const handleReset = () => {
-    setInput(DEFAULT_JSONC);
+    setInput(toolDefaults.jsonc);
     setOutput("");
     setError(null);
   };

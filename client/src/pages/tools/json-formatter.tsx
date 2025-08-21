@@ -8,10 +8,10 @@ import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
 
-const DEFAULT_JSON = `{"name":"John Doe","age":30,"city":"New York","hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zipCode":"10001"}}`;
+import { toolDefaults } from "@/data/defaults";
 
 export default function JsonFormatter() {
-  const [input, setInput] = useState(DEFAULT_JSON);
+  const [input, setInput] = useState(toolDefaults.json);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -57,7 +57,7 @@ export default function JsonFormatter() {
   };
 
   const handleReset = () => {
-    setInput(DEFAULT_JSON);
+    setInput(toolDefaults.json);
     setOutput("");
     setError(null);
   };
