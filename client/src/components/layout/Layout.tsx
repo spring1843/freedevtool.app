@@ -44,7 +44,7 @@ export function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
 
-  // Determine if sidebar should be shown by default
+  // Determine if sidebar should be shown by default (only on homepage and desktop)
   const isHomepage = location === "/";
   const isToolPage = location.startsWith("/tools/");
   const shouldShowSidebarByDefault = isHomepage && !isToolPage;
@@ -273,16 +273,48 @@ export function Layout({ children }: LayoutProps) {
         </div>
 
         <div className="flex flex-1">
-          {/* Sidebar - Show by default on homepage, hamburger menu on tool pages */}
+          {/* Sidebar - Show by default on homepage desktop, hamburger menu on mobile and tool pages */}
           {shouldShowSidebarByDefault ? (
             <>
-              {/* Default sidebar on homepage */}
-              <aside className="w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 overflow-y-auto custom-scrollbar flex flex-col h-full">
+              {/* Default sidebar on homepage - hidden on mobile (lg:block) */}
+              <aside className="hidden lg:block w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 overflow-y-auto custom-scrollbar flex flex-col h-full">
                 <div className="flex-1 min-h-0">
                   <Sidebar collapsed={false} />
                 </div>
               </aside>
-              {/* Main content with sidebar visible */}
+
+              {/* Hamburger menu for mobile on homepage */}
+              <Sheet
+                open={mobileMenuOpen}
+                onOpenChange={setMobileMenuOpen}
+                modal={false}
+              >
+                <SheetContent
+                  side="left"
+                  className="w-80 p-0 bg-white dark:bg-slate-900 border-0 shadow-2xl overflow-y-auto custom-scrollbar lg:hidden"
+                  style={{
+                    marginTop: "4rem",
+                    height: "calc(100vh - 4rem)",
+                    maxHeight: "calc(100vh - 4rem)",
+                  }}
+                >
+                  <SheetHeader className="sr-only">
+                    <SheetTitle>Navigation Menu</SheetTitle>
+                    <SheetDescription>
+                      Navigation menu with all available developer tools
+                      organized by category
+                    </SheetDescription>
+                  </SheetHeader>
+                  <div className="h-full overflow-y-auto custom-scrollbar">
+                    <Sidebar
+                      collapsed={false}
+                      onToolClick={() => setMobileMenuOpen(false)}
+                    />
+                  </div>
+                </SheetContent>
+              </Sheet>
+
+              {/* Main content with sidebar visible on desktop, full width on mobile */}
               <main className="flex-1 p-6 lg:p-8 overflow-auto custom-scrollbar">
                 {children}
               </main>
@@ -312,7 +344,10 @@ export function Layout({ children }: LayoutProps) {
                     </SheetDescription>
                   </SheetHeader>
                   <div className="h-full overflow-y-auto custom-scrollbar">
-                    <Sidebar collapsed={false} />
+                    <Sidebar
+                      collapsed={false}
+                      onToolClick={() => setMobileMenuOpen(false)}
+                    />
                   </div>
                 </SheetContent>
               </Sheet>

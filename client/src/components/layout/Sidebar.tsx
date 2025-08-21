@@ -47,6 +47,7 @@ import {
 interface SidebarProps {
   className?: string;
   collapsed?: boolean;
+  onToolClick?: () => void; // Callback for when a tool is clicked (to close mobile menu)
 }
 
 // Icon mapping function based on category and tool name
@@ -121,13 +122,18 @@ function getToolIcon(category: string, toolName: string) {
   return iconMap[category]?.[toolName] || <Square className="w-4 h-4" />;
 }
 
-export function Sidebar({ className, collapsed = false }: SidebarProps) {
+export function Sidebar({
+  className,
+  collapsed = false,
+  onToolClick,
+}: SidebarProps) {
   const [location] = useLocation();
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({});
   const [visitedPaths, setVisitedPaths] = useState<Set<string>>(new Set());
   const [focusedIndex, setFocusedIndex] = useState(0);
+  const [hasInitializedFocus, setHasInitializedFocus] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
 
   // Create flat list of all navigable items (categories + tools)
@@ -198,22 +204,30 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
   const activeCategory = getCurrentCategory();
   const navigableItems = getNavigableItems();
 
-  // Track visited paths (session-based) and auto-expand active category
+  // Track visited paths (session-based)
   useEffect(() => {
     if (location && location !== "/" && !visitedPaths.has(location)) {
       const newVisited = new Set(visitedPaths);
       newVisited.add(location);
       setVisitedPaths(newVisited);
     }
+  }, [location, visitedPaths]);
 
-    // Auto-expand the current category if not already expanded
-    if (activeCategory && !expandedSections[activeCategory]) {
-      setExpandedSections(prev => ({
-        ...prev,
-        [activeCategory]: true,
-      }));
+  // Auto-expand the current category when activeCategory changes (not when expandedSections changes)
+  useEffect(() => {
+    if (activeCategory) {
+      setExpandedSections(prev => {
+        // Only expand if not already expanded
+        if (!prev[activeCategory]) {
+          return {
+            ...prev,
+            [activeCategory]: true,
+          };
+        }
+        return prev;
+      });
     }
-  }, [location, visitedPaths, activeCategory, expandedSections]);
+  }, [activeCategory]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -251,6 +265,10 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
             selectedItem.type === "tool" &&
             selectedItem.path
           ) {
+            // Close mobile sidebar when navigating to a tool
+            if (onToolClick) {
+              onToolClick();
+            }
             // Use Wouter's navigation method instead of window.location
             const link = document.querySelector(
               `[href="${selectedItem.path}"]`
@@ -271,7 +289,37 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [focusedIndex, navigableItems, toggleSection]);
+  }, [focusedIndex, navigableItems, toggleSection, onToolClick]);
+
+  // Initialize focus to current active tool on first load
+  useEffect(() => {
+    if (!hasInitializedFocus && navigableItems.length > 0) {
+      const activeToolIndex = navigableItems.findIndex(
+        item => item.type === "tool" && item.path === location
+      );
+      if (activeToolIndex !== -1) {
+        setFocusedIndex(activeToolIndex);
+      }
+      setHasInitializedFocus(true);
+    }
+  }, [navigableItems, location, hasInitializedFocus]);
+
+  // Auto-scroll to keep focused item visible
+  useEffect(() => {
+    if (sidebarRef.current && focusedIndex >= 0) {
+      const focusedElement = sidebarRef.current.querySelector(
+        `[data-focus-index="${focusedIndex}"]`
+      ) as HTMLElement;
+
+      if (focusedElement) {
+        focusedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
+      }
+    }
+  }, [focusedIndex]);
 
   // Reset focus when items change
   useEffect(() => {
@@ -354,6 +402,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                   )}
                   onClick={() => toggleSection(categoryName)}
                   data-testid={`category-${categoryName.toLowerCase().replace(/\s+/g, "-")}`}
+                  data-focus-index={categoryItemIndex}
                   tabIndex={-1}
                 >
                   <span
@@ -420,6 +469,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                             <Link href={toolPath}>
                               <Button
                                 variant="ghost"
+                                onClick={onToolClick} // Close mobile menu when tool is clicked
                                 className={cn(
                                   "w-full justify-start text-sm transition-all duration-300 relative rounded-xl h-11 group hover:scale-[1.02] hover:shadow-sm",
                                   (() => {
@@ -443,6 +493,7 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                                     })()
                                 )}
                                 data-testid={`tool-${tool.path.slice(1) || "date-converter"}`}
+                                data-focus-index={toolItemIndex}
                                 tabIndex={-1}
                               >
                                 {isActive ? (
