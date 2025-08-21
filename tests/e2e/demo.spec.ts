@@ -23,7 +23,7 @@ test.describe("Demo End-to-End Test", () => {
     await expect(demoModeActive).toBeVisible();
 
     // Let demo run for a short time
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(3000);
 
     // Stop the demo
     const stopButton = page.locator('button:has-text("Stop")');
