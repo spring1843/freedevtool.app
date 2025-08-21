@@ -30,16 +30,8 @@ export default function Home() {
     pauseDemo,
     resumeDemo,
     skipToNext,
-    setDemoSpeed,
     totalTools,
   } = useDemo();
-
-  // Helper function to format speed display names
-  const formatSpeedName = (speed: string) => {
-    if (speed === "very-fast") return "Very Fast";
-    if (speed === "crazy-fast") return "Crazy Fast";
-    return speed.charAt(0).toUpperCase() + speed.slice(1);
-  };
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-6xl">
@@ -122,7 +114,8 @@ export default function Home() {
                 />
               </div>
               <div className="text-xs text-blue-600 dark:text-blue-400 mt-1 text-center">
-                {Math.round(demoProgress)}% • {demoSpeed.replace("-", " ")} speed
+                {Math.round(demoProgress)}% • {demoSpeed.replace("-", " ")}{" "}
+                speed
               </div>
             </div>
           ) : (
@@ -413,7 +406,9 @@ export default function Home() {
                 <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                      <h4 className="font-semibold text-sm mb-2">Converters:</h4>
+                      <h4 className="font-semibold text-sm mb-2">
+                        Converters:
+                      </h4>
                       <ul className="text-sm space-y-1">
                         <li>
                           <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
@@ -442,7 +437,9 @@ export default function Home() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-sm mb-2">Text Tools:</h4>
+                      <h4 className="font-semibold text-sm mb-2">
+                        Text Tools:
+                      </h4>
                       <ul className="text-sm space-y-1">
                         <li>
                           <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
@@ -471,7 +468,9 @@ export default function Home() {
                       </ul>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-sm mb-2">Generators:</h4>
+                      <h4 className="font-semibold text-sm mb-2">
+                        Generators:
+                      </h4>
                       <ul className="text-sm space-y-1">
                         <li>
                           <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
