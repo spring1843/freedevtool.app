@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "wouter";
 import {
-  Search,
   Keyboard,
   ExternalLink,
   Play,
@@ -11,16 +10,14 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useSearch } from "@/hooks/use-search";
 import { useDemo } from "@/hooks/use-demo-hook";
-import { getToolsCount } from "@/data/tools";
 
 export default function Home() {
-  const { searchQuery, setSearchQuery, filteredToolsData } = useSearch();
+  const { filteredToolsData } = useSearch();
   const [showAllShortcuts, setShowAllShortcuts] = useState(false);
   const {
     isDemoRunning,
@@ -156,20 +153,6 @@ export default function Home() {
               </div>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Search Bar */}
-      <div className="text-center mb-8">
-        <div className="relative max-w-md mx-auto">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder={`Search ${getToolsCount()} tools... (Ctrl+S)`}
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="pl-10"
-            data-testid="homepage-search-input"
-          />
         </div>
       </div>
 
