@@ -26,6 +26,11 @@ import { Separator } from "@/components/ui/separator";
 import { getParam, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import {
+  DEFAULT_METRONOME_NOTE,
+  DEFAULT_METRONOME_FREQUENCY,
+  DEFAULT_METRONOME_INTERVAL_SECONDS,
+} from "@/data/defaults";
 
 interface ToneSchedule {
   id: string;
@@ -61,9 +66,9 @@ export default function Metronome() {
   const [toneSchedules, setToneSchedules] = useState<ToneSchedule[]>([
     {
       id: "1",
-      note: "A4",
-      frequency: 440.0,
-      intervalSeconds: 0.5, // Default: 120 BPM
+      note: DEFAULT_METRONOME_NOTE,
+      frequency: DEFAULT_METRONOME_FREQUENCY,
+      intervalSeconds: DEFAULT_METRONOME_INTERVAL_SECONDS, // Default: 120 BPM
       enabled: true,
     },
   ]);

@@ -21,6 +21,12 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DEFAULT_TIMEZONE_CONVERTER_DATE,
+  DEFAULT_TIMEZONE_CONVERTER_TIME,
+  DEFAULT_TIMEZONE_CONVERTER_SOURCE_TIMEZONE,
+  DEFAULT_TIMEZONE_CONVERTER_TARGET_TIMEZONES,
+} from "@/data/defaults";
 
 interface TimezoneConversion {
   timezone: string;
@@ -33,13 +39,14 @@ interface TimezoneConversion {
 export default function TimezoneConverter() {
   const [sourceDate, setSourceDate] = useState("");
   const [sourceTime, setSourceTime] = useState("");
-  const [sourceTimezone, setSourceTimezone] = useState(getUserTimezone());
-  const [targetTimezones, setTargetTimezones] = useState<string[]>([
-    "America/New_York",
-    "Europe/London",
-    "Asia/Tokyo",
-    "Australia/Sydney",
-  ]);
+  const [sourceTimezone, setSourceTimezone] = useState(
+    DEFAULT_TIMEZONE_CONVERTER_SOURCE_TIMEZONE === "AUTO"
+      ? getUserTimezone()
+      : DEFAULT_TIMEZONE_CONVERTER_SOURCE_TIMEZONE
+  );
+  const [targetTimezones, setTargetTimezones] = useState<string[]>(
+    DEFAULT_TIMEZONE_CONVERTER_TARGET_TIMEZONES
+  );
   const [conversions, setConversions] = useState<TimezoneConversion[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const { toast } = useToast();
@@ -117,8 +124,14 @@ export default function TimezoneConverter() {
     } else {
       // Set current date and time for new users
       const now = new Date();
-      const dateStr = now.toISOString().split("T")[0];
-      const timeStr = now.toTimeString().split(" ")[0];
+      const dateStr =
+        DEFAULT_TIMEZONE_CONVERTER_DATE === "NOW"
+          ? now.toISOString().split("T")[0]
+          : DEFAULT_TIMEZONE_CONVERTER_DATE;
+      const timeStr =
+        DEFAULT_TIMEZONE_CONVERTER_TIME === "NOW"
+          ? now.toTimeString().split(" ")[0]
+          : DEFAULT_TIMEZONE_CONVERTER_TIME;
       setSourceDate(dateStr);
       setSourceTime(timeStr);
     }

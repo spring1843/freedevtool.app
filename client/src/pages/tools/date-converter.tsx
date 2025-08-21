@@ -8,6 +8,7 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useToast } from "@/hooks/use-toast";
+import { DEFAULT_DATE_CONVERTER_INPUT } from "@/data/defaults";
 
 interface DateFormat {
   name: string;
@@ -154,7 +155,11 @@ const DATE_FORMATS = [
 ];
 
 export default function DateConverter() {
-  const [inputDate, setInputDate] = useState("1699123456");
+  const [inputDate, setInputDate] = useState(
+    DEFAULT_DATE_CONVERTER_INPUT === "NOW"
+      ? Math.floor(Date.now() / 1000).toString()
+      : DEFAULT_DATE_CONVERTER_INPUT
+  );
   const [formats, setFormats] = useState<DateFormat[]>([]);
   const { toast } = useToast();
 
@@ -260,7 +265,11 @@ export default function DateConverter() {
   }, [inputDate]);
 
   const handleReset = () => {
-    setInputDate("1699123456");
+    setInputDate(
+      DEFAULT_DATE_CONVERTER_INPUT === "NOW"
+        ? Math.floor(Date.now() / 1000).toString()
+        : DEFAULT_DATE_CONVERTER_INPUT
+    );
     setFormats([]);
   };
 

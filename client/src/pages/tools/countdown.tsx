@@ -15,6 +15,10 @@ import { Play, Pause, Square, RotateCcw, Clock } from "lucide-react";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import {
+  DEFAULT_COUNTDOWN_TIME,
+  DEFAULT_COUNTDOWN_TIMEZONE,
+} from "@/data/defaults";
 
 export default function Countdown() {
   // Set interesting default values (New Year countdown)
@@ -23,7 +27,7 @@ export default function Countdown() {
     const nextYear = new Date(now.getFullYear() + 1, 0, 1, 0, 0, 0); // Next New Year
     return {
       date: nextYear.toISOString().split("T")[0],
-      time: "00:00",
+      time: DEFAULT_COUNTDOWN_TIME,
     };
   };
 
@@ -35,7 +39,9 @@ export default function Countdown() {
   const [isComplete, setIsComplete] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [timeZone, setTimeZone] = useState(
-    Intl.DateTimeFormat().resolvedOptions().timeZone
+    DEFAULT_COUNTDOWN_TIMEZONE === "AUTO"
+      ? Intl.DateTimeFormat().resolvedOptions().timeZone
+      : DEFAULT_COUNTDOWN_TIMEZONE
   );
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -159,10 +165,15 @@ export default function Countdown() {
 
   const handleReset = () => {
     stopCountdown();
-    setTargetDate("");
-    setTargetTime("");
+    const defaultDateTime = getDefaultDateTime();
+    setTargetDate(defaultDateTime.date);
+    setTargetTime(DEFAULT_COUNTDOWN_TIME);
     setSoundEnabled(true);
-    setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    setTimeZone(
+      DEFAULT_COUNTDOWN_TIMEZONE === "AUTO"
+        ? Intl.DateTimeFormat().resolvedOptions().timeZone
+        : DEFAULT_COUNTDOWN_TIMEZONE
+    );
   };
 
   // Preset options for interesting countdowns

@@ -17,6 +17,12 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DEFAULT_UNIT_CONVERTER_VALUE,
+  DEFAULT_UNIT_CONVERTER_CATEGORY,
+  DEFAULT_UNIT_CONVERTER_FROM_UNIT,
+  DEFAULT_UNIT_CONVERTER_TO_UNIT,
+} from "@/data/defaults";
 
 interface UnitGroup {
   name: string;
@@ -155,10 +161,14 @@ const unitGroups: { [key: string]: UnitGroup } = {
 };
 
 export default function UnitConverter() {
-  const [selectedCategory, setSelectedCategory] = useState("weight");
-  const [fromUnit, setFromUnit] = useState("");
-  const [toUnit, setToUnit] = useState("");
-  const [inputValue, setInputValue] = useState("1");
+  const [selectedCategory, setSelectedCategory] = useState(
+    DEFAULT_UNIT_CONVERTER_CATEGORY
+  );
+  const [fromUnit, setFromUnit] = useState(DEFAULT_UNIT_CONVERTER_FROM_UNIT);
+  const [toUnit, setToUnit] = useState(DEFAULT_UNIT_CONVERTER_TO_UNIT);
+  const [inputValue, setInputValue] = useState(
+    DEFAULT_UNIT_CONVERTER_VALUE.toString()
+  );
   const [result, setResult] = useState("");
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();

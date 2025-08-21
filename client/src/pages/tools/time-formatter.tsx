@@ -6,6 +6,11 @@ import { Label } from "@/components/ui/label";
 import { TimezoneSelector } from "@/components/ui/timezone-selector";
 import { getUserTimezone } from "@/lib/time-tools";
 import { Clock, Copy, Check, RefreshCw } from "lucide-react";
+import {
+  DEFAULT_TIME_FORMATTER_DATE,
+  DEFAULT_TIME_FORMATTER_TIME,
+  DEFAULT_TIME_FORMATTER_TIMEZONE,
+} from "@/data/defaults";
 
 interface TimeFormat {
   name: string;
@@ -16,17 +21,35 @@ interface TimeFormat {
 export default function TimeFormatter() {
   const [inputTime, setInputTime] = useState("");
   const [inputDate, setInputDate] = useState("");
-  const [inputTimezone, setInputTimezone] = useState(getUserTimezone());
+  const [inputTimezone, setInputTimezone] = useState(
+    DEFAULT_TIME_FORMATTER_TIMEZONE === "AUTO"
+      ? getUserTimezone()
+      : DEFAULT_TIME_FORMATTER_TIMEZONE
+  );
   const [formats, setFormats] = useState<TimeFormat[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   // Set current date and time on load
   useEffect(() => {
-    const now = new Date();
-    const dateStr = now.toISOString().split("T")[0];
-    const timeStr = now.toTimeString().split(" ")[0];
-    setInputDate(dateStr);
-    setInputTime(timeStr);
+    if (
+      DEFAULT_TIME_FORMATTER_DATE === "NOW" ||
+      DEFAULT_TIME_FORMATTER_TIME === "NOW"
+    ) {
+      const now = new Date();
+      const dateStr =
+        DEFAULT_TIME_FORMATTER_DATE === "NOW"
+          ? now.toISOString().split("T")[0]
+          : DEFAULT_TIME_FORMATTER_DATE;
+      const timeStr =
+        DEFAULT_TIME_FORMATTER_TIME === "NOW"
+          ? now.toTimeString().split(" ")[0]
+          : DEFAULT_TIME_FORMATTER_TIME;
+      setInputDate(dateStr);
+      setInputTime(timeStr);
+    } else {
+      setInputDate(DEFAULT_TIME_FORMATTER_DATE);
+      setInputTime(DEFAULT_TIME_FORMATTER_TIME);
+    }
   }, []);
 
   // Format time whenever input changes

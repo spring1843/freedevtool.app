@@ -15,14 +15,28 @@ import { RefreshCw, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import {
+  DEFAULT_UUID_GENERATOR_COUNT,
+  DEFAULT_UUID_GENERATOR_VERSION,
+  DEFAULT_UUID_GENERATOR_FORMAT,
+} from "@/data/defaults";
 
 export default function UUIDGenerator() {
   const [uuids, setUuids] = useState<string[]>([]);
-  const [version, setVersion] = useState<1 | 4>(4);
-  const [count, setCount] = useState(1);
+  const [version, setVersion] = useState<1 | 4>(
+    DEFAULT_UUID_GENERATOR_VERSION as 1 | 4
+  );
+  const [count, setCount] = useState(DEFAULT_UUID_GENERATOR_COUNT);
   const [format, setFormat] = useState<
     "standard" | "uppercase" | "lowercase" | "nodashes" | "brackets"
-  >("standard");
+  >(
+    DEFAULT_UUID_GENERATOR_FORMAT as
+      | "standard"
+      | "uppercase"
+      | "lowercase"
+      | "nodashes"
+      | "brackets"
+  );
 
   const generateUUID = useCallback(() => {
     const newUuids: string[] = [];
@@ -72,9 +86,16 @@ export default function UUIDGenerator() {
 
   const handleReset = () => {
     setUuids([]);
-    setVersion(4);
-    setCount(1);
-    setFormat("standard");
+    setVersion(DEFAULT_UUID_GENERATOR_VERSION as 1 | 4);
+    setCount(DEFAULT_UUID_GENERATOR_COUNT);
+    setFormat(
+      DEFAULT_UUID_GENERATOR_FORMAT as
+        | "standard"
+        | "uppercase"
+        | "lowercase"
+        | "nodashes"
+        | "brackets"
+    );
   };
 
   const copyToClipboard = async (text: string) => {

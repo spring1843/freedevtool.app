@@ -18,6 +18,16 @@ import { Switch } from "@/components/ui/switch";
 
 import { useToolDefault } from "@/hooks/use-tool-default";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
+import {
+  DEFAULT_PASSWORD_GENERATOR_COUNT,
+  DEFAULT_PASSWORD_GENERATOR_LENGTH,
+  DEFAULT_PASSWORD_GENERATOR_UPPERCASE,
+  DEFAULT_PASSWORD_GENERATOR_LOWERCASE,
+  DEFAULT_PASSWORD_GENERATOR_NUMBERS,
+  DEFAULT_PASSWORD_GENERATOR_SYMBOLS,
+  DEFAULT_PASSWORD_GENERATOR_EXCLUDE_SIMILAR,
+  DEFAULT_PASSWORD_GENERATOR_EXCLUDE_AMBIGUOUS,
+} from "@/data/defaults";
 
 interface PasswordStrength {
   score: number;
@@ -31,14 +41,14 @@ export default function PasswordGenerator() {
     "password-generator",
     {
       passwords: [] as string[],
-      passwordCount: 1,
-      length: [16] as number[],
-      includeUppercase: true,
-      includeLowercase: true,
-      includeNumbers: true,
-      includeSymbols: true,
-      excludeSimilar: false,
-      excludeAmbiguous: false,
+      passwordCount: DEFAULT_PASSWORD_GENERATOR_COUNT,
+      length: [DEFAULT_PASSWORD_GENERATOR_LENGTH] as number[],
+      includeUppercase: DEFAULT_PASSWORD_GENERATOR_UPPERCASE,
+      includeLowercase: DEFAULT_PASSWORD_GENERATOR_LOWERCASE,
+      includeNumbers: DEFAULT_PASSWORD_GENERATOR_NUMBERS,
+      includeSymbols: DEFAULT_PASSWORD_GENERATOR_SYMBOLS,
+      excludeSimilar: DEFAULT_PASSWORD_GENERATOR_EXCLUDE_SIMILAR,
+      excludeAmbiguous: DEFAULT_PASSWORD_GENERATOR_EXCLUDE_AMBIGUOUS,
       showStrength: true,
     }
   );

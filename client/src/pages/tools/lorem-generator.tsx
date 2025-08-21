@@ -14,6 +14,10 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, Copy, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
+import {
+  DEFAULT_LOREM_GENERATOR_PARAGRAPHS,
+  DEFAULT_LOREM_GENERATOR_TYPE,
+} from "@/data/defaults";
 
 const loremWords = [
   "lorem",
@@ -99,9 +103,9 @@ const loremWords = [
 
 export default function LoremGenerator() {
   const [type, setType] = useState<"words" | "sentences" | "paragraphs">(
-    "paragraphs"
+    DEFAULT_LOREM_GENERATOR_TYPE as "words" | "sentences" | "paragraphs"
   );
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState(DEFAULT_LOREM_GENERATOR_PARAGRAPHS);
   const [startWithLorem, setStartWithLorem] = useState(true);
   const [generated, setGenerated] = useState("");
 
@@ -208,8 +212,10 @@ export default function LoremGenerator() {
   }, [type, count, startWithLorem, generateParagraph, generateSentence]);
 
   const handleReset = () => {
-    setType("paragraphs");
-    setCount(3);
+    setType(
+      DEFAULT_LOREM_GENERATOR_TYPE as "words" | "sentences" | "paragraphs"
+    );
+    setCount(DEFAULT_LOREM_GENERATOR_PARAGRAPHS);
     setStartWithLorem(true);
     setGenerated("");
   };

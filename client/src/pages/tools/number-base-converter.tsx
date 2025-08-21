@@ -18,6 +18,11 @@ import {
   getValidatedParam,
 } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DEFAULT_NUMBER_BASE_CONVERTER_INPUT,
+  DEFAULT_NUMBER_BASE_CONVERTER_INPUT_BASE,
+  DEFAULT_NUMBER_BASE_CONVERTER_OUTPUT_BASES,
+} from "@/data/defaults";
 
 interface ConversionResult {
   base: number;
@@ -44,9 +49,15 @@ const commonBases = [
 ];
 
 export default function NumberBaseConverter() {
-  const [inputNumber, setInputNumber] = useState("42");
-  const [inputBase, setInputBase] = useState(10);
-  const [outputBases, setOutputBases] = useState<number[]>([2, 8, 16]);
+  const [inputNumber, setInputNumber] = useState(
+    DEFAULT_NUMBER_BASE_CONVERTER_INPUT
+  );
+  const [inputBase, setInputBase] = useState(
+    DEFAULT_NUMBER_BASE_CONVERTER_INPUT_BASE
+  );
+  const [outputBases, setOutputBases] = useState<number[]>(
+    DEFAULT_NUMBER_BASE_CONVERTER_OUTPUT_BASES
+  );
   const [customBase, setCustomBase] = useState("");
   const [results, setResults] = useState<ConversionResult[]>([]);
   const [error, setError] = useState("");

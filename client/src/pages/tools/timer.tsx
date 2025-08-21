@@ -18,14 +18,18 @@ import {
 } from "@/lib/time-tools";
 import { getParam, updateURL, copyShareableURL } from "@/lib/url-sharing";
 import { useToast } from "@/hooks/use-toast";
+import {
+  DEFAULT_TIMER_MINUTES,
+  DEFAULT_TIMER_AUTO_START,
+} from "@/data/defaults";
 
 export default function Timer() {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(5); // Interesting default: 5 minutes
+  const [minutes, setMinutes] = useState(DEFAULT_TIMER_MINUTES); // Interesting default: 5 minutes
   const [seconds, setSeconds] = useState(0);
-  const [isRunning, setIsRunning] = useState(true); // Auto-start
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
+  const [isRunning, setIsRunning] = useState(DEFAULT_TIMER_AUTO_START); // Auto-start
+  const [timeLeft, setTimeLeft] = useState(DEFAULT_TIMER_MINUTES * 60); // 5 minutes in seconds
   const [isFinished, setIsFinished] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -181,8 +185,12 @@ export default function Timer() {
   };
 
   const reset = () => {
-    setIsRunning(false);
-    setTimeLeft(0);
+    setDays(0);
+    setHours(0);
+    setMinutes(DEFAULT_TIMER_MINUTES);
+    setSeconds(0);
+    setTimeLeft(DEFAULT_TIMER_MINUTES * 60);
+    setIsRunning(DEFAULT_TIMER_AUTO_START);
     setIsFinished(false);
     stopBeeping();
   };

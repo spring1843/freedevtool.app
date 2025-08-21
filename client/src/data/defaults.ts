@@ -655,3 +655,66 @@ export const DEFAULT_COMPOUND_PRINCIPAL = 10000;
 export const DEFAULT_COMPOUND_ANNUAL_RATE = 12;
 export const DEFAULT_COMPOUND_YEARS = 20;
 export const DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION = 500;
+
+// Time-based Tools (use "NOW" for current time/date defaults)
+export const DEFAULT_COUNTDOWN_DATE = "NOW"; // Will be replaced with next New Year
+export const DEFAULT_COUNTDOWN_TIME = "00:00";
+export const DEFAULT_COUNTDOWN_TIMEZONE = "AUTO"; // Will be replaced with user timezone
+
+export const DEFAULT_DATE_CONVERTER_INPUT = "NOW"; // Will be replaced with current timestamp
+
+export const DEFAULT_DATETIME_DIFF_START_DATE = "NOW_MINUS_1_YEAR"; // Will be replaced
+export const DEFAULT_DATETIME_DIFF_START_TIME = "00:00";
+export const DEFAULT_DATETIME_DIFF_END_DATE = "NOW"; // Will be replaced with current date
+export const DEFAULT_DATETIME_DIFF_END_TIME = "NOW"; // Will be replaced with current time
+export const DEFAULT_DATETIME_DIFF_TIMEZONE = "AUTO"; // Will be replaced with user timezone
+
+export const DEFAULT_TIME_FORMATTER_DATE = "NOW"; // Will be replaced with current date
+export const DEFAULT_TIME_FORMATTER_TIME = "NOW"; // Will be replaced with current time
+export const DEFAULT_TIME_FORMATTER_TIMEZONE = "AUTO"; // Will be replaced with user timezone
+
+export const DEFAULT_TIMER_MINUTES = 5;
+export const DEFAULT_TIMER_AUTO_START = true;
+
+export const DEFAULT_TIMEZONE_CONVERTER_DATE = "NOW"; // Will be replaced with current date
+export const DEFAULT_TIMEZONE_CONVERTER_TIME = "NOW"; // Will be replaced with current time
+export const DEFAULT_TIMEZONE_CONVERTER_SOURCE_TIMEZONE = "AUTO"; // Will be replaced with user timezone
+export const DEFAULT_TIMEZONE_CONVERTER_TARGET_TIMEZONES = [
+  "America/New_York",
+  "Europe/London",
+  "Asia/Tokyo",
+  "Australia/Sydney",
+];
+
+// Generator Tools
+export const DEFAULT_LOREM_GENERATOR_PARAGRAPHS = 3;
+export const DEFAULT_LOREM_GENERATOR_TYPE = "paragraphs";
+
+export const DEFAULT_PASSWORD_GENERATOR_COUNT = 1;
+export const DEFAULT_PASSWORD_GENERATOR_LENGTH = 16;
+export const DEFAULT_PASSWORD_GENERATOR_UPPERCASE = true;
+export const DEFAULT_PASSWORD_GENERATOR_LOWERCASE = true;
+export const DEFAULT_PASSWORD_GENERATOR_NUMBERS = true;
+export const DEFAULT_PASSWORD_GENERATOR_SYMBOLS = true;
+export const DEFAULT_PASSWORD_GENERATOR_EXCLUDE_SIMILAR = false;
+export const DEFAULT_PASSWORD_GENERATOR_EXCLUDE_AMBIGUOUS = false;
+
+export const DEFAULT_UUID_GENERATOR_COUNT = 1;
+export const DEFAULT_UUID_GENERATOR_VERSION = 4;
+export const DEFAULT_UUID_GENERATOR_FORMAT = "standard";
+
+// Converter Tools
+export const DEFAULT_NUMBER_BASE_CONVERTER_INPUT = "42";
+export const DEFAULT_NUMBER_BASE_CONVERTER_INPUT_BASE = 10;
+export const DEFAULT_NUMBER_BASE_CONVERTER_OUTPUT_BASES = [2, 8, 16];
+
+export const DEFAULT_UNIT_CONVERTER_VALUE = 1;
+export const DEFAULT_UNIT_CONVERTER_CATEGORY = "weight";
+export const DEFAULT_UNIT_CONVERTER_FROM_UNIT = "kg";
+export const DEFAULT_UNIT_CONVERTER_TO_UNIT = "lb";
+
+// Audio Tools
+export const DEFAULT_METRONOME_BPM = 120;
+export const DEFAULT_METRONOME_NOTE = "A4";
+export const DEFAULT_METRONOME_FREQUENCY = 440.0;
+export const DEFAULT_METRONOME_INTERVAL_SECONDS = 0.5;

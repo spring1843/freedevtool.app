@@ -14,6 +14,13 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
 import { getUserTimezone } from "@/lib/time-tools";
+import {
+  DEFAULT_DATETIME_DIFF_START_DATE,
+  DEFAULT_DATETIME_DIFF_START_TIME,
+  DEFAULT_DATETIME_DIFF_END_DATE,
+  DEFAULT_DATETIME_DIFF_END_TIME,
+  DEFAULT_DATETIME_DIFF_TIMEZONE,
+} from "@/data/defaults";
 
 interface DateTimeDifference {
   totalMilliseconds: number;
@@ -43,11 +50,25 @@ export default function DateTimeDiff() {
     oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
     return {
-      startDate: oneYearAgo.toISOString().split("T")[0],
-      startTime: "00:00",
-      endDate: now.toISOString().split("T")[0],
-      endTime: now.toTimeString().slice(0, 5),
-      timezone: getUserTimezone(),
+      startDate:
+        DEFAULT_DATETIME_DIFF_START_DATE === "NOW_MINUS_1_YEAR"
+          ? oneYearAgo.toISOString().split("T")[0]
+          : DEFAULT_DATETIME_DIFF_START_DATE === "NOW"
+            ? now.toISOString().split("T")[0]
+            : DEFAULT_DATETIME_DIFF_START_DATE,
+      startTime: DEFAULT_DATETIME_DIFF_START_TIME,
+      endDate:
+        DEFAULT_DATETIME_DIFF_END_DATE === "NOW"
+          ? now.toISOString().split("T")[0]
+          : DEFAULT_DATETIME_DIFF_END_DATE,
+      endTime:
+        DEFAULT_DATETIME_DIFF_END_TIME === "NOW"
+          ? now.toTimeString().slice(0, 5)
+          : DEFAULT_DATETIME_DIFF_END_TIME,
+      timezone:
+        DEFAULT_DATETIME_DIFF_TIMEZONE === "AUTO"
+          ? getUserTimezone()
+          : DEFAULT_DATETIME_DIFF_TIMEZONE,
     };
   };
 
