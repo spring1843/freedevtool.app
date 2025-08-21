@@ -7,6 +7,7 @@
 Preferred communication style: Simple, everyday language.
 Theme preferences: Smooth theme transitions with local storage persistence, respecting browser/OS theme selection by default, falling back to light mode when system preference unavailable.
 Timezone behavior: All time-related tools should default to the user's local timezone instead of UTC for better user experience.
+Mobile sidebar behavior: Sidebar should be hidden by default on mobile devices, with hamburger menu available for navigation on all screen sizes.
 Build system preferences: Use make targets instead of npm commands for all development, testing, and release operations (e.g., `make deps` instead of `npm install`, `make start` instead of `npm run dev`).
 Quality assurance: Always run `make ci-without-e2e` after making changes to ensure no regressions were introduced.
 Code quality: React Hook dependency rules configured as errors (not warnings) to enforce strict patterns and prevent runtime bugs.
@@ -23,7 +24,7 @@ The client-side application is built with React and TypeScript, leveraging a mod
 - **UI Components**: Radix UI primitives with shadcn/ui.
 - **Styling**: Tailwind CSS with custom CSS variables for theming, 0.3s transitions, and local storage persistence.
 - **Code Editor**: Simple CodeEditor component with copy functionality. Standardized textarea components across all tools provide character count and disabled word wrapping for consistent user experience.
-- **Navigation**: Hamburger menu in top right, no desktop sidebar, non-modal design. Blue FD logo toggles sidebar, text logo links to homepage.
+- **Navigation**: Contextual sidebar behavior - visible by default on homepage desktop view, hidden on mobile devices and tool pages. Hamburger menu available on all screen sizes via Ctrl+M shortcut. Blue FD logo toggles sidebar, text logo links to homepage.
 
 ### Backend Architecture
 The server-side is a minimal Node.js Express application with TypeScript, providing a basic REST API foundation for future development. It is intentionally lightweight as the application primarily focuses on client-side processing.
