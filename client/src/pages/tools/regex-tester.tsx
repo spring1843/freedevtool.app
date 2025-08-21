@@ -9,17 +9,7 @@ import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_PATTERN =
-  "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b";
-const DEFAULT_TEXT = `Here are some email addresses:
-john.doe@example.com
-jane_smith123@company.org
-test.email+tag@domain.co.uk
-invalid.email@
-another@valid-domain.net
-not-an-email-address
-support@website.info`;
+import { DEFAULT_REGEX_PATTERN, DEFAULT_REGEX_TEXT } from "@/data/defaults";
 
 interface RegexMatch {
   match: string;
@@ -28,8 +18,8 @@ interface RegexMatch {
 }
 
 export default function RegexTester() {
-  const [pattern, setPattern] = useState(DEFAULT_PATTERN);
-  const [text, setText] = useState(DEFAULT_TEXT);
+  const [pattern, setPattern] = useState(DEFAULT_REGEX_PATTERN);
+  const [text, setText] = useState(DEFAULT_REGEX_TEXT);
   const [flags, setFlags] = useState("g");
   const [globalFlag, setGlobalFlag] = useState(true);
   const [caseInsensitiveFlag, setCaseInsensitiveFlag] = useState(false);
@@ -88,8 +78,8 @@ export default function RegexTester() {
   }, [pattern, flags, text, globalFlag]);
 
   const handleReset = () => {
-    setPattern(DEFAULT_PATTERN);
-    setText(DEFAULT_TEXT);
+    setPattern(DEFAULT_REGEX_PATTERN);
+    setText(DEFAULT_REGEX_TEXT);
     setFlags("g");
     setGlobalFlag(true);
     setCaseInsensitiveFlag(false);

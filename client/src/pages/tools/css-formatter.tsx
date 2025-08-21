@@ -15,12 +15,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_CSS = `.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0}.card{background-color:white;padding:20px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,0.1)}.button{background-color:#007bff;color:white;border:none;padding:10px 20px;border-radius:4px;cursor:pointer}.button:hover{background-color:#0056b3}`;
-
-const DEFAULT_SCSS = `$primary-color:#007bff;$secondary-color:#6c757d;$border-radius:4px;.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0;.card{background-color:white;padding:20px;border-radius:$border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);.button{background-color:$primary-color;color:white;border:none;padding:10px 20px;border-radius:$border-radius;cursor:pointer;&:hover{background-color:darken($primary-color,10%);}}}}`;
-
-const DEFAULT_LESS = `@primary-color:#007bff;@secondary-color:#6c757d;@border-radius:4px;.container{display:flex;justify-content:center;align-items:center;height:100vh;background-color:#f0f0f0;.card{background-color:white;padding:20px;border-radius:@border-radius;box-shadow:0 2px 10px rgba(0,0,0,0.1);.button{background-color:@primary-color;color:white;border:none;padding:10px 20px;border-radius:@border-radius;cursor:pointer;&:hover{background-color:darken(@primary-color,10%);}}}}`;
+import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
 
 type FormatType = "css" | "scss" | "less";
 

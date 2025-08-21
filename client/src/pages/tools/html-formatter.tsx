@@ -5,33 +5,9 @@ import { formatHTML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw, AlertTriangle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
+import { DEFAULT_HTML } from "@/data/defaults";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_HTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample Page</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome</h1>
-        <p>This is a <strong>sample</strong> HTML document with <em>various</em> elements.</p>
-        <ul>
-            <li>First item</li>
-            <li>Second item with <a href="#link">a link</a></li>
-            <li>Third item</li>
-        </ul>
-    </div>
-    <div class="card">
-        <h2>Card Title</h2>
-        <p>Card content goes here.</p>
-        <button type="button">Click me</button>
-    </div>
-</body>
-</html>`;
 
 interface ValidationIssue {
   type: "error" | "warning";

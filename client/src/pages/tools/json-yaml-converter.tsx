@@ -7,33 +7,7 @@ import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_JSON = `{
-  "name": "John Doe",
-  "age": 30,
-  "email": "john@example.com",
-  "address": {
-    "street": "123 Main St",
-    "city": "New York",
-    "zipCode": "10001"
-  },
-  "loves": ["free", "dev", "tool", "app"],
-  "isActive": true
-}`;
-
-const DEFAULT_YAML = `name: John Doe
-age: 30
-email: john@example.com
-address:
-  street: 123 Main St
-  city: New York
-  zipCode: "10001"
-loves:
-  - free
-  - dev
-  - tool
-  - app
-isActive: true`;
+import { DEFAULT_JSON, DEFAULT_YAML } from "@/data/defaults";
 
 export default function JSONYAMLConverter() {
   const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);

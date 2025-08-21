@@ -16,9 +16,10 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import JsBarcode from "jsbarcode";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
+import { DEFAULT_BARCODE_GENERATOR } from "@/data/defaults";
 
 export default function BarcodeGenerator() {
-  const [text, setText] = useState("FreeDevTool.App");
+  const [text, setText] = useState(DEFAULT_BARCODE_GENERATOR);
   const [format, setFormat] = useState("CODE128");
   const [width, setWidth] = useState(2);
   const [height, setHeight] = useState(100);
@@ -118,7 +119,7 @@ export default function BarcodeGenerator() {
   };
 
   const handleReset = () => {
-    setText("FreeDevTool.App");
+    setText(DEFAULT_BARCODE_GENERATOR);
     setFormat("CODE128");
     setWidth(2);
     setHeight(100);

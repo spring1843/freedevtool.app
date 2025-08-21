@@ -60,6 +60,7 @@ The application operates without authentication requirements as all tools functi
 - Date converter redesigned with 20 practical, internationally recognized formats categorized for enhanced UX, including auto-detection of input formats.
 - Enhanced RichTextarea component: Word wrap enabled by default with toggle, copy functionality, line numbers (no-wrap mode only), adjustable sizing, and integrated controls bar.
 - Industry-standard code formatting using Prettier integration across all major web development formats (HTML, JSON, JSONC, CSS, YAML, Markdown, LESS, JavaScript, TypeScript, SCSS, GraphQL) with async support and custom fallback mechanisms.
+- Centralized defaults system: All tool default values consolidated into `client/src/data/defaults.ts` package, providing consistent defaults across 22+ tools including formatters, converters, encoders, and text tools for better maintainability and easier modification.
 
 **Performance Optimizations:**
 - Debounced input handling.

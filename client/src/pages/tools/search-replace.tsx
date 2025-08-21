@@ -9,19 +9,18 @@ import { Search, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-Lorem ipsum is commonly used as placeholder text.
-The quick brown fox jumps over the lazy dog.
-Hello world! This is a test string.
-Hello there, this is another hello message.`;
+import {
+  DEFAULT_SEARCH_REPLACE_TEXT,
+  DEFAULT_SEARCH_REPLACE_SEARCH,
+  DEFAULT_SEARCH_REPLACE_REPLACE,
+} from "@/data/defaults";
 
 export default function SearchReplace() {
-  const [text, setText] = useState(DEFAULT_TEXT);
-  const [searchText, setSearchText] = useState("Hello");
-  const [replaceText, setReplaceText] = useState("Hi");
+  const [text, setText] = useState(DEFAULT_SEARCH_REPLACE_TEXT);
+  const [searchText, setSearchText] = useState(DEFAULT_SEARCH_REPLACE_SEARCH);
+  const [replaceText, setReplaceText] = useState(
+    DEFAULT_SEARCH_REPLACE_REPLACE
+  );
   const [isRegex, setIsRegex] = useState(false);
   const [isCaseSensitive, setIsCaseSensitive] = useState(false);
   const [isGlobal, setIsGlobal] = useState(true);
@@ -77,9 +76,9 @@ export default function SearchReplace() {
   }, [text, searchText, replaceText, isRegex, isCaseSensitive, isGlobal]);
 
   const handleReset = () => {
-    setText(DEFAULT_TEXT);
-    setSearchText("Hello");
-    setReplaceText("Hi");
+    setText(DEFAULT_SEARCH_REPLACE_TEXT);
+    setSearchText(DEFAULT_SEARCH_REPLACE_SEARCH);
+    setReplaceText(DEFAULT_SEARCH_REPLACE_REPLACE);
     setIsRegex(false);
     setIsCaseSensitive(false);
     setIsGlobal(true);

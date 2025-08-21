@@ -7,8 +7,7 @@ import { Code, Minimize2, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_TYPESCRIPT = `interface User{name:string;age:number;email?:string;isActive:boolean;}type UserStatus="active"|"inactive"|"pending";class UserManager{private users:User[]=[];constructor(initialUsers:User[]=[]){this.users=initialUsers;}addUser(user:User):void{this.users.push(user);}getActiveUsers():User[]{return this.users.filter(user=>user.isActive);}getUserByName<T extends User>(name:string):T|undefined{return this.users.find(user=>user.name===name)as T|undefined;}}const createUserGreeting=(user:User,status:UserStatus="active"):string=>{const greeting=status==="active"?"Welcome":"Hello";return \`\${greeting} \${user.name}! You are \${user.age} years old.\`;};enum Permission{READ="read",WRITE="write",DELETE="delete"}function hasPermission(userRole:string,required:Permission):boolean{const rolePermissions:{[key:string]:Permission[]}={admin:[Permission.READ,Permission.WRITE,Permission.DELETE],editor:[Permission.READ,Permission.WRITE],viewer:[Permission.READ]};return rolePermissions[userRole]?.includes(required)??false;}`;
+import { DEFAULT_TYPESCRIPT } from "@/data/defaults";
 
 export default function TypeScriptFormatter() {
   const [input, setInput] = useState(DEFAULT_TYPESCRIPT);

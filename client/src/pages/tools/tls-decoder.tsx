@@ -7,19 +7,7 @@ import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_CERT = `-----BEGIN CERTIFICATE-----
-MIIDXTCCAkWgAwIBAgIJAKoK/heBjcOzMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
-BAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBX
-aWRnaXRzIFB0eSBMdGQwHhcNMTQxMjA5MTIwNDQ4WhcNMjQxMjA2MTIwNDQ4WjBF
-MQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50
-ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
-CgKCAQEAr1nYY1Jw9W6E7QHXLKs3WMBhf6R7CKqK+L8K8N8zN5L8Y5X9X5K5L8L8
-K8L8L8K8L8L8K8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8
-L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8
-L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8
-L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8L8
------END CERTIFICATE-----`;
+import { DEFAULT_TLS_DECODER } from "@/data/defaults";
 
 interface CertificateInfo {
   subject: string;
@@ -37,7 +25,7 @@ interface CertificateInfo {
 }
 
 export default function TLSDecoder() {
-  const [certificate, setCertificate] = useState(DEFAULT_CERT);
+  const [certificate, setCertificate] = useState(DEFAULT_TLS_DECODER);
   const [certificateInfo, setCertificateInfo] =
     useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -98,7 +86,7 @@ export default function TLSDecoder() {
   };
 
   const handleReset = () => {
-    setCertificate(DEFAULT_CERT);
+    setCertificate(DEFAULT_TLS_DECODER);
     setCertificateInfo(null);
     setError(null);
   };
