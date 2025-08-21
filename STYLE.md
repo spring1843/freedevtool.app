@@ -22,6 +22,7 @@ We strive to:
 * Tools should be keyboard-friendly. Use standard keys like `Enter`, `Space`, and `Escape` for common actions like start, pause, and stop.
 * Provide immediate feedback for user actions with a toast notification. This confirms that the action was registered. Toasts can be disabled globally.
 * Do not request elevated permissions (e.g., camera access) on launch. Prompt for permissions only when the user explicitly tries to use the feature.
+* Updating tools causes changes in the URL of the application, this allows users to share URLs with others and be able to see the same things.
 
 ### Buttons
 
