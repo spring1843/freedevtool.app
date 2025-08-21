@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
           FreeDevTool.App
         </h1>
@@ -58,30 +58,37 @@ export default function Home() {
           Community-driven utilities with browser-based computation •
           Privacy-focused design
         </p>
+      </div>
 
-        {/* Key Advantages */}
-        <div className="flex flex-wrap justify-center gap-3 mb-6">
-          <div className="inline-flex items-center bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-2" />
-            <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
-              Open Source & Community Driven
-            </span>
-          </div>
-          <div className="inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-3 py-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-            <span className="text-sm font-medium text-green-700 dark:text-green-400">
-              Free Core Features
-            </span>
-          </div>
-          <div className="inline-flex items-center bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg px-3 py-2">
-            <div className="w-2 h-2 bg-purple-500 rounded-full mr-2" />
-            <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
-              No Network Requests Design
-            </span>
+      {/* Two-Column Layout: Info & Demo */}
+      <div className="grid lg:grid-cols-2 gap-8 items-start mb-6">
+        {/* Left Column - Key Advantages */}
+        <div>
+          <div className="flex flex-wrap gap-3 mb-4">
+            <div className="inline-flex items-center bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mr-2" />
+              <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
+                Open Source & Community Driven
+              </span>
+            </div>
+            <div className="inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-3 py-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
+              <span className="text-sm font-medium text-green-700 dark:text-green-400">
+                Free Core Features
+              </span>
+            </div>
+            <div className="inline-flex items-center bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg px-3 py-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full mr-2" />
+              <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
+                No Network Requests Design
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Demo Mode */}
+        {/* Right Column - Demo Controls */}
+        <div>
+          {/* Demo Mode */}
         {isDemoRunning ? (
           <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
             <div className="flex items-center justify-between mb-3">
@@ -201,8 +208,11 @@ export default function Home() {
             </div>
           </div>
         )}
+        </div>
+      </div>
 
-        {/* Search Bar */}
+      {/* Search Bar */}
+      <div className="text-center mb-8">
         <div className="relative max-w-md mx-auto">
           <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
           <Input
