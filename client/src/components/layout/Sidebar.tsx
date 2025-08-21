@@ -363,6 +363,16 @@ export function Sidebar({ className, collapsed = false }: SidebarProps) {
                       <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
                     ) : null}
                     {categoryName}
+                    <span
+                      className={cn(
+                        "text-xs px-1.5 py-0.5 rounded-full font-medium transition-all duration-300",
+                        isCategoryActive
+                          ? "bg-primary/20 text-primary"
+                          : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400"
+                      )}
+                    >
+                      {categoryData.tools.length}
+                    </span>
                   </span>
                   {isExpanded ? (
                     <ChevronDown
