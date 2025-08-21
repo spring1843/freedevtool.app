@@ -438,8 +438,7 @@ export default function Timer() {
       </div>
 
       {/* Add Timer Form */}
-      {showAddTimer ? (
-        <Card className="mb-6">
+      {showAddTimer ? <Card className="mb-6">
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               <div>
@@ -531,35 +530,7 @@ export default function Timer() {
               </Button>
             </div>
           </CardContent>
-        </Card>
-      ) : (
-        /* Timer Presets - Show when timer form is hidden */
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle>Quick Presets</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {timerPresets.map(preset => (
-                <Button
-                  key={preset.name}
-                  variant="outline"
-                  onClick={() => applyPreset(preset)}
-                  className="h-auto p-3 text-left flex flex-col items-start"
-                  data-testid={`preset-${preset.name.toLowerCase().replace(/\s+/g, "-")}`}
-                >
-                  <div className="font-medium text-sm">{preset.name}</div>
-                  <div className="text-xs text-slate-500">
-                    {preset.hours > 0
-                      ? `${preset.hours}:${preset.minutes.toString().padStart(2, "0")}:${preset.seconds.toString().padStart(2, "0")}`
-                      : `${preset.minutes}:${preset.seconds.toString().padStart(2, "0")}`}
-                  </div>
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+        </Card> : null}
 
       {/* Active Timers */}
       <div className="space-y-4">
@@ -683,6 +654,33 @@ export default function Timer() {
           </CardContent>
         </Card>
       )}
+
+      {/* Timer Presets */}
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Quick Presets</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {timerPresets.map(preset => (
+              <Button
+                key={preset.name}
+                variant="outline"
+                onClick={() => applyPreset(preset)}
+                className="h-auto p-3 text-left flex flex-col items-start"
+                data-testid={`preset-${preset.name.toLowerCase().replace(/\s+/g, "-")}`}
+              >
+                <div className="font-medium text-sm">{preset.name}</div>
+                <div className="text-xs text-slate-500">
+                  {preset.hours > 0
+                    ? `${preset.hours}:${preset.minutes.toString().padStart(2, "0")}:${preset.seconds.toString().padStart(2, "0")}`
+                    : `${preset.minutes}:${preset.seconds.toString().padStart(2, "0")}`}
+                </div>
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Keyboard Shortcuts Info */}
       <Card className="mt-6">

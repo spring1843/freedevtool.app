@@ -304,6 +304,23 @@ export function Sidebar({
     }
   }, [navigableItems, location, hasInitializedFocus]);
 
+  // Auto-scroll to keep focused item visible
+  useEffect(() => {
+    if (sidebarRef.current && focusedIndex >= 0) {
+      const focusedElement = sidebarRef.current.querySelector(
+        `[data-focus-index="${focusedIndex}"]`
+      ) as HTMLElement;
+
+      if (focusedElement) {
+        focusedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "nearest",
+        });
+      }
+    }
+  }, [focusedIndex]);
+
   // Reset focus when items change
   useEffect(() => {
     if (focusedIndex >= navigableItems.length) {
@@ -385,6 +402,7 @@ export function Sidebar({
                   )}
                   onClick={() => toggleSection(categoryName)}
                   data-testid={`category-${categoryName.toLowerCase().replace(/\s+/g, "-")}`}
+                  data-focus-index={categoryItemIndex}
                   tabIndex={-1}
                 >
                   <span
@@ -475,6 +493,7 @@ export function Sidebar({
                                     })()
                                 )}
                                 data-testid={`tool-${tool.path.slice(1) || "date-converter"}`}
+                                data-focus-index={toolItemIndex}
                                 tabIndex={-1}
                               >
                                 {isActive ? (
