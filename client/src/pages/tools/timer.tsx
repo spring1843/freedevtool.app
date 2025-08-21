@@ -503,7 +503,7 @@ export default function Timer() {
                 <Select
                   value={newTimerAlarmCount.toString()}
                   onValueChange={value =>
-                    setNewTimerAlarmCount(parseInt(value))
+                    setNewTimerAlarmCount(parseInt(value, 10))
                   }
                 >
                   <SelectTrigger data-testid="alarm-count-select">
