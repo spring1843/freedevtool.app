@@ -10,16 +10,17 @@ test.describe("Demo End-to-End Test", () => {
   test("should handle demo interruption and cleanup properly", async ({
     page,
   }) => {
-    // Start demo in crazy fast mode
-    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
-    await crazyFastButton.click();
-
+    // Start demo
     const startDemoButton = page.locator('[data-testid="start-demo-button"]');
     await startDemoButton.click();
 
     // Wait for demo to start
     const demoModeActive = page.locator("text=Demo Mode Active");
     await expect(demoModeActive).toBeVisible();
+
+    // Change to crazy fast speed after demo starts
+    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
+    await crazyFastButton.click();
 
     // Let demo run for a short time
     await page.waitForTimeout(1000);
@@ -58,12 +59,14 @@ test.describe("Demo End-to-End Test", () => {
       });
     });
 
-    // Start demo in crazy fast mode
-    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
-    await crazyFastButton.click();
-
+    // Start demo
     const startDemoButton = page.locator('[data-testid="start-demo-button"]');
     await startDemoButton.click();
+
+    // Wait for demo to start then set crazy fast speed
+    await page.waitForSelector("text=Demo Mode Active");
+    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
+    await crazyFastButton.click();
 
     // Track visited tools
     const visitedTools = new Set<string>();
