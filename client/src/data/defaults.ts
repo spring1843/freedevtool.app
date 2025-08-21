@@ -631,7 +631,8 @@ export const DEFAULT_UNIT_CONVERTER = `100`;
 export const DEFAULT_NUMBER_BASE_CONVERTER = `255`;
 
 // Generators
-export const DEFAULT_QR_GENERATOR = "Visit FreeDevTool.App for more amazing developer tools!";
+export const DEFAULT_QR_GENERATOR =
+  "Visit FreeDevTool.App for more amazing developer tools!";
 
 export const DEFAULT_BARCODE_GENERATOR = "FreeDevTool.App";
 

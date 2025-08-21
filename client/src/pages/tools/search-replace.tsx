@@ -9,12 +9,18 @@ import { Search, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { DEFAULT_SEARCH_REPLACE_TEXT, DEFAULT_SEARCH_REPLACE_SEARCH, DEFAULT_SEARCH_REPLACE_REPLACE } from "@/data/defaults";
+import {
+  DEFAULT_SEARCH_REPLACE_TEXT,
+  DEFAULT_SEARCH_REPLACE_SEARCH,
+  DEFAULT_SEARCH_REPLACE_REPLACE,
+} from "@/data/defaults";
 
 export default function SearchReplace() {
   const [text, setText] = useState(DEFAULT_SEARCH_REPLACE_TEXT);
   const [searchText, setSearchText] = useState(DEFAULT_SEARCH_REPLACE_SEARCH);
-  const [replaceText, setReplaceText] = useState(DEFAULT_SEARCH_REPLACE_REPLACE);
+  const [replaceText, setReplaceText] = useState(
+    DEFAULT_SEARCH_REPLACE_REPLACE
+  );
   const [isRegex, setIsRegex] = useState(false);
   const [isCaseSensitive, setIsCaseSensitive] = useState(false);
   const [isGlobal, setIsGlobal] = useState(true);

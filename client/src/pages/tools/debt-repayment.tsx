@@ -6,7 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Calculator, RotateCcw, CreditCard, BarChart3 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { DEFAULT_DEBT_PRINCIPAL, DEFAULT_DEBT_ANNUAL_RATE, DEFAULT_DEBT_MONTHLY_PAYMENT } from "@/data/defaults";
+import {
+  DEFAULT_DEBT_PRINCIPAL,
+  DEFAULT_DEBT_ANNUAL_RATE,
+  DEFAULT_DEBT_MONTHLY_PAYMENT,
+} from "@/data/defaults";
 import {
   LineChart,
   Line,
@@ -37,7 +41,9 @@ interface DebtResult {
 export default function DebtRepaymentCalculator() {
   const [principal, setPrincipal] = useState(DEFAULT_DEBT_PRINCIPAL);
   const [annualRate, setAnnualRate] = useState(DEFAULT_DEBT_ANNUAL_RATE);
-  const [monthlyPayment, setMonthlyPayment] = useState(DEFAULT_DEBT_MONTHLY_PAYMENT);
+  const [monthlyPayment, setMonthlyPayment] = useState(
+    DEFAULT_DEBT_MONTHLY_PAYMENT
+  );
   const [result, setResult] = useState<DebtResult | null>(null);
 
   const calculateDebtRepayment = useCallback(() => {
