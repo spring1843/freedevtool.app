@@ -438,7 +438,8 @@ export default function Timer() {
       </div>
 
       {/* Add Timer Form */}
-      {showAddTimer ? <Card className="mb-6">
+      {showAddTimer ? (
+        <Card className="mb-6">
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               <div>
@@ -530,7 +531,8 @@ export default function Timer() {
               </Button>
             </div>
           </CardContent>
-        </Card> : null}
+        </Card>
+      ) : null}
 
       {/* Active Timers */}
       <div className="space-y-4">
