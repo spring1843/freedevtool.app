@@ -79,6 +79,12 @@ export const toolsData: ToolData = {
         description: "Format and beautify JSON with validation",
       },
       {
+        name: "JSONC Formatter",
+        path: "/tools/jsonc-formatter",
+        shortcut: "Ctrl+Shift+C",
+        description: "Format JSON with Comments files",
+      },
+      {
         name: "HTML Beautifier",
         path: "/tools/html-formatter",
         shortcut: "Ctrl+H",
@@ -98,16 +104,23 @@ export const toolsData: ToolData = {
         description: "Format Markdown with live preview",
       },
       {
-        name: "CSS Formatter",
+        name: "CSS/LESS/SCSS Formatter",
         path: "/tools/css-formatter",
         shortcut: "Ctrl+Shift+C",
-        description: "Format and beautify CSS stylesheets",
+        description: "Format CSS, LESS, and SCSS stylesheets with Prettier",
       },
       {
-        name: "LESS Formatter",
-        path: "/tools/less-formatter",
-        shortcut: "Ctrl+L",
-        description: "Format LESS CSS preprocessor files",
+        name: "JavaScript/TypeScript Formatter",
+        path: "/tools/typescript-formatter",
+        shortcut: "Ctrl+Shift+TS",
+        description: "Format JavaScript and TypeScript code with Prettier",
+      },
+
+      {
+        name: "GraphQL Formatter",
+        path: "/tools/graphql-formatter",
+        shortcut: "Ctrl+G",
+        description: "Format GraphQL schemas and queries",
       },
       {
         name: "Time Formatter",

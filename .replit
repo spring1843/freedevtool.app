@@ -1,4 +1,4 @@
-modules = ["web", "docker", "nodejs-24"]
+modules = ["web", "docker", "nodejs-20"]
 run = "npm run dev"
 hidden = [".config", ".git", "generated-icon.png", "node_modules", "dist"]
 

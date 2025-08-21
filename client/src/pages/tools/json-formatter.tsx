@@ -15,10 +15,16 @@ export default function JsonFormatter() {
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const formatCode = useCallback(() => {
-    const { formatted, error: formatError } = formatJSON(input);
-    setOutput(formatted);
-    setError(formatError || null);
+  const formatCode = useCallback(async () => {
+    try {
+      const { formatted, error: formatError } = await formatJSON(input);
+      setOutput(formatted);
+      setError(formatError || null);
+    } catch (error) {
+      setError(
+        `Formatting error: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
   }, [input]);
 
   const minifyCode = () => {

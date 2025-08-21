@@ -14,11 +14,13 @@ import JsonYamlConverter from "@/pages/tools/json-yaml-converter";
 import TimezoneConverter from "@/pages/tools/timezone-converter";
 import UnitConverter from "@/pages/tools/unit-converter";
 import JsonFormatter from "@/pages/tools/json-formatter";
+import JSONCFormatter from "@/pages/tools/jsonc-formatter";
 import HtmlFormatter from "@/pages/tools/html-formatter";
 import YamlFormatter from "@/pages/tools/yaml-formatter";
 import MarkdownFormatter from "@/pages/tools/markdown-formatter";
 import CssFormatter from "@/pages/tools/css-formatter";
-import LessFormatter from "@/pages/tools/less-formatter";
+import TypeScriptFormatter from "@/pages/tools/typescript-formatter";
+import GraphQLFormatter from "@/pages/tools/graphql-formatter";
 import TimeFormatter from "@/pages/tools/time-formatter";
 import Base64Encoder from "@/pages/tools/base64-encoder";
 import UrlEncoder from "@/pages/tools/url-encoder";
@@ -81,11 +83,19 @@ function Router() {
 
         {/* Formatters */}
         <Route path="/tools/json-formatter" component={JsonFormatter} />
+        <Route path="/tools/jsonc-formatter" component={JSONCFormatter} />
         <Route path="/tools/html-formatter" component={HtmlFormatter} />
         <Route path="/tools/yaml-formatter" component={YamlFormatter} />
         <Route path="/tools/markdown-formatter" component={MarkdownFormatter} />
         <Route path="/tools/css-formatter" component={CssFormatter} />
-        <Route path="/tools/less-formatter" component={LessFormatter} />
+        <Route path="/tools/less-formatter" component={CssFormatter} />
+        <Route path="/tools/scss-formatter" component={CssFormatter} />
+
+        <Route
+          path="/tools/typescript-formatter"
+          component={TypeScriptFormatter}
+        />
+        <Route path="/tools/graphql-formatter" component={GraphQLFormatter} />
         <Route path="/tools/time-formatter" component={TimeFormatter} />
 
         {/* Encoders */}
