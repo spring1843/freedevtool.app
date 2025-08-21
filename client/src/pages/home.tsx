@@ -38,27 +38,25 @@ export default function Home() {
       {/* Compact Header - Single Row Layout */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
         {/* Left Side - Title and Features */}
-        <div className="flex-1">
-          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                FreeDevTool.App
-              </h1>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Open Source • Offline Developer Tools
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="inline-flex items-center bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400">
-                Open Source
-              </span>
-              <span className="inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400">
-                Free
-              </span>
-              <span className="inline-flex items-center bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-400">
-                Offline
-              </span>
-            </div>
+        <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+              FreeDevTool.App
+            </h1>
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              Open Source • Offline Developer Tools
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <span className="inline-flex items-center bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400">
+              Open Source
+            </span>
+            <span className="inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400">
+              Free
+            </span>
+            <span className="inline-flex items-center bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-400">
+              Offline
+            </span>
           </div>
         </div>
 
