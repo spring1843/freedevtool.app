@@ -85,7 +85,8 @@ test.describe("Demo End-to-End Test", () => {
       }
 
       if (currentUrl !== lastUrl && currentUrl.includes("/tools/")) {
-        const toolPath = currentUrl.split("/tools/")[1];
+        // Extract tool path and remove query parameters
+        const toolPath = currentUrl.split("/tools/")[1]?.split("?")[0];
         if (toolPath && !visitedTools.has(toolPath)) {
           visitedTools.add(toolPath);
           console.warn(
