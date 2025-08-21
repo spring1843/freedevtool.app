@@ -39,11 +39,10 @@ const delimiters = [
   { value: ":", label: "Colon (:)" },
 ];
 
+import { toolDefaults } from "@/data/defaults";
+
 export default function CSVToJSON() {
-  const [csvInput, setCsvInput] = useState(`name,email,age,city
-John Doe,john@example.com,30,New York
-Jane Smith,jane@example.com,25,Los Angeles
-Bob Johnson,bob@example.com,35,Chicago`);
+  const [csvInput, setCsvInput] = useState(toolDefaults.csvToJson);
   const [selectedDelimiter, setSelectedDelimiter] = useState(",");
   const [jsonOutput, setJsonOutput] = useState("");
   const [_parsedData, setParsedData] = useState<CSVRow[]>([]);

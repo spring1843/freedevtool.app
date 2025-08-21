@@ -460,12 +460,10 @@ body {
 
   urlToJson: `https://api.example.com/users?page=1&limit=10&sort=name&order=asc&filter=active&category=premium#section`,
 
-  csvToJson: `name,age,city,country,occupation
-John Doe,30,New York,USA,Software Engineer
-Jane Smith,25,London,UK,Designer
-Carlos Rodriguez,35,Madrid,Spain,Product Manager
-Yuki Tanaka,28,Tokyo,Japan,Data Scientist
-Emma Wilson,32,Sydney,Australia,Marketing Director`,
+  csvToJson: `name,email,age,city
+John Doe,john@example.com,30,New York
+Jane Smith,jane@example.com,25,Los Angeles
+Bob Johnson,bob@example.com,35,Chicago`,
 
   // Encoders
   base64: `Hello, World! This is a sample text for Base64 encoding.
@@ -526,9 +524,9 @@ Every quick brown fox should jump daily.`,
 
   passwordGenerator: `MySecureP@ssw0rd123!`,
 
-  qrGenerator: `https://www.example.com`,
+  qrGenerator: "Visit FreeDevTool.App for more amazing developer tools!",
 
-  barcodeGenerator: `1234567890123`,
+  barcodeGenerator: "FreeDevTool.App",
 
   // Hash Tools
   md5: `Hello, World! This is a sample text for MD5 hashing.`,
@@ -575,7 +573,7 @@ support@website.info`,
 
   numberBaseConverter: `255`,
 
-  colorPalette: `#3498db`,
+  colorPaletteGenerator: "#3B82F6",
 
   // TLS Decoder
   tlsDecoder: `-----BEGIN CERTIFICATE-----
