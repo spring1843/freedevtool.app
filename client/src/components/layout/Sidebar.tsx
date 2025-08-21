@@ -133,6 +133,7 @@ export function Sidebar({
   >({});
   const [visitedPaths, setVisitedPaths] = useState<Set<string>>(new Set());
   const [focusedIndex, setFocusedIndex] = useState(0);
+  const [hasInitializedFocus, setHasInitializedFocus] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
 
   // Create flat list of all navigable items (categories + tools)
@@ -264,6 +265,10 @@ export function Sidebar({
             selectedItem.type === "tool" &&
             selectedItem.path
           ) {
+            // Close mobile sidebar when navigating to a tool
+            if (onToolClick) {
+              onToolClick();
+            }
             // Use Wouter's navigation method instead of window.location
             const link = document.querySelector(
               `[href="${selectedItem.path}"]`
@@ -284,7 +289,20 @@ export function Sidebar({
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [focusedIndex, navigableItems, toggleSection]);
+  }, [focusedIndex, navigableItems, toggleSection, onToolClick]);
+
+  // Initialize focus to current active tool on first load
+  useEffect(() => {
+    if (!hasInitializedFocus && navigableItems.length > 0) {
+      const activeToolIndex = navigableItems.findIndex(
+        item => item.type === "tool" && item.path === location
+      );
+      if (activeToolIndex !== -1) {
+        setFocusedIndex(activeToolIndex);
+      }
+      setHasInitializedFocus(true);
+    }
+  }, [navigableItems, location, hasInitializedFocus]);
 
   // Reset focus when items change
   useEffect(() => {
