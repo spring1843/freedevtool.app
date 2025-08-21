@@ -127,31 +127,15 @@ export default function Home() {
             </div>
           ) : (
             /* Demo Button */
-            <div className="flex items-center space-x-3">
-              <Button
-                onClick={startDemo}
-                size="default"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                data-testid="start-demo-button"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                Demo Tour ({totalTools} tools)
-              </Button>
-              <div className="flex items-center space-x-1">
-                <span className="text-xs text-slate-500 dark:text-slate-400">Speed:</span>
-                {(["slow", "normal", "fast", "very-fast", "crazy-fast"] as const).map(speed => (
-                  <Button
-                    key={speed}
-                    size="sm"
-                    variant={demoSpeed === speed ? "default" : "outline"}
-                    onClick={() => setDemoSpeed(speed)}
-                    className="h-6 px-2 text-xs"
-                  >
-                    {formatSpeedName(speed)}
-                  </Button>
-                ))}
-              </div>
-            </div>
+            <Button
+              onClick={startDemo}
+              size="default"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              data-testid="start-demo-button"
+            >
+              <Play className="w-4 h-4 mr-2" />
+              Demo Tour ({totalTools} tools)
+            </Button>
           )}
         </div>
       </div>
@@ -206,15 +190,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-
-      {/* No Results */}
-      {Object.keys(filteredToolsData).length === 0 && searchQuery.trim() && (
-        <div className="text-center py-12">
-          <p className="text-slate-500 dark:text-slate-400">
-            No tools found matching &quot;{searchQuery}&quot;
-          </p>
-        </div>
-      )}
 
       {/* Key Advantages Section */}
       <div className="mt-16">
