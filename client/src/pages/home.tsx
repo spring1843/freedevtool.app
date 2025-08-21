@@ -215,243 +215,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Keyboard Shortcuts Help */}
-      <div className="mb-8">
-        <Card>
-          <CardHeader>
-            <CardTitle
-              className="flex items-center justify-between cursor-pointer hover:text-primary transition-colors"
-              onClick={() => setShowAllShortcuts(!showAllShortcuts)}
-            >
-              <div className="flex items-center">
-                <Keyboard className="w-5 h-5 mr-2" />
-                Keyboard Shortcuts
-              </div>
-              {showAllShortcuts ? (
-                <ChevronDown className="w-5 h-5" />
-              ) : (
-                <ChevronRight className="w-5 h-5" />
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
-              Use keyboard shortcuts to quickly navigate and control the app.
-            </p>
-
-            {/* Always visible - Essential shortcuts */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div>
-                <h4 className="font-semibold text-sm mb-2">Navigation:</h4>
-                <ul className="text-sm space-y-1">
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Ctrl+M
-                    </code>{" "}
-                    - Open/Close Menu
-                  </li>
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Ctrl+S
-                    </code>{" "}
-                    - Focus Search
-                  </li>
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Escape
-                    </code>{" "}
-                    - Close Menu
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm mb-2">Theme & UI:</h4>
-                <ul className="text-sm space-y-1">
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Ctrl+D
-                    </code>{" "}
-                    - Toggle Theme
-                  </li>
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      ↑/↓
-                    </code>{" "}
-                    - Search Navigation
-                  </li>
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Enter
-                    </code>{" "}
-                    - Select Tool
-                  </li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold text-sm mb-2">Popular Tools:</h4>
-                <ul className="text-sm space-y-1">
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Ctrl+J
-                    </code>{" "}
-                    - JSON Formatter
-                  </li>
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Ctrl+B
-                    </code>{" "}
-                    - Base64 Encoder
-                  </li>
-                  <li>
-                    <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                      Ctrl+Q
-                    </code>{" "}
-                    - QR Generator
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Expandable section with all shortcuts */}
-            {showAllShortcuts ? (
-              <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div>
-                    <h4 className="font-semibold text-sm mb-2">Converters:</h4>
-                    <ul className="text-sm space-y-1">
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+J
-                        </code>{" "}
-                        - JSON ↔ YAML
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+B
-                        </code>{" "}
-                        - Base64 Encoder
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+U
-                        </code>{" "}
-                        - URL Encoder
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+H
-                        </code>{" "}
-                        - HTML Encoder
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm mb-2">Text Tools:</h4>
-                    <ul className="text-sm space-y-1">
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+W
-                        </code>{" "}
-                        - Word Counter
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+E
-                        </code>{" "}
-                        - Regex Tester
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+T
-                        </code>{" "}
-                        - Text Diff
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+F
-                        </code>{" "}
-                        - Text Formatter
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm mb-2">Generators:</h4>
-                    <ul className="text-sm space-y-1">
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+Q
-                        </code>{" "}
-                        - QR Generator
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+P
-                        </code>{" "}
-                        - Password Generator
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+G
-                        </code>{" "}
-                        - GUID Generator
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+C
-                        </code>{" "}
-                        - Color Palette
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm mb-2">
-                      Hardware Tests:
-                    </h4>
-                    <ul className="text-sm space-y-1">
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+Shift+V
-                        </code>{" "}
-                        - Camera Test
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+Shift+M
-                        </code>{" "}
-                        - Microphone Test
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+Shift+K
-                        </code>{" "}
-                        - Keyboard Test
-                      </li>
-                      <li>
-                        <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
-                          Ctrl+Shift+S
-                        </code>{" "}
-                        - Speaker Test
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            ) : null}
-
-            <div className="text-center mt-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowAllShortcuts(!showAllShortcuts)}
-                className="text-primary hover:text-primary/80"
-              >
-                {showAllShortcuts ? "Show Less" : "Show All Shortcuts"}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
       {/* Tools Grid */}
       <div className="space-y-8">
         {Object.entries(filteredToolsData).map(([section, data]) => (
@@ -630,6 +393,243 @@ export default function Home() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Keyboard Shortcuts Help */}
+        <div className="mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle
+                className="flex items-center justify-between cursor-pointer hover:text-primary transition-colors"
+                onClick={() => setShowAllShortcuts(!showAllShortcuts)}
+              >
+                <div className="flex items-center">
+                  <Keyboard className="w-5 h-5 mr-2" />
+                  Keyboard Shortcuts
+                </div>
+                {showAllShortcuts ? (
+                  <ChevronDown className="w-5 h-5" />
+                ) : (
+                  <ChevronRight className="w-5 h-5" />
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                Use keyboard shortcuts to quickly navigate and control the app.
+              </p>
+
+              {/* Always visible - Essential shortcuts */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <h4 className="font-semibold text-sm mb-2">Navigation:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Ctrl+M
+                      </code>{" "}
+                      - Open/Close Menu
+                    </li>
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Ctrl+S
+                      </code>{" "}
+                      - Focus Search
+                    </li>
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Escape
+                      </code>{" "}
+                      - Close Menu
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm mb-2">Theme & UI:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Ctrl+D
+                      </code>{" "}
+                      - Toggle Theme
+                    </li>
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        ↑/↓
+                      </code>{" "}
+                      - Search Navigation
+                    </li>
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Enter
+                      </code>{" "}
+                      - Select Tool
+                    </li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm mb-2">Popular Tools:</h4>
+                  <ul className="text-sm space-y-1">
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Ctrl+J
+                      </code>{" "}
+                      - JSON Formatter
+                    </li>
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Ctrl+B
+                      </code>{" "}
+                      - Base64 Encoder
+                    </li>
+                    <li>
+                      <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                        Ctrl+Q
+                      </code>{" "}
+                      - QR Generator
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Expandable section with all shortcuts */}
+              {showAllShortcuts ? (
+                <div className="border-t border-slate-200 dark:border-slate-700 pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                      <h4 className="font-semibold text-sm mb-2">Converters:</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+J
+                          </code>{" "}
+                          - JSON ↔ YAML
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+B
+                          </code>{" "}
+                          - Base64 Encoder
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+U
+                          </code>{" "}
+                          - URL Encoder
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+H
+                          </code>{" "}
+                          - HTML Encoder
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-sm mb-2">Text Tools:</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+W
+                          </code>{" "}
+                          - Word Counter
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+E
+                          </code>{" "}
+                          - Regex Tester
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+T
+                          </code>{" "}
+                          - Text Diff
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+F
+                          </code>{" "}
+                          - Text Formatter
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-sm mb-2">Generators:</h4>
+                      <ul className="text-sm space-y-1">
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+Q
+                          </code>{" "}
+                          - QR Generator
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+P
+                          </code>{" "}
+                          - Password Generator
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+G
+                          </code>{" "}
+                          - GUID Generator
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+C
+                          </code>{" "}
+                          - Color Palette
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-sm mb-2">
+                        Hardware Tests:
+                      </h4>
+                      <ul className="text-sm space-y-1">
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+Shift+V
+                          </code>{" "}
+                          - Camera Test
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+Shift+M
+                          </code>{" "}
+                          - Microphone Test
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+Shift+K
+                          </code>{" "}
+                          - Keyboard Test
+                        </li>
+                        <li>
+                          <code className="bg-slate-100 dark:bg-slate-800 px-1 rounded text-xs">
+                            Ctrl+Shift+S
+                          </code>{" "}
+                          - Speaker Test
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              <div className="text-center mt-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowAllShortcuts(!showAllShortcuts)}
+                  className="text-primary hover:text-primary/80"
+                >
+                  {showAllShortcuts ? "Show Less" : "Show All Shortcuts"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Footer */}
