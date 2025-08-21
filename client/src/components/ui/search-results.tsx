@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { Link } from "wouter";
 
 import { ExternalLink } from "lucide-react";
@@ -17,10 +17,35 @@ export function SearchResults({
   className = "",
   selectedIndex = -1,
 }: SearchResultsProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll selected item into view when selectedIndex changes
+  useEffect(() => {
+    if (selectedIndex >= 0 && containerRef.current) {
+      const container = containerRef.current;
+      const selectedItem = container.children[selectedIndex] as HTMLElement;
+
+      if (selectedItem) {
+        const containerRect = container.getBoundingClientRect();
+        const selectedRect = selectedItem.getBoundingClientRect();
+
+        // Check if item is above visible area
+        if (selectedRect.top < containerRect.top) {
+          selectedItem.scrollIntoView({ block: "start", behavior: "smooth" });
+        }
+        // Check if item is below visible area
+        else if (selectedRect.bottom > containerRect.bottom) {
+          selectedItem.scrollIntoView({ block: "end", behavior: "smooth" });
+        }
+      }
+    }
+  }, [selectedIndex]);
+
   if (results.length === 0) return null;
 
   return (
     <div
+      ref={containerRef}
       className={`absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-[9999] max-h-96 overflow-y-auto ${className}`}
       style={{ zIndex: 9999 }}
       data-testid={`search-results`}
