@@ -40,9 +40,14 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const [location, setLocation] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerCollapsed, setHeaderCollapsed] = useState(false);
-  const [, setLocation] = useLocation();
+
+  // Determine if sidebar should be shown by default
+  const isHomepage = location === "/";
+  const isToolPage = location.startsWith("/tools/");
+  const shouldShowSidebarByDefault = isHomepage && !isToolPage;
   const {
     isDemoRunning,
     isDemoPaused,
@@ -268,36 +273,51 @@ export function Layout({ children }: LayoutProps) {
         </div>
 
         <div className="flex flex-1">
-          {/* Sidebar - Always hamburger menu */}
-          <Sheet
-            open={mobileMenuOpen}
-            onOpenChange={setMobileMenuOpen}
-            modal={false}
-          >
-            <SheetContent
-              side="left"
-              className="w-80 p-0 bg-white dark:bg-slate-900 border-0 shadow-2xl"
-              style={{
-                marginTop: "4rem",
-                height: "fit-content",
-                maxHeight: "calc(100vh - 4rem)",
-              }}
-            >
-              <SheetHeader className="sr-only">
-                <SheetTitle>Navigation Menu</SheetTitle>
-                <SheetDescription>
-                  Navigation menu with all available developer tools organized
-                  by category
-                </SheetDescription>
-              </SheetHeader>
-              <Sidebar collapsed={false} />
-            </SheetContent>
-          </Sheet>
-
-          {/* Main Content */}
-          <main className="flex-1 p-6 lg:p-8 overflow-auto custom-scrollbar">
-            {children}
-          </main>
+          {/* Sidebar - Show by default on homepage, hamburger menu on tool pages */}
+          {shouldShowSidebarByDefault ? (
+            <>
+              {/* Default sidebar on homepage */}
+              <aside className="w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 overflow-auto custom-scrollbar">
+                <Sidebar collapsed={false} />
+              </aside>
+              {/* Main content with sidebar visible */}
+              <main className="flex-1 p-6 lg:p-8 overflow-auto custom-scrollbar">
+                {children}
+              </main>
+            </>
+          ) : (
+            <>
+              {/* Hamburger menu for tool pages */}
+              <Sheet
+                open={mobileMenuOpen}
+                onOpenChange={setMobileMenuOpen}
+                modal={false}
+              >
+                <SheetContent
+                  side="left"
+                  className="w-80 p-0 bg-white dark:bg-slate-900 border-0 shadow-2xl"
+                  style={{
+                    marginTop: "4rem",
+                    height: "fit-content",
+                    maxHeight: "calc(100vh - 4rem)",
+                  }}
+                >
+                  <SheetHeader className="sr-only">
+                    <SheetTitle>Navigation Menu</SheetTitle>
+                    <SheetDescription>
+                      Navigation menu with all available developer tools
+                      organized by category
+                    </SheetDescription>
+                  </SheetHeader>
+                  <Sidebar collapsed={false} />
+                </SheetContent>
+              </Sheet>
+              {/* Main content full width */}
+              <main className="flex-1 p-6 lg:p-8 overflow-auto custom-scrollbar">
+                {children}
+              </main>
+            </>
+          )}
         </div>
 
         {/* Footer */}
