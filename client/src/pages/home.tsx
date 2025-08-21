@@ -45,150 +45,104 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-          FreeDevTool.App
-        </h1>
-        <p className="text-xl text-slate-600 dark:text-slate-400 mb-2">
-          🚀 Open Source • Offline Developer Tools
-        </p>
-        <p className="text-sm text-slate-500 dark:text-slate-500 mb-6">
-          Community-driven utilities with browser-based computation •
-          Privacy-focused design
-        </p>
-      </div>
-
-      {/* Two-Column Layout: Info & Demo */}
-      <div className="grid lg:grid-cols-2 gap-8 items-start mb-6">
-        {/* Left Column - Key Advantages */}
-        <div>
-          <div className="flex flex-wrap gap-3 mb-4">
-            <div className="inline-flex items-center bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg px-3 py-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-2" />
-              <span className="text-sm font-medium text-blue-700 dark:text-blue-400">
-                Open Source & Community Driven
-              </span>
+    <div className="container mx-auto px-4 py-6 max-w-6xl">
+      {/* Compact Header - Single Row Layout */}
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+        {/* Left Side - Title and Features */}
+        <div className="flex-1">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+                FreeDevTool.App
+              </h1>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Open Source • Offline Developer Tools
+              </p>
             </div>
-            <div className="inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg px-3 py-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2" />
-              <span className="text-sm font-medium text-green-700 dark:text-green-400">
-                Free Core Features
+            <div className="flex flex-wrap gap-2">
+              <span className="inline-flex items-center bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400">
+                Open Source
               </span>
-            </div>
-            <div className="inline-flex items-center bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg px-3 py-2">
-              <div className="w-2 h-2 bg-purple-500 rounded-full mr-2" />
-              <span className="text-sm font-medium text-purple-700 dark:text-purple-400">
-                No Network Requests Design
+              <span className="inline-flex items-center bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400">
+                Free
+              </span>
+              <span className="inline-flex items-center bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-400">
+                Offline
               </span>
             </div>
           </div>
         </div>
 
-        {/* Right Column - Demo Controls */}
-        <div>
-          {/* Demo Mode */}
-        {isDemoRunning ? (
-          <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-3">
-                <Badge variant="default" className="bg-blue-600">
-                  Demo Mode Active
-                </Badge>
-                <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                  {currentDemoTool}
-                </span>
+        {/* Right Side - Demo Controls */}
+        <div className="flex-shrink-0">
+          {/* Demo Mode Active */}
+          {isDemoRunning ? (
+            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <Badge variant="default" className="bg-blue-600 text-xs">
+                    Demo Active
+                  </Badge>
+                  <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
+                    {currentDemoTool}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={isDemoPaused ? resumeDemo : pauseDemo}
+                    className="h-7 px-2"
+                  >
+                    {isDemoPaused ? (
+                      <Play className="w-3 h-3" />
+                    ) : (
+                      <Pause className="w-3 h-3" />
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={skipToNext}
+                    className="h-7 px-2"
+                  >
+                    <SkipForward className="w-3 h-3" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={stopDemo}
+                    className="h-7 px-2"
+                  >
+                    <Square className="w-3 h-3" />
+                  </Button>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={isDemoPaused ? resumeDemo : pauseDemo}
-                  className="flex items-center space-x-1"
-                >
-                  {isDemoPaused ? (
-                    <Play className="w-3 h-3" />
-                  ) : (
-                    <Pause className="w-3 h-3" />
-                  )}
-                  <span>{isDemoPaused ? "Resume" : "Pause"}</span>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={skipToNext}
-                  className="flex items-center space-x-1"
-                >
-                  <SkipForward className="w-3 h-3" />
-                  <span>Skip</span>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={stopDemo}
-                  className="flex items-center space-x-1"
-                >
-                  <Square className="w-3 h-3" />
-                  <span>Stop</span>
-                </Button>
+              <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-1.5">
+                <div
+                  className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                  style={{ width: `${demoProgress}%` }}
+                />
+              </div>
+              <div className="text-xs text-blue-600 dark:text-blue-400 mt-1 text-center">
+                {Math.round(demoProgress)}% • {demoSpeed.replace("-", " ")} speed
               </div>
             </div>
-            <div className="w-full bg-blue-200 dark:bg-blue-800 rounded-full h-2">
-              <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${demoProgress}%` }}
-              />
-            </div>
-            <div className="text-xs text-blue-600 dark:text-blue-400 mt-1 text-center">
-              {Math.round(demoProgress)}% complete •{" "}
-              {isDemoPaused ? "Paused" : `${demoSpeed.replace("-", " ")} speed`}
-            </div>
-
-            {/* Speed Selector during demo */}
-            <div className="flex items-center justify-center space-x-2 mt-3">
-              <span className="text-xs text-blue-600 dark:text-blue-400">
-                Speed:
-              </span>
-              {(
-                ["slow", "normal", "fast", "very-fast", "crazy-fast"] as const
-              ).map(speed => (
-                <Button
-                  key={speed}
-                  size="sm"
-                  variant={demoSpeed === speed ? "default" : "outline"}
-                  onClick={() => setDemoSpeed(speed)}
-                  className="h-5 px-2 text-xs"
-                >
-                  {formatSpeedName(speed)}
-                </Button>
-              ))}
-            </div>
-          </div>
-        ) : null}
-
-        {/* Demo Button */}
-        {!isDemoRunning && (
-          <div className="mb-6">
-            <div className="flex flex-col items-center space-y-3">
+          ) : (
+            /* Demo Button */
+            <div className="flex items-center space-x-3">
               <Button
                 onClick={startDemo}
-                size="lg"
+                size="default"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 data-testid="start-demo-button"
               >
-                <Play className="w-5 h-5 mr-2" />
-                Start Demo Tour ({totalTools} tools)
+                <Play className="w-4 h-4 mr-2" />
+                Demo Tour ({totalTools} tools)
               </Button>
-
-              {/* Speed Selector */}
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-slate-500 dark:text-slate-400">
-                  Speed:
-                </span>
-                {(
-                  ["slow", "normal", "fast", "very-fast", "crazy-fast"] as const
-                ).map(speed => (
+              <div className="flex items-center space-x-1">
+                <span className="text-xs text-slate-500 dark:text-slate-400">Speed:</span>
+                {(["slow", "normal", "fast", "very-fast", "crazy-fast"] as const).map(speed => (
                   <Button
                     key={speed}
                     size="sm"
@@ -200,14 +154,8 @@ export default function Home() {
                   </Button>
                 ))}
               </div>
-
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
-                Watch all {totalTools} tools in action automatically • Pause
-                anytime to interact
-              </p>
             </div>
-          </div>
-        )}
+          )}
         </div>
       </div>
 
