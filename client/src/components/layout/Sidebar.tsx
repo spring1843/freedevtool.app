@@ -203,22 +203,30 @@ export function Sidebar({
   const activeCategory = getCurrentCategory();
   const navigableItems = getNavigableItems();
 
-  // Track visited paths (session-based) and auto-expand active category
+  // Track visited paths (session-based)
   useEffect(() => {
     if (location && location !== "/" && !visitedPaths.has(location)) {
       const newVisited = new Set(visitedPaths);
       newVisited.add(location);
       setVisitedPaths(newVisited);
     }
+  }, [location, visitedPaths]);
 
-    // Auto-expand the current category if not already expanded
-    if (activeCategory && !expandedSections[activeCategory]) {
-      setExpandedSections(prev => ({
-        ...prev,
-        [activeCategory]: true,
-      }));
+  // Auto-expand the current category when activeCategory changes (not when expandedSections changes)
+  useEffect(() => {
+    if (activeCategory) {
+      setExpandedSections(prev => {
+        // Only expand if not already expanded
+        if (!prev[activeCategory]) {
+          return {
+            ...prev,
+            [activeCategory]: true,
+          };
+        }
+        return prev;
+      });
     }
-  }, [location, visitedPaths, activeCategory, expandedSections]);
+  }, [activeCategory]);
 
   // Keyboard navigation
   useEffect(() => {
