@@ -9,19 +9,16 @@ import { Search, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_TEXT = `Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco.
-Lorem ipsum is commonly used as placeholder text.
-The quick brown fox jumps over the lazy dog.
-Hello world! This is a test string.
-Hello there, this is another hello message.`;
+import { toolDefaults } from "@/data/defaults";
 
 export default function SearchReplace() {
-  const [text, setText] = useState(DEFAULT_TEXT);
-  const [searchText, setSearchText] = useState("Hello");
-  const [replaceText, setReplaceText] = useState("Hi");
+  const [text, setText] = useState(toolDefaults.searchReplace.text);
+  const [searchText, setSearchText] = useState(
+    toolDefaults.searchReplace.search
+  );
+  const [replaceText, setReplaceText] = useState(
+    toolDefaults.searchReplace.replace
+  );
   const [isRegex, setIsRegex] = useState(false);
   const [isCaseSensitive, setIsCaseSensitive] = useState(false);
   const [isGlobal, setIsGlobal] = useState(true);
@@ -77,9 +74,9 @@ export default function SearchReplace() {
   }, [text, searchText, replaceText, isRegex, isCaseSensitive, isGlobal]);
 
   const handleReset = () => {
-    setText(DEFAULT_TEXT);
-    setSearchText("Hello");
-    setReplaceText("Hi");
+    setText(toolDefaults.searchReplace.text);
+    setSearchText(toolDefaults.searchReplace.search);
+    setReplaceText(toolDefaults.searchReplace.replace);
     setIsRegex(false);
     setIsCaseSensitive(false);
     setIsGlobal(true);

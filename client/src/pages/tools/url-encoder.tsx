@@ -5,12 +5,10 @@ import { Link, Unlink, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const defaultPlainText =
-  "Hello World! This is a test URL parameter with special characters: @#$%^&*()+={}[]|\\:;\"'<>?,./`~";
+import { toolDefaults } from "@/data/defaults";
 
 export default function URLEncoder() {
-  const [plainText, setPlainText] = useState(defaultPlainText);
+  const [plainText, setPlainText] = useState(toolDefaults.urlEncoder);
   const [encodedText, setEncodedText] = useState("");
 
   const encodeURL = useCallback(() => {
@@ -43,13 +41,13 @@ export default function URLEncoder() {
 
   const handleEncodedTextChange = (value: string) => {
     setEncodedText(value);
-    if (plainText !== defaultPlainText) {
+    if (plainText !== toolDefaults.urlEncoder) {
       setPlainText("");
     }
   };
 
   const handleReset = () => {
-    setPlainText(defaultPlainText);
+    setPlainText(toolDefaults.urlEncoder);
     setEncodedText("");
   };
 

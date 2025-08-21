@@ -7,62 +7,10 @@ import { FileText, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_MARKDOWN = `# Welcome to Markdown
-
-This is a **bold** text and this is *italic* text.
-
-## Lists
-
-### Unordered List
-- First item
-- Second item  
-  - Nested item
-  - Another nested item
-- Third item
-
-### Ordered List
-1. First step
-2. Second step
-3. Third step
-
-## Code
-
-Inline code: \`console.log('Hello World')\`
-
-Code block:
-\`\`\`javascript
-function greet(name) {
-  return \`Hello, \${name}!\`;
-}
-\`\`\`
-
-## Links and Images
-
-[Visit our website](https://example.com)
-
-![Alt text for image](https://via.placeholder.com/150)
-
-## Blockquotes
-
-> This is a blockquote.
-> It can span multiple lines.
-
-## Tables
-
-| Name | Age | City |
-|------|-----|------|
-| John | 30  | NYC  |
-| Jane | 25  | LA   |
-
-## Horizontal Rule
-
----
-
-*That's it!*`;
+import { toolDefaults } from "@/data/defaults";
 
 export default function MarkdownFormatter() {
-  const [input, setInput] = useState(DEFAULT_MARKDOWN);
+  const [input, setInput] = useState(toolDefaults.markdown);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -86,7 +34,7 @@ export default function MarkdownFormatter() {
   };
 
   const handleReset = () => {
-    setInput(DEFAULT_MARKDOWN);
+    setInput(toolDefaults.markdown);
     setOutput("");
     setError(null);
   };

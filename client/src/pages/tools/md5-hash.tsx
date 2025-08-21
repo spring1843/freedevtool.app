@@ -48,10 +48,10 @@ const simpleMD5 = (input: string): string => {
   return hex.repeat(4).substring(0, 32);
 };
 
+import { toolDefaults } from "@/data/defaults";
+
 export default function MD5Hash() {
-  const [inputText, setInputText] = useState(
-    "Hello World! This is a test text for MD5 hash generation."
-  );
+  const [inputText, setInputText] = useState(toolDefaults.md5);
   const [compareHash, setCompareHash] = useState("");
   const [hashResult, setHashResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -104,7 +104,7 @@ export default function MD5Hash() {
   };
 
   const handleReset = () => {
-    setInputText("Hello World! This is a test text for MD5 hash generation.");
+    setInputText(toolDefaults.md5);
     setCompareHash("");
     setHashResult("");
     setIsMatch(null);

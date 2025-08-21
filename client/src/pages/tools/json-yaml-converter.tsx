@@ -7,38 +7,12 @@ import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_JSON = `{
-  "name": "John Doe",
-  "age": 30,
-  "email": "john@example.com",
-  "address": {
-    "street": "123 Main St",
-    "city": "New York",
-    "zipCode": "10001"
-  },
-  "loves": ["free", "dev", "tool", "app"],
-  "isActive": true
-}`;
-
-const DEFAULT_YAML = `name: John Doe
-age: 30
-email: john@example.com
-address:
-  street: 123 Main St
-  city: New York
-  zipCode: "10001"
-loves:
-  - free
-  - dev
-  - tool
-  - app
-isActive: true`;
+import { toolDefaults } from "@/data/defaults";
 
 export default function JSONYAMLConverter() {
-  const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
+  const [jsonInput, setJsonInput] = useState(toolDefaults.jsonYaml);
   const [yamlOutput, setYamlOutput] = useState("");
-  const [yamlInput, setYamlInput] = useState(DEFAULT_YAML);
+  const [yamlInput, setYamlInput] = useState(toolDefaults.yaml);
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -69,9 +43,9 @@ export default function JSONYAMLConverter() {
   };
 
   const handleReset = () => {
-    setJsonInput(DEFAULT_JSON);
+    setJsonInput(toolDefaults.jsonYaml);
     setYamlOutput("");
-    setYamlInput(DEFAULT_YAML);
+    setYamlInput(toolDefaults.yaml);
     setJsonOutput("");
     setError(null);
   };

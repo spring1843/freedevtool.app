@@ -6,38 +6,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-
-const DEFAULT_YAML = `name: John Doe
-age: 30
-email: john@example.com
-address:
-  street: 123 Main St
-  city: New York
-  zipCode: "10001"
-  country: USA
-hobbies:
-  - reading
-  - swimming
-  - coding
-  - traveling
-skills:
-  - name: JavaScript
-    level: expert
-    years: 5
-  - name: Python
-    level: intermediate
-    years: 3
-  - name: Docker
-    level: beginner
-    years: 1
-isActive: true
-preferences:
-  theme: dark
-  notifications: true
-  language: en`;
+import { toolDefaults } from "@/data/defaults";
 
 export default function YAMLFormatter() {
-  const [input, setInput] = useState(DEFAULT_YAML);
+  const [input, setInput] = useState(toolDefaults.yaml);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -61,7 +33,7 @@ export default function YAMLFormatter() {
   };
 
   const handleReset = () => {
-    setInput(DEFAULT_YAML);
+    setInput(toolDefaults.yaml);
     setOutput("");
     setError(null);
   };

@@ -4,7 +4,7 @@
 export const toolDefaults = {
   // Formatters
   json: `{"name":"John Doe","age":30,"city":"New York","hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zipCode":"10001"}}`,
-  
+
   jsonc: `{
   // Application configuration
   "name": "my-awesome-app",
@@ -484,7 +484,7 @@ Original line that will be changed.`,
 This is the modified text with some content.
 It has multiple lines for comparison.
 Modified line that has been changed.
-This is a new line added to the text.`
+This is a new line added to the text.`,
   },
 
   regexTester: {
@@ -492,7 +492,7 @@ This is a new line added to the text.`
 Phone numbers: +1-555-0123, (555) 456-7890
 Visit our website: https://www.example.com
 Date formats: 2024-01-15, 01/15/2024, Jan 15, 2024`,
-    pattern: `\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b`
+    pattern: `\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b`,
   },
 
   textSort: `apple
@@ -518,7 +518,7 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
 The quick brown fox is very agile.
 Every quick brown fox should jump daily.`,
     search: `quick brown fox`,
-    replace: `swift red wolf`
+    replace: `swift red wolf`,
   },
 
   // Generators
@@ -531,9 +531,34 @@ Every quick brown fox should jump daily.`,
   barcodeGenerator: `1234567890123`,
 
   // Hash Tools
-  md5Hash: `Hello, World! This is a sample text for MD5 hashing.`,
+  md5: `Hello, World! This is a sample text for MD5 hashing.`,
+  bcrypt: `mypassword123`,
 
-  bcryptHash: `MySecurePassword123!`,
+  // JWT
+  jwt: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`,
+
+  // Text diff (fix structure)
+  textDiff1: `Hello World
+This is line 2
+This is line 3
+This line will be removed
+Common line`,
+  textDiff2: `Hello World
+This is line 2 modified
+This is line 3
+New line added here
+Common line`,
+
+  // Regex tester
+  regexPattern: `\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b`,
+  regexText: `Here are some email addresses:
+john.doe@example.com
+jane_smith123@company.org
+test.email+tag@domain.co.uk
+invalid.email@
+another@valid-domain.net
+not-an-email-address
+support@website.info`,
 
   // Date/Time Tools
   dateConverter: `2024-01-15T10:30:00.000Z`,
@@ -542,7 +567,7 @@ Every quick brown fox should jump daily.`,
 
   dateTimeDiff: {
     start: `2024-01-01 09:00:00`,
-    end: `2024-01-15 17:30:00`
+    end: `2024-01-15 17:30:00`,
   },
 
   // Utility Tools
@@ -552,14 +577,11 @@ Every quick brown fox should jump daily.`,
 
   colorPalette: `#3498db`,
 
-  // JWT Decoder
-  jwtDecoder: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`,
-
   // TLS Decoder
   tlsDecoder: `-----BEGIN CERTIFICATE-----
 MIIDBTCCAe2gAwIBAgIJAKZYzZYzZYzZMA0GCSqGSIb3DQEBCwUAMBkxFzAVBgNV
 BAMMDnNhbXBsZS5leGFtcGxlMB4XDTI0MDEwMTAwMDAwMFoXDTI1MDEwMTAwMDAw
 MFowGTEXMBUGA1UEAwwOc2FtcGxlLmV4YW1wbGUwggEiMA0GCSqGSIb3DQEBAQUA
 A4IBDwAwggEKAoIBAQC/Sample/Certificate/Data/Here/This/Is/Just/Example
------END CERTIFICATE-----`
+-----END CERTIFICATE-----`,
 };

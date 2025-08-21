@@ -24,8 +24,10 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
+import { toolDefaults } from "@/data/defaults";
+
 export default function BcryptHash() {
-  const [plaintext, setPlaintext] = useState("mypassword123");
+  const [plaintext, setPlaintext] = useState(toolDefaults.bcrypt);
   const [hash, setHash] = useState("");
   const [verifyText, setVerifyText] = useState("");
   const [rounds, setRounds] = useState(10);
@@ -127,7 +129,7 @@ export default function BcryptHash() {
   };
 
   const handleReset = () => {
-    setPlaintext("mypassword123");
+    setPlaintext(toolDefaults.bcrypt);
     setHash("");
     setVerifyText("");
     setRounds(10);
