@@ -277,8 +277,10 @@ export function Layout({ children }: LayoutProps) {
           {shouldShowSidebarByDefault ? (
             <>
               {/* Default sidebar on homepage */}
-              <aside className="w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 overflow-auto custom-scrollbar">
-                <Sidebar collapsed={false} />
+              <aside className="w-80 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 overflow-y-auto custom-scrollbar flex flex-col h-full">
+                <div className="flex-1 min-h-0">
+                  <Sidebar collapsed={false} />
+                </div>
               </aside>
               {/* Main content with sidebar visible */}
               <main className="flex-1 p-6 lg:p-8 overflow-auto custom-scrollbar">
@@ -295,10 +297,10 @@ export function Layout({ children }: LayoutProps) {
               >
                 <SheetContent
                   side="left"
-                  className="w-80 p-0 bg-white dark:bg-slate-900 border-0 shadow-2xl"
+                  className="w-80 p-0 bg-white dark:bg-slate-900 border-0 shadow-2xl overflow-y-auto custom-scrollbar"
                   style={{
                     marginTop: "4rem",
-                    height: "fit-content",
+                    height: "calc(100vh - 4rem)",
                     maxHeight: "calc(100vh - 4rem)",
                   }}
                 >
@@ -309,7 +311,9 @@ export function Layout({ children }: LayoutProps) {
                       organized by category
                     </SheetDescription>
                   </SheetHeader>
-                  <Sidebar collapsed={false} />
+                  <div className="h-full overflow-y-auto custom-scrollbar">
+                    <Sidebar collapsed={false} />
+                  </div>
                 </SheetContent>
               </Sheet>
               {/* Main content full width */}
