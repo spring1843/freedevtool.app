@@ -20,8 +20,12 @@ test.describe("Demo End-to-End Test", () => {
     await expect(demoModeActive).toBeVisible();
 
     // Change to crazy fast speed after demo starts
-    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
-    await crazyFastButton.click();
+    const speedSelect = page.locator('[role="combobox"]').first();
+    await speedSelect.click();
+    const crazyFastOption = page.locator(
+      '[role="option"]:has-text("Crazy Fast")'
+    );
+    await crazyFastOption.click();
 
     // Let demo run for a short time
     await page.waitForTimeout(3000);
@@ -66,8 +70,12 @@ test.describe("Demo End-to-End Test", () => {
 
     // Wait for demo to start then set crazy fast speed
     await page.waitForSelector("text=Demo Mode Active");
-    const crazyFastButton = page.locator('button:has-text("Crazy Fast")');
-    await crazyFastButton.click();
+    const speedSelect = page.locator('[role="combobox"]').first();
+    await speedSelect.click();
+    const crazyFastOption = page.locator(
+      '[role="option"]:has-text("Crazy Fast")'
+    );
+    await crazyFastOption.click();
 
     // Track visited tools
     const visitedTools = new Set<string>();
