@@ -655,6 +655,7 @@ export const DEFAULT_COMPOUND_PRINCIPAL = 10000;
 export const DEFAULT_COMPOUND_ANNUAL_RATE = 12;
 export const DEFAULT_COMPOUND_YEARS = 20;
 export const DEFAULT_COMPOUND_MONTHLY_CONTRIBUTION = 500;
+<<<<<<< HEAD
 
 // Time-based Tools (use "NOW" for current time/date defaults)
 export const DEFAULT_COUNTDOWN_DATE = "NOW"; // Will be replaced with next New Year
@@ -718,3 +719,4 @@ export const DEFAULT_METRONOME_BPM = 120;
 export const DEFAULT_METRONOME_NOTE = "A4";
 export const DEFAULT_METRONOME_FREQUENCY = 440.0;
 export const DEFAULT_METRONOME_INTERVAL_SECONDS = 0.5;
+
