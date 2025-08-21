@@ -42,6 +42,7 @@ interface TimerInstance {
 
 export default function Timer() {
   // Default timer setup - 5 minutes as per STYLE.md requirement
+  const [newTimerHours, setNewTimerHours] = useState(0);
   const [newTimerMinutes, setNewTimerMinutes] = useState(5);
   const [newTimerSeconds, setNewTimerSeconds] = useState(0);
   const [newTimerName, setNewTimerName] = useState("");
@@ -107,7 +108,7 @@ export default function Timer() {
   );
 
   const addTimer = useCallback(() => {
-    if (newTimerMinutes === 0 && newTimerSeconds === 0) {
+    if (newTimerHours === 0 && newTimerMinutes === 0 && newTimerSeconds === 0) {
       toast({
         title: "Invalid Timer",
         description: "Please set a duration greater than 0",
@@ -116,10 +117,13 @@ export default function Timer() {
       return;
     }
 
-    const duration = newTimerMinutes * 60 + newTimerSeconds;
-    const name =
-      newTimerName.trim() ||
-      `Timer ${newTimerMinutes}:${newTimerSeconds.toString().padStart(2, "0")}`;
+    const duration =
+      newTimerHours * 3600 + newTimerMinutes * 60 + newTimerSeconds;
+    const timeDisplay =
+      newTimerHours > 0
+        ? `${newTimerHours}:${newTimerMinutes.toString().padStart(2, "0")}:${newTimerSeconds.toString().padStart(2, "0")}`
+        : `${newTimerMinutes}:${newTimerSeconds.toString().padStart(2, "0")}`;
+    const name = newTimerName.trim() || `Timer ${timeDisplay}`;
 
     const newTimer: TimerInstance = {
       id: `timer-${Date.now()}`,
@@ -136,19 +140,26 @@ export default function Timer() {
 
     // Reset form
     setNewTimerName("");
+    setNewTimerHours(0);
     setNewTimerMinutes(5);
     setNewTimerSeconds(0);
     setNewTimerAlarmCount(3);
     setShowAddTimer(false);
 
     // Update URL with latest timer
-    updateURL({ m: newTimerMinutes, s: newTimerSeconds, name });
+    updateURL({
+      h: newTimerHours,
+      m: newTimerMinutes,
+      s: newTimerSeconds,
+      name,
+    });
 
     toast({
       title: "Timer Added",
       description: `Added ${name}`,
     });
   }, [
+    newTimerHours,
     newTimerMinutes,
     newTimerSeconds,
     newTimerName,
@@ -190,18 +201,20 @@ export default function Timer() {
     const intervals = alarmIntervalsRef.current;
 
     // Load from URL parameters or create default timer
+    const urlHours = getParam("h", 0);
     const urlMinutes = getParam("m", 5);
     const urlSeconds = getParam("s", 0);
     const urlName = getParam("name", "");
 
-    if (urlMinutes > 0 || urlSeconds > 0) {
+    if (urlHours > 0 || urlMinutes > 0 || urlSeconds > 0) {
+      const duration = urlHours * 3600 + urlMinutes * 60 + urlSeconds;
       const defaultTimer: TimerInstance = {
         id: `timer-${Date.now()}`,
         name:
           urlName ||
-          `Timer ${urlMinutes}:${urlSeconds.toString().padStart(2, "0")}`,
-        duration: urlMinutes * 60 + urlSeconds,
-        timeLeft: urlMinutes * 60 + urlSeconds,
+          `Timer ${urlHours > 0 ? `${urlHours}:` : ""}${urlMinutes}:${urlSeconds.toString().padStart(2, "0")}`,
+        duration,
+        timeLeft: duration,
         isRunning: false, // Don't auto-start per STYLE.md for tools that make sound
         isFinished: false,
         alarmCount: 3,
@@ -334,13 +347,18 @@ export default function Timer() {
   const copyShareURL = useCallback(() => {
     if (timers.length > 0) {
       const timer = timers[0];
-      const minutes = Math.floor(timer.duration / 60);
+      const hours = Math.floor(timer.duration / 3600);
+      const minutes = Math.floor((timer.duration % 3600) / 60);
       const seconds = timer.duration % 60;
-      copyShareableURL({ m: minutes, s: seconds, name: timer.name });
+      copyShareableURL({ h: hours, m: minutes, s: seconds, name: timer.name });
     } else {
-      copyShareableURL({ m: newTimerMinutes, s: newTimerSeconds });
+      copyShareableURL({
+        h: newTimerHours,
+        m: newTimerMinutes,
+        s: newTimerSeconds,
+      });
     }
-  }, [timers, newTimerMinutes, newTimerSeconds]);
+  }, [timers, newTimerHours, newTimerMinutes, newTimerSeconds]);
 
   const getAlarmText = (count: number) => {
     switch (count) {
@@ -355,6 +373,26 @@ export default function Timer() {
       default:
         return `${count} times`;
     }
+  };
+
+  // Timer presets for common use cases
+  const timerPresets = [
+    { name: "Coffee Break", hours: 0, minutes: 5, seconds: 0 },
+    { name: "Meditation", hours: 0, minutes: 10, seconds: 0 },
+    { name: "Study Block", hours: 0, minutes: 25, seconds: 0 },
+    { name: "Short Break", hours: 0, minutes: 15, seconds: 0 },
+    { name: "Workout", hours: 0, minutes: 30, seconds: 0 },
+    { name: "Lunch Break", hours: 1, minutes: 0, seconds: 0 },
+    { name: "Long Focus", hours: 1, minutes: 30, seconds: 0 },
+    { name: "Power Nap", hours: 0, minutes: 20, seconds: 0 },
+  ];
+
+  const applyPreset = (preset: (typeof timerPresets)[0]) => {
+    setNewTimerHours(preset.hours);
+    setNewTimerMinutes(preset.minutes);
+    setNewTimerSeconds(preset.seconds);
+    setNewTimerName(preset.name);
+    setShowAddTimer(true);
   };
 
   return (
@@ -399,11 +437,40 @@ export default function Timer() {
         </div>
       </div>
 
+      {/* Timer Presets */}
+      {!showAddTimer && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Quick Presets</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {timerPresets.map(preset => (
+                <Button
+                  key={preset.name}
+                  variant="outline"
+                  onClick={() => applyPreset(preset)}
+                  className="h-auto p-3 text-left flex flex-col items-start"
+                  data-testid={`preset-${preset.name.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  <div className="font-medium text-sm">{preset.name}</div>
+                  <div className="text-xs text-slate-500">
+                    {preset.hours > 0
+                      ? `${preset.hours}:${preset.minutes.toString().padStart(2, "0")}:${preset.seconds.toString().padStart(2, "0")}`
+                      : `${preset.minutes}:${preset.seconds.toString().padStart(2, "0")}`}
+                  </div>
+                </Button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Add Timer Form */}
       {showAddTimer ? (
         <Card className="mb-6">
           <CardContent className="pt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               <div>
                 <Label htmlFor="timer-name">Timer Name (Optional)</Label>
                 <Input
@@ -416,12 +483,27 @@ export default function Timer() {
               </div>
 
               <div>
+                <Label htmlFor="timer-hours">Hours</Label>
+                <Input
+                  id="timer-hours"
+                  type="number"
+                  min="0"
+                  max="23"
+                  value={newTimerHours}
+                  onChange={e =>
+                    setNewTimerHours(parseInt(e.target.value) || 0)
+                  }
+                  data-testid="timer-hours-input"
+                />
+              </div>
+
+              <div>
                 <Label htmlFor="timer-minutes">Minutes</Label>
                 <Input
                   id="timer-minutes"
                   type="number"
                   min="0"
-                  max="1440"
+                  max="59"
                   value={newTimerMinutes}
                   onChange={e =>
                     setNewTimerMinutes(parseInt(e.target.value) || 0)
@@ -468,9 +550,9 @@ export default function Timer() {
 
             <div className="flex justify-between items-center mt-4">
               <div className="text-sm text-slate-600 dark:text-slate-400">
-                Duration: {newTimerMinutes}:
-                {newTimerSeconds.toString().padStart(2, "0")} • Alarm:{" "}
-                {getAlarmText(newTimerAlarmCount)}
+                Duration: {newTimerHours > 0 ? `${newTimerHours}:` : ""}
+                {newTimerMinutes}:{newTimerSeconds.toString().padStart(2, "0")}{" "}
+                • Alarm: {getAlarmText(newTimerAlarmCount)}
               </div>
               <Button onClick={addTimer} data-testid="add-timer-confirm">
                 <Plus className="w-4 h-4 mr-2" />
