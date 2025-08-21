@@ -12,9 +12,10 @@ We strive to:
 
 ### Tools
 
-* Tools must have a default value
+* Tools must have a default value for input where it makes sense
 * Each tool must have a primary action button that processes the user's input.
 * Allow uploading data to input, downloading and copying the output
+* Have interesting and meaningful presets
 * Allow clearing the input and resetting the input to the default value
 * An "Auto-update" checkbox, enabled by default, should be placed near the main action button. When checked, any change to the input automatically triggers the main action.
 * Tools should automatically process their default input upon launch. The exception is for tools that produce sound or request browser permissions, which should require user interaction to start.
