@@ -7,10 +7,10 @@ import { Code, Minimize2, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_TYPESCRIPT } from "@/data/defaults";
 
 export default function TypeScriptFormatter() {
-  const [input, setInput] = useState(toolDefaults.typescript);
+  const [input, setInput] = useState(DEFAULT_TYPESCRIPT);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -40,7 +40,7 @@ export default function TypeScriptFormatter() {
   };
 
   const handleReset = () => {
-    setInput(toolDefaults.typescript);
+    setInput(DEFAULT_TYPESCRIPT);
     setOutput("");
     setError(null);
   };

@@ -32,12 +32,10 @@ import { useToast } from "@/hooks/use-toast";
 
 import { getParam, updateURL, generateShareableURL } from "@/lib/url-sharing";
 
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_COLOR_PALETTE_GENERATOR } from "@/data/defaults";
 
 export default function ColorPaletteGenerator() {
-  const [baseColor, setBaseColor] = useState(
-    toolDefaults.colorPaletteGenerator
-  );
+  const [baseColor, setBaseColor] = useState(DEFAULT_COLOR_PALETTE_GENERATOR);
   const [selectedType, setSelectedType] = useState("complementary");
   const [generatedPalettes, setGeneratedPalettes] = useState<ColorPalette[]>(
     []

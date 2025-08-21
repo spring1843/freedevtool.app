@@ -9,7 +9,7 @@ import { Search, RotateCcw, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_REGEX_PATTERN, DEFAULT_REGEX_TEXT } from "@/data/defaults";
 
 interface RegexMatch {
   match: string;
@@ -18,8 +18,8 @@ interface RegexMatch {
 }
 
 export default function RegexTester() {
-  const [pattern, setPattern] = useState(toolDefaults.regexPattern);
-  const [text, setText] = useState(toolDefaults.regexText);
+  const [pattern, setPattern] = useState(DEFAULT_REGEX_PATTERN);
+  const [text, setText] = useState(DEFAULT_REGEX_TEXT);
   const [flags, setFlags] = useState("g");
   const [globalFlag, setGlobalFlag] = useState(true);
   const [caseInsensitiveFlag, setCaseInsensitiveFlag] = useState(false);
@@ -78,8 +78,8 @@ export default function RegexTester() {
   }, [pattern, flags, text, globalFlag]);
 
   const handleReset = () => {
-    setPattern(toolDefaults.regexPattern);
-    setText(toolDefaults.regexText);
+    setPattern(DEFAULT_REGEX_PATTERN);
+    setText(DEFAULT_REGEX_TEXT);
     setFlags("g");
     setGlobalFlag(true);
     setCaseInsensitiveFlag(false);

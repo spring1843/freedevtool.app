@@ -6,10 +6,10 @@ import { Lock, Unlock, ArrowRightLeft } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_BASE64 } from "@/data/defaults";
 
 export default function Base64Encoder() {
-  const [plainText, setPlainText] = useState(toolDefaults.base64);
+  const [plainText, setPlainText] = useState(DEFAULT_BASE64);
   const [encodedText, setEncodedText] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -49,13 +49,13 @@ export default function Base64Encoder() {
 
   const handleEncodedTextChange = (value: string) => {
     setEncodedText(value);
-    if (plainText !== toolDefaults.base64) {
-      setPlainText(toolDefaults.base64);
+    if (plainText !== DEFAULT_BASE64) {
+      setPlainText(DEFAULT_BASE64);
     }
   };
 
   const handleReset = () => {
-    setPlainText(toolDefaults.base64);
+    setPlainText(DEFAULT_BASE64);
     setEncodedText("");
     setError(null);
   };

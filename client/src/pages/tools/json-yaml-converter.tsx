@@ -7,12 +7,12 @@ import { ArrowRight, ArrowLeft, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_JSON, DEFAULT_YAML } from "@/data/defaults";
 
 export default function JSONYAMLConverter() {
-  const [jsonInput, setJsonInput] = useState(toolDefaults.jsonYaml);
+  const [jsonInput, setJsonInput] = useState(DEFAULT_JSON);
   const [yamlOutput, setYamlOutput] = useState("");
-  const [yamlInput, setYamlInput] = useState(toolDefaults.yaml);
+  const [yamlInput, setYamlInput] = useState(DEFAULT_YAML);
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -43,9 +43,9 @@ export default function JSONYAMLConverter() {
   };
 
   const handleReset = () => {
-    setJsonInput(toolDefaults.jsonYaml);
+    setJsonInput(DEFAULT_JSON);
     setYamlOutput("");
-    setYamlInput(toolDefaults.yaml);
+    setYamlInput(DEFAULT_YAML);
     setJsonOutput("");
     setError(null);
   };

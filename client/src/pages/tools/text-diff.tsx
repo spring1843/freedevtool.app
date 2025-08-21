@@ -6,7 +6,7 @@ import { GitCompare, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_TEXT_DIFF_1, DEFAULT_TEXT_DIFF_2 } from "@/data/defaults";
 
 interface DiffLine {
   type: "added" | "removed" | "unchanged" | "modified";
@@ -17,8 +17,8 @@ interface DiffLine {
 }
 
 export default function TextDiff() {
-  const [text1, setText1] = useState(toolDefaults.textDiff1);
-  const [text2, setText2] = useState(toolDefaults.textDiff2);
+  const [text1, setText1] = useState(DEFAULT_TEXT_DIFF_1);
+  const [text2, setText2] = useState(DEFAULT_TEXT_DIFF_2);
   const [diffResult, setDiffResult] = useState<DiffLine[]>([]);
   const [diffStats, setDiffStats] = useState<{
     linesAdded: number;
@@ -95,8 +95,8 @@ export default function TextDiff() {
   }, [text1, text2]);
 
   const handleReset = () => {
-    setText1(toolDefaults.textDiff1);
-    setText2(toolDefaults.textDiff2);
+    setText1(DEFAULT_TEXT_DIFF_1);
+    setText2(DEFAULT_TEXT_DIFF_2);
     setDiffResult([]);
     setDiffStats(null);
   };

@@ -1,11 +1,10 @@
 // Centralized default values for all tools
-// This makes it easy to manage and modify default content across all tools
+// Each constant is independent for easy tracking and refactoring
 
-export const toolDefaults = {
-  // Formatters
-  json: `{"name":"John Doe","age":30,"city":"New York","hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zipCode":"10001"}}`,
+// Formatters
+export const DEFAULT_JSON = `{"name":"John Doe","age":30,"city":"New York","hobbies":["reading","swimming","coding"],"address":{"street":"123 Main St","zipCode":"10001"}}`;
 
-  jsonc: `{
+export const DEFAULT_JSONC = `{
   // Application configuration
   "name": "my-awesome-app",
   "version": "1.0.0",
@@ -44,11 +43,11 @@ export const toolDefaults = {
       "apiRateLimit": 100 // Requests per minute
     }
   }
-}`,
+}`;
 
-  html: `<!DOCTYPE html><html><head><title>Sample Page</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><header><h1>Welcome to My Website</h1><nav><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav></header><main><section id="hero"><h2>Hero Section</h2><p>This is a sample HTML document for formatting.</p><button type="button">Call to Action</button></section><article><h3>Article Title</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Bold text</strong> and <em>italic text</em> for emphasis.</p><blockquote>This is a quote that spans multiple lines and contains important information.</blockquote></article></main><footer><p>&copy; 2024 My Website. All rights reserved.</p></footer></body></html>`,
+export const DEFAULT_HTML = `<!DOCTYPE html><html><head><title>Sample Page</title><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body><header><h1>Welcome to My Website</h1><nav><ul><li><a href="#home">Home</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav></header><main><section id="hero"><h2>Hero Section</h2><p>This is a sample HTML document for formatting.</p><button type="button">Call to Action</button></section><article><h3>Article Title</h3><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Bold text</strong> and <em>italic text</em> for emphasis.</p><blockquote>This is a quote that spans multiple lines and contains important information.</blockquote></article></main><footer><p>&copy; 2024 My Website. All rights reserved.</p></footer></body></html>`;
 
-  yaml: `# Application Configuration
+export const DEFAULT_YAML = `# Application Configuration
 app:
   name: "my-awesome-app"
   version: "1.0.0"
@@ -80,44 +79,30 @@ dependencies:
   - name: "express"
     version: "^4.18.0"
   - name: "cors" 
-    version: "^2.8.5"
-  - name: "helmet"
-    version: "^6.0.0"`,
+    version: "^2.8.5"`;
 
-  markdown: `# Sample Markdown Document
+export const DEFAULT_MARKDOWN = `# Sample Markdown Document
 
-This is a **comprehensive example** of Markdown formatting that demonstrates various elements and syntax.
+This is a **comprehensive** example of *Markdown* formatting that demonstrates various elements commonly used in documentation and content creation.
 
-## Table of Contents
-- [Headers](#headers)
-- [Text Formatting](#text-formatting)
-- [Lists](#lists)
-- [Links and Images](#links-and-images)
-- [Code](#code)
-- [Tables](#tables)
+## Introduction
 
-## Headers
-
-### This is an H3
-#### This is an H4
-##### This is an H5
+Markdown is a lightweight markup language with plain-text formatting syntax. It's designed to be easy to read and write, and it can be converted to HTML and other formats.
 
 ## Text Formatting
 
-Here's some *italic text* and some **bold text**. You can also use ~~strikethrough~~.
+You can make text **bold** or *italic*, or even ***both***. You can also use ~~strikethrough~~ text and \`inline code\`.
 
-> This is a blockquote. It can span multiple lines and is useful for highlighting important information or quotes from other sources.
+### Lists
 
-## Lists
-
-### Unordered List
+#### Unordered List
 - First item
 - Second item
   - Nested item
   - Another nested item
 - Third item
 
-### Ordered List
+#### Ordered List
 1. First step
 2. Second step
 3. Third step
@@ -152,9 +137,9 @@ console.log(message);
 
 ---
 
-*This document demonstrates various Markdown elements for formatting and presentation.*`,
+*This document demonstrates various Markdown elements for formatting and presentation.*`;
 
-  css: `/* Modern CSS Stylesheet Example */
+export const DEFAULT_CSS = `/* Modern CSS Stylesheet Example */
 :root {
   --primary-color: #3498db;
   --secondary-color: #2ecc71;
@@ -205,22 +190,30 @@ body {
 
 .button:hover {
   background-color: #2980b9;
-  transform: translateY(-2px);
   box-shadow: var(--box-shadow);
+  transform: translateY(-2px);
+}
+
+.card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 2rem;
+  margin: 1rem 0;
 }
 
 @media (max-width: 768px) {
   .container {
-    padding: 0 15px;
+    padding: 0 10px;
   }
   .button {
     display: block;
     width: 100%;
     text-align: center;
   }
-}`,
+}`;
 
-  less: `// LESS Stylesheet Example with Variables and Mixins
+export const DEFAULT_LESS = `// LESS Stylesheet Example with Variables and Mixins
 @primary-color: #3498db;
 @secondary-color: #2ecc71;
 @accent-color: #e74c3c;
@@ -300,16 +293,16 @@ body {
     color: @primary-color;
     margin-bottom: 10px;
   }
-}`,
+}`;
 
-  scss: `// SCSS Stylesheet Example with Variables, Mixins, and Nesting
+export const DEFAULT_SCSS = `// SCSS Stylesheet Example with Variables, Mixins, and Nesting
 $primary-color: #3498db;
 $secondary-color: #2ecc71;
 $accent-color: #e74c3c;
 $font-size-base: 16px;
 $font-size-large: $font-size-base * 1.25;
 $border-radius: 8px;
-$breakpoint-mobile: 768px;
+$transition-duration: 0.3s;
 
 // Mixins
 @mixin border-radius($radius: $border-radius) {
@@ -324,27 +317,20 @@ $breakpoint-mobile: 768px;
   -moz-box-shadow: $x $y $blur $color;
 }
 
-@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+@mixin transition($property: all, $duration: $transition-duration, $timing: ease) {
   transition: $property $duration $timing;
   -webkit-transition: $property $duration $timing;
   -moz-transition: $property $duration $timing;
 }
 
-@mixin respond-to($breakpoint) {
-  @if $breakpoint == mobile {
-    @media (max-width: $breakpoint-mobile) {
-      @content;
-    }
-  }
-}
-
 // Base styles
 body {
   font-size: $font-size-base;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.6;
   color: #333;
-  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -352,8 +338,8 @@ body {
   margin: 0 auto;
   padding: 0 20px;
   
-  @include respond-to(mobile) {
-    padding: 0 15px;
+  &.fluid {
+    max-width: 100%;
   }
 }
 
@@ -383,59 +369,151 @@ body {
     }
   }
   
-  &.large {
-    padding: 16px 32px;
-    font-size: $font-size-large;
-  }
-  
-  @include respond-to(mobile) {
-    display: block;
-    width: 100%;
-    text-align: center;
+  &.outline {
+    background-color: transparent;
+    border: 2px solid $primary-color;
+    color: $primary-color;
+    
+    &:hover {
+      background-color: $primary-color;
+      color: white;
+    }
   }
 }
 
-.navigation {
-  background-color: white;
+.card {
+  background: white;
+  @include border-radius();
   @include box-shadow();
+  padding: 20px;
+  margin-bottom: 20px;
   
-  .nav-list {
-    list-style: none;
-    display: flex;
-    gap: 20px;
+  .title {
+    font-size: $font-size-large;
+    font-weight: bold;
+    color: $primary-color;
+    margin-bottom: 10px;
     
-    .nav-item {
-      .nav-link {
-        color: $primary-color;
-        text-decoration: none;
-        padding: 10px 15px;
-        display: block;
-        @include transition(color);
-        
-        &:hover {
-          color: darken($primary-color, 15%);
-        }
-        
-        &.active {
-          font-weight: bold;
-          color: $accent-color;
-        }
-      }
-    }
-    
-    @include respond-to(mobile) {
-      flex-direction: column;
-      gap: 0;
+    &.center {
+      text-align: center;
     }
   }
-}`,
+  
+  .content {
+    color: #666;
+    line-height: 1.7;
+    
+    p {
+      margin-bottom: 15px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
 
-  typescript: `interface User{name:string;age:number;email?:string;isActive:boolean;}type UserStatus="active"|"inactive"|"pending";class UserManager{private users:User[]=[];constructor(initialUsers:User[]=[]){this.users=initialUsers;}addUser(user:User):void{this.users.push(user);}getActiveUsers():User[]{return this.users.filter(user=>user.isActive);}getUserByName<T extends User>(name:string):T|undefined{return this.users.find(user=>user.name===name)as T|undefined;}}const createUserGreeting=(user:User,status:UserStatus="active"):string=>{const greeting=status==="active"?"Welcome":"Hello";return \`\${greeting} \${user.name}! You are \${user.age} years old.\`;};enum Permission{READ="read",WRITE="write",DELETE="delete"}function hasPermission(userRole:string,required:Permission):boolean{const rolePermissions:{[key:string]:Permission[]}={admin:[Permission.READ,Permission.WRITE,Permission.DELETE],editor:[Permission.READ,Permission.WRITE],viewer:[Permission.READ]};return rolePermissions[userRole]?.includes(required)??false;}`,
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .card {
+    margin-bottom: 15px;
+    padding: 15px;
+  }
+}`;
 
-  graphql: `type User{id:ID!name:String!email:String!age:Int posts:[Post!]!profile:UserProfile}type Post{id:ID!title:String!content:String!author:User!tags:[String!]!createdAt:String!updatedAt:String comments:[Comment!]!}type Comment{id:ID!content:String!author:User!post:Post!createdAt:String!}type UserProfile{bio:String avatar:String website:String location:String}input CreateUserInput{name:String!email:String!age:Int}input UpdateUserInput{name:String email:String age:Int}type Query{users:[User!]!user(id:ID!):User posts:[Post!]!post(id:ID!):Post searchPosts(query:String!):[Post!]!}type Mutation{createUser(input:CreateUserInput!):User!updateUser(id:ID!,input:UpdateUserInput!):User!deleteUser(id:ID!):Boolean!createPost(title:String!,content:String!,authorId:ID!):Post!}type Subscription{postAdded:Post!commentAdded(postId:ID!):Comment!}schema{query:Query mutation:Mutation subscription:Subscription}`,
+export const DEFAULT_TYPESCRIPT = `// TypeScript Example with Types, Interfaces, and Classes
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age?: number;
+  isActive: boolean;
+  roles: string[];
+}
 
-  // Converters
-  jsonYaml: `{
+interface ApiResponse<T> {
+  data: T;
+  message: string;
+  status: 'success' | 'error';
+  timestamp: Date;
+}
+
+type UserRole = 'admin' | 'user' | 'moderator';
+
+class UserService {
+  private users: User[] = [];
+  
+  constructor(private apiUrl: string) {}
+  
+  async fetchUser(id: number): Promise<ApiResponse<User>> {
+    try {
+      const response = await fetch(\`\${this.apiUrl}/users/\${id}\`);
+      const data = await response.json();
+      
+      return {
+        data,
+        message: 'User fetched successfully',
+        status: 'success',
+        timestamp: new Date()
+      };
+    } catch (error) {
+      return {
+        data: {} as User,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        status: 'error',
+        timestamp: new Date()
+      };
+    }
+  }
+  
+  validateUser(user: Partial<User>): boolean {
+    return !!(user.name && user.email && user.name.length > 0);
+  }
+  
+  filterUsersByRole(role: UserRole): User[] {
+    return this.users.filter(user => user.roles.includes(role));
+  }
+  
+  getUserStats(): { total: number; active: number; inactive: number } {
+    const total = this.users.length;
+    const active = this.users.filter(u => u.isActive).length;
+    const inactive = total - active;
+    
+    return { total, active, inactive };
+  }
+}
+
+// Generic function example
+function createResponse<T>(data: T, message: string): ApiResponse<T> {
+  return {
+    data,
+    message,
+    status: 'success',
+    timestamp: new Date()
+  };
+}
+
+// Usage example
+const userService = new UserService('https://api.example.com');
+const response = createResponse<User[]>([], 'Users loaded successfully');
+
+export { User, UserService, ApiResponse, UserRole };`;
+
+export const DEFAULT_GRAPHQL = `type User{id:ID!name:String!email:String!age:Int posts:[Post!]!profile:UserProfile}type Post{id:ID!title:String!content:String!author:User!tags:[String!]!createdAt:String!updatedAt:String comments:[Comment!]!}type Comment{id:ID!content:String!author:User!post:Post!createdAt:String!}type UserProfile{bio:String avatar:String website:String location:String}input CreateUserInput{name:String!email:String!age:Int}input UpdateUserInput{name:String email:String age:Int}type Query{users:[User!]!user(id:ID!):User posts:[Post!]!post(id:ID!):Post searchPosts(query:String!):[Post!]!}type Mutation{createUser(input:CreateUserInput!):User!updateUser(id:ID!,input:UpdateUserInput!):User!deleteUser(id:ID!):Boolean!createPost(title:String!,content:String!,authorId:ID!):Post!}type Subscription{postAdded:Post!commentAdded(postId:ID!):Comment!}schema{query:Query mutation:Mutation subscription:Subscription}`;
+
+// Converters
+export const DEFAULT_JSON_YAML = `{
   "name": "sample-project",
   "version": "1.0.0",
   "description": "A sample project for JSON to YAML conversion",
@@ -456,130 +534,113 @@ body {
   "keywords": ["sample", "demo", "conversion"],
   "author": "Developer Name",
   "license": "MIT"
-}`,
+}`;
 
-  urlToJson: `https://api.example.com/users?page=1&limit=10&sort=name&order=asc&filter=active&category=premium#section`,
+export const DEFAULT_URL_TO_JSON = `https://api.example.com/users?page=1&limit=10&sort=name&order=asc&filter=active&category=premium#section`;
 
-  csvToJson: `name,email,age,city
+export const DEFAULT_CSV_TO_JSON = `name,email,age,city
 John Doe,john@example.com,30,New York
 Jane Smith,jane@example.com,25,Los Angeles
-Bob Johnson,bob@example.com,35,Chicago`,
+Bob Johnson,bob@example.com,35,Chicago`;
 
-  // Encoders
-  base64: `Hello, World! This is a sample text for Base64 encoding.
+// Encoders
+export const DEFAULT_BASE64 = `Hello, World! This is a sample text for Base64 encoding.
 It contains multiple lines and various characters: !@#$%^&*()
-UTF-8 characters are also supported: 你好, мир, 🌍`,
+UTF-8 characters are also supported: 你好, мир, 🌍`;
 
-  urlEncoder: `https://example.com/search?q=hello world&category=tech&date=2024-01-01`,
+export const DEFAULT_URL_ENCODER = `https://example.com/search?q=hello world&category=tech&date=2024-01-01`;
 
-  // Text Tools
-  textDiff: {
-    original: `The quick brown fox jumps over the lazy dog.
-This is the original text with some content.
-It has multiple lines for comparison.
-Original line that will be changed.`,
-    modified: `The quick brown fox leaps over the lazy dog.
-This is the modified text with some content.
-It has multiple lines for comparison.
-Modified line that has been changed.
-This is a new line added to the text.`,
-  },
-
-  regexTester: {
-    text: `Contact us at support@example.com or sales@company.org
-Phone numbers: +1-555-0123, (555) 456-7890
-Visit our website: https://www.example.com
-Date formats: 2024-01-15, 01/15/2024, Jan 15, 2024`,
-    pattern: `\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b`,
-  },
-
-  textSort: `apple
-banana
-cherry
-date
-elderberry
-fig
-grape
-honeydew
-kiwi
-lemon`,
-
-  textCounter: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`,
-
-  textSplit: `apple,banana,cherry,date,elderberry,fig,grape,honeydew,kiwi,lemon`,
-
-  searchReplace: {
-    text: `The quick brown fox jumps over the lazy dog.
-The quick brown fox is very agile.
-Every quick brown fox should jump daily.`,
-    search: `quick brown fox`,
-    replace: `swift red wolf`,
-  },
-
-  // Generators
-  loremGenerator: `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
-
-  passwordGenerator: `MySecureP@ssw0rd123!`,
-
-  qrGenerator: "Visit FreeDevTool.App for more amazing developer tools!",
-
-  barcodeGenerator: "FreeDevTool.App",
-
-  // Hash Tools
-  md5: `Hello, World! This is a sample text for MD5 hashing.`,
-  bcrypt: `mypassword123`,
-
-  // JWT
-  jwt: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`,
-
-  // Text diff (fix structure)
-  textDiff1: `Hello World
+// Text Tools
+export const DEFAULT_TEXT_DIFF_1 = `Hello World
 This is line 2
 This is line 3
 This line will be removed
-Common line`,
-  textDiff2: `Hello World
+Common line`;
+
+export const DEFAULT_TEXT_DIFF_2 = `Hello World
 This is line 2 modified
 This is line 3
 New line added here
-Common line`,
+Common line`;
 
-  // Regex tester
-  regexPattern: `\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b`,
-  regexText: `Here are some email addresses:
+export const DEFAULT_REGEX_PATTERN = `\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b`;
+
+export const DEFAULT_REGEX_TEXT = `Here are some email addresses:
 john.doe@example.com
 jane_smith123@company.org
 test.email+tag@domain.co.uk
 invalid.email@
 another@valid-domain.net
 not-an-email-address
-support@website.info`,
+support@website.info`;
 
-  // Date/Time Tools
-  dateConverter: `2024-01-15T10:30:00.000Z`,
+export const DEFAULT_TEXT_SORT = `banana
+apple
+Cherry
+apple
+date
+elderberry
+Fig
+grape
+banana
+11
+2
+100
+21
+Cherry
+short
+a very long line of text
+medium line
+short`;
 
-  timezoneConverter: `2024-01-15 10:30:00`,
+export const DEFAULT_TEXT_COUNTER = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.`;
 
-  dateTimeDiff: {
-    start: `2024-01-01 09:00:00`,
-    end: `2024-01-15 17:30:00`,
-  },
+export const DEFAULT_TEXT_SPLIT = `apple,banana,cherry,date,elderberry,fig,grape,honeydew,kiwi,lemon`;
 
-  // Utility Tools
-  unitConverter: `100`,
+export const DEFAULT_SEARCH_REPLACE_TEXT = `The quick brown fox jumps over the lazy dog.
+The quick brown fox is very agile.
+Every quick brown fox should jump daily.`;
 
-  numberBaseConverter: `255`,
+export const DEFAULT_SEARCH_REPLACE_SEARCH = `quick brown fox`;
 
-  colorPaletteGenerator: "#3B82F6",
+export const DEFAULT_SEARCH_REPLACE_REPLACE = `swift red wolf`;
 
-  // TLS Decoder
-  tlsDecoder: `-----BEGIN CERTIFICATE-----
+// Hash Tools
+export const DEFAULT_MD5 = `Hello, World! This is a sample text for MD5 hashing.`;
+
+export const DEFAULT_BCRYPT = `mypassword123`;
+
+// JWT
+export const DEFAULT_JWT = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`;
+
+// Date/Time Tools
+export const DEFAULT_DATE_CONVERTER = `2024-01-15T10:30:00.000Z`;
+
+export const DEFAULT_TIMEZONE_CONVERTER = `2024-01-15 10:30:00`;
+
+export const DEFAULT_DATETIME_DIFF_START = `2024-01-01 09:00:00`;
+
+export const DEFAULT_DATETIME_DIFF_END = `2024-01-15 17:30:00`;
+
+// Utility Tools
+export const DEFAULT_UNIT_CONVERTER = `100`;
+
+export const DEFAULT_NUMBER_BASE_CONVERTER = `255`;
+
+// Generators
+export const DEFAULT_QR_GENERATOR = "Visit FreeDevTool.App for more amazing developer tools!";
+
+export const DEFAULT_BARCODE_GENERATOR = "FreeDevTool.App";
+
+export const DEFAULT_COLOR_PALETTE_GENERATOR = "#3B82F6";
+
+// TLS Decoder
+export const DEFAULT_TLS_DECODER = `-----BEGIN CERTIFICATE-----
 MIIDBTCCAe2gAwIBAgIJAKZYzZYzZYzZMA0GCSqGSIb3DQEBCwUAMBkxFzAVBgNV
 BAMMDnNhbXBsZS5leGFtcGxlMB4XDTI0MDEwMTAwMDAwMFoXDTI1MDEwMTAwMDAw
 MFowGTEXMBUGA1UEAwwOc2FtcGxlLmV4YW1wbGUwggEiMA0GCSqGSIb3DQEBAQUA
 A4IBDwAwggEKAoIBAQC/Sample/Certificate/Data/Here/This/Is/Just/Example
------END CERTIFICATE-----`,
-};
+-----END CERTIFICATE-----`;

@@ -7,7 +7,7 @@ import { Shield, RotateCcw, CheckCircle, XCircle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_TLS_DECODER } from "@/data/defaults";
 
 interface CertificateInfo {
   subject: string;
@@ -25,7 +25,7 @@ interface CertificateInfo {
 }
 
 export default function TLSDecoder() {
-  const [certificate, setCertificate] = useState(toolDefaults.tlsDecoder);
+  const [certificate, setCertificate] = useState(DEFAULT_TLS_DECODER);
   const [certificateInfo, setCertificateInfo] =
     useState<CertificateInfo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +86,7 @@ export default function TLSDecoder() {
   };
 
   const handleReset = () => {
-    setCertificate(toolDefaults.tlsDecoder);
+    setCertificate(DEFAULT_TLS_DECODER);
     setCertificateInfo(null);
     setError(null);
   };

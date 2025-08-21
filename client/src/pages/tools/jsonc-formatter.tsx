@@ -8,10 +8,10 @@ import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_JSONC } from "@/data/defaults";
 
 export default function JSONCFormatter() {
-  const [input, setInput] = useState(toolDefaults.jsonc);
+  const [input, setInput] = useState(DEFAULT_JSONC);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +35,7 @@ export default function JSONCFormatter() {
   };
 
   const handleReset = () => {
-    setInput(toolDefaults.jsonc);
+    setInput(DEFAULT_JSONC);
     setOutput("");
     setError(null);
   };

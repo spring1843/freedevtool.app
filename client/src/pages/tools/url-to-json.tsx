@@ -26,10 +26,10 @@ interface URLComponents {
   queryParams?: Record<string, string>;
 }
 
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_URL_TO_JSON } from "@/data/defaults";
 
 export default function URLToJSON() {
-  const [inputUrl, setInputUrl] = useState(toolDefaults.urlToJson);
+  const [inputUrl, setInputUrl] = useState(DEFAULT_URL_TO_JSON);
   const [urlComponents, setUrlComponents] = useState<URLComponents>({});
   const [jsonOutput, setJsonOutput] = useState("");
   const [error, setError] = useState("");
@@ -37,7 +37,7 @@ export default function URLToJSON() {
 
   useEffect(() => {
     // Load parameters from URL with validation
-    const urlInput = getValidatedParam("url", toolDefaults.urlToJson, {
+    const urlInput = getValidatedParam("url", DEFAULT_URL_TO_JSON, {
       type: "string",
       pattern: /^https?:\/\/[^\s<>"{}|\\^`[\]]*$/,
       maxLength: 2048, // Standard max URL length

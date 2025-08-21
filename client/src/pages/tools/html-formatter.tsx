@@ -5,7 +5,7 @@ import { formatHTML } from "@/lib/formatters";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, Minimize2, RotateCcw, AlertTriangle } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_HTML } from "@/data/defaults";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
 
@@ -17,7 +17,7 @@ interface ValidationIssue {
 }
 
 export default function HTMLFormatter() {
-  const [input, setInput] = useState(toolDefaults.html);
+  const [input, setInput] = useState(DEFAULT_HTML);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<ValidationIssue[]>([]);
@@ -53,7 +53,7 @@ export default function HTMLFormatter() {
   };
 
   const handleReset = () => {
-    setInput(toolDefaults.html);
+    setInput(DEFAULT_HTML);
     setOutput("");
     setError(null);
     setWarnings([]);

@@ -25,7 +25,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 import QRCodeLib from "qrcode-generator";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_QR_GENERATOR } from "@/data/defaults";
 
 // Standalone QR Code generation using qrcode-generator library
 const generateQRCode = (text: string, size = 200): string => {
@@ -135,7 +135,7 @@ const qrPresets: QRPreset[] = [
 ];
 
 export default function QRGenerator() {
-  const [inputText, setInputText] = useState(toolDefaults.qrGenerator);
+  const [inputText, setInputText] = useState(DEFAULT_QR_GENERATOR);
   const [qrType, setQrType] = useState<QRType>("url");
   const [qrSize, setQrSize] = useState(300);
   const [qrUrl, setQrUrl] = useState("");

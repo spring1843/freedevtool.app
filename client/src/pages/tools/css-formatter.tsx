@@ -15,7 +15,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useLocation } from "wouter";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_CSS, DEFAULT_SCSS, DEFAULT_LESS } from "@/data/defaults";
 
 type FormatType = "css" | "scss" | "less";
 
@@ -34,11 +34,11 @@ export default function CSSFormatter() {
     const initialFormat = getInitialFormat();
     switch (initialFormat) {
       case "scss":
-        return toolDefaults.scss;
+        return DEFAULT_SCSS;
       case "less":
-        return toolDefaults.less;
+        return DEFAULT_LESS;
       default:
-        return toolDefaults.css;
+        return DEFAULT_CSS;
     }
   });
   const [output, setOutput] = useState("");
@@ -90,26 +90,26 @@ export default function CSSFormatter() {
     // Change default input based on format
     switch (newFormat) {
       case "scss":
-        setInput(toolDefaults.scss);
+        setInput(DEFAULT_SCSS);
         break;
       case "less":
-        setInput(toolDefaults.less);
+        setInput(DEFAULT_LESS);
         break;
       default:
-        setInput(toolDefaults.css);
+        setInput(DEFAULT_CSS);
     }
   };
 
   const handleReset = () => {
     switch (format) {
       case "scss":
-        setInput(toolDefaults.scss);
+        setInput(DEFAULT_SCSS);
         break;
       case "less":
-        setInput(toolDefaults.less);
+        setInput(DEFAULT_LESS);
         break;
       default:
-        setInput(toolDefaults.css);
+        setInput(DEFAULT_CSS);
     }
     setOutput("");
     setError(null);
@@ -122,13 +122,13 @@ export default function CSSFormatter() {
       setFormat(newFormat);
       switch (newFormat) {
         case "scss":
-          setInput(toolDefaults.scss);
+          setInput(DEFAULT_SCSS);
           break;
         case "less":
-          setInput(toolDefaults.less);
+          setInput(DEFAULT_LESS);
           break;
         default:
-          setInput(toolDefaults.css);
+          setInput(DEFAULT_CSS);
       }
       setOutput("");
       setError(null);

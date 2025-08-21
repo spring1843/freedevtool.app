@@ -14,13 +14,13 @@ import { ArrowUpDown, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_TEXT_SORT } from "@/data/defaults";
 
 type SortType = "alphabetical" | "numerical" | "length" | "reverse";
 type SortOrder = "asc" | "desc";
 
 export default function TextSorter() {
-  const [input, setInput] = useState(toolDefaults.textSort);
+  const [input, setInput] = useState(DEFAULT_TEXT_SORT);
   const [sortType, setSortType] = useState<SortType>("alphabetical");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [caseSensitive, setCaseSensitive] = useState(false);
@@ -68,7 +68,7 @@ export default function TextSorter() {
   }, [input, sortType, sortOrder, caseSensitive]);
 
   const handleReset = () => {
-    setInput(toolDefaults.textSort);
+    setInput(DEFAULT_TEXT_SORT);
     setSortType("alphabetical");
     setSortOrder("asc");
     setCaseSensitive(false);

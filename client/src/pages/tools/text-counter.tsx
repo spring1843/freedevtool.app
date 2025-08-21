@@ -13,10 +13,10 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { usePersistentForm } from "@/hooks/use-persistent-state";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_TEXT_COUNTER } from "@/data/defaults";
 
 const defaultFields = {
-  text: toolDefaults.textCounter,
+  text: DEFAULT_TEXT_COUNTER,
 };
 
 export default function TextCounter() {

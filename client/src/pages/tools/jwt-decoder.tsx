@@ -5,10 +5,10 @@ import { Key, CheckCircle, XCircle } from "lucide-react";
 import { SecurityBanner } from "@/components/ui/security-banner";
 import { useState, useEffect, useCallback } from "react";
 import { ToolButton, ResetButton } from "@/components/ui/tool-button";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_JWT } from "@/data/defaults";
 
 export default function JWTDecoder() {
-  const [token, setToken] = useState(toolDefaults.jwt);
+  const [token, setToken] = useState(DEFAULT_JWT);
   const [header, setHeader] = useState("");
   const [payload, setPayload] = useState("");
   const [signature, setSignature] = useState("");
@@ -69,7 +69,7 @@ export default function JWTDecoder() {
   };
 
   const handleReset = () => {
-    setToken(toolDefaults.jwt);
+    setToken(DEFAULT_JWT);
     setHeader("");
     setPayload("");
     setSignature("");

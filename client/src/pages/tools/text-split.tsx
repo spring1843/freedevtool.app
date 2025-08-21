@@ -9,10 +9,10 @@ import { Split, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_TEXT_SPLIT } from "@/data/defaults";
 
 export default function TextSplit() {
-  const [text, setText] = useState(toolDefaults.textSplit);
+  const [text, setText] = useState(DEFAULT_TEXT_SPLIT);
   const [delimiter, setDelimiter] = useState(",");
   const [removeEmpty, setRemoveEmpty] = useState(true);
   const [trimWhitespace, setTrimWhitespace] = useState(true);
@@ -47,7 +47,7 @@ export default function TextSplit() {
   }, [text, delimiter, removeEmpty, trimWhitespace]);
 
   const handleReset = () => {
-    setText(toolDefaults.textSplit);
+    setText(DEFAULT_TEXT_SPLIT);
     setDelimiter(",");
     setRemoveEmpty(true);
     setTrimWhitespace(true);

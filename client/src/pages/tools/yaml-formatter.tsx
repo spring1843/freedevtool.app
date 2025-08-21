@@ -6,10 +6,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Code, RotateCcw } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { SecurityBanner } from "@/components/ui/security-banner";
-import { toolDefaults } from "@/data/defaults";
+import { DEFAULT_YAML } from "@/data/defaults";
 
 export default function YAMLFormatter() {
-  const [input, setInput] = useState(toolDefaults.yaml);
+  const [input, setInput] = useState(DEFAULT_YAML);
   const [output, setOutput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -33,7 +33,7 @@ export default function YAMLFormatter() {
   };
 
   const handleReset = () => {
-    setInput(toolDefaults.yaml);
+    setInput(DEFAULT_YAML);
     setOutput("");
     setError(null);
   };
