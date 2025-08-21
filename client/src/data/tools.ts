@@ -378,6 +378,14 @@ export function getToolsCount(): number {
   return TOOLS_COUNT;
 }
 
+// Cached tool paths - calculated once and reused
+const ALL_TOOL_PATHS = getAllTools().map(tool => tool.path);
+
+// Utility function to get all tool paths (efficient cached version)
+export function getAllToolPaths(): string[] {
+  return ALL_TOOL_PATHS;
+}
+
 // Utility function to get tools for demo (same as getAllTools but explicit)
 export function getDemoTools(): Array<{
   name: string;

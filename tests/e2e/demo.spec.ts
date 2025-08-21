@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { getToolsCount } from "../../client/src/data/tools"; // Adjust import based on your project structure
+import { getToolsCount, getAllToolPaths } from "../../client/src/data/tools"; // Adjust import based on your project structure
 
 test.describe("Demo End-to-End Test", () => {
   test.beforeEach(async ({ page }) => {
@@ -105,8 +105,16 @@ test.describe("Demo End-to-End Test", () => {
       }
     }
 
-    // Verify we visited all tools
-    expect(visitedTools.size).toBe(getToolsCount());
+    // Get all available tool paths and find missing ones
+    const allToolPaths = getAllToolPaths();
+    const missingTools = allToolPaths.filter(
+      path => !visitedTools.has(path.replace("/tools/", ""))
+    );
+
+    expect(
+      visitedTools.size,
+      `missing tools visits during demo: ${missingTools.join(", ")}`
+    ).toBe(getToolsCount());
 
     // Verify we're back at homepage with explicit URL check
     const finalUrl = page.url();
