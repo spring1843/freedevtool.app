@@ -492,7 +492,7 @@ export default function Timer() {
                   max="59"
                   value={newTimerSeconds}
                   onChange={e =>
-                    setNewTimerSeconds(parseInt(e.target.value) || 0)
+                    setNewTimerSeconds(parseInt(e.target.value, 10) || 0)
                   }
                   data-testid="timer-seconds-input"
                 />
