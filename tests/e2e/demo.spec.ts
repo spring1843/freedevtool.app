@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { getToolsCount, getAllToolPaths } from "../../client/src/data/tools"; // Adjust import based on your project structure
 
 test.describe("Demo End-to-End Test", () => {
   test.beforeEach(async ({ page }) => {
@@ -22,7 +23,7 @@ test.describe("Demo End-to-End Test", () => {
     await expect(demoModeActive).toBeVisible();
 
     // Let demo run for a short time
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(3000);
 
     // Stop the demo
     const stopButton = page.locator('button:has-text("Stop")');
@@ -69,30 +70,32 @@ test.describe("Demo End-to-End Test", () => {
     const visitedTools = new Set<string>();
     let lastUrl = "";
 
-    // Monitor URL changes for a longer period to visit more tools
-    let checksWithoutNewTool = 0;
-    const maxChecksWithoutNewTool = 25;
-
-    while (
-      checksWithoutNewTool < maxChecksWithoutNewTool &&
-      visitedTools.size < 15
-    ) {
-      await page.waitForTimeout(150); // Short wait between checks
-
+    // Monitor URL changes until demo completes
+    while (true) {
       const currentUrl = page.url();
+
+      // Check if we're back at homepage (demo completed)
+      if (
+        currentUrl.endsWith("/") &&
+        !currentUrl.includes("/tools/") &&
+        visitedTools.size > 0
+      ) {
+        console.warn("Demo completed - returned to homepage");
+        break;
+      }
+
       if (currentUrl !== lastUrl && currentUrl.includes("/tools/")) {
-        const toolPath = currentUrl.split("/tools/")[1];
+        // Extract tool path and remove query parameters
+        const toolPath = currentUrl.split("/tools/")[1]?.split("?")[0];
         if (toolPath && !visitedTools.has(toolPath)) {
           visitedTools.add(toolPath);
-          lastUrl = currentUrl;
           console.warn(
             `Visited tool: ${toolPath} (${visitedTools.size} total)`
           );
-          checksWithoutNewTool = 0;
         }
-      } else {
-        checksWithoutNewTool++;
       }
+
+      lastUrl = currentUrl;
 
       // Check if demo is still running
       const isDemoRunning = await page
@@ -103,20 +106,26 @@ test.describe("Demo End-to-End Test", () => {
       }
     }
 
-    // Verify we visited a substantial number of tools
-    expect(visitedTools.size).toBeGreaterThan(5);
-    console.warn(
-      `Visited ${visitedTools.size} tools during demo navigation test`
-    );
-    console.warn(
-      `Tools visited: ${Array.from(visitedTools).sort().join(", ")}`
+    // Get all available tool paths and find missing ones
+    const allToolPaths = getAllToolPaths();
+    const missingTools = allToolPaths.filter(
+      path => !visitedTools.has(path.replace("/tools/", ""))
     );
 
-    // Stop demo for cleanup
-    const stopButton = page.locator('button:has-text("Stop")');
-    if (await stopButton.isVisible()) {
-      await stopButton.click();
-    }
+    expect(
+      visitedTools.size,
+      `missing tools visits during demo: ${missingTools.join(", ")}`
+    ).toBe(getToolsCount());
+
+    // Verify we're back at homepage with explicit URL check
+    const finalUrl = page.url();
+    expect(finalUrl.endsWith("/")).toBeTruthy();
+    expect(finalUrl).not.toContain("/tools/");
+
+    // Additional check to ensure homepage content is visible
+    await expect(
+      page.locator('[data-testid="start-demo-button"]')
+    ).toBeVisible();
 
     // Verify no critical JavaScript errors
     const errors = await page.evaluate(
