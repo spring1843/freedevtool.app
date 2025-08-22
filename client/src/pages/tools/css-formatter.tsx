@@ -22,14 +22,14 @@ type FormatType = "css" | "scss" | "less";
 export default function CSSFormatter() {
   const [location] = useLocation();
 
-  // Determine initial format based on route
-  const getInitialFormat = useCallback((): FormatType => {
+  // Determine initial format based on route - only on mount
+  const getInitialFormat = (): FormatType => {
     if (location.includes("/tools/scss-formatter")) return "scss";
     if (location.includes("/tools/less-formatter")) return "less";
     return "css";
-  }, [location]);
+  };
 
-  const [format, setFormat] = useState<FormatType>(getInitialFormat());
+  const [format, setFormat] = useState<FormatType>(() => getInitialFormat());
   const [input, setInput] = useState(() => {
     const initialFormat = getInitialFormat();
     switch (initialFormat) {
@@ -114,26 +114,6 @@ export default function CSSFormatter() {
     setOutput("");
     setError(null);
   };
-
-  // Update format when route changes
-  useEffect(() => {
-    const newFormat = getInitialFormat();
-    if (newFormat !== format) {
-      setFormat(newFormat);
-      switch (newFormat) {
-        case "scss":
-          setInput(DEFAULT_SCSS);
-          break;
-        case "less":
-          setInput(DEFAULT_LESS);
-          break;
-        default:
-          setInput(DEFAULT_CSS);
-      }
-      setOutput("");
-      setError(null);
-    }
-  }, [getInitialFormat, format]);
 
   useEffect(() => {
     formatCode(false); // Beautify by default
